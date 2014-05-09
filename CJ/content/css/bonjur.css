@@ -1,0 +1,24 @@
+body {
+  background-color: #F2EFDC;
+
+  color: #666666;
+  font-family: verdana;
+}
+
+.page-header {
+  border: none;
+
+  color: #F24C27;
+  font-family: 'optimus';
+  text-align: center;
+}
+.page-header h1 {
+  font-size: 5em;
+}
+.page-header small {
+  font-size: 0.6em;
+}
+
+#hidden-form {
+  display: none;
+}

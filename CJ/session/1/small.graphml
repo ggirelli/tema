@@ -1,0 +1,1229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns
+         http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+<!-- Created by igraph -->
+  <key id="v_name" for="node" attr.name="name" attr.type="string"/>
+  <key id="v_label" for="node" attr.name="label" attr.type="string"/>
+  <key id="v_label.cex" for="node" attr.name="label.cex" attr.type="double"/>
+  <key id="v_label.dist" for="node" attr.name="label.dist" attr.type="double"/>
+  <key id="v_label.color" for="node" attr.name="label.color" attr.type="string"/>
+  <key id="v_chr" for="node" attr.name="chr" attr.type="double"/>
+  <key id="v_start" for="node" attr.name="start" attr.type="double"/>
+  <key id="v_end" for="node" attr.name="end" attr.type="double"/>
+  <key id="v_HUGO" for="node" attr.name="HUGO" attr.type="string"/>
+  <key id="v_cytoband" for="node" attr.name="cytoband" attr.type="string"/>
+  <key id="v_arm" for="node" attr.name="arm" attr.type="string"/>
+  <key id="v_shape" for="node" attr.name="shape" attr.type="string"/>
+  <key id="v_aberration" for="node" attr.name="aberration" attr.type="string"/>
+  <key id="v_percDel" for="node" attr.name="percDel" attr.type="double"/>
+  <key id="v_size" for="node" attr.name="size" attr.type="double"/>
+  <key id="v_size2" for="node" attr.name="size2" attr.type="double"/>
+  <key id="v_percSub" for="node" attr.name="percSub" attr.type="double"/>
+  <key id="v_color" for="node" attr.name="color" attr.type="string"/>
+  <key id="e_weight" for="edge" attr.name="weight" attr.type="double"/>
+  <key id="e_label" for="edge" attr.name="label" attr.type="string"/>
+  <key id="e_occurrency" for="edge" attr.name="occurrency" attr.type="double"/>
+  <key id="e_dependency" for="edge" attr.name="dependency" attr.type="double"/>
+  <key id="e_curved" for="edge" attr.name="curved" attr.type="double"/>
+  <key id="e_arrow.size" for="edge" attr.name="arrow.size" attr.type="double"/>
+  <graph id="G" edgedefault="directed">
+    <node id="n0">
+      <data key="v_name">PTEN~loss</data>
+      <data key="v_label">PTEN</data>
+      <data key="v_label.cex">1.3</data>
+      <data key="v_label.dist">0.7</data>
+      <data key="v_label.color">black</data>
+      <data key="v_chr">10</data>
+      <data key="v_start">8.96232e+07</data>
+      <data key="v_end">8.97285e+07</data>
+      <data key="v_HUGO">PTEN</data>
+      <data key="v_cytoband">q23.31</data>
+      <data key="v_arm">10q</data>
+      <data key="v_shape">circle</data>
+      <data key="v_aberration">loss</data>
+      <data key="v_percDel">0.1</data>
+      <data key="v_size">5</data>
+      <data key="v_size2">2.5</data>
+      <data key="v_percSub">0.157895</data>
+      <data key="v_color">#59A80F</data>
+    </node>
+    <node id="n1">
+      <data key="v_name">ETV6~loss</data>
+      <data key="v_label">ETV6</data>
+      <data key="v_label.cex">1.3</data>
+      <data key="v_label.dist">0.7</data>
+      <data key="v_label.color">black</data>
+      <data key="v_chr">12</data>
+      <data key="v_start">1.18028e+07</data>
+      <data key="v_end">1.20483e+07</data>
+      <data key="v_HUGO">ETV6</data>
+      <data key="v_cytoband">p13.2</data>
+      <data key="v_arm">12p</data>
+      <data key="v_shape">circle</data>
+      <data key="v_aberration">loss</data>
+      <data key="v_percDel">0.2</data>
+      <data key="v_size">10</data>
+      <data key="v_size2">5</data>
+      <data key="v_percSub">0.15</data>
+      <data key="v_color">#59A80F</data>
+    </node>
+    <node id="n2">
+      <data key="v_name">CDKN1B~loss</data>
+      <data key="v_label">CDKN1B</data>
+      <data key="v_label.cex">1.3</data>
+      <data key="v_label.dist">0.7</data>
+      <data key="v_label.color">black</data>
+      <data key="v_chr">12</data>
+      <data key="v_start">1.28703e+07</data>
+      <data key="v_end">1.28753e+07</data>
+      <data key="v_HUGO">CDKN1B</data>
+      <data key="v_cytoband">p13.1</data>
+      <data key="v_arm">12p</data>
+      <data key="v_shape">circle</data>
+      <data key="v_aberration">loss</data>
+      <data key="v_percDel">0.19</data>
+      <data key="v_size">9.5</data>
+      <data key="v_size2">4.75</data>
+      <data key="v_percSub">0.162162</data>
+      <data key="v_color">#59A80F</data>
+    </node>
+    <node id="n3">
+      <data key="v_name">BRCA2~loss</data>
+      <data key="v_label">BRCA2</data>
+      <data key="v_label.cex">1.3</data>
+      <data key="v_label.dist">0.7</data>
+      <data key="v_label.color">black</data>
+      <data key="v_chr">13</data>
+      <data key="v_start">3.28896e+07</data>
+      <data key="v_end">3.29738e+07</data>
+      <data key="v_HUGO">BRCA2</data>
+      <data key="v_cytoband">q13.1</data>
+      <data key="v_arm">13q</data>
+      <data key="v_shape">circle</data>
+      <data key="v_aberration">loss</data>
+      <data key="v_percDel">0.14</data>
+      <data key="v_size">7</data>
+      <data key="v_size2">3.5</data>
+      <data key="v_percSub">0.0384615</data>
+      <data key="v_color">#59A80F</data>
+    </node>
+    <node id="n4">
+      <data key="v_name">RB1~loss</data>
+      <data key="v_label">RB1</data>
+      <data key="v_label.cex">1.3</data>
+      <data key="v_label.dist">0.7</data>
+      <data key="v_label.color">black</data>
+      <data key="v_chr">13</data>
+      <data key="v_start">4.88779e+07</data>
+      <data key="v_end">4.9056e+07</data>
+      <data key="v_HUGO">RB1</data>
+      <data key="v_cytoband">q14.2</data>
+      <data key="v_arm">13q</data>
+      <data key="v_shape">circle</data>
+      <data key="v_aberration">loss</data>
+      <data key="v_percDel">0.37</data>
+      <data key="v_size">18.5</data>
+      <data key="v_size2">9.25</data>
+      <data key="v_percSub">0.0597015</data>
+      <data key="v_color">#59A80F</data>
+    </node>
+    <node id="n5">
+      <data key="v_name">TP53~loss</data>
+      <data key="v_label">TP53</data>
+      <data key="v_label.cex">1.3</data>
+      <data key="v_label.dist">0.7</data>
+      <data key="v_label.color">black</data>
+      <data key="v_chr">17</data>
+      <data key="v_start">7.57172e+06</data>
+      <data key="v_end">7.59087e+06</data>
+      <data key="v_HUGO">TP53</data>
+      <data key="v_cytoband">p13.1</data>
+      <data key="v_arm">17p</data>
+      <data key="v_shape">circle</data>
+      <data key="v_aberration">loss</data>
+      <data key="v_percDel">0.28</data>
+      <data key="v_size">14</data>
+      <data key="v_size2">7</data>
+      <data key="v_percSub">0.0869565</data>
+      <data key="v_color">#59A80F</data>
+    </node>
+    <node id="n6">
+      <data key="v_name">BRCA1~loss</data>
+      <data key="v_label">BRCA1</data>
+      <data key="v_label.cex">1.3</data>
+      <data key="v_label.dist">0.7</data>
+      <data key="v_label.color">black</data>
+      <data key="v_chr">17</data>
+      <data key="v_start">4.11963e+07</data>
+      <data key="v_end">4.12775e+07</data>
+      <data key="v_HUGO">BRCA1</data>
+      <data key="v_cytoband">q21.31</data>
+      <data key="v_arm">17q</data>
+      <data key="v_shape">circle</data>
+      <data key="v_aberration">loss</data>
+      <data key="v_percDel">0.1</data>
+      <data key="v_size">5</data>
+      <data key="v_size2">2.5</data>
+      <data key="v_percSub">0.2</data>
+      <data key="v_color">#59A80F</data>
+    </node>
+    <node id="n7">
+      <data key="v_name">SPOP~loss</data>
+      <data key="v_label">SPOP</data>
+      <data key="v_label.cex">1.3</data>
+      <data key="v_label.dist">0.7</data>
+      <data key="v_label.color">black</data>
+      <data key="v_chr">17</data>
+      <data key="v_start">4.76762e+07</data>
+      <data key="v_end">4.77555e+07</data>
+      <data key="v_HUGO">SPOP</data>
+      <data key="v_cytoband">q21.33</data>
+      <data key="v_arm">17q</data>
+      <data key="v_shape">circle</data>
+      <data key="v_aberration">loss</data>
+      <data key="v_percDel">0.02</data>
+      <data key="v_size">1</data>
+      <data key="v_size2">0.5</data>
+      <data key="v_percSub">0.666667</data>
+      <data key="v_color">#D9FFFC</data>
+    </node>
+    <node id="n8">
+      <data key="v_name">ETS2~loss</data>
+      <data key="v_label">ETS2</data>
+      <data key="v_label.cex">1.3</data>
+      <data key="v_label.dist">0.7</data>
+      <data key="v_label.color">black</data>
+      <data key="v_chr">21</data>
+      <data key="v_start">4.01772e+07</data>
+      <data key="v_end">4.01969e+07</data>
+      <data key="v_HUGO">ETS2</data>
+      <data key="v_cytoband">q22.2</data>
+      <data key="v_arm">21q</data>
+      <data key="v_shape">circle</data>
+      <data key="v_aberration">loss</data>
+      <data key="v_percDel">0.28</data>
+      <data key="v_size">14</data>
+      <data key="v_size2">7</data>
+      <data key="v_percSub">0</data>
+      <data key="v_color">#59A80F</data>
+    </node>
+    <node id="n9">
+      <data key="v_name">FOXP1~loss</data>
+      <data key="v_label">FOXP1</data>
+      <data key="v_label.cex">1.3</data>
+      <data key="v_label.dist">0.7</data>
+      <data key="v_label.color">black</data>
+      <data key="v_chr">3</data>
+      <data key="v_start">7.10039e+07</data>
+      <data key="v_end">7.15927e+07</data>
+      <data key="v_HUGO">FOXP1</data>
+      <data key="v_cytoband">p13</data>
+      <data key="v_arm">3p</data>
+      <data key="v_shape">circle</data>
+      <data key="v_aberration">loss</data>
+      <data key="v_percDel">0.06</data>
+      <data key="v_size">3</data>
+      <data key="v_size2">1.5</data>
+      <data key="v_percSub">0</data>
+      <data key="v_color">#59A80F</data>
+    </node>
+    <node id="n10">
+      <data key="v_name">PDE4D~loss</data>
+      <data key="v_label">PDE4D</data>
+      <data key="v_label.cex">1.3</data>
+      <data key="v_label.dist">0.7</data>
+      <data key="v_label.color">black</data>
+      <data key="v_chr">5</data>
+      <data key="v_start">5.82649e+07</data>
+      <data key="v_end">5.82958e+07</data>
+      <data key="v_HUGO">PDE4D</data>
+      <data key="v_cytoband">q11.2</data>
+      <data key="v_arm">5q</data>
+      <data key="v_shape">circle</data>
+      <data key="v_aberration">loss</data>
+      <data key="v_percDel">0.12</data>
+      <data key="v_size">6</data>
+      <data key="v_size2">3</data>
+      <data key="v_percSub">0.142857</data>
+      <data key="v_color">#59A80F</data>
+    </node>
+    <node id="n11">
+      <data key="v_name">CHD1~loss</data>
+      <data key="v_label">CHD1</data>
+      <data key="v_label.cex">1.3</data>
+      <data key="v_label.dist">0.7</data>
+      <data key="v_label.color">black</data>
+      <data key="v_chr">5</data>
+      <data key="v_start">9.81909e+07</data>
+      <data key="v_end">9.82622e+07</data>
+      <data key="v_HUGO">CHD1</data>
+      <data key="v_cytoband">q15</data>
+      <data key="v_arm">5q</data>
+      <data key="v_shape">circle</data>
+      <data key="v_aberration">loss</data>
+      <data key="v_percDel">0.09</data>
+      <data key="v_size">4.5</data>
+      <data key="v_size2">2.25</data>
+      <data key="v_percSub">0.235294</data>
+      <data key="v_color">#59A80F</data>
+    </node>
+    <node id="n12">
+      <data key="v_name">CDKN1A~loss</data>
+      <data key="v_label">CDKN1A</data>
+      <data key="v_label.cex">1.3</data>
+      <data key="v_label.dist">0.7</data>
+      <data key="v_label.color">black</data>
+      <data key="v_chr">6</data>
+      <data key="v_start">3.66442e+07</data>
+      <data key="v_end">3.66551e+07</data>
+      <data key="v_HUGO">CDKN1A</data>
+      <data key="v_cytoband">p21.2</data>
+      <data key="v_arm">6p</data>
+      <data key="v_shape">circle</data>
+      <data key="v_aberration">loss</data>
+      <data key="v_percDel">0</data>
+      <data key="v_size">0</data>
+      <data key="v_size2">0</data>
+      <data key="v_percSub">1</data>
+      <data key="v_color">#7FFFD4</data>
+    </node>
+    <node id="n13">
+      <data key="v_name">NKX3-1~loss</data>
+      <data key="v_label">NKX3-1</data>
+      <data key="v_label.cex">1.3</data>
+      <data key="v_label.dist">0.7</data>
+      <data key="v_label.color">black</data>
+      <data key="v_chr">8</data>
+      <data key="v_start">2.35362e+07</data>
+      <data key="v_end">2.35404e+07</data>
+      <data key="v_HUGO">NKX3-1</data>
+      <data key="v_cytoband">p21.2</data>
+      <data key="v_arm">8p</data>
+      <data key="v_shape">circle</data>
+      <data key="v_aberration">loss</data>
+      <data key="v_percDel">0.52</data>
+      <data key="v_size">26</data>
+      <data key="v_size2">13</data>
+      <data key="v_percSub">0.0947368</data>
+      <data key="v_color">#59A80F</data>
+    </node>
+    <node id="n14">
+      <data key="v_name">BRCA2~gain</data>
+      <data key="v_label">BRCA2</data>
+      <data key="v_label.cex">1.3</data>
+      <data key="v_label.dist">0.7</data>
+      <data key="v_label.color">black</data>
+      <data key="v_chr">13</data>
+      <data key="v_start">3.28896e+07</data>
+      <data key="v_end">3.29738e+07</data>
+      <data key="v_HUGO">BRCA2</data>
+      <data key="v_cytoband">q13.1</data>
+      <data key="v_arm">13q</data>
+      <data key="v_shape">rectangle</data>
+      <data key="v_aberration">gain</data>
+      <data key="v_percDel">0.03</data>
+      <data key="v_size">1.5</data>
+      <data key="v_size2">0.75</data>
+      <data key="v_percSub">0</data>
+      <data key="v_color">#59A80F</data>
+    </node>
+    <node id="n15">
+      <data key="v_name">FOXP1~gain</data>
+      <data key="v_label">FOXP1</data>
+      <data key="v_label.cex">1.3</data>
+      <data key="v_label.dist">0.7</data>
+      <data key="v_label.color">black</data>
+      <data key="v_chr">3</data>
+      <data key="v_start">7.10039e+07</data>
+      <data key="v_end">7.15927e+07</data>
+      <data key="v_HUGO">FOXP1</data>
+      <data key="v_cytoband">p13</data>
+      <data key="v_arm">3p</data>
+      <data key="v_shape">rectangle</data>
+      <data key="v_aberration">gain</data>
+      <data key="v_percDel">0.05</data>
+      <data key="v_size">2.5</data>
+      <data key="v_size2">1.25</data>
+      <data key="v_percSub">0</data>
+      <data key="v_color">#59A80F</data>
+    </node>
+    <node id="n16">
+      <data key="v_name">BRCA2~pm</data>
+      <data key="v_label">BRCA2</data>
+      <data key="v_label.cex">1.3</data>
+      <data key="v_label.dist">0.7</data>
+      <data key="v_label.color">black</data>
+      <data key="v_chr">13</data>
+      <data key="v_start">3.28896e+07</data>
+      <data key="v_end">3.29738e+07</data>
+      <data key="v_HUGO">BRCA2</data>
+      <data key="v_cytoband">q13.1</data>
+      <data key="v_arm">13q</data>
+      <data key="v_shape">square</data>
+      <data key="v_aberration">pm</data>
+      <data key="v_percDel">0.01</data>
+      <data key="v_size">0.5</data>
+      <data key="v_size2">0.25</data>
+      <data key="v_percSub">0.5</data>
+      <data key="v_color">#D9FFBD</data>
+    </node>
+    <node id="n17">
+      <data key="v_name">SPOP~pm</data>
+      <data key="v_label">SPOP</data>
+      <data key="v_label.cex">1.3</data>
+      <data key="v_label.dist">0.7</data>
+      <data key="v_label.color">black</data>
+      <data key="v_chr">17</data>
+      <data key="v_start">4.76762e+07</data>
+      <data key="v_end">4.77555e+07</data>
+      <data key="v_HUGO">SPOP</data>
+      <data key="v_cytoband">q21.33</data>
+      <data key="v_arm">17q</data>
+      <data key="v_shape">square</data>
+      <data key="v_aberration">pm</data>
+      <data key="v_percDel">0.09</data>
+      <data key="v_size">4.5</data>
+      <data key="v_size2">2.25</data>
+      <data key="v_percSub">0.0625</data>
+      <data key="v_color">#59A80F</data>
+    </node>
+    <node id="n18">
+      <data key="v_name">FOXP1~pm</data>
+      <data key="v_label">FOXP1</data>
+      <data key="v_label.cex">1.3</data>
+      <data key="v_label.dist">0.7</data>
+      <data key="v_label.color">black</data>
+      <data key="v_chr">3</data>
+      <data key="v_start">7.10039e+07</data>
+      <data key="v_end">7.15927e+07</data>
+      <data key="v_HUGO">FOXP1</data>
+      <data key="v_cytoband">p13</data>
+      <data key="v_arm">3p</data>
+      <data key="v_shape">square</data>
+      <data key="v_aberration">pm</data>
+      <data key="v_percDel">0.01</data>
+      <data key="v_size">0.5</data>
+      <data key="v_size2">0.25</data>
+      <data key="v_percSub">0.666667</data>
+      <data key="v_color">#D9FFFC</data>
+    </node>
+    <node id="n19">
+      <data key="v_name">RB1~pm</data>
+      <data key="v_label">RB1</data>
+      <data key="v_label.cex">1.3</data>
+      <data key="v_label.dist">0.7</data>
+      <data key="v_label.color">black</data>
+      <data key="v_chr">13</data>
+      <data key="v_start">4.88779e+07</data>
+      <data key="v_end">4.9056e+07</data>
+      <data key="v_HUGO">RB1</data>
+      <data key="v_cytoband">q14.2</data>
+      <data key="v_arm">13q</data>
+      <data key="v_shape">square</data>
+      <data key="v_aberration">pm</data>
+      <data key="v_percDel">0.01</data>
+      <data key="v_size">0.5</data>
+      <data key="v_size2">0.25</data>
+      <data key="v_percSub">1</data>
+      <data key="v_color">#7FFFD4</data>
+    </node>
+    <node id="n20">
+      <data key="v_name">ETV6~pm</data>
+      <data key="v_label">ETV6</data>
+      <data key="v_label.cex">1.3</data>
+      <data key="v_label.dist">0.7</data>
+      <data key="v_label.color">black</data>
+      <data key="v_chr">12</data>
+      <data key="v_start">1.18028e+07</data>
+      <data key="v_end">1.20483e+07</data>
+      <data key="v_HUGO">ETV6</data>
+      <data key="v_cytoband">p13.2</data>
+      <data key="v_arm">12p</data>
+      <data key="v_shape">square</data>
+      <data key="v_aberration">pm</data>
+      <data key="v_percDel">0</data>
+      <data key="v_size">0</data>
+      <data key="v_size2">0</data>
+      <data key="v_percSub">1</data>
+      <data key="v_color">#7FFFD4</data>
+    </node>
+    <node id="n21">
+      <data key="v_name">TP53~pm</data>
+      <data key="v_label">TP53</data>
+      <data key="v_label.cex">1.3</data>
+      <data key="v_label.dist">0.7</data>
+      <data key="v_label.color">black</data>
+      <data key="v_chr">17</data>
+      <data key="v_start">7.57172e+06</data>
+      <data key="v_end">7.59087e+06</data>
+      <data key="v_HUGO">TP53</data>
+      <data key="v_cytoband">p13.1</data>
+      <data key="v_arm">17p</data>
+      <data key="v_shape">square</data>
+      <data key="v_aberration">pm</data>
+      <data key="v_percDel">0.02</data>
+      <data key="v_size">1</data>
+      <data key="v_size2">0.5</data>
+      <data key="v_percSub">0.333333</data>
+      <data key="v_color">#D9FFBD</data>
+    </node>
+    <node id="n22">
+      <data key="v_name">CDKN1A~pm</data>
+      <data key="v_label">CDKN1A</data>
+      <data key="v_label.cex">1.3</data>
+      <data key="v_label.dist">0.7</data>
+      <data key="v_label.color">black</data>
+      <data key="v_chr">6</data>
+      <data key="v_start">3.66442e+07</data>
+      <data key="v_end">3.66551e+07</data>
+      <data key="v_HUGO">CDKN1A</data>
+      <data key="v_cytoband">p21.2</data>
+      <data key="v_arm">6p</data>
+      <data key="v_shape">square</data>
+      <data key="v_aberration">pm</data>
+      <data key="v_percDel">0.01</data>
+      <data key="v_size">0.5</data>
+      <data key="v_size2">0.25</data>
+      <data key="v_percSub">0</data>
+      <data key="v_color">#59A80F</data>
+    </node>
+    <edge source="n0" target="n1">
+      <data key="e_weight">3</data>
+      <data key="e_label">3/8</data>
+      <data key="e_occurrency">8</data>
+      <data key="e_dependency">3</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n0" target="n2">
+      <data key="e_weight">3</data>
+      <data key="e_label">3/8</data>
+      <data key="e_occurrency">8</data>
+      <data key="e_dependency">3</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n0" target="n11">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/1</data>
+      <data key="e_occurrency">1</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n0" target="n13">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/12</data>
+      <data key="e_occurrency">12</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n1" target="n3">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/5</data>
+      <data key="e_occurrency">5</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n1" target="n4">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/14</data>
+      <data key="e_occurrency">14</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n1" target="n10">
+      <data key="e_weight">2</data>
+      <data key="e_label">2/9</data>
+      <data key="e_occurrency">9</data>
+      <data key="e_dependency">2</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n1" target="n11">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/9</data>
+      <data key="e_occurrency">9</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n1" target="n13">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/29</data>
+      <data key="e_occurrency">29</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n2" target="n3">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/5</data>
+      <data key="e_occurrency">5</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n2" target="n4">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/12</data>
+      <data key="e_occurrency">12</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n2" target="n10">
+      <data key="e_weight">2</data>
+      <data key="e_label">2/8</data>
+      <data key="e_occurrency">8</data>
+      <data key="e_dependency">2</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n2" target="n11">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/7</data>
+      <data key="e_occurrency">7</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n2" target="n13">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/28</data>
+      <data key="e_occurrency">28</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n3" target="n0">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/6</data>
+      <data key="e_occurrency">6</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n3" target="n5">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/9</data>
+      <data key="e_occurrency">9</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n3" target="n6">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/3</data>
+      <data key="e_occurrency">3</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n3" target="n7">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/2</data>
+      <data key="e_occurrency">2</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n3" target="n21">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/1</data>
+      <data key="e_occurrency">1</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n4" target="n0">
+      <data key="e_weight">2</data>
+      <data key="e_label">2/12</data>
+      <data key="e_occurrency">12</data>
+      <data key="e_dependency">2</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n4" target="n1">
+      <data key="e_weight">2</data>
+      <data key="e_label">2/14</data>
+      <data key="e_occurrency">14</data>
+      <data key="e_dependency">2</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n4" target="n2">
+      <data key="e_weight">2</data>
+      <data key="e_label">2/12</data>
+      <data key="e_occurrency">12</data>
+      <data key="e_dependency">2</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n4" target="n5">
+      <data key="e_weight">3</data>
+      <data key="e_label">3/20</data>
+      <data key="e_occurrency">20</data>
+      <data key="e_dependency">3</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n4" target="n6">
+      <data key="e_weight">2</data>
+      <data key="e_label">2/7</data>
+      <data key="e_occurrency">7</data>
+      <data key="e_dependency">2</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n4" target="n7">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/2</data>
+      <data key="e_occurrency">2</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n4" target="n11">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/9</data>
+      <data key="e_occurrency">9</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n4" target="n17">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/12</data>
+      <data key="e_occurrency">12</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n4" target="n21">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/2</data>
+      <data key="e_occurrency">2</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n5" target="n0">
+      <data key="e_weight">2</data>
+      <data key="e_label">2/10</data>
+      <data key="e_occurrency">10</data>
+      <data key="e_dependency">2</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n5" target="n1">
+      <data key="e_weight">6</data>
+      <data key="e_label">6/14</data>
+      <data key="e_occurrency">14</data>
+      <data key="e_dependency">6</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n5" target="n2">
+      <data key="e_weight">6</data>
+      <data key="e_label">6/13</data>
+      <data key="e_occurrency">13</data>
+      <data key="e_dependency">6</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n5" target="n6">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/13</data>
+      <data key="e_occurrency">13</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n5" target="n10">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/9</data>
+      <data key="e_occurrency">9</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n5" target="n11">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/5</data>
+      <data key="e_occurrency">5</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n5" target="n12">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/1</data>
+      <data key="e_occurrency">1</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n5" target="n13">
+      <data key="e_weight">3</data>
+      <data key="e_label">3/35</data>
+      <data key="e_occurrency">35</data>
+      <data key="e_dependency">3</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n5" target="n18">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/1</data>
+      <data key="e_occurrency">1</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n6" target="n1">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/2</data>
+      <data key="e_occurrency">2</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n6" target="n2">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/2</data>
+      <data key="e_occurrency">2</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n6" target="n3">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/3</data>
+      <data key="e_occurrency">3</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n6" target="n4">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/7</data>
+      <data key="e_occurrency">7</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n6" target="n5">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/13</data>
+      <data key="e_occurrency">13</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n6" target="n10">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/1</data>
+      <data key="e_occurrency">1</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n6" target="n11">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/1</data>
+      <data key="e_occurrency">1</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n7" target="n3">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/2</data>
+      <data key="e_occurrency">2</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n7" target="n4">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/2</data>
+      <data key="e_occurrency">2</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n7" target="n10">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/1</data>
+      <data key="e_occurrency">1</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n7" target="n11">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/1</data>
+      <data key="e_occurrency">1</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n8" target="n0">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/5</data>
+      <data key="e_occurrency">5</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n8" target="n1">
+      <data key="e_weight">2</data>
+      <data key="e_label">2/15</data>
+      <data key="e_occurrency">15</data>
+      <data key="e_dependency">2</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n8" target="n2">
+      <data key="e_weight">2</data>
+      <data key="e_label">2/13</data>
+      <data key="e_occurrency">13</data>
+      <data key="e_dependency">2</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n8" target="n3">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/4</data>
+      <data key="e_occurrency">4</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n8" target="n4">
+      <data key="e_weight">2</data>
+      <data key="e_label">2/19</data>
+      <data key="e_occurrency">19</data>
+      <data key="e_dependency">2</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n8" target="n6">
+      <data key="e_weight">2</data>
+      <data key="e_label">2/8</data>
+      <data key="e_occurrency">8</data>
+      <data key="e_dependency">2</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n8" target="n10">
+      <data key="e_weight">2</data>
+      <data key="e_label">2/5</data>
+      <data key="e_occurrency">5</data>
+      <data key="e_dependency">2</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n8" target="n11">
+      <data key="e_weight">2</data>
+      <data key="e_label">2/7</data>
+      <data key="e_occurrency">7</data>
+      <data key="e_dependency">2</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n8" target="n12">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/1</data>
+      <data key="e_occurrency">1</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n8" target="n13">
+      <data key="e_weight">4</data>
+      <data key="e_label">4/33</data>
+      <data key="e_occurrency">33</data>
+      <data key="e_dependency">4</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n8" target="n16">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/1</data>
+      <data key="e_occurrency">1</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n8" target="n19">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/1</data>
+      <data key="e_occurrency">1</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n8" target="n20">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/1</data>
+      <data key="e_occurrency">1</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n9" target="n13">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/8</data>
+      <data key="e_occurrency">8</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n10" target="n0">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/6</data>
+      <data key="e_occurrency">6</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n10" target="n1">
+      <data key="e_weight">3</data>
+      <data key="e_label">3/9</data>
+      <data key="e_occurrency">9</data>
+      <data key="e_dependency">3</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n10" target="n2">
+      <data key="e_weight">3</data>
+      <data key="e_label">3/8</data>
+      <data key="e_occurrency">8</data>
+      <data key="e_dependency">3</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n10" target="n5">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/9</data>
+      <data key="e_occurrency">9</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n10" target="n11">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/10</data>
+      <data key="e_occurrency">10</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n10" target="n13">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/16</data>
+      <data key="e_occurrency">16</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n10" target="n18">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/1</data>
+      <data key="e_occurrency">1</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n11" target="n4">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/9</data>
+      <data key="e_occurrency">9</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n11" target="n10">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/10</data>
+      <data key="e_occurrency">10</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n13" target="n0">
+      <data key="e_weight">2</data>
+      <data key="e_label">2/12</data>
+      <data key="e_occurrency">12</data>
+      <data key="e_dependency">2</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n13" target="n1">
+      <data key="e_weight">3</data>
+      <data key="e_label">3/29</data>
+      <data key="e_occurrency">29</data>
+      <data key="e_dependency">3</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n13" target="n2">
+      <data key="e_weight">3</data>
+      <data key="e_label">3/28</data>
+      <data key="e_occurrency">28</data>
+      <data key="e_dependency">3</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n13" target="n3">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/17</data>
+      <data key="e_occurrency">17</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n13" target="n4">
+      <data key="e_weight">2</data>
+      <data key="e_label">2/35</data>
+      <data key="e_occurrency">35</data>
+      <data key="e_dependency">2</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n13" target="n5">
+      <data key="e_weight">2</data>
+      <data key="e_label">2/35</data>
+      <data key="e_occurrency">35</data>
+      <data key="e_dependency">2</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n13" target="n6">
+      <data key="e_weight">3</data>
+      <data key="e_label">3/12</data>
+      <data key="e_occurrency">12</data>
+      <data key="e_dependency">3</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n13" target="n7">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/3</data>
+      <data key="e_occurrency">3</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n13" target="n10">
+      <data key="e_weight">2</data>
+      <data key="e_label">2/16</data>
+      <data key="e_occurrency">16</data>
+      <data key="e_dependency">2</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n13" target="n11">
+      <data key="e_weight">2</data>
+      <data key="e_label">2/9</data>
+      <data key="e_occurrency">9</data>
+      <data key="e_dependency">2</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n13" target="n12">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/1</data>
+      <data key="e_occurrency">1</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n13" target="n16">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/2</data>
+      <data key="e_occurrency">2</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n13" target="n18">
+      <data key="e_weight">2</data>
+      <data key="e_label">2/2</data>
+      <data key="e_occurrency">2</data>
+      <data key="e_dependency">2</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n13" target="n21">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/2</data>
+      <data key="e_occurrency">2</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n14" target="n4">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/1</data>
+      <data key="e_occurrency">1</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n15" target="n4">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/2</data>
+      <data key="e_occurrency">2</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n15" target="n10">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/1</data>
+      <data key="e_occurrency">1</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n17" target="n0">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/3</data>
+      <data key="e_occurrency">3</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n17" target="n5">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/1</data>
+      <data key="e_occurrency">1</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n17" target="n18">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/1</data>
+      <data key="e_occurrency">1</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+    <edge source="n22" target="n19">
+      <data key="e_weight">1</data>
+      <data key="e_label">1/1</data>
+      <data key="e_occurrency">1</data>
+      <data key="e_dependency">1</data>
+      <data key="e_curved">0.1</data>
+      <data key="e_arrow.size">0.5</data>
+    </edge>
+  </graph>
+</graphml>

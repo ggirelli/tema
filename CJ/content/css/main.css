@@ -1,0 +1,27 @@
+@font-face {
+	font-family: optimus;
+	src: url('fonts/optimus.ttf');
+}
+
+html, body {
+	margin: 0;
+	padding: 0;
+
+	height: 100%;
+	width: 100%;
+
+	overflow: auto;
+
+	background-color: #f0f0f0;
+
+	font-size: 16px;
+}
+
+.console {
+  font-family: monospace;
+  font-size: 0.6em;
+}
+
+.text-danger {
+  color: #C4221C;
+}
