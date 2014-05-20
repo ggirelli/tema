@@ -1,10 +1,6 @@
 <?php
 
-require_once('include/session.class.php');
-
-// Session
-$ss = new SOGIsession();
-$ss->init();
+require_once('SOGI-settings.php');
 
 ?>
 <!DOCTYPE html>
@@ -73,7 +69,7 @@ $ss->init();
 
         $.ajax({
           type: 'POST',
-          url: 'graph_loader.php',
+          url: 'SOGI-loader.php',
           data: data,
           success: function(data) {
             alert(data)

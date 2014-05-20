@@ -1,5 +1,7 @@
 <?php
 
+require_once('functions.lib.php');
+
 /**
  * Manages SOGI sessions.
  * 
@@ -22,10 +24,10 @@ class SOGIsession {
 	private $folder_path;
 
 	/**
-	 * Front-end uri to the session folder
+	 * Front-end uri to the session interface
 	 * @var String
 	 */
-	private $folder_uri;
+	private $interface_uri;
 
 	/**
 	 * If processes are running in this SOGI session
@@ -61,14 +63,33 @@ class SOGIsession {
 	}
 
 	/**
-	 * Initialize a new SOGIsession in the current instance, if empty.
-	 * @return Boolean False if the current instance is not empty.
+	 * Initialize a new SOGIsession in the current instance, if empty, or returns a new SOGIsession class instance.
+	 * @return SOGIsession     A new SOGIsession instance if the current one is not empty.
 	 */
 	public function init() {
-		if($this->id != -1) {
+		if(-1 == $this->id) {
 			// Initialize a new session into the current instance
+			
+			# Prepare ID
+			$this->id = time() . random_string(10);
+			while(SOGIsession::is($this->id)) {
+				$this->id = time() . random_string(10);
+			}
+
+			# Store info
+			$this->folder_path = SESS_PATH . $this->id . '/';
+			$this->interface_uri = ROOT_URI . 's/' . $this->id;
+			$this->running = 0;
+			$this->last_query = 'init';
+			$this->last_query_when = time();
+
+			# Make directory
+			mkdir(SESS_PATH . $this->id);
+			# Write CONFIG in directory
+			$this->writeSession();
+
 		} else {
-			return false;
+			return new SOGIsession();
 		}
 	}
 	
@@ -78,10 +99,11 @@ class SOGIsession {
 	 * @return SOGIsession     A new SOGIsession instance if the current one is not empty.
 	 */
 	public function load($id) {
-		if($this->id != -1) {
-			// Return a new SOGIsession instance
-		} else {
+		if(-1 == $this->id) {
 			// Load into the current instance
+			$this->readSession($id);
+		} else {
+			return new SOGIsession($id);
 		}
 	}
 
@@ -92,7 +114,22 @@ class SOGIsession {
 	 */
 	public function get($attr) {
 		// Return attribute value
+		switch($attr) {
+			case 'id': {
+				return $this->id;
+				break;
+			}
+			case 'uri': {
+				return $this->interface_uri;
+				break;
+			}
+		}
+		return NULL;
 	}
+
+	// -------
+	// PRIVATE
+	// -------
 
 	/**
 	 * Retrieves the actual file list for the current session.
@@ -107,7 +144,14 @@ class SOGIsession {
 	 * @return Boolean T if success
 	 */
 	private function writeSession() {
-
+		$data = '';
+		$data .= "ID\t$this->id\n";
+		$data .= "PATH\t$this->folder_path\n";
+		$data .= "URI\t$this->interface_uri\n";
+		$data .= "RUNNING\t$this->running\n";
+		$data .= "LAST\t$this->last_query\n";
+		$data .= "TIME\t$this->last_query_when\n";
+		file_put_contents($this->folder_path . 'CONFIG', $data);
 	}
 
 	/**
@@ -116,7 +160,52 @@ class SOGIsession {
 	 * @return array     Session attributes
 	 */
 	private function readSession($id) {
+		$f = fopen(SESS_PATH . $id . '/CONFIG', 'r');
+		while(($row = fgets($f)) !== FALSE) {
+			$arow = split("\t", trim($row));
+			switch($arow[0]) {
+				case 'ID': {
+					$this->id = $arow[1];
+					break;
+				}
+				case 'PATH': {
+					$this->folder_path = $arow[1];
+					break;
+				}
+				case 'URI': {
+					$this->interface_uri = $arow[1];
+					break;
+				}
+				case 'RUNNING': {
+					$this->running = $arow[1];
+					break;
+				}
+				case 'LAST': {
+					$this->last_query = $arow[1];
+					break;
+				}
+				case 'TIME': {
+					$this->last_query_when = $arow[1];
+					break;
+				}
+			}
+		}
+		fclose($f);
+		return TRUE;
+	}
 
+	// ------
+	// STATIC
+	// ------
+
+	/**
+	 * Determines if a session with the given id exists
+	 * @param  int  $id session id
+	 * @return boolean     T if it exists
+	 */
+	public static function is($id) {
+		if(in_array($id, scandir(SESS_PATH))) return TRUE;
+		return FALSE;
 	}
 
 }
