@@ -1,0 +1,803 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns
+         http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+<!-- Created by igraph -->
+  <key id="v_name" for="node" attr.name="name" attr.type="string"/>
+  <key id="v_aberration" for="node" attr.name="aberration" attr.type="string"/>
+  <key id="v_HUGO" for="node" attr.name="HUGO" attr.type="string"/>
+  <key id="v_chr" for="node" attr.name="chr" attr.type="double"/>
+  <key id="v_start" for="node" attr.name="start" attr.type="double"/>
+  <key id="v_end" for="node" attr.name="end" attr.type="double"/>
+  <key id="v_cytoband" for="node" attr.name="cytoband" attr.type="double"/>
+  <key id="v_arm" for="node" attr.name="arm" attr.type="double"/>
+  <key id="e_weight" for="edge" attr.name="weight" attr.type="double"/>
+  <key id="e_clonal.cooc" for="edge" attr.name="clonal.cooc" attr.type="double"/>
+  <key id="e_subclonal.cooc" for="edge" attr.name="subclonal.cooc" attr.type="double"/>
+  <key id="e_nonclonal.cooc" for="edge" attr.name="nonclonal.cooc" attr.type="double"/>
+  <graph id="G" edgedefault="directed">
+    <node id="n0">
+      <data key="v_name">ETS2~loss</data>
+      <data key="v_aberration">loss</data>
+      <data key="v_HUGO">ETS2</data>
+      <data key="v_chr">21</data>
+      <data key="v_start">4.01772e+07</data>
+      <data key="v_end">4.01969e+07</data>
+      <data key="v_cytoband">148</data>
+      <data key="v_arm">23</data>
+    </node>
+    <node id="n1">
+      <data key="v_name">FOXP1~loss</data>
+      <data key="v_aberration">loss</data>
+      <data key="v_HUGO">FOXP1</data>
+      <data key="v_chr">3</data>
+      <data key="v_start">7.10039e+07</data>
+      <data key="v_end">7.15927e+07</data>
+      <data key="v_cytoband">16</data>
+      <data key="v_arm">27</data>
+    </node>
+    <node id="n2">
+      <data key="v_name">FOXP1~gain</data>
+      <data key="v_aberration">gain</data>
+      <data key="v_HUGO">FOXP1</data>
+      <data key="v_chr">3</data>
+      <data key="v_start">7.10039e+07</data>
+      <data key="v_end">7.15927e+07</data>
+      <data key="v_cytoband">16</data>
+      <data key="v_arm">27</data>
+    </node>
+    <node id="n3">
+      <data key="v_name">ETV6~loss</data>
+      <data key="v_aberration">loss</data>
+      <data key="v_HUGO">ETV6</data>
+      <data key="v_chr">12</data>
+      <data key="v_start">1.18028e+07</data>
+      <data key="v_end">1.20483e+07</data>
+      <data key="v_cytoband">21</data>
+      <data key="v_arm">5</data>
+    </node>
+    <node id="n4">
+      <data key="v_name">CDKN1B~loss</data>
+      <data key="v_aberration">loss</data>
+      <data key="v_HUGO">CDKN1B</data>
+      <data key="v_chr">12</data>
+      <data key="v_start">1.28703e+07</data>
+      <data key="v_end">1.28753e+07</data>
+      <data key="v_cytoband">17</data>
+      <data key="v_arm">5</data>
+    </node>
+    <node id="n5">
+      <data key="v_name">TP53~loss</data>
+      <data key="v_aberration">loss</data>
+      <data key="v_HUGO">TP53</data>
+      <data key="v_chr">17</data>
+      <data key="v_start">7.57172e+06</data>
+      <data key="v_end">7.59087e+06</data>
+      <data key="v_cytoband">17</data>
+      <data key="v_arm">12</data>
+    </node>
+    <node id="n6">
+      <data key="v_name">CHD1~loss</data>
+      <data key="v_aberration">loss</data>
+      <data key="v_HUGO">CHD1</data>
+      <data key="v_chr">5</data>
+      <data key="v_start">9.81909e+07</data>
+      <data key="v_end">9.82622e+07</data>
+      <data key="v_cytoband">123</data>
+      <data key="v_arm">32</data>
+    </node>
+    <node id="n7">
+      <data key="v_name">NKX3-1~loss</data>
+      <data key="v_aberration">loss</data>
+      <data key="v_HUGO">NKX3-1</data>
+      <data key="v_chr">8</data>
+      <data key="v_start">2.35362e+07</data>
+      <data key="v_end">2.35404e+07</data>
+      <data key="v_cytoband">44</data>
+      <data key="v_arm">37</data>
+    </node>
+    <node id="n8">
+      <data key="v_name">PTEN~loss</data>
+      <data key="v_aberration">loss</data>
+      <data key="v_HUGO">PTEN</data>
+      <data key="v_chr">10</data>
+      <data key="v_start">8.96232e+07</data>
+      <data key="v_end">8.97285e+07</data>
+      <data key="v_cytoband">157</data>
+      <data key="v_arm">2</data>
+    </node>
+    <node id="n9">
+      <data key="v_name">PDE4D~loss</data>
+      <data key="v_aberration">loss</data>
+      <data key="v_HUGO">PDE4D</data>
+      <data key="v_chr">5</data>
+      <data key="v_start">5.82649e+07</data>
+      <data key="v_end">5.82958e+07</data>
+      <data key="v_cytoband">90</data>
+      <data key="v_arm">32</data>
+    </node>
+    <node id="n10">
+      <data key="v_name">RB1~loss</data>
+      <data key="v_aberration">loss</data>
+      <data key="v_HUGO">RB1</data>
+      <data key="v_chr">13</data>
+      <data key="v_start">4.88779e+07</data>
+      <data key="v_end">4.9056e+07</data>
+      <data key="v_cytoband">121</data>
+      <data key="v_arm">7</data>
+    </node>
+    <node id="n11">
+      <data key="v_name">BRCA2~gain</data>
+      <data key="v_aberration">gain</data>
+      <data key="v_HUGO">BRCA2</data>
+      <data key="v_chr">13</data>
+      <data key="v_start">3.28896e+07</data>
+      <data key="v_end">3.29738e+07</data>
+      <data key="v_cytoband">102</data>
+      <data key="v_arm">7</data>
+    </node>
+    <node id="n12">
+      <data key="v_name">BRCA1~loss</data>
+      <data key="v_aberration">loss</data>
+      <data key="v_HUGO">BRCA1</data>
+      <data key="v_chr">17</data>
+      <data key="v_start">4.11963e+07</data>
+      <data key="v_end">4.12775e+07</data>
+      <data key="v_cytoband">140</data>
+      <data key="v_arm">13</data>
+    </node>
+    <node id="n13">
+      <data key="v_name">SPOP~pm</data>
+      <data key="v_aberration">pm</data>
+      <data key="v_HUGO">SPOP</data>
+      <data key="v_chr">17</data>
+      <data key="v_start">4.76762e+07</data>
+      <data key="v_end">4.77555e+07</data>
+      <data key="v_cytoband">142</data>
+      <data key="v_arm">13</data>
+    </node>
+    <node id="n14">
+      <data key="v_name">BRCA2~loss</data>
+      <data key="v_aberration">loss</data>
+      <data key="v_HUGO">BRCA2</data>
+      <data key="v_chr">13</data>
+      <data key="v_start">3.28896e+07</data>
+      <data key="v_end">3.29738e+07</data>
+      <data key="v_cytoband">102</data>
+      <data key="v_arm">7</data>
+    </node>
+    <node id="n15">
+      <data key="v_name">CDKN1A~pm</data>
+      <data key="v_aberration">pm</data>
+      <data key="v_HUGO">CDKN1A</data>
+      <data key="v_chr">6</data>
+      <data key="v_start">3.66442e+07</data>
+      <data key="v_end">3.66551e+07</data>
+      <data key="v_cytoband">44</data>
+      <data key="v_arm">33</data>
+    </node>
+    <node id="n16">
+      <data key="v_name">SPOP~loss</data>
+      <data key="v_aberration">loss</data>
+      <data key="v_HUGO">SPOP</data>
+      <data key="v_chr">17</data>
+      <data key="v_start">4.76762e+07</data>
+      <data key="v_end">4.77555e+07</data>
+      <data key="v_cytoband">142</data>
+      <data key="v_arm">13</data>
+    </node>
+    <node id="n17">
+      <data key="v_name">BRCA2~pm</data>
+      <data key="v_aberration">pm</data>
+      <data key="v_HUGO">BRCA2</data>
+      <data key="v_chr">13</data>
+      <data key="v_start">3.28896e+07</data>
+      <data key="v_end">3.29738e+07</data>
+      <data key="v_cytoband">102</data>
+      <data key="v_arm">7</data>
+    </node>
+    <node id="n18">
+      <data key="v_name">FOXP1~pm</data>
+      <data key="v_aberration">pm</data>
+      <data key="v_HUGO">FOXP1</data>
+      <data key="v_chr">3</data>
+      <data key="v_start">7.10039e+07</data>
+      <data key="v_end">7.15927e+07</data>
+      <data key="v_cytoband">16</data>
+      <data key="v_arm">27</data>
+    </node>
+    <node id="n19">
+      <data key="v_name">RB1~pm</data>
+      <data key="v_aberration">pm</data>
+      <data key="v_HUGO">RB1</data>
+      <data key="v_chr">13</data>
+      <data key="v_start">4.88779e+07</data>
+      <data key="v_end">4.9056e+07</data>
+      <data key="v_cytoband">121</data>
+      <data key="v_arm">7</data>
+    </node>
+    <node id="n20">
+      <data key="v_name">ETV6~pm</data>
+      <data key="v_aberration">pm</data>
+      <data key="v_HUGO">ETV6</data>
+      <data key="v_chr">12</data>
+      <data key="v_start">1.18028e+07</data>
+      <data key="v_end">1.20483e+07</data>
+      <data key="v_cytoband">21</data>
+      <data key="v_arm">5</data>
+    </node>
+    <node id="n21">
+      <data key="v_name">CDKN1A~loss</data>
+      <data key="v_aberration">loss</data>
+      <data key="v_HUGO">CDKN1A</data>
+      <data key="v_chr">6</data>
+      <data key="v_start">3.66442e+07</data>
+      <data key="v_end">3.66551e+07</data>
+      <data key="v_cytoband">44</data>
+      <data key="v_arm">33</data>
+    </node>
+    <node id="n22">
+      <data key="v_name">TP53~pm</data>
+      <data key="v_aberration">pm</data>
+      <data key="v_HUGO">TP53</data>
+      <data key="v_chr">17</data>
+      <data key="v_start">7.57172e+06</data>
+      <data key="v_end">7.59087e+06</data>
+      <data key="v_cytoband">17</data>
+      <data key="v_arm">12</data>
+    </node>
+    <edge source="n0" target="n3">
+      <data key="e_weight">2</data>
+      <data key="e_clonal.cooc">12</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">1</data>
+    </edge>
+    <edge source="n0" target="n4">
+      <data key="e_weight">2</data>
+      <data key="e_clonal.cooc">10</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">1</data>
+    </edge>
+    <edge source="n0" target="n6">
+      <data key="e_weight">2</data>
+      <data key="e_clonal.cooc">5</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">0</data>
+    </edge>
+    <edge source="n0" target="n7">
+      <data key="e_weight">4</data>
+      <data key="e_clonal.cooc">26</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">3</data>
+    </edge>
+    <edge source="n0" target="n8">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">4</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">0</data>
+    </edge>
+    <edge source="n0" target="n9">
+      <data key="e_weight">2</data>
+      <data key="e_clonal.cooc">3</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">0</data>
+    </edge>
+    <edge source="n0" target="n10">
+      <data key="e_weight">2</data>
+      <data key="e_clonal.cooc">16</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">1</data>
+    </edge>
+    <edge source="n0" target="n12">
+      <data key="e_weight">2</data>
+      <data key="e_clonal.cooc">5</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">1</data>
+    </edge>
+    <edge source="n0" target="n14">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">3</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">0</data>
+    </edge>
+    <edge source="n0" target="n17">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">0</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">0</data>
+    </edge>
+    <edge source="n0" target="n19">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">0</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">0</data>
+    </edge>
+    <edge source="n0" target="n20">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">0</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">0</data>
+    </edge>
+    <edge source="n0" target="n21">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">0</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">0</data>
+    </edge>
+    <edge source="n1" target="n7">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">7</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">0</data>
+    </edge>
+    <edge source="n2" target="n9">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">0</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">0</data>
+    </edge>
+    <edge source="n2" target="n10">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">0</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">1</data>
+    </edge>
+    <edge source="n3" target="n6">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">6</data>
+      <data key="e_subclonal.cooc">1</data>
+      <data key="e_nonclonal.cooc">1</data>
+    </edge>
+    <edge source="n3" target="n7">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">22</data>
+      <data key="e_subclonal.cooc">1</data>
+      <data key="e_nonclonal.cooc">3</data>
+    </edge>
+    <edge source="n3" target="n9">
+      <data key="e_weight">2</data>
+      <data key="e_clonal.cooc">3</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">1</data>
+    </edge>
+    <edge source="n3" target="n10">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">11</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">0</data>
+    </edge>
+    <edge source="n3" target="n14">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">3</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">1</data>
+    </edge>
+    <edge source="n4" target="n6">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">4</data>
+      <data key="e_subclonal.cooc">1</data>
+      <data key="e_nonclonal.cooc">1</data>
+    </edge>
+    <edge source="n4" target="n7">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">21</data>
+      <data key="e_subclonal.cooc">1</data>
+      <data key="e_nonclonal.cooc">3</data>
+    </edge>
+    <edge source="n4" target="n9">
+      <data key="e_weight">2</data>
+      <data key="e_clonal.cooc">2</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">1</data>
+    </edge>
+    <edge source="n4" target="n10">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">9</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">0</data>
+    </edge>
+    <edge source="n4" target="n14">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">3</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">1</data>
+    </edge>
+    <edge source="n5" target="n3">
+      <data key="e_weight">6</data>
+      <data key="e_clonal.cooc">7</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">1</data>
+    </edge>
+    <edge source="n5" target="n4">
+      <data key="e_weight">6</data>
+      <data key="e_clonal.cooc">6</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">1</data>
+    </edge>
+    <edge source="n5" target="n6">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">3</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">1</data>
+    </edge>
+    <edge source="n5" target="n7">
+      <data key="e_weight">3</data>
+      <data key="e_clonal.cooc">23</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">8</data>
+    </edge>
+    <edge source="n5" target="n8">
+      <data key="e_weight">2</data>
+      <data key="e_clonal.cooc">7</data>
+      <data key="e_subclonal.cooc">1</data>
+      <data key="e_nonclonal.cooc">0</data>
+    </edge>
+    <edge source="n5" target="n9">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">7</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">0</data>
+    </edge>
+    <edge source="n5" target="n12">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">5</data>
+      <data key="e_subclonal.cooc">2</data>
+      <data key="e_nonclonal.cooc">4</data>
+    </edge>
+    <edge source="n5" target="n18">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">0</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">0</data>
+    </edge>
+    <edge source="n5" target="n21">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">0</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">0</data>
+    </edge>
+    <edge source="n6" target="n9">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">5</data>
+      <data key="e_subclonal.cooc">2</data>
+      <data key="e_nonclonal.cooc">1</data>
+    </edge>
+    <edge source="n6" target="n10">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">6</data>
+      <data key="e_subclonal.cooc">1</data>
+      <data key="e_nonclonal.cooc">0</data>
+    </edge>
+    <edge source="n7" target="n3">
+      <data key="e_weight">3</data>
+      <data key="e_clonal.cooc">22</data>
+      <data key="e_subclonal.cooc">1</data>
+      <data key="e_nonclonal.cooc">3</data>
+    </edge>
+    <edge source="n7" target="n4">
+      <data key="e_weight">3</data>
+      <data key="e_clonal.cooc">21</data>
+      <data key="e_subclonal.cooc">1</data>
+      <data key="e_nonclonal.cooc">3</data>
+    </edge>
+    <edge source="n7" target="n5">
+      <data key="e_weight">2</data>
+      <data key="e_clonal.cooc">23</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">8</data>
+    </edge>
+    <edge source="n7" target="n6">
+      <data key="e_weight">2</data>
+      <data key="e_clonal.cooc">4</data>
+      <data key="e_subclonal.cooc">1</data>
+      <data key="e_nonclonal.cooc">2</data>
+    </edge>
+    <edge source="n7" target="n8">
+      <data key="e_weight">2</data>
+      <data key="e_clonal.cooc">8</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">1</data>
+    </edge>
+    <edge source="n7" target="n9">
+      <data key="e_weight">2</data>
+      <data key="e_clonal.cooc">9</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">5</data>
+    </edge>
+    <edge source="n7" target="n10">
+      <data key="e_weight">2</data>
+      <data key="e_clonal.cooc">31</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">3</data>
+    </edge>
+    <edge source="n7" target="n12">
+      <data key="e_weight">3</data>
+      <data key="e_clonal.cooc">7</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">2</data>
+    </edge>
+    <edge source="n7" target="n14">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">14</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">3</data>
+    </edge>
+    <edge source="n7" target="n16">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">1</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">1</data>
+    </edge>
+    <edge source="n7" target="n17">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">1</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">0</data>
+    </edge>
+    <edge source="n7" target="n18">
+      <data key="e_weight">2</data>
+      <data key="e_clonal.cooc">0</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">0</data>
+    </edge>
+    <edge source="n7" target="n21">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">0</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">0</data>
+    </edge>
+    <edge source="n7" target="n22">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">1</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">0</data>
+    </edge>
+    <edge source="n8" target="n3">
+      <data key="e_weight">3</data>
+      <data key="e_clonal.cooc">5</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">0</data>
+    </edge>
+    <edge source="n8" target="n4">
+      <data key="e_weight">3</data>
+      <data key="e_clonal.cooc">5</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">0</data>
+    </edge>
+    <edge source="n8" target="n6">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">0</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">0</data>
+    </edge>
+    <edge source="n8" target="n7">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">8</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">1</data>
+    </edge>
+    <edge source="n9" target="n3">
+      <data key="e_weight">3</data>
+      <data key="e_clonal.cooc">3</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">1</data>
+    </edge>
+    <edge source="n9" target="n4">
+      <data key="e_weight">3</data>
+      <data key="e_clonal.cooc">2</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">1</data>
+    </edge>
+    <edge source="n9" target="n5">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">7</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">0</data>
+    </edge>
+    <edge source="n9" target="n6">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">5</data>
+      <data key="e_subclonal.cooc">2</data>
+      <data key="e_nonclonal.cooc">1</data>
+    </edge>
+    <edge source="n9" target="n7">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">9</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">5</data>
+    </edge>
+    <edge source="n9" target="n8">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">5</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">0</data>
+    </edge>
+    <edge source="n9" target="n18">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">0</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">0</data>
+    </edge>
+    <edge source="n10" target="n3">
+      <data key="e_weight">2</data>
+      <data key="e_clonal.cooc">11</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">0</data>
+    </edge>
+    <edge source="n10" target="n4">
+      <data key="e_weight">2</data>
+      <data key="e_clonal.cooc">9</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">0</data>
+    </edge>
+    <edge source="n10" target="n5">
+      <data key="e_weight">3</data>
+      <data key="e_clonal.cooc">15</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">3</data>
+    </edge>
+    <edge source="n10" target="n6">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">6</data>
+      <data key="e_subclonal.cooc">1</data>
+      <data key="e_nonclonal.cooc">0</data>
+    </edge>
+    <edge source="n10" target="n8">
+      <data key="e_weight">2</data>
+      <data key="e_clonal.cooc">8</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">3</data>
+    </edge>
+    <edge source="n10" target="n12">
+      <data key="e_weight">2</data>
+      <data key="e_clonal.cooc">4</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">0</data>
+    </edge>
+    <edge source="n10" target="n13">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">7</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">4</data>
+    </edge>
+    <edge source="n10" target="n16">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">0</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">0</data>
+    </edge>
+    <edge source="n10" target="n22">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">1</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">0</data>
+    </edge>
+    <edge source="n11" target="n10">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">0</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">0</data>
+    </edge>
+    <edge source="n12" target="n3">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">1</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">0</data>
+    </edge>
+    <edge source="n12" target="n4">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">1</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">0</data>
+    </edge>
+    <edge source="n12" target="n5">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">5</data>
+      <data key="e_subclonal.cooc">2</data>
+      <data key="e_nonclonal.cooc">4</data>
+    </edge>
+    <edge source="n12" target="n6">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">0</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">0</data>
+    </edge>
+    <edge source="n12" target="n9">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">0</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">0</data>
+    </edge>
+    <edge source="n12" target="n10">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">4</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">0</data>
+    </edge>
+    <edge source="n12" target="n14">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">1</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">0</data>
+    </edge>
+    <edge source="n13" target="n5">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">0</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">0</data>
+    </edge>
+    <edge source="n13" target="n8">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">1</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">2</data>
+    </edge>
+    <edge source="n13" target="n18">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">0</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">0</data>
+    </edge>
+    <edge source="n14" target="n5">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">6</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">2</data>
+    </edge>
+    <edge source="n14" target="n8">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">4</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">1</data>
+    </edge>
+    <edge source="n14" target="n12">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">1</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">0</data>
+    </edge>
+    <edge source="n14" target="n16">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">0</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">0</data>
+    </edge>
+    <edge source="n14" target="n22">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">0</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">0</data>
+    </edge>
+    <edge source="n15" target="n19">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">0</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">0</data>
+    </edge>
+    <edge source="n16" target="n6">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">0</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">0</data>
+    </edge>
+    <edge source="n16" target="n9">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">0</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">0</data>
+    </edge>
+    <edge source="n16" target="n10">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">0</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">0</data>
+    </edge>
+    <edge source="n16" target="n14">
+      <data key="e_weight">1</data>
+      <data key="e_clonal.cooc">0</data>
+      <data key="e_subclonal.cooc">0</data>
+      <data key="e_nonclonal.cooc">0</data>
+    </edge>
+  </graph>
+</graphml>

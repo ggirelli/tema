@@ -105,13 +105,19 @@ require_once('SOGI-settings.php');
 			url: 'SOGI-loader.php',
 			data: data,
 			success: function(data) {
-				// Add messages
-				$('.progress-bar').attr('aria-valuenow', (100/filen)*(index+1)).css({'width' : (100/filen)*(index+1) + '%'});
-				if(index < filen-1) {
-					uploadFile(flist, index+1)
-				} else {
-					$('#panel-interface').append($('<small />').text('Upload terminated, we are going to redirect you to the interface in 5 seconds.').css({'text-align' : 'center', 'display' : 'block'}));
+				if(data == 0) {
+					// Error
+					$('#panel-interface').append($('<small />').text('An error occurred, the file upload has been blocked.<br />We are going to redirect you to the interface in 5 seconds.<br />Please try again from the interface uploader.').css({'text-align' : 'center', 'display' : 'block'}));
 					setTimeout(function() { document.location.href = <?php echo '\'' . ROOT_URI . 's/\''; ?> + session_id; }, 5000);
+				} else {
+					// Add messages
+					$('.progress-bar').attr('aria-valuenow', (100/filen)*(index+1)).css({'width' : (100/filen)*(index+1) + '%'});
+					if(index < filen-1) {
+						uploadFile(flist, index+1)
+					} else {
+						$('#panel-interface').append($('<small />').text('Upload terminated, we are going to redirect you to the interface in 5 seconds.').css({'text-align' : 'center', 'display' : 'block'}));
+						setTimeout(function() { document.location.href = <?php echo '\'' . ROOT_URI . 's/\''; ?> + session_id; }, 5000);
+					}
 				}
 			},
 			processData: false,
