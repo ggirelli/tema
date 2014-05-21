@@ -171,7 +171,7 @@ require_once('SOGI-settings.php');
 	<div class="panel-body">
 		<div id="panel-welcome">
 			<p>Welcome to SOGI!</p>
-			<p>Please, upload your graphml files to enter the interface!</p>
+			<p>Please, upload your <code>.graphml</code> files to enter the interface!</p>
 		</div>
 		
 		<div id="panel-interface" class="panel">
