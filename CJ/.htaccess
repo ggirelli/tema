@@ -1,0 +1,2 @@
+RewriteEngine On
+RewriteRule ^s/(.*)$  SOGI-interface.php?id=$1

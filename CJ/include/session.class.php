@@ -123,6 +123,22 @@ class SOGIsession {
 				return $this->interface_uri;
 				break;
 			}
+			case 'path': {
+				return $this->folder_path;
+				break;
+			}
+			case 'running': {
+				return $this->running;
+				break;
+			}
+			case 'last': {
+				return $this->last_query;
+				break;
+			}
+			case 'when': {
+				return $this->last_query_when;
+				break;
+			}
 		}
 		return NULL;
 	}
