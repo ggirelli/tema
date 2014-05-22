@@ -3,19 +3,26 @@ div {
 }
 
 #left-side {
-	height: 80%;
+	height: 100%;
 
 	background-color: red;
 }
 
+#right-side {
+	height: 100%;
+	padding: 0;
+}
+
 #canvas {
-	height: 80%;
+	height: 75%;
+	min-height: 500px;
 
 	background-color: black;
 }
 
 #bottom-side {
-	height: 20%;
+	height: 25%;
+	min-height: 180px;
 
 	background-color: blue;
 }
