@@ -153,6 +153,7 @@ require_once('SOGI-settings.php');
 		});
 
 		$('#check-file').click(function(e) {
+			// Check files
 			checkFile('#hidden-form input[type="file"]:not(.checked)', 0, function() { return; });
 		});
 
@@ -161,6 +162,34 @@ require_once('SOGI-settings.php');
 			// Check files
 			checkFile('#hidden-form input[type="file"]:not(.checked)', 0, function() { preUploadFile(); });
 		});
+
+		// Set up load button
+		$('#load-session').submit(function(e) {
+			e.preventDefault();
+			$.ajax({
+				type: 'GET',
+				url: 'SOGI-session.php?a=load&id=' + $('#load-id').val(),
+				success: function(data) {
+					switch(data) {
+						case 'E0': {
+							alert('An error occurred, please try again.\nIf the error persists, contact the admin.');
+							break;
+						}
+						case 'E1': {
+							alert('The requested session does not exist.');
+							break;
+						}
+						case 'E2': {
+							alert('Please, insert a session ID.');
+							break;
+						}
+						default: {
+							document.location.href = data;
+						}
+					}
+				}
+			});
+		});
 	
 	});
 
@@ -168,30 +197,36 @@ require_once('SOGI-settings.php');
 
 </head>
 <body>
+	<div class="page-header">
+		<h1 id='title'>SOGI <small>Simple Online Graph Interface</small></h1>
+	</div>
 
-<div class="page-header">
-	<h1 id='title'>SOGI <small>Simple Online Graph Interface</small></h1>
-</div>
-
-<div class="panel col-md-6 col-md-offset-3">
-	<div class="panel-body">
-		<div id="panel-welcome">
-			<p>Welcome to SOGI!</p>
-			<p>Please, upload your <code>.graphml</code> files to enter the interface!</p>
-		</div>
-		
-		<div id="panel-interface" class="panel">
-			<div id="panel-buttons" class="col-md-4 panel-body">
-				<button id="add-file" class="btn btn-primary btn-block">add a file</button>
-				<button id="check-file" class="btn btn-default btn-block">check files</button>
-				<button id="start-upload" class="btn btn-success btn-block">start upload</button>
+	<div class="panel col-md-6 col-md-offset-3">
+		<div class="panel-body">
+			<div id="panel-welcome">
+				<p>Welcome to SOGI!</p>
+				<p>Please, upload your <code>.graphml</code> files to <b>start a new session</b>!</p>
 			</div>
-			<div id="panel-list" class="col-md-8 panel-body"></div>
+			
+			<div id="panel-interface" class="panel">
+				<div id="panel-buttons" class="col-md-4 panel-body">
+					<button id="add-file" class="btn btn-primary btn-block">add a file</button>
+					<button id="check-file" class="btn btn-warning btn-block">check files</button>
+					<button id="start-upload" class="btn btn-success btn-block">start upload</button>
+				</div>
+				<div id="panel-list" class="col-md-8 panel-body"></div>
+			</div>
+
+			<div id="panel-load" class="col-md-12">
+				Or <b>load an old session</b>:<br />
+				<form id='load-session' target=''>
+					<input id='load-id' type='text' class='form-control' placeholder='Enter session ID' />
+					<input type='submit' class="btn btn-info col-md-4" value='load session' />
+				</form>
+			</div>
 		</div>
 	</div>
-</div>
 
-<form id='hidden-form'></form>
-
+	<form id='hidden-form'></form>
 </body>
 </html>

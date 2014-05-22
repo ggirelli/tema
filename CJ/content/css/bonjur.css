@@ -22,3 +22,19 @@ body {
 #hidden-form {
   display: none;
 }
+
+#panel-buttons {
+  padding: 0;
+}
+
+#panel-load {
+  margin-top: 2em;
+  padding: 0;
+  padding-top: 1.5em;
+
+  border-top: 1px solid #dadada;
+}
+
+#load-id {
+  margin: 0.5em 0;
+}
