@@ -7,6 +7,9 @@ define('CONT_PATH', ROOT_PATH . 'content/');
 define('INCL_PATH', ROOT_PATH . 'include/');
 define('SESS_PATH', ROOT_PATH . 'session/');
 
+# Array of filenames that cannot be uploaded
+define('FILENAME_BAN', array('CONFIG', '.htaccess', 'php.ini'));
+
 require_once(INCL_PATH . 'functions.lib.php');
 require_once(INCL_PATH . 'session.class.php');
 

@@ -102,7 +102,7 @@ require_once('SOGI-settings.php');
 
 		$.ajax({
 			type: 'POST',
-			url: 'SOGI-loader.php',
+			url: 'SOGI-uploader.php',
 			data: data,
 			success: function(data) {
 				if(data == 0) {
@@ -205,7 +205,10 @@ require_once('SOGI-settings.php');
 		<div class="panel-body">
 			<div id="panel-welcome">
 				<p>Welcome to SOGI!</p>
-				<p>Please, upload your <code>.graphml</code> files to <b>start a new session</b>!</p>
+				<p>
+					Please, upload your <code>.graphml</code> files to <b>start a new session</b>!<br />
+					<small>If your files are particularly</small> <b>BIG</b> <small>please, use an</small>	<code>sshfs</code><small> or </small> <code>scp</code><small> connection instead of this uploader.</small>
+				</p>
 			</div>
 			
 			<div id="panel-interface" class="panel">

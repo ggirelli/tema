@@ -2,7 +2,7 @@
 
 require_once('SOGI-settings.php');
 
-if(in_array($_FILES['file']['name'], array('CONFIG'))) {
+if(in_array($_FILES['file']['name'], FILENAME_BAN)) {
 	die(0);
 }
 

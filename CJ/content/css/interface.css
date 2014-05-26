@@ -3,6 +3,8 @@ div {
 }
 
 #left-side {
+	padding: 0;
+
 	height: 100%;
 
 	background-color: red;
@@ -17,12 +19,34 @@ div {
 	height: 75%;
 	min-height: 500px;
 
-	background-color: black;
+	background-color: #f0f0f0;
+}
+
+#canvas #cy {
+	height: 100%;
+	width: 100%;
+	position: absolute;
+	left: 0;
+	top: 0;
 }
 
 #bottom-side {
+	padding: 0;
+
 	height: 25%;
 	min-height: 180px;
 
 	background-color: blue;
+}
+
+#bottom-side #console {
+	height: 100%;
+
+	background: black;
+}
+
+#bottom-side #inspector {
+	height: 100%;
+
+	background-color: lightgray;
 }
