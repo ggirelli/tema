@@ -13,7 +13,7 @@ if(isset($_GET['a']) and @$_GET['a'] != '') {
 				# is the ID correct?
 				if(SOGIsession::is($_GET['id'])) {
 					# Load session
-					$session = new SOGIsession($_GET['id']);
+					$session = new SOGIsession($FILENAME_BAN, $_GET['id']);
 					# Retrieve ID
 					$id = $session->get('uri');
 					if($id != -1) die($id);
@@ -28,7 +28,7 @@ if(isset($_GET['a']) and @$_GET['a'] != '') {
 		}
 		case 'init': {
 			# Initialize session
-			$session = new SOGIsession();
+			$session = new SOGIsession($FILENAME_BAN);
 			# Retrieve ID
 			$id = $session->get('id');
 			if($id != -1) die($id);
@@ -41,5 +41,5 @@ if(isset($_GET['a']) and @$_GET['a'] != '') {
 }
 
 # Terminate
-echo 'E0';
+die('E0');
 ?>
