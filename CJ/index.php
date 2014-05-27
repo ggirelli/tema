@@ -33,7 +33,7 @@ require_once('SOGI-settings.php');
 						$('#panel-list .alert-info').eq(index).removeClass('alert-info alert-dismissable').addClass('alert-danger');
 						$(selector).eq(index).remove();
 						if($(selector).length != 0) {
-							checkFile(selector, 0);
+							checkFile(selector, 0, triggerFunc);
 						} else {
 							if($('#panel-list .alert-success').length != 0) {
 								triggerFunc();
@@ -43,7 +43,7 @@ require_once('SOGI-settings.php');
 						$('#panel-list .alert-info').eq(index).removeClass('alert-info').addClass('alert-success');
 						$(selector).eq(index).addClass('checked');
 						if($(selector).length != 0) {
-							checkFile(selector, 0)
+							checkFile(selector, 0, triggerFunc)
 						} else {
 							if($('#panel-list .alert-success').length != 0) {
 								triggerFunc();
@@ -74,6 +74,7 @@ require_once('SOGI-settings.php');
 				type: 'GET',
 				url: 'SOGI-session.php?a=init',
 				success: function(data) {
+					alert(data);
 					session_id = data;
 					interface_uri = <?php echo '\'' . ROOT_URI . 's/\''; ?> + session_id;
 
@@ -112,8 +113,9 @@ require_once('SOGI-settings.php');
 				} else {
 					// Add messages
 					$('.progress-bar').attr('aria-valuenow', (100/filen)*(index+1)).css({'width' : (100/filen)*(index+1) + '%'});
+					// Go on uploading
 					if(index < filen-1) {
-						uploadFile(flist, index+1)
+						uploadFile(flist, index+1, session_id);
 					} else {
 						$('#panel-interface').append($('<small />').text('Upload terminated, we are going to redirect you to the interface in 5 seconds.').css({'text-align' : 'center', 'display' : 'block'}));
 						setTimeout(function() { document.location.href = <?php echo '\'' . ROOT_URI . 's/\''; ?> + session_id; }, 5000);
@@ -154,13 +156,15 @@ require_once('SOGI-settings.php');
 
 		$('#check-file').click(function(e) {
 			// Check files
+			console.log(2);
 			checkFile('#hidden-form input[type="file"]:not(.checked)', 0, function() { return; });
 		});
 
 		// Set up upload button
 		$('#start-upload').click(function(e) {
 			// Check files
-			checkFile('#hidden-form input[type="file"]:not(.checked)', 0, function() { preUploadFile(); });
+			console.log(1);
+			checkFile('#hidden-form input[type="file"]:not(.checked)', 0, function() { preUploadFile(); return; });
 		});
 
 		// Set up load button
