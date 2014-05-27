@@ -25,7 +25,7 @@ require_once('SOGI-settings.php');
 
 			$.ajax({
 				type: 'POST',
-				url: 'SOGI-filecheck.php',
+				url: 'fc/',
 				data: data,
 				success: function(data) {
 					if(data == 0) {
@@ -72,7 +72,7 @@ require_once('SOGI-settings.php');
 			// Ask for session_id
 			$.ajax({
 				type: 'GET',
-				url: 'SOGI-session.php?a=init',
+				url: 'ssa/init',
 				success: function(data) {
 					session_id = data;
 					interface_uri = <?php echo '\'' . ROOT_URI . 's/\''; ?> + session_id;
@@ -102,7 +102,7 @@ require_once('SOGI-settings.php');
 
 		$.ajax({
 			type: 'POST',
-			url: 'SOGI-uploader.php',
+			url: 'up/',
 			data: data,
 			success: function(data) {
 				if(data == 0) {
@@ -171,7 +171,7 @@ require_once('SOGI-settings.php');
 			e.preventDefault();
 			$.ajax({
 				type: 'GET',
-				url: 'SOGI-session.php?a=load&id=' + $('#load-id').val(),
+				url: 'ssa/load/' + $('#load-id').val(),
 				success: function(data) {
 					switch(data) {
 						case 'E0': {
