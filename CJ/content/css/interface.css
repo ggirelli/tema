@@ -18,7 +18,9 @@ div {
 	border-top: none;
 }
 
-#left-side .panel-body {
+#left-side .panel-body,
+#left-side .panel-body div {
+	position: relative;
 	color: #323232;
 	font-size: 0.85em;
 }
@@ -34,6 +36,12 @@ div {
 	height: 100%;
 	width: 100%;
 	padding: 10px 15px;
+}
+
+#left-side .panel-body #upload-new {
+	position: absolute;
+	top: 5px;
+	right: 5px;
 }
 
 /* RIGHT SIDEBAR */
@@ -82,6 +90,10 @@ div {
 	color: #323232;
 	font-family: monospace;
 	font-size: 0.85em;
+}
+
+#bottom-side #console .panel-body p {
+	margin: 0;
 }
 
 #bottom-side #inspector {
