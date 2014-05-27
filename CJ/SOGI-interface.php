@@ -1,9 +1,22 @@
 <?php
-$id = $_GET['id'];
 
 require_once('SOGI-settings.php');
 
-$ss = new SOGIsession($id);
+# Check again required session ID
+if(isset($_GET['id']) and @$_GET['id'] != '') {
+	# Is the ID correct?
+	if(SOGIsession::is($_GET['id'])) {
+		# Load session
+		$id = $_GET['id'];
+		$session = new SOGIsession($FILENAME_BAN, $id);
+	} else {
+		# Terminate
+		die('E1');
+	}
+} else {
+	# Terminate
+	die('E2');
+}
 
 ?>
 
@@ -99,7 +112,7 @@ $ss = new SOGIsession($id);
 </head>
 <body>
 
-<!-- Interfaccia, sessione <?php echo $id; ?>. -->
+<!-- SOGI, session <?php echo $id; ?> -->
 
 <div id='left-side' class="col-md-2">
 	left sidebar
