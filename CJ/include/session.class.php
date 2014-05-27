@@ -159,14 +159,16 @@ class SOGIsession {
 	 * Retrieves the actual file list for the current session.
 	 * @return array List of file names
 	 */
-	private function getCurrFileList() {
-		foreach(scandir(SESS_PATH) as $fname) {
+	public function getCurrFileList() {
+		$flist = array();
+		foreach(scandir(SESS_PATH . $this->id) as $fname) {
 			if(!in_array($fname, $this->banned_fnames)) {
-
+				$flist[] = $fname;
 			}
 		}
 
 		// Return the current list of file names
+		return($flist);
 	}
 
 	/**
