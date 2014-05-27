@@ -7,7 +7,7 @@ if(in_array($_FILES['file']['name'], $FILENAME_BAN)) {
 }
 
 $info = pathinfo($_FILES['file']['name']);
-if(isset($info['extension']) and @$info['extension'] == 'graphml') {
+if(isset($info['extension']) and @in_array($info['extension'], array('graphml', 'json'))) {
 	die('1');
 } else {
 	die('0');

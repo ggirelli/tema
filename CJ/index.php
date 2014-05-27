@@ -209,7 +209,7 @@ require_once('SOGI-settings.php');
 			<div id="panel-welcome">
 				<p>Welcome to SOGI!</p>
 				<p>
-					Please, upload your <code>.graphml</code> files to <b>start a new session</b>!<br />
+					Please, upload your <code>.graphml</code> or <code>.json</code> files to <b>start a new session</b>!<br />
 					<small>If your files are particularly</small> <b>BIG</b> <small>please, use an</small>	<code>sshfs</code><small> or </small> <code>scp</code><small> connection instead of this uploader.</small>
 				</p>
 			</div>
