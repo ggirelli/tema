@@ -172,6 +172,59 @@ class SOGIsession {
 	}
 
 	/**
+	 * Retrieves the actual graphml file list for the current session.
+	 * @return array List of file names
+	 */
+	public function getGraphmlFileList() {
+		$flist = array();
+		foreach(glob(SESS_PATH . $this->id . '/*.graphml') as $fname) {
+			$fname = basename($fname, '.graphml');
+			if(!in_array($fname, $this->banned_fnames)) {
+				$flist[] = $fname;
+			}
+		}
+
+		// Return the current list of file names
+		return($flist);
+	}
+
+	/**
+	 * Retrieves the actual JSON file list for the current session.
+	 * @return array List of file names
+	 */
+	public function getJSONFileList() {
+		$flist = array();
+		foreach(glob(SESS_PATH . $this->id . '/*.json') as $fname) {
+			$fname = basename($fname, '.json');
+			if(!in_array($fname, $this->banned_fnames)) {
+				$flist[] = $fname;
+			}
+		}
+
+		// Return the current list of file names
+		return($flist);
+	}
+
+	/**
+	 * Retrieves the actual list of file to be converted into JSON, for the current session.
+	 * @return array List of file names
+	 */
+	public function getToConvertFileList() {
+		$glist = $this->getGraphmlFileList();
+		$jlist = $this->getJSONFileList();
+
+		$uncommon = array();
+
+		foreach($glist as $gfile) {
+			if(!in_array($gfile, $jlist)) {
+				$uncommon[] = $gfile;
+			}
+		}
+		
+		return($uncommon);
+	}
+
+	/**
 	 * Writes a config file with all the session params.
 	 * @return Boolean T if success
 	 */
