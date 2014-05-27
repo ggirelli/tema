@@ -1,5 +1,6 @@
 <?php
 
+require_once(dirname(dirname(__FILE__)) . '/SOGI-settings.php');
 require_once('functions.lib.php');
 
 /**
@@ -47,6 +48,12 @@ class SOGIsession {
 	 */
 	private $last_query_when;
 
+	/**
+	 * List of filenames that cannot be uploaded
+	 * @var String
+	 */
+	private $banned_fnames;
+
 	/*-----------*/
 	/* FUNCTIONS */
 	/*-----------*/
@@ -54,7 +61,8 @@ class SOGIsession {
 	/**
 	 * Loads a SOGIsession or creates a new one.
 	 */
-	public function __construct($id = null) {
+	public function __construct($ban, $id = null) {
+		$this->banned_fnames = $ban;
 		if(is_null($id)) {
 			$this->init();
 		} else {
@@ -152,6 +160,12 @@ class SOGIsession {
 	 * @return array List of file names
 	 */
 	private function getCurrFileList() {
+		foreach(scandir(SESS_PATH) as $fname) {
+			if(!in_array($fname, $this->banned_fnames)) {
+
+			}
+		}
+
 		// Return the current list of file names
 	}
 
