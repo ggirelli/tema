@@ -74,7 +74,6 @@ require_once('SOGI-settings.php');
 				type: 'GET',
 				url: 'SOGI-session.php?a=init',
 				success: function(data) {
-					alert(data);
 					session_id = data;
 					interface_uri = <?php echo '\'' . ROOT_URI . 's/\''; ?> + session_id;
 
