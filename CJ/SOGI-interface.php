@@ -256,6 +256,16 @@ if(count($uncommon) != 0) $toInit = true;
 					}
 				}
 			});
+
+			// ------------
+			// COMMAND LINE
+			// ------------
+			
+			$('#cmd-line').submit(function(e) {
+				e.preventDefault();
+				alert(1);
+			});
+
 		});
 	</script>
 </head>
@@ -349,6 +359,14 @@ if(count($uncommon) != 0) $toInit = true;
 			<div class="panel-body">
 				
 			</div>
+			<form id='cmd-line' class='form-inline'>
+				<div class="col col-md-11">
+					<input type='text' class='form-control' placeholder='SOGI command line' />
+				</div>
+				<div class="col col-md-1">
+					<button class='btn btn-info btn-block'><span class="glyphicon glyphicon-forward"></span></button>
+				</div>
+			</form>
 		</div>
 		<div id="inspector" class="col-md-3 panel panel-default">
 			<div class="panel-body">

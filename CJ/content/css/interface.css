@@ -112,6 +112,34 @@ div {
 	margin: 0;
 }
 
+#bottom-side #console #cmd-line {
+	position: absolute;
+	bottom: 0;
+
+	display: block;
+	width: 100%;
+}
+
+#bottom-side #console #cmd-line .col {
+	padding: 0;
+}
+
+#bottom-side #console #cmd-line input[type=text] {
+	width: 100%;
+	border-radius: 0;
+	border-bottom: 0;
+	border-left: 0;
+	border-right: 0;
+}
+
+#bottom-side #console #cmd-line button {
+	width: 100%;
+	border-radius: 0;
+	border-bottom: 0;
+	border-left: 0;
+	border-right: 0;
+}
+
 #bottom-side #inspector {
 	height: 100%;
 	padding: 0;
