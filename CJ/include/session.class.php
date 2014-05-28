@@ -151,6 +151,57 @@ class SOGIsession {
 		return NULL;
 	}
 
+	/**
+	 * Sets the value of certain parameters, in the current session
+	 * @param String $attr Attribute name
+	 * @param mix $val  The value of the attribute
+	 * @return  none
+	 */
+	public function set($attr, $val) {
+		switch($attr) {
+			case 'running': {
+				$this->running = $val;
+				$this->writeSession();
+				break;
+			}
+			case 'last': {
+				$this->last_query = $val;
+				$this->writeSession();
+				break;
+			}
+			case 'time': {
+				$this->last_query_when = $val;
+				$this->writeSession();
+				break;
+			}
+		}
+	}
+
+	/**
+	 * Sets the value of some parameters, in the current session
+	 * @param list $l {$attr:$val,...}
+	 * @return  none
+	 */
+	public function multiset($l) {
+		foreach($l as $attr => $val) {
+			switch($attr) {
+				case 'running': {
+					$this->running = $val;
+					break;
+				}
+				case 'last': {
+					$this->last_query = $val;
+					break;
+				}
+				case 'time': {
+					$this->last_query_when = $val;
+					break;
+				}
+			}
+		}
+		$this->writeSession();
+	}
+
 	// -------
 	// PRIVATE
 	// -------
@@ -291,6 +342,24 @@ class SOGIsession {
 	public static function is($id) {
 		if(in_array($id, scandir(SESS_PATH))) return TRUE;
 		return FALSE;
+	}
+
+	public static function exec($FILENAME_BAN, $id, $name, $query) {
+		$ss = new SOGIsession($FILENAME_BAN, $id);
+		if($ss->get('running') == 0) {
+			$ss->multiset(array(
+				'running' => 1,
+				'last' => $name,
+				'time' => time()
+			));
+
+			exec($query);
+
+			$ss->set('running', 0);
+			return(TRUE);
+		} else {
+			return FALSE;
+		}
 	}
 
 }

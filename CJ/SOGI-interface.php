@@ -21,7 +21,8 @@ if(isset($_GET['id']) and @$_GET['id'] != '') {
 
 # Compare graphml/JSON lists
 $uncommon = $ss->getToConvertFileList();
-if(count($uncommon) != 0) $toInit = TRUE;
+$toInit = false;
+if(count($uncommon) != 0) $toInit = true;
 
 ?>
 
@@ -40,11 +41,45 @@ if(count($uncommon) != 0) $toInit = TRUE;
 	<script type="text/javascript">
 		var toInit = <?php if($toInit) { echo 1; } else { echo 0; } ?>;
 
+		function doConsole(talk) {
+			var d = new Date();
+			$('#console .panel-body').append($('<p />').html(d.getDate() + '-' + d.getMonth() + '-' + d.getFullYear() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds() + ' ~ ' + talk));
+			$('#console .panel-body').scrollTop($(this).height());
+		}
+
 		function doServer(action, data, success) {
 			$.ajax({
-				url: '<?php echo ROOT_URI; ?>a/' + action,
+				method: 'POST',
+				url: '<?php echo ROOT_URI; ?>doserve/' + action,
 				data: data,
-				success: success
+				success: function(data) {
+					success(data);
+				}
+			});
+		}
+
+		function loadGraph(name) {
+			doConsole('Loading graph "' + name + '" into canvas.');
+			url = '<?php echo ROOT_URI; ?>session/<?php echo $id; ?>/' + name + '.json';
+			$.getJSON(url, {}, function(data) {
+				switch(data) {
+					case 'E0': case 'E1': case 'E2': {
+						doConsole('No connection, operation aborted.');
+						break;
+					}
+					case 'E3': {
+						doConsole('Only one operation at a time, thanks :)');
+						break;
+					}
+					default: {
+						$('#cy').cytoscape(function() {
+							doConsole('Found ' + data['nodes'].length + ' nodes and ' + data['edges'].length + ' edges.');
+							cy.load(data, function(e) {
+								doConsole('Loaded.');
+							});
+						});
+					}
+				}
 			});
 		}
 
@@ -60,7 +95,9 @@ if(count($uncommon) != 0) $toInit = TRUE;
 				var uncommon = <?php echo '["' . implode('", "', $uncommon) . '"]'; ?>;
 				$(uncommon).each(function() {
 					$('#console .panel-body').append($('<p />').text('Converting ').append($('<span />').text(this).css({'text-decoration':'underline'})));
-					$()
+					doServer('convertToJSON', {'name': this, 'id': '<?php echo $id; ?>'}, function(x) {
+						alert(x);
+					});
 				});
 			}
 
@@ -70,7 +107,6 @@ if(count($uncommon) != 0) $toInit = TRUE;
 
 			$('#cy').cytoscape({
 				container: document.getElementById('cy'),
-				minZoom: 1,
 				maxZoom: 5,
 				hideEdgesOnViewport: true,
 				hideLabelsOnViewport: true,
@@ -101,30 +137,20 @@ if(count($uncommon) != 0) $toInit = TRUE;
 
 				elements: {
 					nodes: [
-					  { data: { id: 'j', name: 'Jerry', weight: 65, height: 174 } },
-					  { data: { id: 'e', name: 'Elaine', weight: 48, height: 160 } },
-					  { data: { id: 'k', name: 'Kramer', weight: 75, height: 185 } },
-					  { data: { id: 'g', name: 'George', weight: 70, height: 150 } }
+					  { data: { id: 'j', name: 'Welcome', weight: 65, height: 174, background: 'red' } },
+					  { data: { id: 'e', name: 'in', weight: 48, height: 160 } },
+					  { data: { id: 'k', name: 'SOGI', weight: 75, height: 185 } },
 					],
 
 					edges: [
 					  { data: { source: 'j', target: 'e' } },
-					  { data: { source: 'j', target: 'k' } },
-					  { data: { source: 'j', target: 'g' } },
-
-					  { data: { source: 'e', target: 'j' } },
 					  { data: { source: 'e', target: 'k' } },
-
-					  { data: { source: 'k', target: 'j' } },
 					  { data: { source: 'k', target: 'e' } },
-					  { data: { source: 'k', target: 'g' } },
-
-					  { data: { source: 'g', target: 'j' } }
 					],
 				},
 
 				layout: {
-					name: 'cose',
+					name: 'grid',
 					refresh: 0,
 					fit: true,
 					padding: 30,
@@ -153,6 +179,27 @@ if(count($uncommon) != 0) $toInit = TRUE;
 
 							cy.elements().addClass('faded');
 							neighborhood.removeClass('faded');
+
+							$('#inspector .panel-body').html('');
+							$('#inspector .panel-body').append($('<h5 />').html('<b>Inspecting node \'' + node.data('name') + '\'</b>'));
+							$('#inspector .panel-body').append($('<div />').attr('id', 'attributes'));
+							for(var k in node.data()) {
+								if(k != 'name') {
+									$('#inspector .panel-body #attributes').append($('<span />').html('<u>' + k + '</u> = ' + node.data(k) + '<br />'));
+								}
+							}
+						});
+
+						cy.on('tap', 'edge', function(e){
+							var edge = e.cyTarget; 
+							$('#inspector .panel-body').html('');
+							$('#inspector .panel-body').append($('<h5 />').html('<b>Inspecting edge \'' + edge.data('id') + '\'</b>'));
+							$('#inspector .panel-body').append($('<div />').attr('id', 'attributes'));
+							for(var k in edge.data()) {
+								if(k != 'id') {
+									$('#inspector .panel-body #attributes').append($('<span />').html('<u>' + k + '</u> = ' + edge.data(k) + '<br />'));
+								}
+							}
 						});
 
 						cy.on('tap', function(e){
@@ -182,11 +229,12 @@ if(count($uncommon) != 0) $toInit = TRUE;
 			<div class="panel-body">
 				<?php
 				foreach($ss->getJSONFileList() as $fname) {
-					$s = "<a href='' class='col-md-8'>$fname</a>";
-					$s .= "<div class='col-md-4'>";
-					$s .= "<a href=''><span class='glyphicon glyphicon-remove'></span></a>&nbsp;&nbsp;";
-					$s .= "<a href=''><span class='glyphicon glyphicon glyphicon-cloud-download'></span></a>";
-					$s .= "</div>";
+					$s = '<a href="javascript:loadGraph(\'' . $fname . '\')" class="col-md-8">' . $fname . '</a>';
+					$s .= '<div class="col-md-4">';
+					$s .= '<a href=""><span class="glyphicon glyphicon glyphicon-cloud-download"></span></a>&nbsp;&nbsp;';
+					$s .= '<a href=""><span class="glyphicon glyphicon-pencil"></span></a>&nbsp;&nbsp;';
+					$s .= '<a href=""><span class="glyphicon glyphicon-remove"></span></a>';
+					$s .= '</div>';
 					echo $s;
 				}
 				?>
@@ -246,6 +294,7 @@ if(count($uncommon) != 0) $toInit = TRUE;
 </div>
 
 <div id="right-side" class="col-md-10">
+	<h1 id="interface-title">SOGI</h1>
 	<div id="canvas" class="col-md-12">
 		<div id="cy"></div>
 	</div>

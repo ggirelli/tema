@@ -51,6 +51,21 @@ div {
 	padding: 0;
 }
 
+#interface-title {
+	position: absolute;
+	top: 0.3em;
+	right: 0.3em;
+
+	margin: 0;
+	padding: 0;
+
+	color: #F24C27;
+	font-family: 'optimus';
+	font-size: 1.6em;
+
+	z-index: 10;
+}
+
 /* CANVAS */
 
 #canvas {
@@ -58,6 +73,7 @@ div {
 	min-height: 500px;
 
 	background-color: #f0f0f0;
+	border-left: 1px solid #e0e0e0;
 }
 
 #canvas #cy {
@@ -108,4 +124,8 @@ div {
 	color: #323232;
 	font-family: monospace;
 	font-size: 0.85em;
+}
+
+#bottom-side #inspector .panel-body #attributes {
+	color: #323232;
 }

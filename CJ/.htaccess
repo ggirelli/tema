@@ -2,6 +2,6 @@ RewriteEngine On
 RewriteRule ^s/(.*)$  SOGI-interface.php?id=$1
 RewriteRule ^fc/$  SOGI-filecheck.php
 RewriteRule ^ssa/(.*)$  SOGI-session.php?a=$1
-RewriteRule ^ssa/load/(.*)$  SOGI-session.php?a=load&id=$1
+RewriteRule ^ssal/(.*)$  SOGI-session.php?a=load&id=$1
 RewriteRule ^up/(.*)$  SOGI-uploader.php
 RewriteRule ^doserve/(.*)$  SOGI-doServer.php?a=$1

@@ -171,7 +171,7 @@ require_once('SOGI-settings.php');
 			e.preventDefault();
 			$.ajax({
 				type: 'GET',
-				url: 'ssa/load/' + $('#load-id').val(),
+				url: 'ssal/' + $('#load-id').val(),
 				success: function(data) {
 					switch(data) {
 						case 'E0': {
