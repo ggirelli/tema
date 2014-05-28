@@ -41,12 +41,24 @@ if(count($uncommon) != 0) $toInit = true;
 	<script type="text/javascript">
 		var toInit = <?php if($toInit) { echo 1; } else { echo 0; } ?>;
 
+		/**
+		 * Allows to add text to the console
+		 * @param  {String} talk Text (html format) to add to the console inside a <p /> with the current timestamp
+		 * @return {none}      
+		 */
 		function doConsole(talk) {
 			var d = new Date();
 			$('#console .panel-body').append($('<p />').html(d.getDate() + '-' + d.getMonth() + '-' + d.getFullYear() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds() + ' ~ ' + talk));
-			$('#console .panel-body').scrollTop($(this).height());
+			$('#console').scrollTop($('#console .panel-body').height());
 		}
 
+		/**
+		 * Queries the server
+		 * @param  {String} action  Query keyword
+		 * @param  {Object} data    POST data required to perform the action
+		 * @param  {function} success Function triggered if the client can contact the server
+		 * @return {none}         
+		 */
 		function doServer(action, data, success) {
 			$.ajax({
 				method: 'POST',
@@ -58,6 +70,11 @@ if(count($uncommon) != 0) $toInit = true;
 			});
 		}
 
+		/**
+		 * Loads a graph in the canvas
+		 * @param  {String} name graph name
+		 * @return {none}
+		 */
 		function loadGraph(name) {
 			doConsole('Loading graph "' + name + '" into canvas.');
 			url = '<?php echo ROOT_URI; ?>session/<?php echo $id; ?>/' + name + '.json';
@@ -81,6 +98,34 @@ if(count($uncommon) != 0) $toInit = true;
 					}
 				}
 			});
+		}
+
+		/**
+		 * Downloads a graph in JSON or graphml format
+		 * @param  {String} name Graph's name
+		 * @return {none}
+		 */
+		function downloadGraph(name) {
+			$('.jumbotron').css({'display':'block'});
+			$('.jumbotron .container').append($('<p />').html('To donwload the <i>\'' + name + '\'</i> graph,<br /><u>right click</u> on the desired format and select <b>save</b>:'));
+
+			json_btn = $('<a />').text('json').addClass('btn btn-success btn-lg').attr('target','new').attr('href','<?php echo ROOT_URI; ?>session/<?php echo $id; ?>/' + name + '.json');
+			graphml_btn = $('<a />').text('graphml').addClass('btn btn-warning btn-lg').attr('target','new').attr('href','<?php echo ROOT_URI; ?>session/<?php echo $id; ?>/' + name + '.graphml');
+
+			$('.jumbotron .container').append(json_btn);
+			$('.jumbotron .container').append('&nbsp;');
+			$('.jumbotron .container').append(graphml_btn);
+
+			$('.jumbotron .container').append($('<p />').html('or go <a href="javascript:hideJumbo()">back</a>...'));
+		}
+
+		/**
+		 * Hides the jumbotron
+		 * @return {none}
+		 */
+		function hideJumbo() {
+			$('.jumbotron .container').html('');
+			$('.jumbotron').css({'display':'none'});
 		}
 
 		$(document).ready(function() {
@@ -114,12 +159,16 @@ if(count($uncommon) != 0) $toInit = true;
 
 				style: cytoscape.stylesheet()
 					.selector('node').css({
+						'background-color': 'white',
+						'border-color': '#909090',
+						'border-width': '1px',
 						'content': 'data(name)',
 						'text-valign': 'center',
-						'color': 'white',
+						'color': '#323232',
 						'min-zoomed-font-size': '10px',
-						'text-outline-width': 2,
-						'text-outline-color': '#888'
+						'font-family': 'arial',
+						'text-outline-color': 'white',
+						'text-outline-width': '1'
 					})
 					.selector('edge').css({
 						'target-arrow-shape': 'triangle'
@@ -137,8 +186,8 @@ if(count($uncommon) != 0) $toInit = true;
 
 				elements: {
 					nodes: [
-					  { data: { id: 'j', name: 'Welcome', weight: 65, height: 174, background: 'red' } },
-					  { data: { id: 'e', name: 'in', weight: 48, height: 160 } },
+					  { data: { id: 'j', name: 'Welcome', weight: 65, height: 174 } },
+					  { data: { id: 'e', name: 'to', weight: 48, height: 160 } },
 					  { data: { id: 'k', name: 'SOGI', weight: 75, height: 185 } },
 					],
 
@@ -153,19 +202,6 @@ if(count($uncommon) != 0) $toInit = true;
 					name: 'grid',
 					refresh: 0,
 					fit: true,
-					padding: 30,
-					randomize: true,
-					debug: false,
-					nodeRepulsion: 10000,
-					nodeOverlap: 10,
-					idealEdgeLength: 10,
-					edgeElasticity: 100,
-					nestingFactor: 5,
-					gravity: 250,
-					numIter: 100,
-					initialTemp: 200,
-					coolingFactor: 0.95,
-					minTemp: 1,
 					ready: function(){
 						window.cy = this;
 
@@ -191,8 +227,14 @@ if(count($uncommon) != 0) $toInit = true;
 						});
 
 						cy.on('tap', 'edge', function(e){
-							var edge = e.cyTarget; 
+							var edge = e.cyTarget;
+
 							$('#inspector .panel-body').html('');
+
+							cy.elements().addClass('faded');
+							edge.source().removeClass('faded');
+							edge.target().removeClass('faded');
+
 							$('#inspector .panel-body').append($('<h5 />').html('<b>Inspecting edge \'' + edge.data('id') + '\'</b>'));
 							$('#inspector .panel-body').append($('<div />').attr('id', 'attributes'));
 							for(var k in edge.data()) {
@@ -204,6 +246,7 @@ if(count($uncommon) != 0) $toInit = true;
 
 						cy.on('tap', function(e){
 							if( e.cyTarget === cy ){
+								$('#inspector .panel-body').html('');
 								cy.elements().removeClass('faded');
 							}
 						});
@@ -220,6 +263,9 @@ if(count($uncommon) != 0) $toInit = true;
 
 <!-- SOGI, session <?php echo $id; ?> -->
 
+<div class="jumbotron"><div class="container"></div></div>
+
+
 <div id='left-side' class="col-md-2 panel-group">
 	<div class="panel panel-primary">
 		<div class="panel-heading">
@@ -231,7 +277,7 @@ if(count($uncommon) != 0) $toInit = true;
 				foreach($ss->getJSONFileList() as $fname) {
 					$s = '<a href="javascript:loadGraph(\'' . $fname . '\')" class="col-md-8">' . $fname . '</a>';
 					$s .= '<div class="col-md-4">';
-					$s .= '<a href=""><span class="glyphicon glyphicon glyphicon-cloud-download"></span></a>&nbsp;&nbsp;';
+					$s .= '<a href="javascript:downloadGraph(\'' . $fname . '\')"><span class="glyphicon glyphicon glyphicon-cloud-download"></span></a>&nbsp;&nbsp;';
 					$s .= '<a href=""><span class="glyphicon glyphicon-pencil"></span></a>&nbsp;&nbsp;';
 					$s .= '<a href=""><span class="glyphicon glyphicon-remove"></span></a>';
 					$s .= '</div>';
@@ -272,7 +318,7 @@ if(count($uncommon) != 0) $toInit = true;
 		</div>
 		<div class="panel-collapse collapse" id="graph-style">
 			<div class="panel-body">
-				Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed, exercitationem, veritatis dolorum maxime corporis expedita a ad error! Rem, nostrum doloribus illo vero dolorum ea velit reprehenderit inventore et labore? Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed, exercitationem, veritatis dolorum maxime corporis expedita a ad error! Rem, nostrum doloribus illo vero dolorum ea velit reprehenderit inventore et labore? Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed, exercitationem, veritatis dolorum maxime corporis expedita a ad error! Rem, nostrum doloribus illo vero dolorum ea velit reprehenderit inventore et labore? Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed, exercitationem, veritatis dolorum maxime corporis expedita a ad error! Rem, nostrum doloribus illo vero dolorum ea velit reprehenderit inventore et labore? Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed, exercitationem, veritatis dolorum maxime corporis expedita a ad error! Rem, nostrum doloribus illo vero dolorum ea velit reprehenderit inventore et labore? Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed, exercitationem, veritatis dolorum maxime corporis expedita a ad error! Rem, nostrum doloribus illo vero dolorum ea velit reprehenderit inventore et labore? Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed, exercitationem, veritatis dolorum maxime corporis expedita a ad error! Rem, nostrum doloribus illo vero dolorum ea velit reprehenderit inventore et labore? Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed, exercitationem, veritatis dolorum maxime corporis expedita a ad error! Rem, nostrum doloribus illo vero dolorum ea velit reprehenderit inventore et labore?
+				...
 			</div>
 		</div>
 	</div>
@@ -282,7 +328,7 @@ if(count($uncommon) != 0) $toInit = true;
 		</div>
 		<div class="panel-collapse collapse" id="graph-settings">
 			<div class="panel-body">
-				Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed, exercitationem, veritatis dolorum maxime corporis expedita a ad error! Rem, nostrum doloribus illo vero dolorum ea velit reprehenderit inventore et labore? Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed, exercitationem, veritatis dolorum maxime corporis expedita a ad error! Rem, nostrum doloribus illo vero dolorum ea velit reprehenderit inventore et labore? Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed, exercitationem, veritatis dolorum maxime corporis expedita a ad error! Rem, nostrum doloribus illo vero dolorum ea velit reprehenderit inventore et labore? Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed, exercitationem, veritatis dolorum maxime corporis expedita a ad error! Rem, nostrum doloribus illo vero dolorum ea velit reprehenderit inventore et labore? Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed, exercitationem, veritatis dolorum maxime corporis expedita a ad error! Rem, nostrum doloribus illo vero dolorum ea velit reprehenderit inventore et labore? Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed, exercitationem, veritatis dolorum maxime corporis expedita a ad error! Rem, nostrum doloribus illo vero dolorum ea velit reprehenderit inventore et labore? Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed, exercitationem, veritatis dolorum maxime corporis expedita a ad error! Rem, nostrum doloribus illo vero dolorum ea velit reprehenderit inventore et labore? Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed, exercitationem, veritatis dolorum maxime corporis expedita a ad error! Rem, nostrum doloribus illo vero dolorum ea velit reprehenderit inventore et labore?
+				...
 			</div>
 		</div>
 	</div>
@@ -306,7 +352,7 @@ if(count($uncommon) != 0) $toInit = true;
 		</div>
 		<div id="inspector" class="col-md-3 panel panel-default">
 			<div class="panel-body">
-				Inspector Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugiat, a, itaque provident similique quisquam dolorum earum perferendis est dolore perspiciatis alias animi officiis architecto eligendi dicta suscipit voluptas dolores illo! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugiat, a, itaque provident similique quisquam dolorum earum perferendis est dolore perspiciatis alias animi officiis architecto eligendi dicta suscipit voluptas dolores illo! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugiat, a, itaque provident similique quisquam dolorum earum perferendis est dolore perspiciatis alias animi officiis architecto eligendi dicta suscipit voluptas dolores illo! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugiat, a, itaque provident similique quisquam dolorum earum perferendis est dolore perspiciatis alias animi officiis architecto eligendi dicta suscipit voluptas dolores illo! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugiat, a, itaque provident similique quisquam dolorum earum perferendis est dolore perspiciatis alias animi officiis architecto eligendi dicta suscipit voluptas dolores illo! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugiat, a, itaque provident similique quisquam dolorum earum perferendis est dolore perspiciatis alias animi officiis architecto eligendi dicta suscipit voluptas dolores illo! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugiat, a, itaque provident similique quisquam dolorum earum perferendis est dolore perspiciatis alias animi officiis architecto eligendi dicta suscipit voluptas dolores illo!
+				
 			</div>
 		</div>
 	</div>
