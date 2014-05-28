@@ -48,7 +48,7 @@ if(count($uncommon) != 0) $toInit = true;
 		 */
 		function doConsole(talk) {
 			var d = new Date();
-			$('#console .panel-body').append($('<p />').html(d.getDate() + '-' + d.getMonth() + '-' + d.getFullYear() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds() + ' ~ ' + talk));
+			$('#console .panel-body').append($('<p />').html(d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds() + ' ~ ' + talk));
 			$('#console').scrollTop($('#console .panel-body').height());
 		}
 
@@ -263,7 +263,8 @@ if(count($uncommon) != 0) $toInit = true;
 			
 			$('#cmd-line').submit(function(e) {
 				e.preventDefault();
-				alert(1);
+				doConsole($('#cmd-line input[type=text]').val());
+				$('#cmd-line input[type=text]').val('');
 			});
 
 		});
