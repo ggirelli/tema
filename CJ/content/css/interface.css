@@ -98,11 +98,21 @@ div {
 #bottom-side #console {
 	height: 100%;
 	padding: 0;
-	overflow: auto;
 	border-radius: 0;
 }
 
 #bottom-side #console .panel-body {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 34px;
+	overflow: auto;
+}
+
+#bottom-side #console .panel-body .wrapper {
+	padding-bottom: 1em;
+	
 	color: #323232;
 	font-family: monospace;
 	font-size: 0.85em;
@@ -115,7 +125,7 @@ div {
 #bottom-side #console #cmd-line {
 	position: absolute;
 	bottom: 0;
-
+	
 	display: block;
 	width: 100%;
 }

@@ -48,8 +48,8 @@ if(count($uncommon) != 0) $toInit = true;
 		 */
 		function doConsole(talk) {
 			var d = new Date();
-			$('#console .panel-body').append($('<p />').html(d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds() + ' ~ ' + talk));
-			$('#console').scrollTop($('#console .panel-body').height());
+			$('#console .panel-body .wrapper').append($('<p />').html(d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds() + ' ~ ' + talk));
+			$('#console .panel-body').scrollTop($('#console .panel-body .wrapper').height());
 		}
 
 		/**
@@ -357,9 +357,7 @@ if(count($uncommon) != 0) $toInit = true;
 	</div>
 	<div id="bottom-side" class="col-md-12">
 		<div id="console" class="col-md-9 panel panel-default">
-			<div class="panel-body">
-				
-			</div>
+			<div class="panel-body"><div class="wrapper"></div></div>
 			<form id='cmd-line' class='form-inline'>
 				<div class="col col-md-11">
 					<input type='text' class='form-control' placeholder='SOGI command line' />
