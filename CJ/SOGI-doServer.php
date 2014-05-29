@@ -21,6 +21,7 @@ switch($_GET['a']) {
 		}
 		break;
 	}
+
 	case 'doConsole': {
 		if(isset($_POST['text']) and isset($_POST['id'])) {
 			if($_POST['text'] != '' and $_POST['id'] != '') {
@@ -28,6 +29,16 @@ switch($_GET['a']) {
 			} else {
 				die('E2');
 			}
+		} else {
+			die('E1');
+		}
+		break;
+	}
+
+	case 'isRunning': {
+		if(isset($_POST['text']) and $_POST['id'] != '') {
+			$ss = new SOGIsession($FILENAME_BAN, $_POST['id']);
+			echo $ss->get('running');
 		} else {
 			die('E1');
 		}

@@ -204,10 +204,6 @@ class SOGIsession {
 		$this->writeSession();
 	}
 
-	// -------
-	// PRIVATE
-	// -------
-
 	/**
 	 * Retrieves the actual file list for the current session.
 	 * @return array List of file names
@@ -276,6 +272,10 @@ class SOGIsession {
 		
 		return($uncommon);
 	}
+
+	// -------
+	// PRIVATE
+	// -------
 
 	/**
 	 * Writes a config file with all the session params.

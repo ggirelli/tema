@@ -69,6 +69,9 @@ if(count($uncommon) != 0) $toInit = true;
 				data: data,
 				success: function(data) {
 					success(data);
+				},
+				fail: function() {
+					doConsole('<u>Triggered error</u>');
 				}
 			});
 		}
@@ -109,14 +112,26 @@ if(count($uncommon) != 0) $toInit = true;
 		 * @return {none}        Writes directly to consoles
 		 */
 		function convertGraphs(lnames, index) {
-			doConsole('Converting <i>\'' + lnames[index] + '\' to JSON format.');
+			doConsole('Converting <i>\'' + lnames[index] + '\'</i> to JSON format.');
 			doServer('convertToJSON', {'name':lnames[index], 'id':'<?php echo $id; ?>'}, function(data) {
-				doConsole('<i>\'' + lnames[index] + '\' converted.');
+				switch(data) {
+					case 'E0': case 'E1': case 'E2': {
+						doConsole('Mr. Server isn\'t answering.');
+						break;
+					}
+					case 'E3': {
+						doConsole('Only one operation at a time, please...');
+						break;
+					}
+					default: {
+						doConsole('<i>\'' + lnames[index] + '\'</i> converted.');
 
-				$('#graph-list .panel-body').append('<a href="javascript:loadGraph(\'' + lnames[index] + '\')" class="col-md-8">' + lnames[index] + '</a><div class="col-md-4"><a href="javascript:downloadGraph(\'' + lnames[index] + '\')"><span class="glyphicon glyphicon glyphicon-cloud-download"></span></a>&nbsp;&nbsp;<a href=""><span class="glyphicon glyphicon-pencil"></span></a>&nbsp;&nbsp;<a href=""><span class="glyphicon glyphicon-remove"></span></a></div>');
+						$('#graph-list .panel-body').append('<a href="javascript:loadGraph(\'' + lnames[index] + '\')" class="col-md-8">' + lnames[index] + '</a><div class="col-md-4"><a href="javascript:downloadGraph(\'' + lnames[index] + '\')"><span class="glyphicon glyphicon glyphicon-cloud-download"></span></a>&nbsp;&nbsp;<a href=""><span class="glyphicon glyphicon-pencil"></span></a>&nbsp;&nbsp;<a href=""><span class="glyphicon glyphicon-remove"></span></a></div>');
 
-				if((index+1) < lnames.length) {
-					convertGraphs(lnames, index+1);
+						if((index+1) < lnames.length) {
+							convertGraphs(lnames, index+1);
+						}
+					}
 				}
 			});
 		}
@@ -127,17 +142,40 @@ if(count($uncommon) != 0) $toInit = true;
 		 * @return {none}
 		 */
 		function downloadGraph(name) {
-			$('.jumbotron').css({'display':'block'});
-			$('.jumbotron .container').append($('<p />').html('To donwload the <i>\'' + name + '\'</i> graph,<br /><u>right click</u> on the desired format and select <b>save</b>:'));
+			doConsole('Downloading graph <i>\'' + name + '\'</i>, choose the format:');
+			doConsole('<a href="<?php echo ROOT_URI; ?>session/<?php echo $id; ?>/' + name + '.json" target="_new">JSON</a> or <a href="<?php echo ROOT_URI; ?>session/<?php echo $id; ?>/' + name + '.graphml" target="_new">graphml</a>');
+			$('#cmd-line').unbind('submit');
+			$('#cmd-line').submit(function(e) {
+				e.preventDefault();
+				val = $('#cmd-line input[type=text]').val();
+				doConsole(val);
+				downloadGraphConsole(name,1);
+			});
+		}
 
-			json_btn = $('<a />').text('json').addClass('btn btn-success btn-lg').attr('target','new').attr('href','<?php echo ROOT_URI; ?>session/<?php echo $id; ?>/' + name + '.json');
-			graphml_btn = $('<a />').text('graphml').addClass('btn btn-warning btn-lg').attr('target','new').attr('href','<?php echo ROOT_URI; ?>session/<?php echo $id; ?>/' + name + '.graphml');
+		/**
+		 * Basic command line submit event
+		 * @return {none}
+		 */
+		function cmdSubmit() {
+			doConsole($('#cmd-line input[type=text]').val());
+			$('#cmd-line input[type=text]').val('');
+		}
 
-			$('.jumbotron .container').append(json_btn);
-			$('.jumbotron .container').append('&nbsp;');
-			$('.jumbotron .container').append(graphml_btn);
-
-			$('.jumbotron .container').append($('<p />').html('or go <a href="javascript:hideJumbo()">back</a>...'));
+		/**
+		 * Checks if a query is running (back-end)
+		 * @return {none} Shows query status
+		 */
+		function isRunning() {
+			doServer('isRunning', {'id':'<?php echo $id; ?>'}, function(data) {
+				if(data == 1) {
+					console.log('running');
+				} else if(data == 0) {
+					console.log('not running');
+				} else {
+					console.lof('error');
+				}
+			})
 		}
 
 		/**
@@ -154,10 +192,11 @@ if(count($uncommon) != 0) $toInit = true;
 			// ----------
 			// INITIALIZE
 			// ----------
-
+			
+			$('#console .panel-body').scrollTop($('#console .panel-body .wrapper').height());
 			if(toInit) {
-				$('#console .panel-body').append($('<p />').text('Initializing the interface...'));
-				$('#console .panel-body').append($('<p />').text('I am going to convert some files into the JSON format:'));
+				doConsole('Initializing the interface...');
+				doConsole('I am going to convert some files into the JSON format:');
 				convertGraphs(<?php echo '["' . implode('", "', $uncommon) . '"]'; ?>, 0)
 			}
 
@@ -276,11 +315,7 @@ if(count($uncommon) != 0) $toInit = true;
 			// COMMAND LINE
 			// ------------
 			
-			$('#cmd-line').submit(function(e) {
-				e.preventDefault();
-				doConsole($('#cmd-line input[type=text]').val());
-				$('#cmd-line input[type=text]').val('');
-			});
+			$('#cmd-line').submit(function(e) { e.preventDefault(); cmdSubmit(); });
 
 		});
 	</script>
@@ -303,7 +338,7 @@ if(count($uncommon) != 0) $toInit = true;
 				foreach($ss->getJSONFileList() as $fname) {
 					$s = '<a href="javascript:loadGraph(\'' . $fname . '\')" class="col-md-8">' . $fname . '</a>';
 					$s .= '<div class="col-md-4">';
-					$s .= '<a href="javascript:downloadGraph(\'' . $fname . '\')"><span class="glyphicon glyphicon glyphicon-cloud-download"></span></a>&nbsp;&nbsp;';
+					$s .= '<a href="javascript:downloadGraph(\'' . $fname . '\',0)"><span class="glyphicon glyphicon glyphicon-cloud-download"></span></a>&nbsp;&nbsp;';
 					$s .= '<a href=""><span class="glyphicon glyphicon-pencil"></span></a>&nbsp;&nbsp;';
 					$s .= '<a href=""><span class="glyphicon glyphicon-remove"></span></a>';
 					$s .= '</div>';
@@ -320,7 +355,7 @@ if(count($uncommon) != 0) $toInit = true;
 		</div>
 		<div class="panel-collapse collapse" id="graph-tools">
 			<div class="panel-body">
-				<button type="button" class="btn btn-warning btn-md">
+				<button type="button" class="btn btn-warning btn-md" onclick='javascript:'>
 					<span class="glyphicon glyphicon-link"></span>
 				</button>
 				<button type="button" class="btn btn-warning btn-md">
