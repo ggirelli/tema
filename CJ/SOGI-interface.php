@@ -71,7 +71,7 @@ if(count($uncommon) != 0) $toInit = true;
 					success(data);
 				},
 				fail: function() {
-					doConsole('<u>Triggered error</u>');
+					doConsole('<u>Triggered error</u>.');
 				}
 			});
 		}
@@ -82,9 +82,7 @@ if(count($uncommon) != 0) $toInit = true;
 		 * @return {none}
 		 */
 		function loadGraph(name) {
-			doConsole('Loading graph "' + name + '" into canvas.');
-			url = '<?php echo ROOT_URI; ?>session/<?php echo $id; ?>/' + name + '.json';
-			$.getJSON(url, {}, function(data) {
+			doServer('loadGraph', {'name':name,'id':'<?php echo $id; ?>'}, function(data) {
 				switch(data) {
 					case 'E0': case 'E1': case 'E2': {
 						doConsole('No connection, operation aborted.');
@@ -95,6 +93,8 @@ if(count($uncommon) != 0) $toInit = true;
 						break;
 					}
 					default: {
+						doConsole('Loading graph "' + name + '" into canvas.');
+						data = $.parseJSON(data);
 						$('#cy').cytoscape(function() {
 							doConsole('Found ' + data['nodes'].length + ' nodes and ' + data['edges'].length + ' edges.');
 							cy.load(data, function(e) {
@@ -237,7 +237,7 @@ if(count($uncommon) != 0) $toInit = true;
 						'opacity': 0.25,
 						'text-opacity': 0
 					}),
-
+<?php if($ss->get('graph') == '0') { ?>
 				elements: {
 					nodes: [
 					  { data: { id: 'j', name: 'Welcome', weight: 65, height: 174 } },
@@ -251,7 +251,9 @@ if(count($uncommon) != 0) $toInit = true;
 					  { data: { source: 'k', target: 'e' } },
 					],
 				},
-
+<?php } else { ?>
+				elements: <?php echo file_get_contents(SESS_PATH . $id . '/' . $ss->get('graph') . '.json'); ?>,
+<?php } ?>
 				layout: {
 					name: 'grid',
 					refresh: 0,

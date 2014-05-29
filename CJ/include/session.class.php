@@ -54,6 +54,12 @@ class SOGIsession {
 	 */
 	private $banned_fnames;
 
+	/**
+	 * Name of the current graph
+	 * @var String
+	 */
+	private $graph;
+
 	/*-----------*/
 	/* FUNCTIONS */
 	/*-----------*/
@@ -90,6 +96,7 @@ class SOGIsession {
 			$this->running = 0;
 			$this->last_query = 'init';
 			$this->last_query_when = time();
+			$this->graph = 0;
 
 			# Make directory
 			mkdir(SESS_PATH . $this->id);
@@ -97,7 +104,6 @@ class SOGIsession {
 			$this->writeSession();
 
 			file_put_contents(SESS_PATH . $this->id . '/CONSOLE', '');
-
 		} else {
 			return new SOGIsession();
 		}
@@ -149,6 +155,10 @@ class SOGIsession {
 				return $this->last_query_when;
 				break;
 			}
+			case 'graph': {
+				return $this->graph;
+				break;
+			}
 		}
 		return NULL;
 	}
@@ -176,6 +186,11 @@ class SOGIsession {
 				$this->writeSession();
 				break;
 			}
+			case 'graph': {
+				$this->graph = $val;
+				$this->writeSession();
+				break;
+			}
 		}
 	}
 
@@ -197,6 +212,10 @@ class SOGIsession {
 				}
 				case 'time': {
 					$this->last_query_when = $val;
+					break;
+				}
+				case 'graph': {
+					$this->graph = $val;
 					break;
 				}
 			}
@@ -289,6 +308,7 @@ class SOGIsession {
 		$data .= "RUNNING\t$this->running\n";
 		$data .= "LAST\t$this->last_query\n";
 		$data .= "TIME\t$this->last_query_when\n";
+		$data .= "GRAPH\t$this->graph";
 		file_put_contents($this->folder_path . 'CONFIG', $data);
 	}
 
@@ -324,6 +344,10 @@ class SOGIsession {
 				}
 				case 'TIME': {
 					$this->last_query_when = $arow[1];
+					break;
+				}
+				case 'GRAPH': {
+					$this->graph = $arow[1];
 					break;
 				}
 			}

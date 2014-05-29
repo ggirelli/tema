@@ -22,6 +22,25 @@ switch($_GET['a']) {
 		break;
 	}
 
+	case 'loadGraph': {
+		if(isset($_POST['id']) and isset($_POST['name'])) {
+			if($_POST['id'] != '' and $_POST['name'] != '') {
+				$ss = new SOGIsession($FILENAME_BAN, $_POST['id']);
+				if(!in_array($_POST['name'], $ss->getJSONFileList())) {
+					die('E3');
+				} else {
+					echo file_get_contents(ROOT_URI . 'session/' . $_POST['id'] . '/' . $_POST['name'] . '.json');
+					$ss->set('graph',$_POST['name']);
+				}
+			} else {
+				die('E2');
+			}
+		} else {
+			die('E1');
+		}
+		break;
+	}
+
 	case 'doConsole': {
 		if(isset($_POST['text']) and isset($_POST['id'])) {
 			if($_POST['text'] != '' and $_POST['id'] != '') {
