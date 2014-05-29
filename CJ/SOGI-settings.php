@@ -15,7 +15,7 @@ define('SESS_PATH', ROOT_PATH . 'session/');
  * Array of filenames that cannot be uploaded
  */
 global $FILENAME_BAN;
-$FILENAME_BAN = array('.', '..', 'CONFIG', '.htaccess', 'php.ini');
+$FILENAME_BAN = array('.', '..', 'CONFIG', 'CONSOLE', '.htaccess', 'php.ini');
 
 # REQUIRES
 

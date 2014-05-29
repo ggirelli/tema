@@ -21,6 +21,18 @@ switch($_GET['a']) {
 		}
 		break;
 	}
+	case 'doConsole': {
+		if(isset($_POST['text']) and isset($_POST['id'])) {
+			if($_POST['text'] != '' and $_POST['id'] != '') {
+				file_put_contents(SESS_PATH . $_POST['id'] . '/CONSOLE', $_POST['text'], FILE_APPEND);
+			} else {
+				die('E2');
+			}
+		} else {
+			die('E1');
+		}
+		break;
+	}
 }
 
 ?>

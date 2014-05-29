@@ -48,8 +48,11 @@ if(count($uncommon) != 0) $toInit = true;
 		 */
 		function doConsole(talk) {
 			var d = new Date();
-			$('#console .panel-body .wrapper').append($('<p />').html(d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds() + ' ~ ' + talk));
-			$('#console .panel-body').scrollTop($('#console .panel-body .wrapper').height());
+			talk = d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds() + ' ~ ' + talk;
+			doServer('doConsole', {'text':'<p>' + talk + '</p>', 'id':'<?php echo $id; ?>'}, function(data) {
+				$('#console .panel-body .wrapper').append($('<p />').html(talk));
+				$('#console .panel-body').scrollTop($('#console .panel-body .wrapper').height());
+			});
 		}
 
 		/**
@@ -101,6 +104,24 @@ if(count($uncommon) != 0) $toInit = true;
 		}
 
 		/**
+		 * Manages convertion of a list of graphs from graphml to JSON
+		 * @param  {Array} lnames List of graph names
+		 * @return {none}        Writes directly to consoles
+		 */
+		function convertGraphs(lnames, index) {
+			doConsole('Converting <i>\'' + lnames[index] + '\' to JSON format.');
+			doServer('convertToJSON', {'name':lnames[index], 'id':'<?php echo $id; ?>'}, function(data) {
+				doConsole('<i>\'' + lnames[index] + '\' converted.');
+
+				$('#graph-list .panel-body').append('<a href="javascript:loadGraph(\'' + lnames[index] + '\')" class="col-md-8">' + lnames[index] + '</a><div class="col-md-4"><a href="javascript:downloadGraph(\'' + lnames[index] + '\')"><span class="glyphicon glyphicon glyphicon-cloud-download"></span></a>&nbsp;&nbsp;<a href=""><span class="glyphicon glyphicon-pencil"></span></a>&nbsp;&nbsp;<a href=""><span class="glyphicon glyphicon-remove"></span></a></div>');
+
+				if((index+1) < lnames.length) {
+					convertGraphs(lnames, index+1);
+				}
+			});
+		}
+
+		/**
 		 * Downloads a graph in JSON or graphml format
 		 * @param  {String} name Graph's name
 		 * @return {none}
@@ -137,13 +158,7 @@ if(count($uncommon) != 0) $toInit = true;
 			if(toInit) {
 				$('#console .panel-body').append($('<p />').text('Initializing the interface...'));
 				$('#console .panel-body').append($('<p />').text('I am going to convert some files into the JSON format:'));
-				var uncommon = <?php echo '["' . implode('", "', $uncommon) . '"]'; ?>;
-				$(uncommon).each(function() {
-					$('#console .panel-body').append($('<p />').text('Converting ').append($('<span />').text(this).css({'text-decoration':'underline'})));
-					doServer('convertToJSON', {'name': this, 'id': '<?php echo $id; ?>'}, function(x) {
-						alert(x);
-					});
-				});
+				convertGraphs(<?php echo '["' . implode('", "', $uncommon) . '"]'; ?>, 0)
 			}
 
 			// ----------------
@@ -357,7 +372,7 @@ if(count($uncommon) != 0) $toInit = true;
 	</div>
 	<div id="bottom-side" class="col-md-12">
 		<div id="console" class="col-md-9 panel panel-default">
-			<div class="panel-body"><div class="wrapper"></div></div>
+			<div class="panel-body"><div class="wrapper"><?php echo file_get_contents(SESS_PATH . $id . '/CONSOLE'); ?></div></div>
 			<form id='cmd-line' class='form-inline'>
 				<div class="col col-md-11">
 					<input type='text' class='form-control' placeholder='SOGI command line' />

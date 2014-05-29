@@ -96,6 +96,8 @@ class SOGIsession {
 			# Write CONFIG in directory
 			$this->writeSession();
 
+			file_put_contents(SESS_PATH . $this->id . '/CONSOLE', '');
+
 		} else {
 			return new SOGIsession();
 		}
