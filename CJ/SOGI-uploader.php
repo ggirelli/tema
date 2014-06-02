@@ -7,7 +7,7 @@ if(in_array($_FILES['file']['name'], $FILENAME_BAN)) {
 }
 
 $info = pathinfo($_FILES['file']['name']);
-if(isset($info['extension']) and @in_array($info['extension'], array('graphml', 'json'))) {
+if(isset($info['extension']) and @in_array($info['extension'], array('graphml'))) {
 	$newname = $_FILES['file']['name']; 
 
 	$target = SESS_PATH . $_POST['id'] . '/' . $newname;
