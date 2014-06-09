@@ -49,8 +49,19 @@ if(count($uncommon) != 0) $toInit = true;
 			var d = new Date();
 			talk = d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds() + ' ~ ' + talk;
 			doServer('doConsole', {'text':'<p>' + talk + '</p>', 'id':'<?php echo $id; ?>'}, function(data) {
-				$('#console .panel-body .wrapper').append($('<p />').html(talk));
-				$('#console .panel-body').scrollTop($('#console .panel-body .wrapper').height());
+				switch(data) {
+					case 'E0': case 'E1': case 'E2': case 'E3': {
+						doConsole('Mr. Server isn\'t answering.');
+						break;
+					}
+					case 'ER': {
+						talk = d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds() + ' ~ ' + 'Only one operation at a time, please...';
+					}
+					default: {
+						$('#console .panel-body .wrapper').append($('<p />').html(talk));
+						$('#console .panel-body').scrollTop($('#console .panel-body .wrapper').height());
+					}
+				}
 			});
 		}
 
@@ -83,11 +94,11 @@ if(count($uncommon) != 0) $toInit = true;
 		function loadGraph(name) {
 			doServer('loadGraph', {'name':name,'id':'<?php echo $id; ?>'}, function(data) {
 				switch(data) {
-					case 'E0': case 'E1': case 'E2': {
+					case 'E0': case 'E1': case 'E2': case 'E3': {
 						doConsole('No connection, operation aborted.');
 						break;
 					}
-					case 'E3': {
+					case 'ER': {
 						doConsole('Only one operation at a time, thanks :)');
 						break;
 					}
@@ -114,11 +125,14 @@ if(count($uncommon) != 0) $toInit = true;
 			doConsole('Converting <i>\'' + lnames[index] + '\'</i> to JSON format.');
 			doServer('convertToJSON', {'name':lnames[index], 'id':'<?php echo $id; ?>'}, function(data) {
 				switch(data) {
-					case 'E0': case 'E1': case 'E2': {
+					case 'E0': case 'E1': case 'E2': case 'E3': {
 						doConsole('Mr. Server isn\'t answering.');
 						break;
 					}
-					case 'E3': {
+					case 'E4': {
+						doConsole('Failed to convert, will try next time that the interface is loaded.');
+					}
+					case 'ER': {
 						doConsole('Only one operation at a time, please...');
 						break;
 					}
@@ -178,20 +192,24 @@ if(count($uncommon) != 0) $toInit = true;
 					// Rename
 					doServer('renameGraph', {'id':'<?php echo $id; ?>', 'old_name':name, 'new_name':val}, function(data) {
 						switch(data) {
-							case 'E0': case 'E1': {
+							case 'E0': case 'E1': case 'E2': {
 								doConsole('An error occurred while contacting the server. Try again later.');
 								break;
 							}
-							case 'E2': {
+							case 'E3': {
 								doConsole('The server cannot accept empty parameter');
 								break;
 							}
-							case 'E3': {
+							case 'E4': {
 								doConsole('Cannot rename non-existent graph.');
 								break;
 							}
-							case 'E4': {
+							case 'E5': {
 								doConsole('A graph with the new name is already present, please try with a different one.');
+								break;
+							}
+							case 'ER': {
+								doConsole('Only one operation at a time, please...');
 								break;
 							}
 							case 'OK': {
@@ -244,12 +262,16 @@ if(count($uncommon) != 0) $toInit = true;
 						// Remove
 						doServer('removeGraph', {'id':'<?php echo $id; ?>', 'name':name}, function(data) {
 							switch(data) {
-								case 'E0': case 'E1': {
+								case 'E0': case 'E1': case 'E2': case 'E3': {
 									doConsole('An error occurred while contacting the server. Try again later.');
 									break;
 								}
-								case 'E1': {
+								case 'E4': {
 									doConsole('Cannot remove non-existent graph.');
+									break;
+								}
+								case 'ER': {
+									doConsole('Only one operation at a time, please...');
 									break;
 								}
 								case 'OK': {
@@ -386,12 +408,12 @@ if(count($uncommon) != 0) $toInit = true;
 		 */
 		function isRunning() {
 			doServer('isRunning', {'id':'<?php echo $id; ?>'}, function(data) {
-				if(data == 1) {
+				if(data == 'ER') {
 					console.log('running');
 				} else if(data == 0) {
 					console.log('not running');
 				} else {
-					console.lof('error');
+					console.log('error');
 				}
 			})
 		}
