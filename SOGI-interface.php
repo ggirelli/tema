@@ -125,7 +125,7 @@ if(count($uncommon) != 0) $toInit = true;
 					default: {
 						doConsole('<i>\'' + lnames[index] + '\'</i> converted.');
 
-						$('#graph-list .panel-body').append('<a href="javascript:loadGraph(\'' + lnames[index] + '\')" class="col-md-8" data-gname="' + lnames[index] + '">' + lnames[index] + '</a><div class="col-md-4" data-gname="' + lnames[index] + '"><a href="javascript:downloadGraph(\'' + lnames[index] + '\')"><span class="glyphicon glyphicon glyphicon-cloud-download"></span></a>&nbsp;&nbsp;<a href="javascript:renameGraph(\'' + lnames[index] + '\')"><span class="glyphicon glyphicon-pencil"></span></a>&nbsp;&nbsp;<a href="javascript:removeGraph(\'' + lnames[index] + '\')"><span class="glyphicon glyphicon-remove"></span></a></div>');
+						$('#graph-list .panel-body').append('<a href="javascript:loadGraph(\'' + lnames[index] + '\')" class="col-md-8" data-gname="' + lnames[index] + '" onmouseenter="javascript:showCmdSpy(\'Load graph: ' + lnames[index] + '\');" onmouseleave="javascript:hideCmdSpy();">' + lnames[index] + '</a><div class="col-md-4" data-gname="' + lnames[index] + '"><a href="javascript:downloadGraph(\'' + lnames[index] + '\')" onmouseenter="javascript:showCmdSpy(\'Download graph: ' + lnames[index] + '\');" onmouseleave="javascript:hideCmdSpy();"><span class="glyphicon glyphicon glyphicon-cloud-download"></span></a>&nbsp;&nbsp;<a href="javascript:renameGraph(\'' + lnames[index] + '\')" onmouseenter="javascript:showCmdSpy(\'Rename graph: ' + lnames[index] + '\');" onmouseleave="javascript:hideCmdSpy();"><span class="glyphicon glyphicon-pencil"></span></a>&nbsp;&nbsp;<a href="javascript:removeGraph(\'' + lnames[index] + '\')" onmouseenter="javascript:showCmdSpy(\'Remove graph: ' + lnames[index] + '\');" onmouseleave="javascript:hideCmdSpy();"><span class="glyphicon glyphicon-remove"></span></a></div>');
 
 						if((index+1) < lnames.length) {
 							convertGraphs(lnames, index+1);
@@ -287,7 +287,82 @@ if(count($uncommon) != 0) $toInit = true;
 		 */
 		function uploadGraph() {
 			$.ajax({
-				url: '<?php echo ROOT_URI . 'include/HTMLremote/uploadGraph.form.php'; ?>',
+				url: '<?php echo ROOT_URI; ?>include/HTMLremote/uploadGraph.form.php',
+				type: 'POST',
+				data: {'id':'<?php echo $id; ?>'},
+				success: function(data) {
+					showJumbo(data);
+				}
+			});
+		}
+
+		/**
+		 * Loads the form to intersect graphs
+		 * @return {none}
+		 */
+		function intersectGraphs() {
+			$.ajax({
+				url: '<?php echo ROOT_URI; ?>include/HTMLremote/intersectGraphs.php',
+				type: 'POST',
+				data: {'id':'<?php echo $id; ?>'},
+				success: function(data) {
+					showJumbo(data);
+				}
+			});
+		}
+
+		/**
+		 * Loads the form to merge graphs
+		 * @return {none}
+		 */
+		function mergeGraphs() {
+			$.ajax({
+				url: '<?php echo ROOT_URI; ?>include/HTMLremote/mergeGraphs.php',
+				type: 'POST',
+				data: {'id':'<?php echo $id; ?>'},
+				success: function(data) {
+					showJumbo(data);
+				}
+			});
+		}
+
+		/**
+		 * Loads the form to subtract graphs
+		 * @return {none}
+		 */
+		function subtractGraphs() {
+			$.ajax({
+				url: '<?php echo ROOT_URI; ?>include/HTMLremote/subtractGraphs.php',
+				type: 'POST',
+				data: {'id':'<?php echo $id; ?>'},
+				success: function(data) {
+					showJumbo(data);
+				}
+			});
+		}
+
+		/**
+		 * Loads the form to see if a graph is contained in another graph
+		 * @return {none}
+		 */
+		function containsGraphs() {
+			$.ajax({
+				url: '<?php echo ROOT_URI; ?>include/HTMLremote/containsGraphs.php',
+				type: 'POST',
+				data: {'id':'<?php echo $id; ?>'},
+				success: function(data) {
+					showJumbo(data);
+				}
+			});
+		}
+
+		/**
+		 * Loads the form to apply filters to the graph
+		 * @return {none}
+		 */
+		function filterGraphs() {
+			$.ajax({
+				url: '<?php echo ROOT_URI; ?>include/HTMLremote/filterGraphs.php',
 				type: 'POST',
 				data: {'id':'<?php echo $id; ?>'},
 				success: function(data) {
@@ -548,11 +623,11 @@ if(count($uncommon) != 0) $toInit = true;
 		<div class="panel-collapse collapse" id="graph-tools">
 			<div class="panel-body" style='padding-top: 0;'>
 				<h5>Operations</h5>
-				<button type="button" class="btn btn-success btn-md" onclick='javascript:intersectGraphs();' onmouseenter="javascript:showCmdSpy('Intersect graphs');" onmouseleave="javascript:hideCmdSpy();">
-					<span class="glyphicon glyphicon-link"></span>
-				</button>
 				<button type="button" class="btn btn-success btn-md" onclick='javascript:mergeGraphs();' onmouseenter="javascript:showCmdSpy('Merge graphs');" onmouseleave="javascript:hideCmdSpy();">
 					<span class="glyphicon glyphicon-resize-small"></span>
+				</button>
+				<button type="button" class="btn btn-success btn-md" onclick='javascript:intersectGraphs();' onmouseenter="javascript:showCmdSpy('Intersect graphs');" onmouseleave="javascript:hideCmdSpy();">
+					<span class="glyphicon glyphicon-link"></span>
 				</button>
 				<button type="button" class="btn btn-success btn-md" onclick='javascript:subtractGraphs();' onmouseenter="javascript:showCmdSpy('Subtract graphs');" onmouseleave="javascript:hideCmdSpy();">
 					<span class="glyphicon glyphicon-resize-full"></span>

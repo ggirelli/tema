@@ -225,7 +225,6 @@ require_once(dirname(dirname(dirname(__FILE__))) . '/SOGI-settings.php');
 			checkFile('#hidden-form input[type="file"]:not(.checked)', 0, function() { preUploadFile(); return; });
 		});
 	});
-
 </script>
 
 <div class="page-header">
