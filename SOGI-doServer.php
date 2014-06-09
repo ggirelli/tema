@@ -68,6 +68,30 @@ switch($_GET['a']) {
 		break;
 	}
 
+	case 'removeGraph': {
+		if(isset($_POST['id']) and isset($_POST['name'])) {
+			if($_POST['id'] != '' and $_POST['name'] != '') {
+				if(SOGIsession::is($_POST['id'])) {
+					$ss = new SOGIsession($FILENAME_BAN, $_POST['id']);
+					if(in_array($_POST['name'], $ss->getJSONFileList())) {
+						unlink(SESS_PATH . $_POST['id'] . '/' . $_POST['name'] . '.json');
+						unlink(SESS_PATH . $_POST['id'] . '/' . $_POST['name'] . '.graphml');
+						die('OK');
+					} else {
+						die('E4');
+					}
+				} else {
+					die('E3');
+				}
+			} else {
+				die('E2');
+			}
+		} else {
+			die('E1');
+		}
+		break;
+	}
+
 	case 'doConsole': {
 		if(isset($_POST['text']) and isset($_POST['id'])) {
 			if($_POST['text'] != '' and $_POST['id'] != '') {

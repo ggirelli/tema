@@ -155,14 +155,12 @@ require_once('SOGI-settings.php');
 
 		$('#check-file').click(function(e) {
 			// Check files
-			console.log(2);
 			checkFile('#hidden-form input[type="file"]:not(.checked)', 0, function() { return; });
 		});
 
 		// Set up upload button
 		$('#start-upload').click(function(e) {
 			// Check files
-			console.log(1);
 			checkFile('#hidden-form input[type="file"]:not(.checked)', 0, function() { preUploadFile(); return; });
 		});
 

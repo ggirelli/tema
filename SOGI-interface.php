@@ -126,7 +126,7 @@ if(count($uncommon) != 0) $toInit = true;
 					default: {
 						doConsole('<i>\'' + lnames[index] + '\'</i> converted.');
 
-						$('#graph-list .panel-body').append('<a href="javascript:loadGraph(\'' + lnames[index] + '\')" class="col-md-8">' + lnames[index] + '</a><div class="col-md-4"><a href="javascript:downloadGraph(\'' + lnames[index] + '\')"><span class="glyphicon glyphicon glyphicon-cloud-download"></span></a>&nbsp;&nbsp;<a href=""><span class="glyphicon glyphicon-pencil"></span></a>&nbsp;&nbsp;<a href=""><span class="glyphicon glyphicon-remove"></span></a></div>');
+						$('#graph-list .panel-body').append('<a href="javascript:loadGraph(\'' + lnames[index] + '\')" class="col-md-8" data-gname="' + lnames[index] + '">' + lnames[index] + '</a><div class="col-md-4" data-gname="' + lnames[index] + '"><a href="javascript:downloadGraph(\'' + lnames[index] + '\')"><span class="glyphicon glyphicon glyphicon-cloud-download"></span></a>&nbsp;&nbsp;<a href="javascript:renameGraph(\'' + lnames[index] + '\')"><span class="glyphicon glyphicon-pencil"></span></a>&nbsp;&nbsp;<a href="javascript:removeGraph(\'' + lnames[index] + '\')"><span class="glyphicon glyphicon-remove"></span></a></div>');
 
 						if((index+1) < lnames.length) {
 							convertGraphs(lnames, index+1);
@@ -219,8 +219,82 @@ if(count($uncommon) != 0) $toInit = true;
 			});
 		}
 
+		/**
+		 * Removes a graph
+		 * @param  {String} name Graph's name
+		 * @return {none}
+		 */
+		function removeGraph(name) {
+			// Ask to insert new name
+			doConsole('Do you really want to remove graph \'<u>' + name + '</u>\'? (y/n)');
+
+			$('#cmd-line input[type=text]').val('').select();
+
+			// Change command-line submit event
+			$('#cmd-line').unbind('submit');
+			$('#cmd-line').submit(function(e) {
+				e.preventDefault();
+
+				// Retrieve answer
+				val = $('#cmd-line input[type=text]').val();
+				doConsole(val);
+
+				// Check new name
+				if(/^[ynYN]$/.test(val)) {
+					if(/^[yY]$/.test(val)) {
+						// Remove
+						doServer('removeGraph', {'id':'<?php echo $id; ?>', 'name':name}, function(data) {
+							switch(data) {
+								case 'E0': case 'E1': {
+									doConsole('An error occurred while contacting the server. Try again later.');
+									break;
+								}
+								case 'E1': {
+									doConsole('Cannot remove non-existent graph.');
+									break;
+								}
+								case 'OK': {
+									$('#graph-list .panel-body a[data-gname=' + name + ']').remove();
+									$('#graph-list .panel-body div[data-gname=' + name + ']').remove();
+									doConsole('Removed graph \'<u>' + name + '</u>\'');
+
+									$('#cmd-line input[type=text]').val('');
+
+									$('#cmd-line').unbind('submit');
+									$('#cmd-line').submit(function(e) { e.preventDefault(); cmdSubmit(); });
+									break;
+								}
+								default:
+									alert(data);
+							}
+						});
+					} else {
+						$('#cmd-line input[type=text]').val('');
+
+						$('#cmd-line').unbind('submit');
+						$('#cmd-line').submit(function(e) { e.preventDefault(); cmdSubmit(); });
+					}
+				} else {
+					// Ask for correct new name
+					$('#cmd-line input[type=text]').val('');
+					doConsole('Please, answer correctly. (y/n)');
+				}
+			});
+		}
+
+		/**
+		 * Loads the form to upload graphs into the current session
+		 * @return {none}
+		 */
 		function uploadGraph() {
-			showJumbo('Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo, nesciunt numquam sunt autem a nobis esse suscipit rem reiciendis. Quam, architecto, ab iusto praesentium nostrum voluptates modi tempora dolor officia.');
+			$.ajax({
+				url: '<?php echo ROOT_URI . 'include/HTMLremote/uploadGraph.form.php'; ?>',
+				type: 'POST',
+				data: {'id':'<?php echo $id; ?>'},
+				success: function(data) {
+					showJumbo(data);
+				}
+			});
 		}
 
 		/**
@@ -422,7 +496,7 @@ if(count($uncommon) != 0) $toInit = true;
 					$s .= '<div class="col-md-4" data-gname="' . $fname . '">';
 					$s .= '<a href="javascript:downloadGraph(\'' . $fname . '\',0)"><span class="glyphicon glyphicon glyphicon-cloud-download"></span></a>&nbsp;&nbsp;';
 					$s .= '<a href="javascript:renameGraph(\'' . $fname . '\')"><span class="glyphicon glyphicon-pencil"></span></a>&nbsp;&nbsp;';
-					$s .= '<a href=""><span class="glyphicon glyphicon-remove"></span></a>';
+					$s .= '<a href="javascript:removeGraph(\'' . $fname . '\')"><span class="glyphicon glyphicon-remove"></span></a>';
 					$s .= '</div>';
 					echo $s;
 				}
