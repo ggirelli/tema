@@ -64,6 +64,15 @@ if(count($uncommon) != 0) $toInit = true;
 				}
 			});
 		}
+		
+		/**
+		 * Basic command line submit event
+		 * @return {none}
+		 */
+		function cmdSubmit() {
+			doConsole($('#cmd-line input[type=text]').val());
+			$('#cmd-line input[type=text]').val('');
+		}
 
 		/**
 		 * Queries the server
@@ -391,15 +400,6 @@ if(count($uncommon) != 0) $toInit = true;
 					showJumbo(data);
 				}
 			});
-		}
-
-		/**
-		 * Basic command line submit event
-		 * @return {none}
-		 */
-		function cmdSubmit() {
-			doConsole($('#cmd-line input[type=text]').val());
-			$('#cmd-line input[type=text]').val('');
 		}
 
 		/**
