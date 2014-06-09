@@ -5,7 +5,7 @@ options(echo=TRUE)
 args <- commandArgs(trailingOnly = TRUE)
 print(args)
 
-setwd(paste0('/home/gire/public_html/SOGI/CJ/session/', args[1], '/'))
+setwd(paste0('/home/gire/public_html/SOGI/session/', args[1], '/'))
 
 cat('Reading GRAPHML file.\n')
 g <- read.graph(paste0(args[2], '.graphml'), format='graphml')

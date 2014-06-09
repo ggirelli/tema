@@ -163,6 +163,8 @@ if(count($uncommon) != 0) $toInit = true;
 			doConsole('Insert the new name for graph <u>\'' + name + '\'</u>:');
 			doConsole('<i>(allowed characters: a-z, A-Z, 0-9, _, -)</i>');
 
+			$('#cmd-line input[type=text]').val(name).select();
+
 			// Change command-line submit event
 			$('#cmd-line').unbind('submit');
 			$('#cmd-line').submit(function(e) {
@@ -178,17 +180,31 @@ if(count($uncommon) != 0) $toInit = true;
 					doServer('renameGraph', {'id':'<?php echo $id; ?>', 'old_name':name, 'new_name':val}, function(data) {
 						switch(data) {
 							case 'E0': case 'E1': {
-								doConsole('An error occurred while contacting the server. Try again later.')
+								doConsole('An error occurred while contacting the server. Try again later.');
 								break;
 							}
 							case 'E2': {
-								doConsole('The server cannot accept empty para,eter')
+								doConsole('The server cannot accept empty parameter');
 								break;
 							}
 							case 'E3': {
+								doConsole('Cannot rename non-existent graph.');
 								break;
 							}
 							case 'E4': {
+								doConsole('A graph with the new name is already present, please try with a different one.');
+								break;
+							}
+							case 'OK': {
+								$('#graph-list .panel-body a[data-gname=' + name + ']').text(val).attr('href', 'javascript:loadGraph(\'' + val + '\')');
+								$('#graph-list .panel-body a[data-gname=' + name + ']').attr('data-gname', val);
+								$('#graph-list .panel-body div[data-gname=' + name + ']').replaceWith('<div class="col-md-4" data-gname="' + val + '"><a href="javascript:downloadGraph(\'' + val + '\',0)"><span class="glyphicon glyphicon glyphicon-cloud-download"></span></a>&nbsp;&nbsp;<a href="javascript:renameGraph(\'' + val + '\')"><span class="glyphicon glyphicon-pencil"></span></a>&nbsp;&nbsp;<a href=""><span class="glyphicon glyphicon-remove"></span></a></div>');
+								doConsole('Renamed.');
+
+								$('#cmd-line input[type=text]').val('');
+
+								$('#cmd-line').unbind('submit');
+								$('#cmd-line').submit(function(e) { e.preventDefault(); cmdSubmit(); });
 								break;
 							}
 							default:
@@ -201,6 +217,10 @@ if(count($uncommon) != 0) $toInit = true;
 					doConsole('<i>(allowed characters: a-z, A-Z, 0-9, _, -)</i>');
 				}
 			});
+		}
+
+		function uploadGraph() {
+			showJumbo('Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo, nesciunt numquam sunt autem a nobis esse suscipit rem reiciendis. Quam, architecto, ab iusto praesentium nostrum voluptates modi tempora dolor officia.');
 		}
 
 		/**
@@ -226,6 +246,16 @@ if(count($uncommon) != 0) $toInit = true;
 					console.lof('error');
 				}
 			})
+		}
+
+		/**
+		 * Shows the jumbotron
+		 * @attr {String} html [jumbotron html content]
+		 * @return {none}
+		 */
+		function showJumbo(html) {
+			$('.jumbotron .container').html(html);
+			$('.jumbotron').css({'display':'block'});
 		}
 
 		/**
@@ -388,8 +418,8 @@ if(count($uncommon) != 0) $toInit = true;
 			<div class="panel-body">
 				<?php
 				foreach($ss->getJSONFileList() as $fname) {
-					$s = '<a href="javascript:loadGraph(\'' . $fname . '\')" class="col-md-8">' . $fname . '</a>';
-					$s .= '<div class="col-md-4">';
+					$s = '<a href="javascript:loadGraph(\'' . $fname . '\')" class="col-md-8" data-gname="' . $fname . '">' . $fname . '</a>';
+					$s .= '<div class="col-md-4" data-gname="' . $fname . '">';
 					$s .= '<a href="javascript:downloadGraph(\'' . $fname . '\',0)"><span class="glyphicon glyphicon glyphicon-cloud-download"></span></a>&nbsp;&nbsp;';
 					$s .= '<a href="javascript:renameGraph(\'' . $fname . '\')"><span class="glyphicon glyphicon-pencil"></span></a>&nbsp;&nbsp;';
 					$s .= '<a href=""><span class="glyphicon glyphicon-remove"></span></a>';
@@ -397,7 +427,7 @@ if(count($uncommon) != 0) $toInit = true;
 					echo $s;
 				}
 				?>
-				<a id='upload-new' href=''><span class="glyphicon glyphicon-cloud-upload"></span></a>
+				<a id='upload-new' href='javascript:uploadGraph()'><span class="glyphicon glyphicon-cloud-upload"></span></a>
 			</div>
 		</div>
 	</div>
