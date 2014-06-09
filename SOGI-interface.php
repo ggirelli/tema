@@ -25,7 +25,6 @@ $toInit = false;
 if(count($uncommon) != 0) $toInit = true;
 
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -341,6 +340,42 @@ if(count($uncommon) != 0) $toInit = true;
 			$('.jumbotron').css({'display':'none'});
 		}
 
+		/**
+		 * Show command's info in spy
+		 * @param  {String} talk Command's panel
+		 * @return {none}
+		 */
+		function showCmdSpy(talk) {
+			$("#cmd-spy").text(talk);
+			$("#cmd-spy").css({'display':'block'});
+		}
+
+		/**
+		 * Hides command's info from spy
+		 * @return {none}
+		 */
+		function hideCmdSpy() {
+			$("#cmd-spy").text('');
+			$("#cmd-spy").css({'display':'none'});
+		}
+
+		/**
+		 * Toggles fullscreen-canvas mode
+		 * @return {none}
+		 */
+		function toggleFullscreen() {
+			if($('#right-side').width() == $(document).width()) {
+				$('#bottom-side, #console, #inspector').slideDown(1000);
+				$('#left-side').animate({'width':'16.6667%'}, 1000)
+				$('#right-side').animate({'height':'100%', 'width': '83.3333%'}, 1000);
+				$('#canvas').animate({'height':'75%', 'width':'100%'}, 1000, function() { cy.resize(); });
+			} else {
+				$('#bottom-side, #console, #inspector').slideUp(1000);
+				$('#left-side').animate({'width':'0px'}, 1000)
+				$('#right-side, #canvas').animate({'height':'100%', 'width':'100%'}, 1000, function() { cy.resize(); });
+			}
+		}
+
 		$(document).ready(function() {
 
 			// ----------
@@ -353,6 +388,8 @@ if(count($uncommon) != 0) $toInit = true;
 				doConsole('I am going to convert some files into the JSON format:');
 				convertGraphs(<?php echo '["' . implode('", "', $uncommon) . '"]'; ?>, 0)
 			}
+
+			$('span[data-toggle=tooltip]').tooltip({'trigger':'hover'});
 
 			// ----------------
 			// CYTOSCAPE CANVAS
@@ -472,7 +509,6 @@ if(count($uncommon) != 0) $toInit = true;
 			// ------------
 			
 			$('#cmd-line').submit(function(e) { e.preventDefault(); cmdSubmit(); });
-
 		});
 	</script>
 </head>
@@ -492,16 +528,16 @@ if(count($uncommon) != 0) $toInit = true;
 			<div class="panel-body">
 				<?php
 				foreach($ss->getJSONFileList() as $fname) {
-					$s = '<a href="javascript:loadGraph(\'' . $fname . '\')" class="col-md-8" data-gname="' . $fname . '">' . $fname . '</a>';
+					$s = '<a href="javascript:loadGraph(\'' . $fname . '\')" class="col-md-8" data-gname="' . $fname . '" onmouseenter="javascript:showCmdSpy(\'Load graph: ' . $fname . '\');" onmouseleave="javascript:hideCmdSpy();">' . $fname . '</a>';
 					$s .= '<div class="col-md-4" data-gname="' . $fname . '">';
-					$s .= '<a href="javascript:downloadGraph(\'' . $fname . '\',0)"><span class="glyphicon glyphicon glyphicon-cloud-download"></span></a>&nbsp;&nbsp;';
-					$s .= '<a href="javascript:renameGraph(\'' . $fname . '\')"><span class="glyphicon glyphicon-pencil"></span></a>&nbsp;&nbsp;';
-					$s .= '<a href="javascript:removeGraph(\'' . $fname . '\')"><span class="glyphicon glyphicon-remove"></span></a>';
+					$s .= '<a href="javascript:downloadGraph(\'' . $fname . '\',0)" onmouseenter="javascript:showCmdSpy(\'Download graph: ' . $fname . '\');" onmouseleave="javascript:hideCmdSpy();"><span class="glyphicon glyphicon glyphicon-cloud-download"></span></a>&nbsp;&nbsp;';
+					$s .= '<a href="javascript:renameGraph(\'' . $fname . '\')" onmouseenter="javascript:showCmdSpy(\'Rename graph: ' . $fname . '\');" onmouseleave="javascript:hideCmdSpy();"><span class="glyphicon glyphicon-pencil"></span></a>&nbsp;&nbsp;';
+					$s .= '<a href="javascript:removeGraph(\'' . $fname . '\')" onmouseenter="javascript:showCmdSpy(\'Remove graph: ' . $fname . '\');" onmouseleave="javascript:hideCmdSpy();"><span class="glyphicon glyphicon-remove"></span></a>';
 					$s .= '</div>';
 					echo $s;
 				}
 				?>
-				<a id='upload-new' href='javascript:uploadGraph()'><span class="glyphicon glyphicon-cloud-upload"></span></a>
+				<a id='upload-new' href='javascript:uploadGraph()' onmouseenter="javascript:showCmdSpy('Upload graphs');" onmouseleave="javascript:hideCmdSpy();"><span class="glyphicon glyphicon-cloud-upload"></span></a>
 			</div>
 		</div>
 	</div>
@@ -510,20 +546,25 @@ if(count($uncommon) != 0) $toInit = true;
 			<h4 class="panel-title"><a href="#graph-tools" data-toggle="collapse" data-parent="#left-side">Graph Tools</a></h4>
 		</div>
 		<div class="panel-collapse collapse" id="graph-tools">
-			<div class="panel-body">
-				<button type="button" class="btn btn-warning btn-md" onclick='javascript:'>
+			<div class="panel-body" style='padding-top: 0;'>
+				<h5>Operations</h5>
+				<button type="button" class="btn btn-success btn-md" onclick='javascript:intersectGraphs();' onmouseenter="javascript:showCmdSpy('Intersect graphs');" onmouseleave="javascript:hideCmdSpy();">
 					<span class="glyphicon glyphicon-link"></span>
 				</button>
-				<button type="button" class="btn btn-warning btn-md">
+				<button type="button" class="btn btn-success btn-md" onclick='javascript:mergeGraphs();' onmouseenter="javascript:showCmdSpy('Merge graphs');" onmouseleave="javascript:hideCmdSpy();">
 					<span class="glyphicon glyphicon-resize-small"></span>
 				</button>
-				<button type="button" class="btn btn-warning btn-md">
+				<button type="button" class="btn btn-success btn-md" onclick='javascript:subtractGraphs();' onmouseenter="javascript:showCmdSpy('Subtract graphs');" onmouseleave="javascript:hideCmdSpy();">
 					<span class="glyphicon glyphicon-resize-full"></span>
 				</button>
-				<button type="button" class="btn btn-warning btn-md">
+				<button type="button" class="btn btn-success btn-md" onclick='javascript:containsGraphs();' onmouseenter="javascript:showCmdSpy('Contains graph?');" onmouseleave="javascript:hideCmdSpy();">
 					<span class="glyphicon glyphicon-record"></span>
 				</button>
-				<button type="button" class="btn btn-warning btn-md" onclick="javascript:$('#cy').cytoscape(function(){cy.center(cy.$('*'))});">
+				<button type="button" class="btn btn-danger btn-md" onclick='javascript:filterGraphs();' onmouseenter="javascript:showCmdSpy('Filter current graph');" onmouseleave="javascript:hideCmdSpy();">
+					<span class="glyphicon glyphicon-filter"></span>
+				</button>
+				<h5>Layout</h5>
+				<button type="button" class="btn btn-danger btn-md" onclick="javascript:$('#cy').cytoscape(function(){cy.center(cy.$('*'))});" onmouseenter="javascript:showCmdSpy('Center current graph in the canvas');" onmouseleave="javascript:hideCmdSpy();">
 					<span class="glyphicon glyphicon-screenshot"></span>
 				</button>
 			</div>
@@ -558,7 +599,11 @@ if(count($uncommon) != 0) $toInit = true;
 
 <div id="right-side" class="col-md-10">
 	<h1 id="interface-title">SOGI</h1>
+	<div id="cmd-spy"></div>
 	<div id="canvas" class="col-md-12">
+		<button id="fullscreen" class="btn btn-default btn-sm" onclick="javascript:toggleFullscreen();" onmouseenter="javascript:showCmdSpy('Toggle fullscreen mode');" onmouseleave="javascript:hideCmdSpy();">
+			<span class="glyphicon glyphicon-fullscreen"></span>
+		</button>
 		<div id="cy"></div>
 	</div>
 	<div id="bottom-side" class="col-md-12">

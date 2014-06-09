@@ -84,6 +84,32 @@ div {
 	top: 0;
 }
 
+#cmd-spy {
+	position: absolute;
+	top: 0;
+	left: 0;
+
+	padding: 0 5px;
+	padding-top: 5px;
+
+	color: #323232;
+	font-family: monospace;
+	font-size: 0.6em;
+
+	background-color: #dedede;
+
+	z-index: 10;
+}
+
+#fullscreen {
+	position: absolute;
+	bottom: -1px;
+	left: -1px;
+	border-color: #dadada;
+	border-radius: 0;
+	z-index: 10;
+}
+
 /* BOTTOM SIDEBAR */
 
 #bottom-side {
@@ -91,8 +117,6 @@ div {
 
 	height: 25%;
 	min-height: 180px;
-
-	background-color: blue;
 }
 
 #bottom-side #console {
@@ -188,4 +212,12 @@ div {
 .jumbotron .container {
 	color: #323232;
 	text-align: center;
+}
+
+.tooltip,
+.tooltip-arrow,
+.tooltip-inner {
+	display: inline-block;
+	position: absolute;
+	color: white !important;
 }
