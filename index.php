@@ -68,6 +68,7 @@ require_once('SOGI-settings.php');
 			$('#panel-welcome').remove();
 			$('#panel-buttons').remove();
 			$('#panel-list').remove();
+			$('#panel-load').remove();
 
 			// Ask for session_id
 			$.ajax({

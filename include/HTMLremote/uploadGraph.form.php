@@ -229,7 +229,7 @@ require_once(dirname(dirname(dirname(__FILE__))) . '/SOGI-settings.php');
 </script>
 
 <div class="page-header">
-	<h1 id='title'>SOGI ~ uploader</h1>
+	<h1 id='title'>SOGI <small>~ uploader</small></h1>
 </div>
 
 <div class="panel col-md-6 col-md-offset-3">
