@@ -56,6 +56,7 @@ if(count($uncommon) != 0) $toInit = true;
 					}
 					case 'ER': {
 						talk = d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds() + ' ~ ' + 'Only one operation at a time, please...';
+						$('#cmd-line input[type=text]').val('');
 					}
 					default: {
 						$('#console .panel-body .wrapper').append($('<p />').html(talk));
@@ -219,6 +220,7 @@ if(count($uncommon) != 0) $toInit = true;
 							}
 							case 'ER': {
 								doConsole('Only one operation at a time, please...');
+								$('#cmd-line input[type=text]').val('');
 								break;
 							}
 							case 'OK': {
@@ -347,13 +349,8 @@ if(count($uncommon) != 0) $toInit = true;
 		 * @return {none}
 		 */
 		function mergeGraphs() {
-			$.ajax({
-				url: '<?php echo ROOT_URI; ?>include/HTMLremote/mergeGraphs.php',
-				type: 'POST',
-				data: {'id':'<?php echo $id; ?>'},
-				success: function(data) {
-					showJumbo(data);
-				}
+			$.post('<?php echo ROOT_URI; ?>include/HTMLremote/mergeGraphs.php', {'id':'<?php echo $id; ?>'}, function(data) {
+				showJumbo(data);
 			});
 		}
 
@@ -404,10 +401,11 @@ if(count($uncommon) != 0) $toInit = true;
 
 		/**
 		 * Checks if a query is running (back-end)
-		 * @return {none} Shows query status
+		 * @return {none} Shows status in the console
 		 */
 		function isRunning() {
 			doServer('isRunning', {'id':'<?php echo $id; ?>'}, function(data) {
+				console.log(data);
 				if(data == 'ER') {
 					console.log('running');
 				} else if(data == 0) {
@@ -473,20 +471,47 @@ if(count($uncommon) != 0) $toInit = true;
 			}
 		}
 
+		function checkQueryStatus() {
+			doServer('isRunning', {'id':'<?php echo $id; ?>'}, function(data) {
+				if(data == 'ER') {
+					if($('#bottom-side #console #query-status .running').css('display') == 'none') {
+						$('.disableable').attr('disabled','');
+						$('#bottom-side #console #query-status div').css({'display':'none'});
+						$('#bottom-side #console #query-status .running').css({'display':'block'});
+					}
+				} else if(data == 0) {
+					if($('#bottom-side #console #query-status .waiting').css('display') == 'none') {
+						$('.disableable').removeAttr('disabled');
+						$('#bottom-side #console #query-status div').css({'display':'none'});
+						$('#bottom-side #console #query-status .waiting').css({'display':'block'});
+					}
+				} else {
+					if($('#bottom-side #console #query-status .error').css('display') == 'none') {
+						$('#bottom-side #console #query-status div').css({'display':'none'});
+						$('#bottom-side #console #query-status .error').css({'display':'block'});
+					}
+				}
+			})
+		}
+
 		$(document).ready(function() {
 
 			// ----------
 			// INITIALIZE
 			// ----------
 			
+			// Go to the bottom of the console
 			$('#console .panel-body').scrollTop($('#console .panel-body .wrapper').height());
+
+			// Convert files to JSOn if required
 			if(toInit) {
 				doConsole('Initializing the interface...');
 				doConsole('I am going to convert some files into the JSON format:');
 				convertGraphs(<?php echo '["' . implode('", "', $uncommon) . '"]'; ?>, 0)
 			}
 
-			$('span[data-toggle=tooltip]').tooltip({'trigger':'hover'});
+			// Check if something is running on the server
+			//window.setInterval(checkQueryStatus, 50);
 
 			// ----------------
 			// CYTOSCAPE CANVAS
@@ -645,19 +670,19 @@ if(count($uncommon) != 0) $toInit = true;
 		<div class="panel-collapse collapse" id="graph-tools">
 			<div class="panel-body" style='padding-top: 0;'>
 				<h5>Operations</h5>
-				<button type="button" class="btn btn-success btn-md" onclick='javascript:mergeGraphs();' onmouseenter="javascript:showCmdSpy('Merge graphs');" onmouseleave="javascript:hideCmdSpy();">
+				<button type="button" class="btn btn-success btn-md disableable" onclick='javascript:mergeGraphs();' onmouseenter="javascript:showCmdSpy('Merge graphs');" onmouseleave="javascript:hideCmdSpy();">
 					<span class="glyphicon glyphicon-resize-small"></span>
 				</button>
-				<button type="button" class="btn btn-success btn-md" onclick='javascript:intersectGraphs();' onmouseenter="javascript:showCmdSpy('Intersect graphs');" onmouseleave="javascript:hideCmdSpy();">
+				<button type="button" class="btn btn-success btn-md disableable" onclick='javascript:intersectGraphs();' onmouseenter="javascript:showCmdSpy('Intersect graphs');" onmouseleave="javascript:hideCmdSpy();">
 					<span class="glyphicon glyphicon-link"></span>
 				</button>
-				<button type="button" class="btn btn-success btn-md" onclick='javascript:subtractGraphs();' onmouseenter="javascript:showCmdSpy('Subtract graphs');" onmouseleave="javascript:hideCmdSpy();">
+				<button type="button" class="btn btn-success btn-md disableable" onclick='javascript:subtractGraphs();' onmouseenter="javascript:showCmdSpy('Subtract graphs');" onmouseleave="javascript:hideCmdSpy();">
 					<span class="glyphicon glyphicon-resize-full"></span>
 				</button>
-				<button type="button" class="btn btn-success btn-md" onclick='javascript:containsGraphs();' onmouseenter="javascript:showCmdSpy('Contains graph?');" onmouseleave="javascript:hideCmdSpy();">
+				<button type="button" class="btn btn-success btn-md disableable" onclick='javascript:containsGraphs();' onmouseenter="javascript:showCmdSpy('Contains graph?');" onmouseleave="javascript:hideCmdSpy();">
 					<span class="glyphicon glyphicon-record"></span>
 				</button>
-				<button type="button" class="btn btn-danger btn-md" onclick='javascript:filterGraphs();' onmouseenter="javascript:showCmdSpy('Filter current graph');" onmouseleave="javascript:hideCmdSpy();">
+				<button type="button" class="btn btn-danger btn-md disableable" onclick='javascript:filterGraphs();' onmouseenter="javascript:showCmdSpy('Filter current graph');" onmouseleave="javascript:hideCmdSpy();">
 					<span class="glyphicon glyphicon-filter"></span>
 				</button>
 				<h5>Layout</h5>
@@ -705,13 +730,24 @@ if(count($uncommon) != 0) $toInit = true;
 	</div>
 	<div id="bottom-side" class="col-md-12">
 		<div id="console" class="col-md-9 panel panel-default">
+			<div id="query-status">
+				<div class="running">
+					running <span class="glyphicon glyphicon-warning-sign"></span>
+				</div>
+				<div class="waiting">
+					free <span class="glyphicon glyphicon-globe"></span>
+				</div>
+				<div class="error">
+					error <span class="glyphicon glyphicon-remove-circle"></span>
+				</div>
+			</div>
 			<div class="panel-body"><div class="wrapper"><?php echo file_get_contents(SESS_PATH . $id . '/CONSOLE'); ?></div></div>
 			<form id='cmd-line' class='form-inline'>
 				<div class="col col-md-11">
-					<input type='text' class='form-control' placeholder='SOGI command line' />
+					<input type='text' class='form-control disableable' placeholder='SOGI command line' />
 				</div>
 				<div class="col col-md-1">
-					<button class='btn btn-info btn-block'><span class="glyphicon glyphicon-forward"></span></button>
+					<button class='btn btn-info btn-block disableable'><span class="glyphicon glyphicon-forward"></span></button>
 				</div>
 			</form>
 		</div>

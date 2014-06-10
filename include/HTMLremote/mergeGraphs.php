@@ -30,26 +30,52 @@ $lf = $ss->getJSONFileList();
 	.panel-body select {
 	    font-family: arial;
 	    color: #323232;
-	    
+	}
+
+	.panel-attributes {
+		padding: 10px 0;
+		font-size: 0.75em;
+		font-family: arial;
+		text-align: left;
+	}
+	.panel-attributes label {
+		color: #323232;
+		font-weight: normal;
+	}
+
+	.form-rows {
+		margin: 3px 0;
 	}
 </style>
 
 <script type="text/javascript">
-	$('#form-merge').submit(function(e) {
-		e.preventDefault();
+	$(document).ready(function() {
+		$('#form-merge').submit(function(e) {
+			e.preventDefault();
 
-		vone = $('#first-graph').val();
-		vtwo = $('#second-graph').val();
-		vout = $('#output').val();
-		if('#' == vone || '#' == vtwo || vone == vtwo) {
-			alert('Please select two different graphs.')
-		} else {
-			if('' == vout) { 
-				alert('Please, specify an output file.');
+			vone = $('#first-graph').val();
+			vtwo = $('#second-graph').val();
+			vout = $('#output').val();
+			if('#' == vone || '#' == vtwo || vone == vtwo) {
+				alert('Please select two different graphs.')
 			} else {
-				alert('merge');
+				if('' == vout) { 
+					alert('Please, specify an output file.');
+				} else {
+					// Check the output file
+					$.post('<?php echo ROOT_URI; ?>doserve/isFile', {'id':'<?php echo $_POST["id"]; ?>', 'name':vout}, function(data) {
+						if('1' == data) {
+							alert('Please, change output file.');
+						} else {
+							$('#form-merge').css({'display':'none'});
+							$.post('<?php echo ROOT_URI; ?>include/HTMLremote/mergeGraphs.step2.php', {'id': '<?php echo $_POST["id"]; ?>'}, function(data) {
+								$('#merge-wrap').append($('<div />').html(data));
+							}, 'html');
+						}
+					}, 'html');
+				}
 			}
-		}
+		});
 	});
 </script>
 
@@ -69,18 +95,24 @@ $lf = $ss->getJSONFileList();
 <?php die(); } ?>
 
 <div class="panel col-md-6 col-md-offset-3">
-	<div class="panel-body"><form id='form-merge'>
+	<div class="panel-body" id="merge-wrap"><form id='form-merge'>
 		<p>Select two graphs to merge:</p>
-		<p><select id='first-graph' class="form-control">
-			<option value="#">Select a graph</option>
-			<?php foreach($lf as $fn) { ?><option value="<?php echo $fn; ?>"><?php echo $fn; ?></option><?php } ?>
-		</select></p>
-		<p><select id='second-graph' class="form-control">
-			<option value="#">Select a graph</option>
-			<?php foreach($lf as $fn) { ?><option value="<?php echo $fn; ?>"><?php echo $fn; ?></option><?php } ?>
-		</select></p>
-		<p><input type="text" id="output" class='form-control' placeholder='Output file' /></p>
-		<input type='submit' id='merge-button' class="btn btn-success btn-block" value='merge' />
+		<p class='col-sm-12'>
+			<select id='first-graph' class="form-control">
+				<option value="#">Select a graph</option>
+				<?php foreach($lf as $fn) { ?><option value="<?php echo $fn; ?>"><?php echo $fn; ?></option><?php } ?>
+			</select>
+		</p>
+		<p class='col-sm-12'>
+			<select id='second-graph' class="form-control">
+				<option value="#">Select a graph</option>
+				<?php foreach($lf as $fn) { ?><option value="<?php echo $fn; ?>"><?php echo $fn; ?></option><?php } ?>
+			</select>
+		</p>
+		<p class='col-sm-12'>
+			<input type="text" id="output" class='form-control' placeholder='Output file' />
+		</p>
+		<input type='submit' id='next-button' class="btn btn-success btn-block" value='next' />
 		<button id="abort-upload" class="btn btn-danger btn-block" onclick="javascript:hideJumbo();">abort</button>
 	</form></div>
 </div>

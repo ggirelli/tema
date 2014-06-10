@@ -180,6 +180,36 @@ div {
 	border-right: 0;
 }
 
+#bottom-side #console #query-status {
+	position: absolute;
+	top: -1.5em;
+	right: 1em;
+
+	height: 1em;
+	width: 100px;
+
+	font-family: monospace;
+	font-size: 0.8em;
+	text-align: right;
+
+	z-index: 11;
+}
+
+#bottom-side #console #query-status .running {
+	display: none;
+	color: red;
+}
+
+#bottom-side #console #query-status .waiting {
+	display: none;
+	color: green;
+}
+
+#bottom-side #console #query-status .error {
+	display: none;
+	color: red;
+}
+
 #bottom-side #inspector {
 	height: 100%;
 	padding: 0;
@@ -210,6 +240,7 @@ div {
 	top: 0;
 	bottom: 0;
 
+	overflow: auto;
 	z-index: 12;
 
 	background-color: rgba(250,250,250,0.83);
@@ -218,12 +249,4 @@ div {
 .jumbotron .container {
 	color: #323232;
 	text-align: center;
-}
-
-.tooltip,
-.tooltip-arrow,
-.tooltip-inner {
-	display: inline-block;
-	position: absolute;
-	color: white !important;
 }
