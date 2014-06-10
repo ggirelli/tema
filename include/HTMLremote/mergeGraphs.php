@@ -47,7 +47,7 @@ $lf = $ss->getJSONFileList();
 			if('' == vout) { 
 				alert('Please, specify an output file.');
 			} else {
-				//merge
+				alert('merge');
 			}
 		}
 	});

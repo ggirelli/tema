@@ -44,11 +44,7 @@ $lf = $ss->getJSONFileList();
 		if('#' == vone || '#' == vtwo || vone == vtwo) {
 			alert('Please select two different graphs.')
 		} else {
-			if('' == vout) { 
-				alert('Please, specify an output file.');
-			} else {
-				//contains
-			}
+			//contains
 		}
 	});
 </script>
@@ -81,7 +77,6 @@ $lf = $ss->getJSONFileList();
 			<?php foreach($lf as $fn) { ?><option value="<?php echo $fn; ?>"><?php echo $fn; ?></option><?php } ?>
 		</select></p>
 		<p>...?</p>
-		<p><input type="text" id="output" class='form-control' placeholder='Output file' /></p>
 		<input type='submit' id='contains-button' class="btn btn-success btn-block" value='contains' />
 		<button id="abort-upload" class="btn btn-danger btn-block" onclick="javascript:hideJumbo();">abort</button>
 	</form></div>
