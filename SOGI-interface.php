@@ -136,6 +136,7 @@ if(count($uncommon) != 0) $toInit = true;
 			doServer('convertToJSON', {'name':lnames[index], 'id':'<?php echo $id; ?>'}, function(data) {
 				switch(data) {
 					case 'E0': case 'E1': case 'E2': case 'E3': {
+						console.log(data);
 						doConsole('Mr. Server isn\'t answering.');
 						break;
 					}
@@ -286,8 +287,8 @@ if(count($uncommon) != 0) $toInit = true;
 									break;
 								}
 								case 'OK': {
-									$('#graph-list .panel-body a[data-gname=' + name + ']').remove();
-									$('#graph-list .panel-body div[data-gname=' + name + ']').remove();
+									$('#graph-list .panel-body a[data-gname="' + name + '"]').remove();
+									$('#graph-list .panel-body div[data-gname="' + name + '"]').remove();
 									doConsole('Removed graph \'<u>' + name + '</u>\'');
 
 									$('#cmd-line input[type=text]').val('');
@@ -511,7 +512,7 @@ if(count($uncommon) != 0) $toInit = true;
 			}
 
 			// Check if something is running on the server
-			window.setInterval(checkQueryStatus, 50);
+			window.setInterval(checkQueryStatus, 100);
 
 			// ----------------
 			// CYTOSCAPE CANVAS

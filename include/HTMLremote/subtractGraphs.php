@@ -47,7 +47,32 @@ $lf = $ss->getJSONFileList();
 			if('' == vout) { 
 				alert('Please, specify an output file.');
 			} else {
-				//subtract
+				// Check the output file
+				if(/^([0-9a-zA-Z_-]*)$/.test(vout)) {
+					$.post('<?php echo ROOT_URI; ?>doserve/isFile', {'id':'<?php echo $_POST["id"]; ?>', 'name':vout}, function(data) {
+						if('1' == data) {
+							alert('Please, change output file.');
+						} else {
+							// Subtract
+							// doServer
+							doConsole('subtract ' + $('#form-subtract #first-graph').val() + ' ' + $('#form-subtract #second-graph').val() + ' ' + $('#form-subtract #output').val());
+							$('.jumbotron').css({'display':'none'});
+							doServer('subtractGraphs', {'gone':$('#form-subtract #first-graph').val(), 'gtwo':$('#form-subtract #second-graph').val(), 'gout':$('#form-subtract #output').val(), 'id':'<?php echo $_POST["id"]; ?>'}, function(data) {
+								console.log(data);
+								if('DONE' == data) {
+									doConsole('Subtracted.');
+									convertGraphs([$('#form-subtract #output').val()], 0);
+									hideJumbo();
+								} else {
+									doConsole('Error, try again later.');
+									hideJumbo();
+								}
+							});
+						}
+					}, 'html');
+				} else {
+					alert('Please, use only alfanumerics for the output file name.\nSpecial characters allowed are - _');
+				}
 			}
 		}
 	});

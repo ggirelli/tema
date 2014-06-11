@@ -44,7 +44,29 @@ $lf = $ss->getJSONFileList();
 		if('#' == vone || '#' == vtwo || vone == vtwo) {
 			alert('Please select two different graphs.')
 		} else {
-			//contains
+			// Contains
+			// doServer
+			doConsole('contains ' + $('#form-contains #first-graph').val() + ' ' + $('#form-contains #second-graph').val());
+			$('.jumbotron').css({'display':'none'});
+			doServer('containsGraphs', {'gone':$('#form-contains #first-graph').val(), 'gtwo':$('#form-contains #second-graph').val(), 'id':'<?php echo $_POST["id"]; ?>'}, function(data) {
+				console.log(data);
+				switch(data) {
+					case 'Y': {
+						doConsole($('#form-contains #first-graph').val() + ' <b>contains</b> ' + $('#form-contains #second-graph').val());
+						hideJumbo();
+						break;
+					}
+					case 'N': {
+						doConsole($('#form-contains #first-graph').val() + ' <b>does not</b> contain ' + $('#form-contains #second-graph').val());
+						hideJumbo();
+						break;
+					}
+					default: {
+						doConsole('Error, try again later.');
+						hideJumbo();
+					}
+				}
+			});
 		}
 	});
 </script>

@@ -278,12 +278,7 @@ write.graph = function(graph, file, format) {
     else {
         tmpfile <- FALSE
     }
-    res <- switch(format, pajek = write.graph.pajek(graph, file), edgelist = write.graph.edgelist(graph, file), 
-        	ncol = write.graph.ncol(graph, file), lgl = write.graph.lgl(graph, 
-            file), graphml = write.graph.graphml(graph, 
-            file), dimacs = write.graph.dimacs(graph, file), gml = write.graph.gml(graph, file), dot = write.graph.dot(graph, 
-            file), leda = write.graph.leda(graph, file), json = write.graph.json(graph, file),
-             stop(paste("Unknown file format:", format)))
+    res <- switch(format, pajek = write.graph.pajek(graph, file), edgelist = write.graph.edgelist(graph, file), ncol = write.graph.ncol(graph, file), lgl = write.graph.lgl(graph, file), graphml = write.graph.graphml(graph, file), dimacs = write.graph.dimacs(graph, file), gml = write.graph.gml(graph, file), dot = write.graph.dot(graph, file), leda = write.graph.leda(graph, file), json = write.graph.json(graph, file),stop(paste("Unknown file format:", format)))
     if (tmpfile) {
         buffer <- read.graph.toraw(file)
         write.graph.fromraw(buffer, origfile)

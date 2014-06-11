@@ -47,7 +47,32 @@ $lf = $ss->getJSONFileList();
 			if('' == vout) { 
 				alert('Please, specify an output file.');
 			} else {
-				//intersect
+				// Check the output file
+				if(/^([0-9a-zA-Z_-]*)$/.test(vout)) {
+					$.post('<?php echo ROOT_URI; ?>doserve/isFile', {'id':'<?php echo $_POST["id"]; ?>', 'name':vout}, function(data) {
+						if('1' == data) {
+							alert('Please, change output file.');
+						} else {
+							// Intersect
+							// doServer
+							doConsole('intersect ' + $('#form-intersect #first-graph').val() + ' ' + $('#form-intersect #second-graph').val() + ' ' + $('#form-intersect #output').val());
+							$('.jumbotron').css({'display':'none'});
+							doServer('intersectGraphs', {'gone':$('#form-intersect #first-graph').val(), 'gtwo':$('#form-intersect #second-graph').val(), 'gout':$('#form-intersect #output').val(), 'id':'<?php echo $_POST["id"]; ?>'}, function(data) {
+								console.log(data);
+								if('DONE' == data) {
+									doConsole('Intersected.');
+									convertGraphs([$('#form-intersect #output').val()], 0);
+									hideJumbo();
+								} else {
+									doConsole('Error, try again later.');
+									hideJumbo();
+								}
+							});
+						}
+					}, 'html');
+				} else {
+					alert('Please, use only alfanumerics for the output file name.\nSpecial characters allowed are - _');
+				}
 			}
 		}
 	});

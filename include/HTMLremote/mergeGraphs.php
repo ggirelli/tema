@@ -63,16 +63,20 @@ $lf = $ss->getJSONFileList();
 					alert('Please, specify an output file.');
 				} else {
 					// Check the output file
-					$.post('<?php echo ROOT_URI; ?>doserve/isFile', {'id':'<?php echo $_POST["id"]; ?>', 'name':vout}, function(data) {
-						if('1' == data) {
-							alert('Please, change output file.');
-						} else {
-							$('#form-merge').css({'display':'none'});
-							$.post('<?php echo ROOT_URI; ?>include/HTMLremote/mergeGraphs.step2.php', {'id': '<?php echo $_POST["id"]; ?>'}, function(data) {
-								$('#merge-wrap').append($('<div />').html(data));
-							}, 'html');
-						}
-					}, 'html');
+					if(/^([0-9a-zA-Z_-]*)$/.test(vout)) {
+						$.post('<?php echo ROOT_URI; ?>doserve/isFile', {'id':'<?php echo $_POST["id"]; ?>', 'name':vout}, function(data) {
+							if('1' == data) {
+								alert('Please, change output file.');
+							} else {
+								$('#form-merge').css({'display':'none'});
+								$.post('<?php echo ROOT_URI; ?>include/HTMLremote/mergeGraphs.step2.php', {'id': '<?php echo $_POST["id"]; ?>'}, function(data) {
+									$('#merge-wrap').append($('<div />').html(data));
+								}, 'html');
+							}
+						}, 'html');
+					} else {
+						alert('Please, use only alfanumerics for the output file name.\nSpecial characters allowed are - _');
+					}
 				}
 			}
 		});

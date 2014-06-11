@@ -85,7 +85,35 @@ $ss = new SOGIsession($FILENAME_BAN, $_POST['id']);
 				$('<span />').addClass('col-sm-5 col-sm-offset-2').append($('<button />').addClass('btn btn-block btn-success').attr('id', 'confirm-button').text('confirm').click(function(e) {
 					e.preventDefault();
 
-					alert('MERGE');
+					// Prepare vat
+					vat = 'list\\(';
+					$('#form-merge-step-2 #vertex-attr-tab select').each(function() {
+						if('list\\(' != vat) { vat = vat + ','; }
+						vat = vat + $(this).parent().siblings('label').text() + '=\\"' + $(this).val() + '\\"';
+					});
+					vat = vat + ',\\"ignore\\"\\)';
+
+					// Prepare eat
+					eat = 'list\\(';
+					$('#form-merge-step-2 #edge-attr-tab select').each(function() {
+						if('list\\(' != eat) { eat = eat + ','; }
+						eat = eat + $(this).parent().siblings('label').text() + '=\\"' + $(this).val() + '\\"';
+					});
+					eat = eat + ',\\"ignore\\"\\)';
+
+					// doServer
+					doConsole('merge ' + $('#form-merge #first-graph').val() + ' ' + $('#form-merge #second-graph').val() + ' ' + $('#form-merge #output').val() + ' ' + $('#form-merge-step-2 #vertex-main-attr').val() + ' ' + vat + ' ' + eat);
+					$('.jumbotron').css({'display':'none'});
+					doServer('mergeGraphs', {'gone':$('#form-merge #first-graph').val(), 'gtwo':$('#form-merge #second-graph').val(), 'gout':$('#form-merge #output').val(), 'vkey':$('#form-merge-step-2 #vertex-main-attr').val(), 'vat':vat, 'eat':eat, 'id':'<?php echo $_POST["id"]; ?>'}, function(data) {
+						if('DONE' == data) {
+							doConsole('Merged.');
+							convertGraphs([$('#form-merge #output').val()], 0);
+							hideJumbo();
+						} else {
+							doConsole('Error, try again later.');
+							hideJumbo();
+						}
+					});
 
 				})).insertAfter($('#edit-button').parent());
 
@@ -96,11 +124,11 @@ $ss = new SOGIsession($FILENAME_BAN, $_POST['id']);
 		// Get vertex id attribute event
 		$('#vertex-main-attr').change(function(e) {
 			if('#' != $(this).val()) {
-				$('#vertex-attr-tab select').removeAttr('disabled');
-				$('#vertex-attr-tab #vertex-attr-' + $(this).val() + ' select').val('ignore').attr('disabled','');
+				$('#vertex-attr-tab select').removeAttr('disabled').removeClass('main-id');
+				$('#vertex-attr-tab #vertex-attr-' + $(this).val() + ' select').addClass('main-id').val('first').attr('disabled','');
 			} else {
 				// Enable all the vertex attributes
-				$('#vertex-attr-tab select').removeAttr('disabled');
+				$('#vertex-attr-tab select').removeAttr('disabled').removeClass('main-id');
 			}
 		});
 
@@ -111,8 +139,6 @@ $ss = new SOGIsession($FILENAME_BAN, $_POST['id']);
 			$.each(data['edges'][0]['data'], function(k,v) {
 				if($.inArray(k, ['source', 'target']) == -1) {
 					eattr.push(k);
-				} else {
-					console.log(k);
 				}
 			});
 

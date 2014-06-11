@@ -379,12 +379,31 @@ class SOGIsession {
 				'time' => time()
 			));
 
-			exec($query);
+			exec($query, $res);
+			#print_r($res);
 
 			$ss->set('running', 0);
 			return(TRUE);
 		} else {
 			return FALSE;
+		}
+	}
+
+	public static function execReturn($FILENAME_BAN, $id, $name, $query) {
+		$ss = new SOGIsession($FILENAME_BAN, $id);
+		if($ss->get('running') == 0) {
+			$ss->multiset(array(
+				'running' => 1,
+				'last' => $name,
+				'time' => time()
+			));
+
+			exec($query, $res);
+
+			$ss->set('running', 0);
+			return($res);
+		} else {
+			return 'ERROR';
 		}
 	}
 

@@ -1,4 +1,7 @@
 #!/usr/bin/env Rscript
+#
+library('igraph')
+
 source('../extendIgraph.R')
 
 options(echo=TRUE)

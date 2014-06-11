@@ -38,6 +38,7 @@ switch($_GET['a']) {
 					echo file_get_contents(ROOT_URI . 'session/' . $_POST['id'] . '/' . $_POST['name'] . '.json');
 					$ss->set('graph',$_POST['name']);
 					$ss->set('running',0);
+					die();
 				}
 			} else {
 				die('E3');
@@ -85,11 +86,97 @@ switch($_GET['a']) {
 				if(in_array($_POST['name'], $ss->getJSONFileList())) {
 					unlink(SESS_PATH . $_POST['id'] . '/' . $_POST['name'] . '.json');
 					unlink(SESS_PATH . $_POST['id'] . '/' . $_POST['name'] . '.graphml');
+					$ss->set('graph',0);
 					$ss->set('running',0);
 					die('OK');
 				} else {
 					$ss->set('running',0);
 					die('E4');
+				}
+			} else {
+				die('E3');
+			}
+		} else {
+			die('E2');
+		}
+		break;
+	}
+
+	case 'mergeGraphs': {
+		if(isset($_POST['gone']) and isset($_POST['gtwo']) and isset($_POST['gout']) and isset($_POST['vkey']) and isset($_POST['vat']) and isset($_POST['eat'])) {
+			if('' != $_POST['gone'] and '' != $_POST['gtwo'] and '' != $_POST['gout'] and '' != $_POST['vkey'] and '' != $_POST['vat'] and '' != $_POST['eat']) {
+				$query = 'cd ' . INCL_PATH . 'Rscripts; ./mergeGraphs.R ' . $_POST['id'] . ' ' . $_POST['gone'] . ' ' . $_POST['gtwo'] . ' ' . $_POST['gout'] . ' ' . $_POST['vkey'] . ' ' . $_POST['vat'] . ' ' . $_POST['eat'];
+				$res = SOGIsession::exec($FILENAME_BAN, $_POST['id'], 'mergeGraphs', $query);
+				if($res === FALSE) {
+					die('E4');
+				} else {
+					die('DONE');
+				}
+			} else {
+				die('E3');
+			}
+		} else {
+			die('E2');
+		}
+		break;
+	}
+
+	case 'intersectGraphs': {
+		if(isset($_POST['gone']) and isset($_POST['gtwo']) and isset($_POST['gout'])) {
+			if('' != $_POST['gone'] and '' != $_POST['gtwo'] and '' != $_POST['gout']) {
+				$query = 'cd ' . INCL_PATH . 'Rscripts; ./intersectGraphs.R ' . $_POST['id'] . ' ' . $_POST['gone'] . ' ' . $_POST['gtwo'] . ' ' . $_POST['gout'];
+				$res = SOGIsession::exec($FILENAME_BAN, $_POST['id'], 'intersectGraphs', $query);
+				if($res === FALSE) {
+					die('E4');
+				} else {
+					die('DONE');
+				}
+			} else {
+				die('E3');
+			}
+		} else {
+			die('E2');
+		}
+		break;
+	}
+
+	case 'subtractGraphs': {
+		if(isset($_POST['gone']) and isset($_POST['gtwo']) and isset($_POST['gout'])) {
+			if('' != $_POST['gone'] and '' != $_POST['gtwo'] and '' != $_POST['gout']) {
+				$query = 'cd ' . INCL_PATH . 'Rscripts; ./subtractGraphs.R ' . $_POST['id'] . ' ' . $_POST['gone'] . ' ' . $_POST['gtwo'] . ' ' . $_POST['gout'];
+				$res = SOGIsession::exec($FILENAME_BAN, $_POST['id'], 'subtractGraphs', $query);
+				if($res === FALSE) {
+					die('E4');
+				} else {
+					die('DONE');
+				}
+			} else {
+				die('E3');
+			}
+		} else {
+			die('E2');
+		}
+		break;
+	}
+
+	case 'containsGraphs': {
+		if(isset($_POST['gone']) and isset($_POST['gtwo'])) {
+			if('' != $_POST['gone'] and '' != $_POST['gtwo']) {
+				$query = 'cd ' . INCL_PATH . 'Rscripts; ./containsGraphs.R ' . $_POST['id'] . ' ' . $_POST['gone'] . ' ' . $_POST['gtwo'];
+				$res = SOGIsession::execReturn($FILENAME_BAN, $_POST['id'], 'containsGraphs', $query);
+				if($res === 'ERROR') {
+					die('E4');
+				} else {
+					switch($res[count($res)-1]) {
+						case 'Y>': {
+							die('Y');
+							break;
+						}
+						case 'N>': {
+							die('N');
+							break;
+						}
+					}
 				}
 			} else {
 				die('E3');
