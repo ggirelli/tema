@@ -55,8 +55,8 @@ if(count($uncommon) != 0) $toInit = true;
 						break;
 					}
 					case 'ER': {
-						talk = d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds() + ' ~ ' + 'Only one operation at a time, please...';
-						$('#cmd-line input[type=text]').val('');
+						$('#query-status').fadeOut(80).fadeIn(80).fadeOut(80).fadeIn(80).fadeOut(80).fadeIn(80).fadeOut(80).fadeIn(80)
+						break;
 					}
 					default: {
 						$('#console .panel-body .wrapper').append($('<p />').html(talk));
@@ -511,7 +511,7 @@ if(count($uncommon) != 0) $toInit = true;
 			}
 
 			// Check if something is running on the server
-			//window.setInterval(checkQueryStatus, 50);
+			window.setInterval(checkQueryStatus, 50);
 
 			// ----------------
 			// CYTOSCAPE CANVAS
