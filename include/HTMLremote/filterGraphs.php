@@ -47,6 +47,7 @@ $lf = $ss->getJSONFileList();
 
 <div class="panel col-md-6 col-md-offset-3">
 	<div class="panel-body"><form id='form-filter'>
+		<p>@TODO</p>
 		<button id="abort-upload" class="btn btn-danger btn-block" onclick="javascript:hideJumbo();">abort</button>
 	</form></div>
 </div>

@@ -112,7 +112,7 @@ $lf = $ss->getJSONFileList();
 		<p class='col-sm-12'>
 			<input type="text" id="output" class='form-control' placeholder='Output file' />
 		</p>
-		<input type='submit' id='next-button' class="btn btn-success btn-block" value='next' />
+		<input type='submit' id='next-button' class="btn btn-info btn-block" value='next' />
 		<button id="abort-upload" class="btn btn-danger btn-block" onclick="javascript:hideJumbo();">abort</button>
 	</form></div>
 </div>

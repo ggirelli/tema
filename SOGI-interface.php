@@ -431,8 +431,8 @@ if(count($uncommon) != 0) $toInit = true;
 		 * @return {none}
 		 */
 		function hideJumbo() {
-			$('.jumbotron .container').html('');
 			$('.jumbotron').css({'display':'none'});
+			$('.jumbotron .container').html('');
 		}
 
 		/**
