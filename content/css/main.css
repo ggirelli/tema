@@ -25,3 +25,18 @@ html, body {
 .text-danger {
   color: #C4221C;
 }
+
+textarea:hover, 
+input:hover, 
+textarea:active, 
+input:active, 
+textarea:focus, 
+input:focus,
+button:focus,
+button:active,
+button:hover,
+a
+{
+    outline:0px !important;
+    -webkit-appearance:none;
+}
