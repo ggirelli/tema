@@ -223,6 +223,24 @@ switch($_GET['a']) {
 		die(0);
 		break;
 	}
+
+	case 'applySetting': {
+		if(isset($_POST['name']) and isset($_POST['value'])) {
+			if('' != $_POST['name'] and '' != $_POST['value']) {
+				if(in_array($_POST['name'], array("running", "last", "time", "graph", "nodesThreshold"))) {
+					$ss = new SOGIsession($FILENAME_BAN, $_POST['id']);
+					$ss->set($_POST['name'], $_POST['value']);
+					die('OK');
+				} else {
+					die('E4');
+				}
+			} else {
+				die('E3');
+			}
+		} else {
+			die('E2');
+		}
+	}
 }
 
 ?>

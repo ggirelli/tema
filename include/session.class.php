@@ -60,6 +60,12 @@ class SOGIsession {
 	 */
 	private $graph;
 
+	/**
+	 * Nodes number threshold
+	 * @var int
+	 */
+	private $nodesThreshold;
+
 	/*-----------*/
 	/* FUNCTIONS */
 	/*-----------*/
@@ -97,6 +103,7 @@ class SOGIsession {
 			$this->last_query = 'init';
 			$this->last_query_when = time();
 			$this->graph = 0;
+			$this->nodesThreshold = 1000;
 
 			# Make directory
 			mkdir(SESS_PATH . $this->id);
@@ -159,6 +166,10 @@ class SOGIsession {
 				return $this->graph;
 				break;
 			}
+			case 'nodesThreshold': {
+				return $this->nodesThreshold;
+				break;
+			}
 		}
 		return NULL;
 	}
@@ -191,6 +202,11 @@ class SOGIsession {
 				$this->writeSession();
 				break;
 			}
+			case 'nodesThreshold': {
+				$this->nodesThreshold = $val;
+				$this->writeSession();
+				break;
+			}
 		}
 	}
 
@@ -216,6 +232,10 @@ class SOGIsession {
 				}
 				case 'graph': {
 					$this->graph = $val;
+					break;
+				}
+				case 'nodesThreshold': {
+					$this->nodesThreshold = $val;
 					break;
 				}
 			}
@@ -308,7 +328,8 @@ class SOGIsession {
 		$data .= "RUNNING\t$this->running\n";
 		$data .= "LAST\t$this->last_query\n";
 		$data .= "TIME\t$this->last_query_when\n";
-		$data .= "GRAPH\t$this->graph";
+		$data .= "GRAPH\t$this->graph\n";
+		$data .= "NTHR\t$this->nodesThreshold";
 		file_put_contents($this->folder_path . 'CONFIG', $data);
 	}
 
@@ -348,6 +369,10 @@ class SOGIsession {
 				}
 				case 'GRAPH': {
 					$this->graph = $arow[1];
+					break;
+				}
+				case 'NTHR': {
+					$this->nodesThreshold = $arow[1];
 					break;
 				}
 			}

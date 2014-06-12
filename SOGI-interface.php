@@ -511,6 +511,22 @@ if(count($uncommon) != 0) $toInit = true;
 				convertGraphs(<?php echo '["' . implode('", "', $uncommon) . '"]'; ?>, 0)
 			}
 
+			// Set settings apply event
+			$('#form-settings').submit(function(e) {
+				e.preventDefault();
+
+				// Check nodes threshold
+				if(/^[0-9]*$/.test($('#form-settings #nodes-threshold').val()) && '' != $('#form-settings #nodes-threshold').val()) {
+					doServer('applySetting', {'id':'<?php echo $id; ?>', 'name':'nodesThreshold', 'value':$('#form-settings #nodes-threshold').val()}, function(data) {
+						console.log(data);
+						doConsole('SET nodesThreshold TO ' + $('#form-settings #nodes-threshold').val());
+					});
+				} else {
+					alert('"Nodes Threshold" must be numeric and non-empty.')
+				}
+
+			});
+
 			// Check if something is running on the server
 			window.setInterval(checkQueryStatus, 100);
 
@@ -708,9 +724,17 @@ if(count($uncommon) != 0) $toInit = true;
 			<h4 class="panel-title"><a href="#graph-settings" data-toggle="collapse" data-parent="#left-side">Settings</a></h4>
 		</div>
 		<div class="panel-collapse collapse" id="graph-settings">
-			<div class="panel-body">
-				...
-			</div>
+			<form id='form-settings'>
+				<div class="panel-body">
+				<label for="nodes-threshold" class="col-sm-8 control-label" style='line-height: 34px; text-align: right;'>Nodes Threshold</label>
+				<span class='col-sm-4' style="padding: 0;">
+					<input type="number" name="nodes-threshold" id="nodes-threshold" class="form-control" value="<?php echo $ss->get("nodesThreshold"); ?>">
+				</span>
+				</div>
+				<span class='col-sm-4 col-sm-offset-8' style='margin-bottom: 0.8em;'>
+					<button class='btn btn-md btn-block btn-success'><span class="glyphicon glyphicon-ok"></span></button>
+				</span>
+			</form>
 		</div>
 	</div>
 	<div class="panel panel-success">
