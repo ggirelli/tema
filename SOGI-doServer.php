@@ -17,6 +17,8 @@ switch($_GET['a']) {
 				$res = SOGIsession::exec($FILENAME_BAN, $_POST['id'], 'convertToJSON', $query);
 				if($res === FALSE) {
 					die('E4');
+				} else {
+					die('OK');
 				}
 			} else {
 				die('E3');

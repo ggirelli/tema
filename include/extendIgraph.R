@@ -204,10 +204,19 @@ get.vertex.attributes = function(v, id=FALSE) {
 	# Prepare table
 	t <- sapply(vl, FUN=function(name, v) { return(get.vertex.attr(name, v)) }, v=v)
 
-	# Add id column name
-	if(id) {
-		t <- cbind(1:length(t[,1]), t)
-		colnames(t)[1] <- 'id'
+	# Get t length
+	if(!is.matrix(t)) {
+		# Add id column name
+		if(id) {
+			t <- c(1, t)
+			names(t)[1] <- 'id'
+		}
+	} else {
+		# Add id column name
+		if(id) {
+			t <- cbind(1:length(t[,1]), t)
+			colnames(t)[1] <- 'id'
+		}
 	}
 
 	# Terminate
@@ -248,17 +257,33 @@ get.edge.attributes = function(e, id=FALSE, path=FALSE) {
 	# Prepare table
 	t <- sapply(el, FUN=function(name, e) { return(get.edge.attr(name, e)) }, e=e)
 
-	# Add id column name
-	if(id) {
-		t <- cbind(1:length(t[,1]), t)
-		colnames(t)[1] <- 'id'
-	}
+	# Get t length
+	if(!is.matrix(t)) {
+		# Add id column name
+		if(id) {
+			t <- c(1, t)
+			names(t)[1] <- 'id'
+		}
 
-	# Add source/target
-	if(path) {
-		el <- get.edgelist(get('graph', attr(e, 'env')), names=FALSE)
-		t <- cbind(t, paste0('n', el[,1]), paste0('n', el[,2]))
-		colnames(t)[(length(t[1,])-1):length(t[1,])] <- c('source', 'target')
+		# Add source/target
+		if(path) {
+			el <- get.edgelist(get('graph', attr(e, 'env')), names=FALSE)
+			t <- c(t, paste0('n', el[,1]), paste0('n', el[,2]))
+			names(t)[(length(t)-1):length(t)] <- c('source', 'target')
+		}
+	} else {
+		# Add id column name
+		if(id) {
+			t <- cbind(1:length(t[,1]), t)
+			colnames(t)[1] <- 'id'
+		}
+
+		# Add source/target
+		if(path) {
+			el <- get.edgelist(get('graph', attr(e, 'env')), names=FALSE)
+			t <- cbind(t, paste0('n', el[,1]), paste0('n', el[,2]))
+			colnames(t)[(length(t[1,])-1):length(t[1,])] <- c('source', 'target')
+		}
 	}
 	
 	# Terminate
@@ -292,22 +317,40 @@ write.graph.json = function(graph, file) {
 	l <- list(nodes=list(), edges=list())
 
 	# NODES
-	l$nodes <- apply(get.vertex.attributes(V(g), id=TRUE), MARGIN=1, FUN=function(x, index) {
-		data <- list(id=paste0('n', as.vector(x['id'])))
-		for(attr in names(x)[which(names(x) != 'id')]) {
-			data <- append(data, eval(parse(text=paste0('x[\'', attr, '\']'))))
-		}
-		return(list(data=data))
-	})
+	val <- get.vertex.attributes(V(g), id=TRUE)
+	if(is.matrix(val)) {
+		l$nodes <- apply(val, MARGIN=1, FUN=function(x, index) {
+			data <- list(id=paste0('n', as.vector(x['id'])))
+			for(attr in names(x)[which(names(x) != 'id')]) {
+				data <- append(data, eval(parse(text=paste0('x[\'', attr, '\']'))))
+			}
+			return(list(data=data))
+		})
+	} else {
+		data <- sapply(1:length(val), FUN=function(x, val) {
+			if(names(val[x]) == 'id') return(list(id=paste0('e',val[x])))
+			return(val[x])
+		}, val=val)
+		l$nodes <- list(c(list(data=data)))
+	}
 
 	# EDGES
-	l$edges <- apply(get.edge.attributes(E(g), id=TRUE, path=TRUE), MARGIN=1, FUN=function(x, index) {
-		data <- list(id=paste0('e', as.vector(x['id'])))
-		for(attr in names(x)[which(names(x) != 'id')]) {
-			data <- append(data, eval(parse(text=paste0('x[\'', attr, '\']'))))
-		}
-		return(list(data=data))
-	})
+	eal <- get.edge.attributes(E(g), id=T, path=T)
+	if(is.matrix(eal)) {
+		l$edges <- apply(eal, MARGIN=1, FUN=function(x, index) {
+			data <- list(id=paste0('e', as.vector(x['id'])))
+			for(attr in names(x)[which(names(x) != 'id')]) {
+				data <- append(data, eval(parse(text=paste0('x[\'', attr, '\']'))))
+			}
+			return(list(data=data))
+		})
+	} else {
+		data <- sapply(1:length(eal), FUN=function(x, eal) {
+			if(names(eal[x]) == 'id') return(list(id=paste0('e',eal[x])))
+			return(eal[x])
+		}, eal=eal)
+		l$edges <- list(c(list(data=data)))
+	}
 
 	write(toJSON(l), file=file.path(file))
 }

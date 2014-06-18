@@ -105,6 +105,7 @@ $ss = new SOGIsession($FILENAME_BAN, $_POST['id']);
 					doConsole('merge ' + $('#form-merge #first-graph').val() + ' ' + $('#form-merge #second-graph').val() + ' ' + $('#form-merge #output').val() + ' ' + $('#form-merge-step-2 #vertex-main-attr').val() + ' ' + vat + ' ' + eat);
 					$('.jumbotron').css({'display':'none'});
 					doServer('mergeGraphs', {'gone':$('#form-merge #first-graph').val(), 'gtwo':$('#form-merge #second-graph').val(), 'gout':$('#form-merge #output').val(), 'vkey':$('#form-merge-step-2 #vertex-main-attr').val(), 'vat':vat, 'eat':eat, 'id':'<?php echo $_POST["id"]; ?>'}, function(data) {
+						alert(data);
 						if('DONE' == data) {
 							doConsole('Merged.');
 							convertGraphs([$('#form-merge #output').val()], 0);
