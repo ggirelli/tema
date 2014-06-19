@@ -237,7 +237,7 @@ if(count($uncommon) != 0) $toInit = true;
 								break;
 							}
 							default:
-								alert(data);
+								console.log(data);
 						}
 					});
 				} else {
@@ -298,7 +298,7 @@ if(count($uncommon) != 0) $toInit = true;
 									break;
 								}
 								default:
-									alert(data);
+									console.log(data);
 							}
 						});
 					} else {
