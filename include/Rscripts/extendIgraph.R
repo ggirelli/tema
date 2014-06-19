@@ -10,7 +10,7 @@ library('igraph')
 		# Retrieve attribute name list
 		attr.list.x <- list.vertex.attributes(get('graph', attr(x, 'env')))
 		attr.list.y <- list.vertex.attributes(get('graph', attr(y, 'env')))
-
+		print(attr.list.x)
 		if(length(attr.list.x) == 0 | length(attr.list.y) == 0) {
 			cat('Error: graphs have no node attributes.','\n')
 			return(FALSE)
@@ -25,7 +25,7 @@ library('igraph')
 		attr.value.y <- lapply(attr.list.y, y, FUN=function(attr, y) { return(eval(parse(text=paste0('y$', attr)))) })
 
 		# Verify identity
-		if(length(which(vapply(attr.value.x, FUN=function(x,y) { return(x %in% unlist(y)) }, FUN.VALUE=c(logical(1), logical(0)), y=attr.value.y))) == 0) return(FALSE)
+		if(length(which(vapply(attr.value.x, FUN=function(x,y) { return(x %in% unlist(y)) }, FUN.VALUE=c(logical(1), logical(0)), y=attr.value.y))) != length(attr.list.x)-1) return(FALSE)
 		return(TRUE)
 
 	} else { # Other cases:
@@ -84,7 +84,7 @@ library('igraph')
 			attr.value.y <- lapply(attr.list.y, y, FUN=function(attr, y) { return(eval(parse(text=paste0('y$', attr)))) })
 
 			# Verify identity
-			if(length(which(vapply(attr.value.x, FUN=function(x,y) { return(x %in% unlist(y)) }, FUN.VALUE=c(logical(1), logical(0)), y=attr.value.y))) == 0) return(FALSE)
+			if(length(which(vapply(attr.value.x, FUN=function(x,y) { return(x %in% unlist(y)) }, FUN.VALUE=c(logical(1), logical(0)), y=attr.value.y))) == length(attr.list.x)-1) return(FALSE)
 			return(TRUE)
 		} else {
 			return(TRUE)

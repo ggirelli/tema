@@ -448,12 +448,16 @@ GraphManager <- function() {
 
 		subtract = function(g.one, g.two) {
 			# Removes edges and nodes that are common to both graphs from the first graph
-			
 			common.vertices <- which(V(g.one) %in% V(g.two))
 			if(length(common.vertices) != 0 ) g.one <- g.one - vertices(V(g.one)[common.vertices])
 
+			if(ecount(g.one) == 0) return(graph.ring(2))
+
 			common.edges <- which(E(g.one) %in% E(g.two))
 			if(length(common.edges) != 0) g.one <- delete.edges(g.one, E(g.one)[common.edges])
+
+			# Remove zero-degree
+			g.one <- delete.vertices(g.one, which(degree(g.one, V(g.one)) == 0))
 
 			return(g.one)
 		},
