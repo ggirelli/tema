@@ -85,6 +85,7 @@ library('igraph')
 
 			# Verify identity
 			if(length(which(vapply(attr.value.x, FUN=function(x,y) { return(x %in% unlist(y)) }, FUN.VALUE=c(logical(1), logical(0)), y=attr.value.y))) == 0) return(FALSE)
+			return(TRUE)
 		} else {
 			return(TRUE)
 		}
@@ -290,34 +291,22 @@ get.edge.attributes = function(e, id=FALSE, path=FALSE) {
 	return(t)
 }
 
-write.graph = function(graph, file, format) {
-    if (!is.igraph(graph)) {
-        stop("Not a graph object")
-    }
-    if (!is.character(file) || length(grep("://", file, fixed = TRUE)) > 
-        0 || length(grep("~", file, fixed = TRUE)) > 0) {
-        tmpfile <- TRUE
-        origfile <- file
-        file <- tempfile()
-    }
-    else {
-        tmpfile <- FALSE
-    }
-    res <- switch(format, pajek = write.graph.pajek(graph, file), edgelist = write.graph.edgelist(graph, file), ncol = write.graph.ncol(graph, file), lgl = write.graph.lgl(graph, file), graphml = write.graph.graphml(graph, file), dimacs = write.graph.dimacs(graph, file), gml = write.graph.gml(graph, file), dot = write.graph.dot(graph, file), leda = write.graph.leda(graph, file), json = write.graph.json(graph, file),stop(paste("Unknown file format:", format)))
-    if (tmpfile) {
-        buffer <- read.graph.toraw(file)
-        write.graph.fromraw(buffer, origfile)
-    }
-    invisible(res)
+write.graph.old = write.graph
+write.graph = function(graph, file, format, ...) {
+	if(format %in% c('json', 'JSON')) {
+		write.graph.json(graph,file)
+	} else {
+		write.graph.old(graph, file, format)
+	}
 }
 
-write.graph.json = function(graph, file) {
+write.graph.json = function(graph, file, ...) {
 	library('rjson')
 
 	l <- list(nodes=list(), edges=list())
 
 	# NODES
-	val <- get.vertex.attributes(V(g), id=TRUE)
+	val <- get.vertex.attributes(V(graph), id=TRUE)
 	if(is.matrix(val)) {
 		l$nodes <- apply(val, MARGIN=1, FUN=function(x, index) {
 			data <- list(id=paste0('n', as.vector(x['id'])))
@@ -335,7 +324,7 @@ write.graph.json = function(graph, file) {
 	}
 
 	# EDGES
-	eal <- get.edge.attributes(E(g), id=T, path=T)
+	eal <- get.edge.attributes(E(graph), id=T, path=T)
 	if(is.matrix(eal)) {
 		l$edges <- apply(eal, MARGIN=1, FUN=function(x, index) {
 			data <- list(id=paste0('e', as.vector(x['id'])))

@@ -1,8 +1,7 @@
 #!/usr/bin/env Rscript
 #
-library('igraph')
 
-source('../extendIgraph.R')
+source('extendIgraph.R')
 
 options(echo=TRUE)
 args <- commandArgs(trailingOnly = TRUE)
