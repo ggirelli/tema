@@ -48,6 +48,10 @@ div {
 	font-weight: bold !important;
 }
 
+#left-side #graph-tools .btn {
+    margin-bottom: 0.3em;
+}
+
 /* RIGHT SIDEBAR */
 
 #right-side {

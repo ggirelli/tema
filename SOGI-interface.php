@@ -18,7 +18,6 @@ if(isset($_GET['id']) and @$_GET['id'] != '') {
 	die('E2');
 }
 
-
 # Compare graphml/JSON lists
 $uncommon = $ss->getToConvertFileList();
 $toInit = false;
@@ -474,13 +473,14 @@ if(count($uncommon) != 0) $toInit = true;
 
 		function checkQueryStatus() {
 			doServer('isRunning', {'id':'<?php echo $id; ?>'}, function(data) {
-				if(data == 'ER') {
+				console.log(data);
+				if(data == '1') {
 					if($('#bottom-side #console #query-status .running').css('display') == 'none') {
 						$('.disableable').attr('disabled','');
 						$('#bottom-side #console #query-status div').css({'display':'none'});
 						$('#bottom-side #console #query-status .running').css({'display':'block'});
 					}
-				} else if(data == 0) {
+				} else if(data == '0') {
 					if($('#bottom-side #console #query-status .waiting').css('display') == 'none') {
 						$('.disableable').removeAttr('disabled');
 						$('#bottom-side #console #query-status div').css({'display':'none'});
@@ -696,14 +696,18 @@ if(count($uncommon) != 0) $toInit = true;
 				<button type="button" class="btn btn-success btn-md disableable" onclick='javascript:subtractGraphs();' onmouseenter="javascript:showCmdSpy('Subtract graphs');" onmouseleave="javascript:hideCmdSpy();">
 					<span class="glyphicon glyphicon-resize-full"></span>
 				</button>
-				<button type="button" class="btn btn-success btn-md disableable" onclick='javascript:containsGraphs();' onmouseenter="javascript:showCmdSpy('Contains graph?');" onmouseleave="javascript:hideCmdSpy();">
-					<span class="glyphicon glyphicon-record"></span>
-				</button>
 				<button type="button" class="btn btn-danger btn-md disableable" onclick='javascript:filterGraphs();' onmouseenter="javascript:showCmdSpy('Filter current graph');" onmouseleave="javascript:hideCmdSpy();">
 					<span class="glyphicon glyphicon-filter"></span>
 				</button>
+				<br />
+				<button type="button" class="btn btn-info btn-md disableable" onclick='javascript:containsGraphs();' onmouseenter="javascript:showCmdSpy('Contains graph?');" onmouseleave="javascript:hideCmdSpy();">
+					<span class="glyphicon glyphicon-record"></span>
+				</button>
+				<button type="button" class="btn btn-info btn-md disableable" onclick='javascript:similarityGraphs();' onmouseenter="javascript:showCmdSpy('Calculate similarity');" onmouseleave="javascript:hideCmdSpy();">
+					<span class="glyphicon glyphicon-road"></span>
+				</button>
 				<h5>Layout</h5>
-				<button type="button" class="btn btn-danger btn-md" onclick="javascript:$('#cy').cytoscape(function(){cy.center(cy.$('*'))});" onmouseenter="javascript:showCmdSpy('Center current graph in the canvas');" onmouseleave="javascript:hideCmdSpy();">
+				<button type="button" class="btn btn-warning btn-md" onclick="javascript:$('#cy').cytoscape(function(){cy.center(cy.$('*'))});" onmouseenter="javascript:showCmdSpy('Center current graph in the canvas');" onmouseleave="javascript:hideCmdSpy();">
 					<span class="glyphicon glyphicon-screenshot"></span>
 				</button>
 			</div>
