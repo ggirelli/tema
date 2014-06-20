@@ -451,7 +451,7 @@ GraphManager <- function() {
 			common.vertices <- which(V(g.one) %in% V(g.two))
 			if(length(common.vertices) != 0 ) g.one <- g.one - vertices(V(g.one)[common.vertices])
 
-			if(ecount(g.one) == 0) return(graph.ring(2))
+			if(ecount(g.one) == 0) return(graph.empty())
 
 			common.edges <- which(E(g.one) %in% E(g.two))
 			if(length(common.edges) != 0) g.one <- delete.edges(g.one, E(g.one)[common.edges])
@@ -467,6 +467,8 @@ GraphManager <- function() {
 			
 			uncommon.vertices <- which(!(V(g.one) %in% V(g.two)))
 			if(length(uncommon.vertices) != 0 ) g.one <- g.one - vertices(V(g.one)[uncommon.vertices])
+
+			if(ecount(g.one) == 0) return(graph.empty())
 
 			uncommon.edges <- which(!(E(g.one) %in% E(g.two)))
 			if(length(uncommon.edges) != 0) g.one <- delete.edges(g.one, E(g.one)[uncommon.edges])
