@@ -10,7 +10,7 @@ library('igraph')
 	
 	# If both node lists have length == 1 perform pair comparison
 	if(length(x) == 1 && length(y) == 1) {
-
+		
 		# Retrieve attribute name list
 		attr.list.x <- list.vertex.attributes(get('graph', attr(x, 'env')))
 		attr.list.y <- list.vertex.attributes(get('graph', attr(y, 'env')))
@@ -27,9 +27,9 @@ library('igraph')
 		# Retrieve attribute values
 		attr.value.x <- lapply(attr.list.x, x, FUN=function(attr, x) { return(eval(parse(text=paste0('x$', attr)))) })
 		attr.value.y <- lapply(attr.list.y, y, FUN=function(attr, y) { return(eval(parse(text=paste0('y$', attr)))) })
-
+		
 		# Verify identity
-		if(length(which(vapply(attr.value.x, FUN=function(x,y) { return(x %in% unlist(y)) }, FUN.VALUE=c(logical(1), logical(0)), y=attr.value.y))) != length(attr.list.x)-1) return(FALSE)
+		if(length(which(vapply(attr.value.x, FUN=function(x,y) { return(x %in% unlist(y)) }, FUN.VALUE=c(logical(1), logical(0)), y=attr.value.y))) != length(attr.list.x)) return(FALSE)
 		return(TRUE)
 
 	} else { # Other cases:
@@ -88,7 +88,7 @@ library('igraph')
 			attr.value.y <- lapply(attr.list.y, y, FUN=function(attr, y) { return(eval(parse(text=paste0('y$', attr)))) })
 
 			# Verify identity
-			if(length(which(vapply(attr.value.x, FUN=function(x,y) { return(x %in% unlist(y)) }, FUN.VALUE=c(logical(1), logical(0)), y=attr.value.y))) == length(attr.list.x)-1) return(FALSE)
+			if(length(which(vapply(attr.value.x, FUN=function(x,y) { return(x %in% unlist(y)) }, FUN.VALUE=c(logical(1), logical(0)), y=attr.value.y))) != length(attr.list.x)) return(FALSE)
 			return(TRUE)
 		} else {
 			return(TRUE)
@@ -187,7 +187,7 @@ compare.vertices.couple.skipping = function(x, y, skip=c()) {
 	# The comparison is carried out on the attributes of each vertex (except for the id).
 	# The attributes specified in skip are skipped
 	
-	if(c() == skip) { return(compare.vertices.couple(x, y)) }
+	if(0 == length(skip)) { return(compare.vertices.couple(x, y)) }
 	
 	# If both node lists have length == 1 perform pair comparison
 	if(length(x) == 1 && length(y) == 1) {
@@ -283,7 +283,7 @@ compare.edges.couple.skipping = function(x, y, skip=c()) {
 	# The comparison is carried out on the attributes of each edge  and, obiously, also on target/source.
 	# The attributes specified in skip are skipped
 	
-	if(c() == skip) { return(compare.edges.couple(x, y)) }
+	if(0 == length(skip)) { return(compare.edges.couple(x, y)) }
 	
 	# If both edge lists have length == 1 perform pair comparison
 	if(length(x) == 1 && length(y) == 1) {
