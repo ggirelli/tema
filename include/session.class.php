@@ -395,6 +395,14 @@ class SOGIsession {
 		return FALSE;
 	}
 
+	/**
+	 * Executes a shell query
+	 * @param  Array $FILENAME_BAN Banned filenames
+	 * @param  String $id           SOGIsession ID
+	 * @param  String $name         Query action name
+	 * @param  String $query        Shell query
+	 * @return Boolean               Whether everything went smoothly
+	 */
 	public static function exec($FILENAME_BAN, $id, $name, $query) {
 		$ss = new SOGIsession($FILENAME_BAN, $id);
 		if($ss->get('running') == 0) {
@@ -414,6 +422,14 @@ class SOGIsession {
 		}
 	}
 
+	/**
+	 * Executes a shell query
+	 * @param  Array $FILENAME_BAN Banned filenames
+	 * @param  String $id           SOGIsession ID
+	 * @param  String $name         Query action name
+	 * @param  String $query        Shell query
+	 * @return Mix               'ERROR' in case of error, otherwise the query output
+	 */
 	public static function execReturn($FILENAME_BAN, $id, $name, $query) {
 		$ss = new SOGIsession($FILENAME_BAN, $id);
 		if($ss->get('running') == 0) {
@@ -430,6 +446,34 @@ class SOGIsession {
 		} else {
 			return 'ERROR';
 		}
+	}
+
+	/**
+	 * Executes a shell query w/o updating the running-status
+	 * @param  Array $FILENAME_BAN Banned filenames
+	 * @param  String $id           SOGIsession ID
+	 * @param  String $name         Query action name
+	 * @param  String $query        Shell query
+	 * @return Boolean               Whether everything went smoothly
+	 */
+	public static function hiddenExec($FILENAME_BAN, $id, $name, $query) {
+		$ss = new SOGIsession($FILENAME_BAN, $id);
+		exec($query, $res);
+		return(TRUE);
+	}
+
+	/**
+	 * Executes a shell query w/o updating the running-status
+	 * @param  Array $FILENAME_BAN Banned filenames
+	 * @param  String $id           SOGIsession ID
+	 * @param  String $name         Query action name
+	 * @param  String $query        Shell query
+	 * @return Mix               'ERROR' in case of error, otherwise the query output
+	 */
+	public static function hiddenExecReturn($FILENAME_BAN, $id, $name, $query) {
+		$ss = new SOGIsession($FILENAME_BAN, $id);
+		exec($query, $res);
+		return($res);
 	}
 
 }

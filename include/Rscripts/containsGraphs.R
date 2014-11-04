@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript
 
-source('../GraphManager.class.R')
+source('GraphManager.class.R')
 
 options(echo=TRUE)
 args <- commandArgs(trailingOnly = TRUE)

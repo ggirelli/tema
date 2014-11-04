@@ -7,6 +7,11 @@ if(!isset($_GET['a'])) die('E0');
 if(!isset($_POST['id']) or '' == @$_POST['id'] or !SOGIsession::is(@$_POST['id'])) die('E1');
 
 $ss = new SOGIsession($FILENAME_BAN, $_POST['id']);
+if('isRunning' == $_GET['a']) {
+	$query = 'cd ' . SESS_PATH . $_POST['id'] .  '/; cat CONFIG | head -n 4 | tail -n 1 | cut -f 2';
+	$res = SOGIsession::hiddenExecReturn($FILENAME_BAN, $_POST['id'], 'convertToJSON', $query);
+	die($res[0]);
+}
 if(1 == $ss->get('running')) die('ER');
 
 switch($_GET['a']) {
@@ -17,6 +22,8 @@ switch($_GET['a']) {
 				$res = SOGIsession::exec($FILENAME_BAN, $_POST['id'], 'convertToJSON', $query);
 				if($res === FALSE) {
 					die('E4');
+				} else {
+					die('OK');
 				}
 			} else {
 				die('E3');
@@ -216,11 +223,6 @@ switch($_GET['a']) {
 		} else {
 			die('E2');
 		}
-		break;
-	}
-
-	case 'isRunning': {
-		die(0);
 		break;
 	}
 
