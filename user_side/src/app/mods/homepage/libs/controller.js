@@ -58,6 +58,7 @@
 
 	                })
 	                    .success(function (data) {
+	                    	console.log(data);
 	                        if(0 == data['err']) {
 	                        	document.location.hash = data['hash'];
 	                        	scope.m.tmpID = undefined;
