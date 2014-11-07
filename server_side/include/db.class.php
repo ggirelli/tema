@@ -67,7 +67,7 @@ class C2MySQL {
 	}
 	
 	/**
-	 * Connect to the server
+	 * Connects to the server
 	 * @return null (sets $this->connect_error)
 	 */
 	function connect2MySQL() {
@@ -78,27 +78,25 @@ class C2MySQL {
 	}
 	
 	/**
-	 * Stabilisce la connessione al database MYSQL selezionato
-	 * @return void (set $this->connect_error)
-	 * @access private
+	 * Connects to the database
+	 * @return void (sets $this->connect_error)
 	 */
 	function connect2MySQL_db() {
 		if(!@mysql_select_db($this->db_name, $this->db_cnx_id)) {
-            trigger_error('Impossibile selezionare il database.');
+            trigger_error('Impossible to select the database.');
             $this->connectError = true;
 		}
 	}
 	
 	/**
-	 * Funzione che individua eventuali errori avvenuti durante la connessione
-	 * @return boolean		(true = an error has occured)
-	 * @access public
+	 * Identifies errors that occurred during the connection.
+	 * @return boolean	true = an error has occured
 	 */
 	function isError() {
-		// Valuta gli errori basandosi sulla variabile di segnale
+		// Evaluates errors based on the signal variable.
 		if( $this->connect_error ) { return true; }
 		
-		// Valuta eventuali errori di tipo mysql
+		// Evaluate MySQL errors
         $error = mysql_error($this->db_cnx_id);
         if ( empty($error) )
             return false;
@@ -107,10 +105,9 @@ class C2MySQL {
 	}
 	
     /**
-     * Ritorna un'istanza di MySQLResult per eseguire il fetch delle righe dove
-     * @param string sql		(query da eseguire)
-     * @return MySQLResult-"class instance"
-     * @access public
+     * Returns a MySQLresult instance for data fetching
+     * @param String $sql 	query to be executed
+     * @return MySQLresult instance
      */
     function & query($sql) {
         if (!$queryResource = mysql_query($sql,$this->db_cnx_id))
@@ -120,23 +117,21 @@ class C2MySQL {
     }
 	
 	/**
-	 * Funzione che blocca la tabella inviata come parametro
-	 * @param string table		(tabella da bloccare)
-	 * @param class-instance db	(istanza di questa classe)
-	 * @access public
-	 * @return void
+	 * Locks a table
+	 * @param String $table 	table name
+	 * @param db instance 	$db
+	 * @return null
 	 */
 	function lock($table, $db) {
-		// Costruisco la query da eseguire
+		// Construct the query
 		$sql = "LOCK TABLES " . $table . " WRITE";
 		$db->query($sql);
 	}
 	
 	/**
-	 * Funzione che sblocca la tabella inviata come parametro
-	 * @param class-instance db	(istanza di questa classe)
-	 * @access public
-	 * @return void
+	 * Unlocks all tables
+	 * @param db instance 	$db
+	 * @return null
 	 */
 	function unlock($db) {
 		$sql = "UNLOCK TABLES ";
@@ -144,13 +139,12 @@ class C2MySQL {
 	}
 	
 	/**
-	 * Funzione che esegue la chiusura della connessione con il database
-	 * @return void		(close mysql-connection)
-	 * @access public
+	 * Close the connection
+	 * @return null
 	 */
 	function close(){
 		if( !mysql_close($this->db_cnx_id) )
-			trigger_error("Impossibile terminare la connessione con il server MySQL.\n\n" . mysql_error());
+			trigger_error("Impossible to terminat the connection.\n\n" . mysql_error());
 	}
 }
 
@@ -161,36 +155,33 @@ class C2MySQL {
  * @see C2MySQL
  * @since 0.2.0
  */
-class MySQLResult {
+class MySQLresult {
     /**
-     * Istanza di MySQL che determina la connessione al database
-     * @access private
-     * @var MySQL-"class instance"
+     * C2MySQL instance
+     * @var MySQL instance
      */
     var $c2mysql;
 
     /**
-     * Risultato della query eseguita, da fetchare
-     * @access private
+     *  Result of the query, to fetch
      * @var resource
      */
     var $query;
 
     /**
-     * Funzione costruttore
-     * @param object mysql   	(istanza della classe MySQL)
-     * @param resource query 	(risultato della MySQL-query eseguita, da fetchare)
+     * @param C2MySQL instance $mysql
+     * @param resource $query
      * @access public
      */
-    function MySQLResult(& $c2mysql,$query) {
+    function __construct(& $c2mysql,$query) {
         $this->c2mysql = & $c2mysql;
         $this->query = $query;
     }
 
     /**
-     * Esegue il fetch di una riga
-     * @return array ; return boolean(false) (only if the
-     * @access public
+     * Fetches a row
+     * @return array 	fetched row
+     * @return Boolean 	if no rows are left to be fetched, returns false
      */
     function fetch () {
         if ( $row = mysql_fetch_array($this->query,MYSQL_ASSOC) ) {
@@ -204,27 +195,22 @@ class MySQLResult {
     }
 
     /**
-     * Ritorna il numero di righe selezionate
-     * @return int
-     * @access public
+     * @return int 	number of selected rows
      */
     function size () {
         return mysql_num_rows($this->query);
     }
 
     /**
-     * Ritorna l'ID dell'ultima riga inserita
-     * @return int
-     * @access public
+     * @return int 	ID of the last inserted row
      */
     function insertID () {
         return mysql_insert_id($this->c2mysql->db_cnx_id);
     }
     
     /**
-     * Cerca errori di MySQL
-     * @return boolean
-     * @access public
+     * Looks for MySQL errors
+     * @return Boolean
      */
     function isError () {
         return $this->c2mysql->isError();
