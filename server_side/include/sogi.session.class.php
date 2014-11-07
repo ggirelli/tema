@@ -1,11 +1,14 @@
 <?php
 
+// Requirements
+require_once('sogi.db.class.php');
+
 /**
 * Class that manages SOGI sessions
 * @author Gabriele Girelli <gabriele@filopoe.it>
 * @since 0.2.0
 */
-class SOGIsession extends C2MySQL {
+class SOGIsession extends SOGIdb {
 	
 	// ATTRIBUTES
 	
@@ -59,8 +62,8 @@ class SOGIsession extends C2MySQL {
 
 	// public FUNCTIONS
 
-	public function __construct($id) {
-		# code...
+	public function __construct($host, $user, $pwd, $db_name, $id) {
+		parent::__construct($host, $user, $pwd, $db_name);
 	}
 
 	/**
@@ -79,7 +82,7 @@ class SOGIsession extends C2MySQL {
 	 * @param  String $id
 	 * @return null
 	 */
-	private function new($id) {
+	private function _new($id) {
 
 	}
 
@@ -88,7 +91,7 @@ class SOGIsession extends C2MySQL {
 	 * @param  String $id
 	 * @return null
 	 */
-	private function load($id) {
+	private function _load($id) {
 
 	}
 

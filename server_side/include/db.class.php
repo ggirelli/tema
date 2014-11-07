@@ -10,51 +10,56 @@
  * @since 0.2.0
  */
 class C2MySQL {
+
+	// ATTRIBUTES
+
 	/**
 	 * MySQL host name
 	 * @var string
 	 */
-	var $host;
+	public $host;
 	
 	/**
 	 * MySQL host user
 	 * @var string
 	 */
-	var $user;
+	public $user;
 	
 	/**
 	 * MySQL host password
 	 * @var string
 	 */
-	var $pwd;
+	private $pwd;
 	
 	/**
 	 * MySQL database name
 	 * @var string
 	 */
-	var $db_name;
+	public $db_name;
 	
 	/**
 	 * Connection id
 	 * @var integer
 	 */
-	var $db_cnx_id;
+	private $db_cnx_id;
 	
 	/**
 	 * Error variable
 	 * @var boolean
 	 */
-	var $connect_error;
+	public $connect_error;
 	
+	// public FUNCTIONS
+
 	/**
-	 * Connect to given database and server
+	 * Connects to given database and server
      * @param string host (MySQL host name)
      * @param string dbUser (MySQL host user)
      * @param string dbPass (MySQL host password)
      * @param string dbName (MySQL database name)
 	 * @return null
 	 */
-	function __construct($host, $user, $pwd, $db_name) {
+	public function __construct($host, $user, $pwd, $db_name) {
 		$this->host = $host;
 		$this->user = $user;
 		$this->pwd = $pwd;
@@ -66,51 +71,15 @@ class C2MySQL {
 		if( !$this->isError() ) { $this->connect2MySQL_db(); }
 	}
 	
-	/**
-	 * Connects to the server
-	 * @return null (sets $this->connect_error)
-	 */
-	function connect2MySQL() {
-		if(!$this->db_cnx_id = @mysql_connect($this->host, $this->user, $this->pwd)) {
-            trigger_error('Impossible to contact the MySQL server.');
-            $this->connectError = true;
-		}
-	}
-	
-	/**
-	 * Connects to the database
-	 * @return void (sets $this->connect_error)
-	 */
-	function connect2MySQL_db() {
-		if(!@mysql_select_db($this->db_name, $this->db_cnx_id)) {
-            trigger_error('Impossible to select the database.');
-            $this->connectError = true;
-		}
-	}
-	
-	/**
-	 * Identifies errors that occurred during the connection.
-	 * @return boolean	true = an error has occured
-	 */
-	function isError() {
-		// Evaluates errors based on the signal variable.
-		if( $this->connect_error ) { return true; }
-		
-		// Evaluate MySQL errors
-        $error = mysql_error($this->db_cnx_id);
-        if ( empty($error) )
-            return false;
-        else
-            return true;
-	}
-	
+	// protected FUNCTIONS
+
     /**
      * Returns a MySQLresult instance for data fetching
      * @param String $sql 	query to be executed
      * @return MySQLresult instance
      */
-    function & query($sql) {
-        if (!$queryResource = mysql_query($sql,$this->db_cnx_id))
+    protected function & query($sql) {
+        if ( !$queryResource = mysql_query($sql,$this->db_cnx_id) )
             trigger_error ('Query fallita: ' . mysql_error($this->db_cnx_id) . ' SQL: ' . $sql);
         $result = new MySQLResult($this,$queryResource);
 		return $result;
@@ -122,7 +91,7 @@ class C2MySQL {
 	 * @param db instance 	$db
 	 * @return null
 	 */
-	function lock($table, $db) {
+	protected function lock($table, $db) {
 		// Construct the query
 		$sql = "LOCK TABLES " . $table . " WRITE";
 		$db->query($sql);
@@ -133,7 +102,7 @@ class C2MySQL {
 	 * @param db instance 	$db
 	 * @return null
 	 */
-	function unlock($db) {
+	protected function unlock($db) {
 		$sql = "UNLOCK TABLES ";
 		$db->query($sql);
 	}
@@ -142,11 +111,68 @@ class C2MySQL {
 	 * Close the connection
 	 * @return null
 	 */
-	function close(){
+	protected function close() {
 		if( !mysql_close($this->db_cnx_id) )
 			trigger_error("Impossible to terminat the connection.\n\n" . mysql_error());
 	}
+
+	/**
+	 * Check if a given table exists
+	 * @param  String $table table name
+	 * @return Boolean
+	 */
+	protected function table_exists($table) {
+		$res = $this->query("SHOW TABLES LIKE '" . $table . "'");
+		if( $res->size() == 1 ) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Identifies errors that occurred during the connection.
+	 * @return boolean	true = an error has occured
+	 */
+	protected function isError() {
+		// Evaluates errors based on the signal variable.
+		if( $this->connect_error ) { return true; }
+		
+		// Evaluate MySQL errors
+        $error = mysql_error($this->db_cnx_id);
+        if ( empty($error) )
+            return false;
+        else
+            return true;
+	}
+
+	// private FUNCTIONS
+	
+	/**
+	 * Connects to the server
+	 * @return null (sets $this->connect_error)
+	 */
+	private function connect2MySQL() {
+		if( !$this->db_cnx_id = @mysql_connect($this->host, $this->user, $this->pwd) ) {
+            trigger_error('Impossible to contact the MySQL server.');
+            $this->connectError = true;
+		}
+	}
+	
+	/**
+	 * Connects to the database
+	 * @return void (sets $this->connect_error)
+	 */
+	private function connect2MySQL_db() {
+		if( !@mysql_select_db($this->db_name, $this->db_cnx_id) ) {
+            trigger_error('Impossible to select the database.');
+            $this->connectError = true;
+		}
+	}
+
 }
+
+
 
 /**
  * This class manages fetching data from MySQL databases
@@ -173,7 +199,7 @@ class MySQLresult {
      * @param resource $query
      * @access public
      */
-    function __construct(& $c2mysql,$query) {
+    public function __construct(& $c2mysql,$query) {
         $this->c2mysql = & $c2mysql;
         $this->query = $query;
     }
@@ -183,7 +209,7 @@ class MySQLresult {
      * @return array 	fetched row
      * @return Boolean 	if no rows are left to be fetched, returns false
      */
-    function fetch () {
+    public function fetch () {
         if ( $row = mysql_fetch_array($this->query,MYSQL_ASSOC) ) {
             return $row;
         } else if ( $this->size() > 0 ) {
@@ -197,14 +223,14 @@ class MySQLresult {
     /**
      * @return int 	number of selected rows
      */
-    function size () {
+    public function size () {
         return mysql_num_rows($this->query);
     }
 
     /**
      * @return int 	ID of the last inserted row
      */
-    function insertID () {
+    public function insertID () {
         return mysql_insert_id($this->c2mysql->db_cnx_id);
     }
     
@@ -212,7 +238,7 @@ class MySQLresult {
      * Looks for MySQL errors
      * @return Boolean
      */
-    function isError () {
+    public function isError () {
         return $this->c2mysql->isError();
     }
 }
