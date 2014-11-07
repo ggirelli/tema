@@ -1,7 +1,5 @@
-@font-face {
-	font-family: optimus;
-	src: url('../fonts/optimus.ttf');
-}
+
+/* LEFT BAR */
 
 #interface #left-bar {
 	position: fixed;
@@ -47,7 +45,7 @@
 	margin: 10px;
 	padding: 0;
 
-	border-radius: 50px;
+	border-radius: 20px;
 
 	font-size: 1em;
 	font-weight: normal;
@@ -70,6 +68,8 @@
 	text-align: center;
 	vertical-align: center;
 }
+
+/* BOTTOM BAR */
 
 #interface #bottom-bar {
 	position: fixed;
@@ -127,6 +127,8 @@
 
 	vertical-align: top;
 }
+
+/* CANVAS */
 
 #interface #canvas {
 	position: fixed;
