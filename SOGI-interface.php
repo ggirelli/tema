@@ -696,18 +696,31 @@ if(count($uncommon) != 0) $toInit = true;
 				<button type="button" class="btn btn-success btn-md disableable" onclick='javascript:subtractGraphs();' onmouseenter="javascript:showCmdSpy('Subtract graphs');" onmouseleave="javascript:hideCmdSpy();">
 					<span class="glyphicon glyphicon-resize-full"></span>
 				</button>
-				<button type="button" class="btn btn-danger btn-md disableable" onclick='javascript:filterGraphs();' onmouseenter="javascript:showCmdSpy('Filter current graph');" onmouseleave="javascript:hideCmdSpy();">
+				<button type="button" class="btn btn-danger btn-md disabled" onclick='javascript:filterGraphs();' onmouseenter="javascript:showCmdSpy('Filter current graph');" onmouseleave="javascript:hideCmdSpy();">
 					<span class="glyphicon glyphicon-filter"></span>
 				</button>
 				<br />
 				<button type="button" class="btn btn-info btn-md disableable" onclick='javascript:containsGraphs();' onmouseenter="javascript:showCmdSpy('Contains graph?');" onmouseleave="javascript:hideCmdSpy();">
 					<span class="glyphicon glyphicon-record"></span>
 				</button>
-				<button type="button" class="btn btn-info btn-md disableable" onclick='javascript:similarityGraphs();' onmouseenter="javascript:showCmdSpy('Calculate similarity');" onmouseleave="javascript:hideCmdSpy();">
+				<button type="button" class="btn btn-info btn-md disabled" onclick='javascript:similarityGraphs();' onmouseenter="javascript:showCmdSpy('Calculate similarity');" onmouseleave="javascript:hideCmdSpy();">
 					<span class="glyphicon glyphicon-road"></span>
 				</button>
 				<h5>Layout</h5>
-				<button type="button" class="btn btn-warning btn-md" onclick="javascript:$('#cy').cytoscape(function(){cy.center(cy.$('*'))});" onmouseenter="javascript:showCmdSpy('Center current graph in the canvas');" onmouseleave="javascript:hideCmdSpy();">
+				<button type="button" class="btn btn-warning btn-md" onclick="javascript:cy.layout({name:'circle'})" onmouseenter="javascript:showCmdSpy('Apply circular layout');" onmouseleave="javascript:hideCmdSpy();">
+					<span class="glyphicon glyphicon-repeat"></span>
+				</button>
+				<button type="button" class="btn btn-warning btn-md" onclick="javascript:cy.layout({name:'grid'})" onmouseenter="javascript:showCmdSpy('Apply grid layout');" onmouseleave="javascript:hideCmdSpy();">
+					<span class="glyphicon glyphicon-th"></span>
+				</button>
+				<button type="button" class="btn btn-warning btn-md" onclick="javascript:cy.layout({name:'breadthfirst'})" onmouseenter="javascript:showCmdSpy('Apply breadthfirst layout');" onmouseleave="javascript:hideCmdSpy();">
+					<span class="glyphicon glyphicon-tree-deciduous"></span>
+				</button>
+				<button type="button" class="btn btn-warning btn-md" onclick="javascript:cy.layout({name:'random'})" onmouseenter="javascript:showCmdSpy('Apply random layout');" onmouseleave="javascript:hideCmdSpy();">
+					<span class="glyphicon glyphicon-asterisk"></span>
+				</button>
+				<br />
+				<button type="button" class="btn btn-danger btn-md" onclick="javascript:$('#cy').cytoscape(function(){cy.center(cy.$('*'))});" onmouseenter="javascript:showCmdSpy('Center current graph in the canvas');" onmouseleave="javascript:hideCmdSpy();">
 					<span class="glyphicon glyphicon-screenshot"></span>
 				</button>
 			</div>

@@ -540,22 +540,24 @@ write.graph.json = function(graph, file, ...) {
 	}
 
 	# EDGES
-	eal <- get.edge.attributes(E(graph), skip=c())
-	if(is.matrix(eal)) {
-		l$edges <- apply(eal, MARGIN=1, FUN=function(x, index) {
-			data <- list(id=paste0('e', as.vector(x['id'])))
-			for(attr in names(x)[which(names(x) != 'id')]) {
-				data <- append(data, eval(parse(text=paste0('x[\'', attr, '\']'))))
-			}
-			return(list(data=data))
-		})
-	} else {
-		data <- sapply(1:length(eal), FUN=function(x, eal) {
-			if(names(eal[x]) == 'id') return(list(id=paste0('e',eal[x])))
-			return(eal[x])
-		}, eal=eal)
-		l$edges <- list(c(list(data=data)))
+	if(ecount(graph) != 0) {
+		eal <- get.edge.attributes(E(graph), skip=c())
+		if(is.matrix(eal)) {
+			l$edges <- apply(eal, MARGIN=1, FUN=function(x, index) {
+				data <- list(id=paste0('e', as.vector(x['id'])))
+				for(attr in names(x)[which(names(x) != 'id')]) {
+					data <- append(data, eval(parse(text=paste0('x[\'', attr, '\']'))))
+				}
+				return(list(data=data))
+			})
+		} else {
+			data <- sapply(1:length(eal), FUN=function(x, eal) {
+				if(names(eal[x]) == 'id') return(list(id=paste0('e',eal[x])))
+				return(eal[x])
+			}, eal=eal)
+			l$edges <- list(c(list(data=data)))
+		}
 	}
-
+	
 	write(toJSON(l), file=file.path(file))
 }
