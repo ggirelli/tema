@@ -3,7 +3,7 @@
 
     define([], function () {
 
-        return function (scope, model, http) {
+        return function (scope, model, http, timeout) {
 
         	scope.m = model;
         	
@@ -31,7 +31,6 @@
 	                        if(0 == data['err']) {
 	                        	document.location.hash = data['hash'];
 	                        } else {
-	                        	console.log(1);
 	                        	console.log(data);
 	                        }
 	                    });
@@ -41,12 +40,13 @@
 	        		scope.m.homeChoice = 1;
 	        	},
 
-	        	isLoading: function() {
+	        	isPreLoading: function() {
 	        		return(scope.m.homeChoice == 1);
 	        	},
 
 	        	load: function(id) {
-	        		console.log('load: ' + id);
+	        		scope.m.homeChoice = 2;
+
 	                http({
 
 	                    method: 'POST',
@@ -58,9 +58,24 @@
 
 	                })
 	                    .success(function (data) {
-	                        console.log(data);
-	                        scope.homepage.waiting();
+	                        if(0 == data['err']) {
+	                        	document.location.hash = data['hash'];
+	                        	scope.m.tmpID = undefined;
+	                        	scope.homepage.waiting();
+	                        } else {
+	                        	scope.m.tmpErr = 3;
+	                        	console.log(data);
+	                        	timeout(function() {
+	                        		scope.m.tmpErr = undefined;
+	                        		scope.m.tmpID = undefined;
+	                        		scope.homepage.waiting();
+	                        	}, 3000);
+	                        }
 	                    });
+	        	},
+
+	        	isLoading: function() {
+	        		return(scope.m.homeChoice == 2);
 	        	}
 
 	        }

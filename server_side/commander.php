@@ -22,6 +22,7 @@ if( isset($data->action) ) {
 			}
 
 			case 'load_session': {
+				require_once('action/session_load.php');
 				break;
 			}
 

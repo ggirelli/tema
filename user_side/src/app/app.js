@@ -15,7 +15,7 @@
         	service('appModel', [model]).
         	controller('appController', ['$scope', 'appModel', controller]).
 
-            controller('homepageController', ['$scope', 'appModel', '$http', homepageController])
+            controller('homepageController', ['$scope', 'appModel', '$http', '$timeout', homepageController])
 
     });
 

@@ -72,3 +72,7 @@
 
 	font-variant: small-caps;
 }
+
+#homepage .load-error {
+	text-align: center;
+}
