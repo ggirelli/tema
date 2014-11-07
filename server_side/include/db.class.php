@@ -122,8 +122,8 @@ class C2MySQL {
 	 * @return Boolean
 	 */
 	protected function table_exists($table) {
-		$res = $this->query("SHOW TABLES LIKE '" . $table . "'");
-		if( $res->size() == 1 ) {
+		$r = $this->query("SHOW TABLES LIKE '" . $table . "'");
+		if( $r->size() == 1 ) {
 			return true;
 		} else {
 			return false;

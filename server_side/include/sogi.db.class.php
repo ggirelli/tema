@@ -38,6 +38,8 @@ class SOGIdb extends C2MySQL {
 		if( !parent::table_exists('sessions') ) {
 			return false;
 		}
+		
+		return true;
 	}
 
 	/**
@@ -49,13 +51,14 @@ class SOGIdb extends C2MySQL {
 		// Session table definition
 		$sql = "CREATE TABLE sessions (" .
 			"id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY, " .
-			"path VARCHAR(200) NOT NULL UNIQUE, " .
-			"uri VARCHAR(200) NOT NULL UNIQUE, " .
+			"seed VARCHAR(100) NOT NULL UNIQUE, " .
+			"folder_path VARCHAR(200) NOT NULL UNIQUE, " .
+			"interface_uri VARCHAR(200) NOT NULL UNIQUE, " .
 			"running INT NOT NULL DEFAULT 0, " .
-			"lastOperation VARCHAR(100), " .
-			"time INTEGER, " .
-			"currNet VARCHAR(100), " .
-			"nodeThr INTEGER" .
+			"last_query VARCHAR(100), " .
+			"last_query_when INTEGER, " .
+			"current_net VARCHAR(100), " .
+			"node_thr INTEGER" .
 			")";
 		
 		// Create table

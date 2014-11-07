@@ -1,2 +1,3 @@
 RewriteEngine On
 RewriteRule ^s/$  server_side/commander.php
+RewriteRule ^s/(.*)/(.*)$ server_side/session/$1/$2

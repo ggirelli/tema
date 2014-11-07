@@ -28,7 +28,12 @@
 
 	                })
 	                    .success(function (data) {
-	                        console.log(data);
+	                        if(0 == data['err']) {
+	                        	document.location.hash = data['hash'];
+	                        } else {
+	                        	console.log(1);
+	                        	console.log(data);
+	                        }
 	                    });
 	        	},
 

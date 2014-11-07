@@ -6,7 +6,6 @@
 // Requirements
 require_once('settings.php');
 require_once('include/sogi.session.class.php');
-$session = new SOGIsession(HOST, USER, PWD, DB_NAME, 1);
 
 // Read POST JSON data
 $data = json_decode(file_get_contents("php://input"));
@@ -18,6 +17,7 @@ if( isset($data->action) ) {
 		switch($data->action) {
 
 			case 'new_session': {
+				require_once('action/session_new.php');
 				break;
 			}
 
