@@ -1,0 +1,37 @@
+<!-- import url-specific style -->
+<style type="text/css">@import "/public_html/SOGIv020/user_side/src/common/css/bonjur.css";</style>
+
+<!-- url-specific template -->
+<div id='homepage' class='col-md-8 col-md-offset-2'>
+
+	<div class="title col-md-12">
+		<p>SOGI</p>
+		<small>Simple Online Graph Interface</small>
+	</div>
+
+	<div class="session-choice panel panel-default col-md-12" ng-app='sogi' ng-controller='homepageController as hCtrl' ng-model='hCtrl'>
+		<div class="panel-heading">
+			<span ng-show='homepage.isWaiting()'>Make your choice:</span>
+			<span ng-show='homepage.isLoading()'>Enter the session ID:</span>
+		</div>
+		<div class="panel-body">
+			<div class="col-md-6">
+				<button class="cell btn btn-success" ng-click='homepage.new()' ng-class="{'disabled':homepage.isLoading()}">create a new session</button>
+			</div>
+			<div class="col-md-6" ng-show='homepage.isWaiting()'>
+				<button class="cell btn btn-warning" ng-click='homepage.loading()'>load an old session</button>
+			</div>
+			<div class="col-md-6" ng-show='homepage.isLoading()'>
+				<div class="cell cell-input">
+					<input type="text" placeholder='session id' ng-model='m.tmpID' />
+				</div>
+
+				<div class='cell-response'>
+					<button class='btn btn-primary' ng-click='homepage.load(m.tmpID); m.tmpID = undefined;'>load</button>
+					<button class='btn btn-danger' ng-click='homepage.waiting()'>back</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
