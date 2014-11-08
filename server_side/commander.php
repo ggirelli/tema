@@ -16,7 +16,7 @@ if( isset($data->action) ) {
 
 		switch($data->action) {
 
-			case 'new_session': case 'load_session': case 'get_network_list': {
+			case 'session_new': case 'session_load': case 'get_network_list': {
 				require_once('action/' . $data->action . '.php');
 				break;
 			}

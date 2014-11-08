@@ -22,7 +22,7 @@
 
 	                    method: 'POST',
 	                    data: {
-	                        action: 'new_session'
+	                        action: 'session_new'
 	                    },
 	                    url: 's/'
 
@@ -51,7 +51,7 @@
 
 	                    method: 'POST',
 	                    data: {
-	                        action: 'load_session',
+	                        action: 'session_load',
 	                        id: scope.m.tmpID
 	                    },
 	                    url: 's/'
