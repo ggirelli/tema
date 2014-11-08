@@ -3,11 +3,11 @@
 
     define([], function () {
 
-        return function (scope, model, panels, animate) {
+        return function (scope, model, panels, inspector) {
 
         	scope.m = model;
 
-        	// Panels service
+        	scope.inspector = inspector;
         	scope.panels = panels;
 
         };

@@ -69,12 +69,18 @@
 	</div>
 
 	<div id='bottom-bar' ng-click='panels.closeAll()'>
-		<div id="console">
-			<input type='text' class='terminal' /><button class='btn btn-info'>></button>
+		<div class="col-md-12 wrap">
+			<div id="console" class='col-md-5'>
+				<input type='text' class='terminal' /><button class='btn btn-info'>></button>
+			</div>
+			<div id="inspector" class="col-md-3 col-md-offset-2 panel panel-info" ng-show='inspector.show'>
+				<div class="panel-heading">Inspector</div>
+				<div class="panel-body"></div>
+			</div>
 		</div>
 	</div>
 
-	<div id="canvas" ng-click='panels.closeAll()'>
+	<div id="canvas" ng-click='panels.closeAll();'>
 		
 	</div>
 
