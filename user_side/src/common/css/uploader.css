@@ -38,3 +38,14 @@
 	font-size: 1.5em;
 	font-weight: bold;
 }
+
+#uploader .uploader-wrap {
+	margin-top: 1em;
+	padding-top: 1.5em;
+
+	border-top: 1px solid #428BCA;
+}
+
+#uploader .uploader-btn-wrap .btn {
+	font-variant: small-caps;
+}

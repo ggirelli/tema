@@ -14,6 +14,18 @@
 		<div class="panel-body">
 			<p>Please, upload your <code>.graphml</code> files to start a new session!</p>
 			<p>If your files are particularly <span class='big'>BIG</span> please, use an <code>sshfs</code> or <code>scp</code> connection instead of this uploader.<sup>1</sup></p>
+
+			<div class="uploader-wrap col-md-12">
+				<div class="uploader-btn-wrap col-md-4">
+					<button class="btn btn-primary btn-block" ng-click='uploader.addFile()'>Select file</button>
+					<button class="btn btn-warning btn-block" ng-click='uploader.check_list()'>Check file(s)</button>
+					<button class="btn btn-success btn-block" ng-click='uploader.upload()'>Upload file(s)</button>
+					<a href='#/interface/{{m.session_id}}' class="btn btn-danger btn-block">Abort</a>
+				</div>
+				<div class="uploader-list-wrap col-md-8">
+					
+				</div>
+			</div>
 		</div>
 	</div>
 
