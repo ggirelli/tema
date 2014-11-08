@@ -1,0 +1,40 @@
+#uploader .title {
+	margin-bottom: 0.5em;
+	margin-top: 0.5em;
+
+	color: #F24C27;
+
+	font-family: optimus;
+	font-size: 6em;
+	line-height: 0.5em;
+	text-align: center;
+}
+
+#uploader .title span {
+	display: block;
+	width: 100%;
+}
+
+#uploader .title small {
+	display: block;
+	width: 100%;
+
+	color: #767676;
+
+	font-size: 0.3em;
+}
+
+#uploader .uploader-panel {
+	padding: 0;
+}
+
+#uploader .uploader-panel .panel-heading {
+	font-family: tahoma;
+	font-weight: bold;
+	text-align: center;
+}
+
+#uploader .uploader-panel .big {
+	font-size: 1.5em;
+	font-weight: bold;
+}

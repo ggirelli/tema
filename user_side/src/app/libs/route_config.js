@@ -7,15 +7,19 @@
                 routeProvider
 
                     .when('/', {
-                        templateUrl: 'user_side/src/app/mods/homepage/homepage.tpl.html'
+                        templateUrl: 'user_side/src/app/mods/homepage/tpl.html'
                     })
 
                     .when('/upload/:id', {
-                        templateUrl: 'user_side/src/app/mods/upload/upload.tpl.html'
+                        templateUrl: 'user_side/src/app/mods/uploader/tpl.html'
                     })
 
                     .when('/interface/:id', {
-                        templateUrl: 'user_side/src/app/mods/interface/interface.tpl.html'
+                        templateUrl: 'user_side/src/app/mods/interface/tpl.html'
+                    })
+
+                    .when('/help', {
+                        templateUrl: 'user_side/src/app/mods/help/tpl.html'
                     })
 
                     .otherwise({

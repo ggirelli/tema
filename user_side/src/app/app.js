@@ -5,12 +5,15 @@
         './libs/model', './libs/controller', './libs/route_config',
         './mods/homepage/libs/controller', './mods/interface/libs/controller',
         './mods/interface/libs/inspector.service', './mods/interface/libs/panels.service',
+        './mods/interface/libs/commander.service',
+        './mods/uploader/libs/controller',
         'angular-route', 'angular-animate'];
 
     define(def_requirements,
         function (angular, model, controller, routeConfig,
             homepageController, interfaceController,
-            inspectorService, panelsService) {
+            inspectorService, panelsService, commanderService,
+            uploaderController) {
         
         angular.module('sogi', ['ngRoute']).
         	config(['$routeProvider', routeConfig]).
@@ -22,7 +25,10 @@
             
             service('inspectorService', [inspectorService]).
             service('panelsService', [panelsService]).
-            controller('interfaceController', ['$scope', 'appModel', 'panelsService', 'inspectorService', interfaceController])
+            service('commanderService', ['$q', '$http', commanderService]).
+            controller('interfaceController', ['$scope', 'appModel', '$routeParams', 'panelsService', 'inspectorService', 'commanderService', interfaceController]).
+
+            controller('uploaderController', ['$scope', 'appModel', '$routeParams', uploaderController])
 
     });
 

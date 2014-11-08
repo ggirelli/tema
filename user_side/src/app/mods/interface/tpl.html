@@ -6,34 +6,38 @@
 
 	<div id='left-bar'>
 		<a class="title" href='#/'>SOGI</a>
-		<span class="btn btn-primary btn-circle" ng-click="panels.toggle('graph_list')" ng-class="{'open' : panels.show.graph_list}">
+		<span class="btn btn-primary btn-circle" ng-click="panels.toggle('graph_list')" ng-class="{'open' : panels.show.graph_list}" title="Network list">
 			<span class="glyphicon glyphicon-th-list"></span>
 		</span>
-		<span class="btn btn-danger btn-circle" ng-click="panels.toggle('operations')" ng-class="{'open' : panels.show.operations}">
+		<span class="btn btn-danger btn-circle" ng-click="panels.toggle('operations')" ng-class="{'open' : panels.show.operations}" title="Operations">
 			<span class="glyphicon glyphicon-pencil"></span>
 		</span>
-		<span class="btn btn-warning btn-circle" ng-click="panels.toggle('layout')" ng-class="{'open' : panels.show.layout}">
+		<span class="btn btn-warning btn-circle" ng-click="panels.toggle('layout')" ng-class="{'open' : panels.show.layout}" title="Layout">
 			<span class="glyphicon glyphicon-th"></span>
 		</span>
-		<span class="btn btn-warning btn-circle" ng-click="panels.toggle('style')" ng-class="{'open' : panels.show.style}">
+		<span class="btn btn-warning btn-circle" ng-click="panels.toggle('style')" ng-class="{'open' : panels.show.style}" title="Style">
 			<span class="glyphicon glyphicon-adjust"></span>
 		</span>
-		<span class="btn btn-success btn-circle" ng-click="panels.toggle('select')" ng-class="{'open' : panels.show.select}">
+		<span class="btn btn-success btn-circle" ng-click="panels.toggle('select')" ng-class="{'open' : panels.show.select}" title="Select">
 			<span class="glyphicon glyphicon-check"></span>
 		</span>
-		<span class="btn btn-default btn-circle" ng-click="panels.toggle('settings')" ng-class="{'open' : panels.show.settings}">
+		<span class="btn btn-default btn-circle" ng-click="panels.toggle('settings')" ng-class="{'open' : panels.show.settings}" title="Settings">
 			<span class="glyphicon glyphicon-cog"></span>
 		</span>
-		<span class="btn btn-info btn-circle">
+		<a href="#/help" class="btn btn-info btn-circle" title="Help">
 			<span class="glyphicon glyphicon-heart-empty"></span>
-		</span>
+		</a>
 	</div>
 
 	<div class='left-panel-wrap'>
 		<div class='left-panel graph-list-panel panel panel-primary' ng-show='panels.show.graph_list'>
 			<div class="panel-heading">Network list</div>
 			<div class="panel-body">
-				...
+				<span ng-show='networks.list != null'>@TODO LIST</span>
+				<p ng-show='networks.list == null'>
+					<i>You have not uploaded any network yet...</i><br />
+					Visit the <a href="#/upload/{{m.session_id}}">uploader</a>!
+				</p>
 			</div>
 		</div>
 		<div class='left-panel operations-panel panel panel-danger' ng-show='panels.show.operations'>

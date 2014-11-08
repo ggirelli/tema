@@ -1,0 +1,22 @@
+<!-- import url-specific style -->
+<style type="text/css">@import "/public_html/SOGIv020/user_side/src/common/css/uploader.css";</style>
+
+<!-- url-specific template -->
+<div id='uploader' class='col-md-8 col-md-offset-2' ng-app='sogi' ng-controller='uploaderController as uCtrl' ng-model='uCtrl'>
+
+	<div class="title col-md-12">
+		<p>SOGI</p>
+		<small>Simple Online Graph Interface</small>
+	</div>
+
+	<div class="uploader-panel panel panel-primary col-md-12">
+		<div class="panel-heading">Uploader</div>
+		<div class="panel-body">
+			<p>Please, upload your <code>.graphml</code> files to start a new session!</p>
+			<p>If your files are particularly <span class='big'>BIG</span> please, use an <code>sshfs</code> or <code>scp</code> connection instead of this uploader.<sup>1</sup></p>
+		</div>
+	</div>
+
+	<small><sup>1</sup> you can upload your files manually at the address <span style='font-family: Monospace;'>/server_side/session/{{m.session_id}}/</span></small>
+
+</div>

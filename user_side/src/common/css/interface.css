@@ -112,6 +112,9 @@ html {
 
 #interface .left-panel .panel-heading {
 	border-radius: 0;
+
+	font-weight: bold;
+	font-family: tahoma;
 }
 
 /* BOTTOM BAR */

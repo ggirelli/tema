@@ -31,7 +31,7 @@
                     }
                 }
                 self.show[panel] = !self.show[panel];
-            }
+            };
 
             /**
              * Checks whether a panel is open
@@ -40,7 +40,7 @@
             self.isOpen = function() {
                 if( self.show.graph_list || self.show.operations || self.show.layout || self.show.style || self.show.select || self.show.settings ) return(true);
                 return(false);
-            }
+            };
 
             /**
              * Which panel is open?
@@ -55,7 +55,7 @@
                 if( self.show.select ) return('select');
                 if( self.show.settings ) return('settings');
                 return(false);
-            }
+            };
 
             /**
              * Closes every panel
@@ -70,7 +70,7 @@
                     select: false,
                     settings: false
                 };
-            }
+            };
         };
 
     });
