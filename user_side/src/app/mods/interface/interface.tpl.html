@@ -6,22 +6,22 @@
 
 	<div id='left-bar'>
 		<a class="title" href='#/'>SOGI</a>
-		<span class="btn btn-primary btn-circle">
+		<span class="btn btn-primary btn-circle" ng-click="panels.toggle('graph_list')" ng-class="{'open' : panels.show.graph_list}">
 			<span class="glyphicon glyphicon-th-list"></span>
 		</span>
-		<span class="btn btn-danger btn-circle">
+		<span class="btn btn-danger btn-circle" ng-click="panels.toggle('operations')" ng-class="{'open' : panels.show.operations}">
 			<span class="glyphicon glyphicon-pencil"></span>
 		</span>
-		<span class="btn btn-warning btn-circle">
+		<span class="btn btn-warning btn-circle" ng-click="panels.toggle('layout')" ng-class="{'open' : panels.show.layout}">
 			<span class="glyphicon glyphicon-th"></span>
 		</span>
-		<span class="btn btn-warning btn-circle">
+		<span class="btn btn-warning btn-circle" ng-click="panels.toggle('style')" ng-class="{'open' : panels.show.style}">
 			<span class="glyphicon glyphicon-adjust"></span>
 		</span>
-		<span class="btn btn-success btn-circle">
+		<span class="btn btn-success btn-circle" ng-click="panels.toggle('select')" ng-class="{'open' : panels.show.select}">
 			<span class="glyphicon glyphicon-check"></span>
 		</span>
-		<span class="btn btn-default btn-circle">
+		<span class="btn btn-default btn-circle" ng-click="panels.toggle('settings')" ng-class="{'open' : panels.show.settings}">
 			<span class="glyphicon glyphicon-cog"></span>
 		</span>
 		<span class="btn btn-info btn-circle">
@@ -29,13 +29,52 @@
 		</span>
 	</div>
 
-	<div id='bottom-bar'>
+	<div class='left-panel-wrap'>
+		<div class='left-panel graph-list-panel panel panel-primary' ng-show='panels.show.graph_list'>
+			<div class="panel-heading">Network list</div>
+			<div class="panel-body">
+				...
+			</div>
+		</div>
+		<div class='left-panel operations-panel panel panel-danger' ng-show='panels.show.operations'>
+			<div class="panel-heading">Operations</div>
+			<div class="panel-body">
+				...
+			</div>
+		</div>
+		<div class='left-panel layout-panel panel panel-warning' ng-show='panels.show.layout'>
+			<div class="panel-heading">Layout</div>
+			<div class="panel-body">
+				...
+			</div>
+		</div>
+		<div class='left-panel style-panel panel panel-warning' ng-show='panels.show.style'>
+			<div class="panel-heading">Style</div>
+			<div class="panel-body">
+				...
+			</div>
+		</div>
+		<div class='left-panel select-panel panel panel-success' ng-show='panels.show.select'>
+			<div class="panel-heading">Select</div>
+			<div class="panel-body">
+				...
+			</div>
+		</div>
+		<div class='left-panel settings-panel panel panel-default' ng-show='panels.show.settings'>
+			<div class="panel-heading">Settings</div>
+			<div class="panel-body">
+				...
+			</div>
+		</div>
+	</div>
+
+	<div id='bottom-bar' ng-click='panels.closeAll()'>
 		<div id="console">
 			<input type='text' class='terminal' /><button class='btn btn-info'>></button>
 		</div>
 	</div>
 
-	<div id="canvas">
+	<div id="canvas" ng-click='panels.closeAll()'>
 		
 	</div>
 

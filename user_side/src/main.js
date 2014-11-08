@@ -12,6 +12,7 @@
             'vendor': 'vendor',
             // Libraries
             'angular': 'vendor/js/angular',
+            'angular-animate': 'vendor/js/angular-animate.min',
             'angular-route': 'vendor/js/angular-route.min',
             'bootstrap': 'vendor/js/bootstrap.min',
             'cytoscape': 'vendor/js/cytoscape.min',
@@ -21,6 +22,10 @@
             // Vendor libraries.
             'angular': {
                 'exports': 'angular'
+            },
+            'angular-animate': {
+                'exports': 'ngAnimate',
+                'deps': ['angular']
             },
             'angular-route': {
                 'exports': 'ngRoute',
@@ -35,7 +40,7 @@
         }
     });
 
-    requirejs(['angular', 'angular-route', 'app/app'], function (angular) {
+    requirejs(['angular', 'angular-animate', 'angular-route', 'app/app'], function (angular) {
 
         // Angular bootstrapping
         angular.element(document).ready(function () {
