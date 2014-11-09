@@ -66,7 +66,12 @@
             /**
              * Checks files in the queue and removes error
              */
-        	self.check_list = function(time) {
+        	self.check_list = function (time) {
+                if ( 0 == self.files.length ) {
+                    alert('No files to check.');
+                    stop();
+                }
+
                 var i = 0;
         		while ( i < self.files.length ) {
                     var ext = self.files[i].data[0].name.split('.');
@@ -184,16 +189,16 @@
                 self.files = [];
                 self.files_rm = [];
                 self.files_up = [];
+
+                self.uploading = false;
+                self.progress = 0;
             };
 
             /**
              * Ends uploading process, reset uploader controller and redirects to the interface
              */
             self.end = function(session_id) {
-                // Reset uploader status
-                self.uploading = false;
-
-                // Reset queue
+                // Reset queue and uploader status
                 self.abort();
 
                 // Redirect to the interface

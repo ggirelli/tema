@@ -46,6 +46,7 @@
 					</div>
 
 					<button class="btn btn-success btn-end-upload" ng-show="uploader.uploading && uploader.progress == 100" ng-click="uploader.end(m.session_id)">continue</button>
+					<button class="btn btn-warning btn-end-upload" ng-show="uploader.uploading && uploader.progress == 100" ng-click="uploader.abort()">again</button>
 				</div>
 
 				<form id='hidden-form' ng-submit="uploader.upload()">

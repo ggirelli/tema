@@ -62,7 +62,7 @@
 
 #uploader .uploader-list-wrap .btn-end-upload {
 	float: right;
-	
+	margin-left: 4px;
 	font-variant: small-caps;
 }
 
