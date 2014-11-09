@@ -20,20 +20,23 @@
 			<div class="uploader-wrap col-md-12">
 
 				<div class="uploader-btn-wrap col-md-4">
-					<button class="btn btn-primary btn-block" ng-click='uploader.addFile()'>Select file</button>
-					<button class="btn btn-warning btn-block" ng-click='uploader.check_list()'>Check file(s)</button>
-					<button class="btn btn-success btn-block" ng-click='uploader.upload()'>Upload file(s)</button>
-					<a href='#/interface/{{m.session_id}}' class="btn btn-danger btn-block" ng-click='uploader.abort()'>Abort</a>
+					<button class="btn btn-primary btn-block" ng-click='uploader.addFile()' ng-class="{'disabled' : uploader.ing}">Select file</button>
+					<button class="btn btn-warning btn-block" ng-click='uploader.check_list(2000)' ng-class="{'disabled' : uploader.ing}">Check file(s)</button>
+					<button class="btn btn-success btn-block" submit-form='#hidden-form' ng-class="{'disabled' : uploader.ing}">Upload file(s)</button>
+					<a href='#/interface/{{m.session_id}}' class="btn btn-danger btn-block" ng-click='uploader.abort()' ng-class="{'disabled' : uploader.ing}">Abort</a>
 				</div>
 
 				<div class="uploader-list-wrap col-md-8">
-					<div class='alert alert-{{file.class}}' ng-repeat="file in uploader.files">
+					<div class='alert alert-info' ng-repeat="file in uploader.files">
 						{{file.data[0].name}}
-						<a href="" class="file-alert-rm-btn" ng-click="uploader.rmFile(file.id)" ng-show="file.class == 'info'"><span class="glyphicon glyphicon-remove"></span></a>
+						<a href="" class="file-alert-rm-btn" ng-click="uploader.rmFile(file.id)"><span class="glyphicon glyphicon-remove"></span></a>
+					</div>
+					<div class='alert alert-danger' ng-repeat="file in uploader.files.rm">
+						{{file.data[0].name}}
 					</div>
 				</div>
 
-				<form id='hidden-form'>
+				<form id='hidden-form' ng-submit="uploader.upload()">
 					<input type="file" ng-repeat="file in uploader.files" uploader-autoclick="{{file.id}}">
 				</form>
 

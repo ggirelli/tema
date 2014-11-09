@@ -6,14 +6,16 @@
         './mods/homepage/libs/controller', './mods/interface/libs/controller',
         './mods/interface/libs/inspector.service', './mods/interface/libs/panels.service',
         './mods/interface/libs/commander.service',
-        './mods/uploader/libs/controller', './mods/uploader/libs/service', './mods/uploader/libs/directive',
+        './mods/uploader/libs/controller', './mods/uploader/libs/service', 
+        './mods/uploader/libs/directive', './mods/uploader/libs/submit_form.directive',
         'angular-route', 'angular-animate', 'jquery'];
 
     define(def_requirements,
         function (angular, model, controller, routeConfig,
             homepageController, interfaceController,
             inspectorService, panelsService, commanderService,
-            uploaderController, uploaderService, autoclickDirective) {
+            uploaderController, uploaderService,
+            autoclickDirective, submitformDirective) {
         
         angular.module('sogi', ['ngRoute']).
         	config(['$routeProvider', routeConfig]).
@@ -28,7 +30,7 @@
             service('commanderService', ['$q', '$http', commanderService]).
             controller('interfaceController', ['$scope', 'appModel', '$routeParams', 'panelsService', 'inspectorService', 'commanderService', interfaceController]).
 
-            service('uploaderService', ['$timeout', uploaderService]).
+            service('uploaderService', ['$q', '$timeout', uploaderService]).
             controller('uploaderController', ['$scope', 'appModel', '$routeParams', 'uploaderService', uploaderController]).
 
             directive('uploaderAutoclick', ['$parse', function ($parse) {
@@ -36,6 +38,15 @@
                 return {
                     restrict: 'A',
                     link: autoclickDirective
+                };
+
+            }]).
+
+            directive('submitForm', [function () {
+
+                return {
+                    restrict: 'A',
+                    link: submitformDirective
                 };
 
             }])
