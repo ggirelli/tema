@@ -19,21 +19,33 @@
 
 			<div class="uploader-wrap col-md-12">
 
+				<div class="progress" ng-show='uploader.uploading'>
+					<div class="progress-bar progress-bar-striped active" role="progress-bar" aria-valuenow="uploader.progress" aria-valuemin="0", aria-valuemax="100" style="width: {{uploader.progress}}%">
+						<span class="sr-only">{{uploader.progress}}%</span>
+					</div>
+				</div>
+
 				<div class="uploader-btn-wrap col-md-4">
-					<button class="btn btn-primary btn-block" ng-click='uploader.addFile()' ng-class="{'disabled' : uploader.ing}">Select file</button>
-					<button class="btn btn-warning btn-block" ng-click='uploader.check_list(2000)' ng-class="{'disabled' : uploader.ing}">Check file(s)</button>
-					<button class="btn btn-success btn-block" submit-form='#hidden-form' ng-class="{'disabled' : uploader.ing}">Upload file(s)</button>
-					<a href='#/interface/{{m.session_id}}' class="btn btn-danger btn-block" ng-click='uploader.abort()' ng-class="{'disabled' : uploader.ing}">Abort</a>
+					<button class="btn btn-primary btn-block" ng-click='uploader.addFile()' ng-class="{'disabled' : uploader.uploading}">Select file</button>
+					<button class="btn btn-warning btn-block" ng-click='uploader.check_list(2000)' ng-class="{'disabled' : uploader.uploading}">Check file(s)</button>
+					<button class="btn btn-success btn-block" submit-form='#hidden-form' ng-class="{'disabled' : uploader.uploading}">Upload file(s)</button>
+					<a href='#/interface/{{m.session_id}}' class="btn btn-danger btn-block" ng-click='uploader.abort()' ng-class="{'disabled' : uploader.uploading}">Abort</a>
 				</div>
 
 				<div class="uploader-list-wrap col-md-8">
 					<div class='alert alert-info' ng-repeat="file in uploader.files">
 						{{file.data[0].name}}
-						<a href="" class="file-alert-rm-btn" ng-click="uploader.rmFile(file.id)"><span class="glyphicon glyphicon-remove"></span></a>
+						<a href="" class="file-alert-rm-btn" ng-click="uploader.rmFile(file.id-1)"><span class="glyphicon glyphicon-remove"></span></a>
 					</div>
-					<div class='alert alert-danger' ng-repeat="file in uploader.files.rm">
+					<div class='alert alert-danger' ng-repeat="file in uploader.files_rm">
 						{{file.data[0].name}}
 					</div>
+					<div class="alert alert-{{file.class}} alert-uploading" ng-repeat="file in uploader.files_up">
+						{{file.data[0].name}}
+						<small>{{file.msg}}</small>
+					</div>
+
+					<button class="btn btn-success btn-end-upload" ng-show="uploader.uploading && uploader.progress == 100" ng-click="uploader.end(m.session_id)">continue</button>
 				</div>
 
 				<form id='hidden-form' ng-submit="uploader.upload()">
@@ -45,6 +57,10 @@
 		</div>
 	</div>
 
-	<small><sup>1</sup> you can upload your files manually at the address <span style='font-family: Monospace;'>/server_side/session/{{m.session_id}}/</span></small>
+	<p>
+		<small><sup>1</sup> you can upload your files manually at the address <span style='font-family: Monospace;'>/server_side/session/{{m.session_id}}/</span></small>
+	</p>
+
+	<small>If you leave this page the upload will be interrupted.</small>
 
 </div>

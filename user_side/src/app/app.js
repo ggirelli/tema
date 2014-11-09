@@ -30,7 +30,7 @@
             service('commanderService', ['$q', '$http', commanderService]).
             controller('interfaceController', ['$scope', 'appModel', '$routeParams', 'panelsService', 'inspectorService', 'commanderService', interfaceController]).
 
-            service('uploaderService', ['$q', '$timeout', uploaderService]).
+            service('uploaderService', ['$http', '$q', '$timeout', uploaderService]).
             controller('uploaderController', ['$scope', 'appModel', '$routeParams', 'uploaderService', uploaderController]).
 
             directive('uploaderAutoclick', ['$parse', function ($parse) {

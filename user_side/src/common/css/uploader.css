@@ -54,6 +54,18 @@
 	float: right;
 }
 
+#uploader .uploader-list-wrap .alert-uploading small {
+	display: block;
+
+	font-weight: bold;
+}
+
+#uploader .uploader-list-wrap .btn-end-upload {
+	float: right;
+	
+	font-variant: small-caps;
+}
+
 #hidden-form {
 	display: none;
 }

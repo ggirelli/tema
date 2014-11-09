@@ -12,7 +12,7 @@
              */
             self.homeChoice = 0;
 
-            self.session_id
+            self.session_id = null;
            	self.currentSession = null;
 
 

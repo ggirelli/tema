@@ -16,4 +16,8 @@ define('RPATH', dirname(__FILE__));
 define('SPATH', dirname(__FILE__) . '/session');
 define('RURI', 'http://localhost/public_html/SOGIv020');
 
+// Uploader
+$FILENAME_BAN = array('.', '..', 'config');
+$ALLOWED_EXT = array('graphml');
+
 ?>
