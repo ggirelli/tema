@@ -96,7 +96,10 @@ html {
 	border-left-width: 0;
 	border-radius: 0;
 
-	z-index: 1;
+	overflow-x: hidden;
+	overflow-y: auto;
+
+	z-index: 2;
 
 	-moz-transition:all linear 0.5s;
 	-o-transition:all linear 0.5s;
@@ -116,6 +119,25 @@ html {
 	font-weight: bold;
 	font-family: tahoma;
 }
+
+#interface .left-panel .panel-heading a {
+	text-decoration: none;
+}
+
+#interface .left-panel.panel-primary .panel-heading a {
+	color: #ffffff;
+}
+
+#interface .left-panel.panel-primary .panel-heading a:hover {
+	color: rgba(40, 91, 135, 1);
+}
+
+/* PANEL-SPECIFIC */
+
+.graph-list-panel .net-action {
+	margin-left: 8px;
+}
+
 
 /* BOTTOM BAR */
 

@@ -34,13 +34,24 @@
 	<div class='left-panel-wrap'>
 
 		<div class='left-panel graph-list-panel panel panel-primary' ng-show='panels.show.graph_list'>
-			<div class="panel-heading">Network list</div>
+			<div class="panel-heading">
+				Network list
+				<a href='#/upload/{{m.session_id}}' class="glyphicon glyphicon-cloud-upload float-right"></a>
+			</div>
 			<div class="panel-body">
-				<span ng-show='networks.list != null'>@TODO LIST</span>
+
+				<div class="alert alert-info" ng-show='networks.list != null' ng-repeat='net in networks.list'>
+					<a href="">{{net.name}}</a>
+					<a href="" class="net-action float-right" title='Remove' ng-click=""><span class="glyphicon glyphicon-trash"></span></a>
+					<a href="" class="net-action float-right" title='Rename' ng-click=""><span class="glyphicon glyphicon-pencil"></span></a>
+					<a href="" class="net-action float-right" title='Download' ng-click=""><span class="glyphicon glyphicon-cloud-download"></span></a>
+				</div>
+
 				<p ng-show='networks.list == null'>
 					<i>You have not uploaded any network yet...</i><br />
 					Visit the <a href="#/upload/{{m.session_id}}">uploader</a>!
 				</p>
+
 			</div>
 		</div>
 

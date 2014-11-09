@@ -12,8 +12,12 @@
         	scope.panels = panels;
         	scope.commander = commander;
 
-        	scope.networks = {};
-            scope.networks.list = commander.get_network_list(scope.m.session_id);
+            scope.networks = {
+                list: null
+            };
+            scope.commander.get_network_list(scope.m.session_id).then(function (data) {
+                scope.networks.list = data.list;
+            });
 
         };
 

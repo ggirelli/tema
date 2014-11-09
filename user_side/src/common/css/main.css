@@ -13,3 +13,7 @@ body {
 
 	background-color: #fefefe;
 }
+
+.float-right {
+	float: right;
+}

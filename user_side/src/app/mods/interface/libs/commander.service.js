@@ -24,7 +24,7 @@
                         qwait.resolve(data);
                     });
 
-                return q.promise;
+                return qwait.promise;
             }
 
         };
