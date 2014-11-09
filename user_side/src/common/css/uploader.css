@@ -50,6 +50,10 @@
 	font-variant: small-caps;
 }
 
+#uploader .uploader-list-wrap .file-alert-rm-btn {
+	float: right;
+}
+
 #hidden-form {
 	display: none;
 }

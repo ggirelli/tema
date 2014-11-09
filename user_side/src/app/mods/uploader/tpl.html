@@ -27,13 +27,16 @@
 				</div>
 
 				<div class="uploader-list-wrap col-md-8">
-					<div ng-repeat="file in uploader.files">{{file.data[0].name}}</div>
+					<div class='alert alert-info' ng-repeat="file in uploader.files">
+						{{file.data[0].name}}
+						<a href="" ng-click="uploader.rmFile(file.id)" class="file-alert-rm-btn"><span class="glyphicon glyphicon-remove"></span></a>
+					</div>
 				</div>
 
 				<form id='hidden-form'>
 					<input type="file" ng-repeat="file in uploader.files" data-file-id="{{file.id}}" uploader-autoclick>
 				</form>
-				
+
 			</div>
 
 		</div>

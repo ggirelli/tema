@@ -14,12 +14,16 @@
                 });
         	};
 
+            self.rmFile = function(id) {
+                self.files.splice(id, 1);
+            };
+
         	self.check_list = function() {
-        		alert(2);
+        		console.log(2);
         	};
 
         	self.upload = function() {
-        		alert(3);
+        		console.log(3);
         	};
 
         };
