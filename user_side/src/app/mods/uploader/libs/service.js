@@ -91,7 +91,7 @@
             /**
              * Begins upload
              */
-        	self.upload = function(session_id) {
+        	self.upload = function (session_id) {
                 // Impose a check on the Queue
                 self.check_list(0);
 
@@ -109,7 +109,7 @@
                 }                    
         	};
 
-            self.single_upload = function(session_id, id) {
+            self.single_upload = function (session_id, id) {
                 // defer the main process
                 var qwait = q.defer();
                 // defer the single recursions
@@ -126,42 +126,53 @@
                         action: 'upload_network'
                     },
                     url: 's/',
-                    headers: { 'Content-Type': undefined },
+                    headers: {
+                        'Content-Type': undefined
+                    },
                     transformRequest: function (data) {
                         var fd = new FormData();
+
                         angular.forEach(data, function (value, key) {
                             fd.append(key, value);
                         });
+
                         return fd;
                     }
 
                 }).
                     success(function (data) {
+
                         if ( 1 == data['err'] || 2 == data['err'] ) {
                             // Change alert status
                             self.files_up[id].class = 'danger';
                             self.files_up[id].msg = 'ERROR: cannot perform the request.';
+
                         } else if ( 3 == data['err'] ) {
                             // Change alert status
                             self.files_up[id].class = 'danger';
                             self.files_up[id].msg = 'ERROR: trying to upload to non-existing session.';
+
                         } else if ( 4 == data['err'] ) {
                             // Change alert status
                             self.files_up[id].class = 'danger';
                             self.files_up[id].msg = 'ERROR: banned file.';
+
                         } else if ( 5 == data['err'] ) {
                             // Change alert status
                             self.files_up[id].class = 'danger';
                             self.files_up[id].msg = 'ERROR: wrong extension.';
+
                         } else if ( 6 == data['err'] ) {
                             // Change alert status
                             self.files_up[id].class = 'danger';
                             self.files_up[id].msg = 'ERROR: this file already exists, try renaming it.';
+
                         } else {
                             // Change alert status
                             self.files_up[id].class = 'success';
                             self.files_up[id].msg = 'File correctly uploaded';
                         }
+
                         // Update progress
                         self.progress = Math.round(((id + 1) / self.files_up.length) * 100)
 
@@ -170,6 +181,7 @@
                     });
 
                 qrecursive.promise.then(function () {
+
                     if ( id < self.files_up.length - 1 ) {
                         self.single_upload(session_id, id+1).then(function () {
                             qwait.resolve();
@@ -177,6 +189,7 @@
                     } else {
                         qwait.resolve();
                     }
+
                 });
 
                 return qwait.promise;
@@ -185,7 +198,7 @@
             /**
              * Clears the queue befor aborting
              */
-            self.abort = function() {
+            self.abort = function () {
                 self.files = [];
                 self.files_rm = [];
                 self.files_up = [];
@@ -197,7 +210,7 @@
             /**
              * Ends uploading process, reset uploader controller and redirects to the interface
              */
-            self.end = function(session_id) {
+            self.end = function (session_id) {
                 // Reset queue and uploader status
                 self.abort();
 
