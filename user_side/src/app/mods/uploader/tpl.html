@@ -27,9 +27,9 @@
 				</div>
 
 				<div class="uploader-list-wrap col-md-8">
-					<div class='alert alert-info' ng-repeat="file in uploader.files">
+					<div class='alert alert-{{file.class}}' ng-repeat="file in uploader.files">
 						{{file.data[0].name}}
-						<a href="" ng-click="uploader.rmFile(file.id)" class="file-alert-rm-btn"><span class="glyphicon glyphicon-remove"></span></a>
+						<a href="" class="file-alert-rm-btn" ng-click="uploader.rmFile(file.id)" ng-show="file.class == 'info'"><span class="glyphicon glyphicon-remove"></span></a>
 					</div>
 				</div>
 
