@@ -26,6 +26,10 @@
         		console.log(3);
         	};
 
+            self.abort = function() {
+                self.files = [];
+            };
+
         };
 
     });

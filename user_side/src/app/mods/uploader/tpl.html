@@ -23,7 +23,7 @@
 					<button class="btn btn-primary btn-block" ng-click='uploader.addFile()'>Select file</button>
 					<button class="btn btn-warning btn-block" ng-click='uploader.check_list()'>Check file(s)</button>
 					<button class="btn btn-success btn-block" ng-click='uploader.upload()'>Upload file(s)</button>
-					<a href='#/interface/{{m.session_id}}' class="btn btn-danger btn-block">Abort</a>
+					<a href='#/interface/{{m.session_id}}' class="btn btn-danger btn-block" ng-click='uploader.abort()'>Abort</a>
 				</div>
 
 				<div class="uploader-list-wrap col-md-8">
