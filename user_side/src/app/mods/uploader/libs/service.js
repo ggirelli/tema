@@ -6,8 +6,12 @@
         return function () {
         	var self = this;
 
+        	self.files = [];
+			
         	self.addFile = function() {
-        		alert(1);
+        		self.files.push({
+                    id: self.files.length
+                });
         	};
 
         	self.check_list = function() {

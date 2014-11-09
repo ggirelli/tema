@@ -40,7 +40,7 @@
         }
     });
 
-    requirejs(['angular', 'angular-animate', 'angular-route', 'app/app'], function (angular) {
+    requirejs(['angular', 'angular-animate', 'angular-route', 'jquery', 'app/app'], function (angular) {
 
         // Angular bootstrapping
         angular.element(document).ready(function () {

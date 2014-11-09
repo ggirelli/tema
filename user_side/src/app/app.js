@@ -6,14 +6,14 @@
         './mods/homepage/libs/controller', './mods/interface/libs/controller',
         './mods/interface/libs/inspector.service', './mods/interface/libs/panels.service',
         './mods/interface/libs/commander.service',
-        './mods/uploader/libs/controller', './mods/uploader/libs/service',
-        'angular-route', 'angular-animate'];
+        './mods/uploader/libs/controller', './mods/uploader/libs/service', './mods/uploader/libs/directive',
+        'angular-route', 'angular-animate', 'jquery'];
 
     define(def_requirements,
         function (angular, model, controller, routeConfig,
             homepageController, interfaceController,
             inspectorService, panelsService, commanderService,
-            uploaderController, uploaderService) {
+            uploaderController, uploaderService, autoclickDirective) {
         
         angular.module('sogi', ['ngRoute']).
         	config(['$routeProvider', routeConfig]).
@@ -29,7 +29,16 @@
             controller('interfaceController', ['$scope', 'appModel', '$routeParams', 'panelsService', 'inspectorService', 'commanderService', interfaceController]).
 
             service('uploaderService', [uploaderService]).
-            controller('uploaderController', ['$scope', 'appModel', '$routeParams', 'uploaderService', uploaderController])
+            controller('uploaderController', ['$scope', 'appModel', '$routeParams', 'uploaderService', uploaderController]).
+
+            directive('uploaderAutoclick', ['$parse', function ($parse) {
+
+                return {
+                    restrict: 'A',
+                    link: autoclickDirective
+                };
+
+            }])
 
     });
 

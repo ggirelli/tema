@@ -49,3 +49,7 @@
 #uploader .uploader-btn-wrap .btn {
 	font-variant: small-caps;
 }
+
+#hidden-form {
+	display: none;
+}
