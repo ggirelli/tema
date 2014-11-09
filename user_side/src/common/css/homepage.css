@@ -24,6 +24,10 @@
 	font-size: 0.3em;
 }
 
+#homepage .session-choice {
+	padding: 0;
+}
+
 #homepage .session-choice .panel-heading {
 	text-align: center;
 }
