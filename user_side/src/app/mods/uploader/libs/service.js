@@ -16,8 +16,14 @@
              * Add a file to the queue
              */
         	self.addFile = function () {
+                var new_id;
+                if ( 0 == self.files.length ) {
+                    new_id = 1;
+                } else {
+                     new_id = self.files[self.files.length - 1].id + 1;
+                }
         		self.files.push({
-                    id: self.files.length,
+                    id: new_id,
                     class: 'info'
                 });
         	};
@@ -27,7 +33,7 @@
              * @param  {int} id index of the file to remove in self.files
              */
             self.rmFile = function (id) {
-                self.files.splice(id, 1);
+                self.files.splice(id - 1, 1);
             };
 
             /**

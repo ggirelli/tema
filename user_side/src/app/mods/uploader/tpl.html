@@ -34,7 +34,7 @@
 				</div>
 
 				<form id='hidden-form'>
-					<input type="file" ng-repeat="file in uploader.files" data-file-id="{{file.id}}" uploader-autoclick>
+					<input type="file" ng-repeat="file in uploader.files" uploader-autoclick="{{file.id}}">
 				</form>
 
 			</div>
