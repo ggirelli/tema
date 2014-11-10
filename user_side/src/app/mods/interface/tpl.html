@@ -40,11 +40,11 @@
 			</div>
 			<div class="panel-body">
 
-				<div class="alert alert-info" ng-show='networks.list != null' ng-repeat='net in networks.list'>
-					<a href="">{{net.name}}</a>
-					<a href="" class="net-action float-right" title='Remove' ng-click=""><span class="glyphicon glyphicon-trash"></span></a>
-					<a href="" class="net-action float-right" title='Rename' ng-click=""><span class="glyphicon glyphicon-pencil"></span></a>
-					<a href="" class="net-action float-right" title='Download' ng-click=""><span class="glyphicon glyphicon-cloud-download"></span></a>
+				<div class="alert" ng-show='networks.list != null' ng-repeat='net in networks.list' ng-class="{'alert-info' : networks.isConverted(net), 'alert-danger' : !networks.isConverted(net)}">
+					<a href="" ng-class="{'text-danger' : !networks.isConverted(net)}" ng-click="networks.init_file(net)">{{net.name}} <span class="glyphicon glyphicon-flag" ng-show="!networks.isConverted(net)"> </span></a>
+					<a href="" ng-class="{'text-danger' : !networks.isConverted(net)}"  class="net-action float-right" title='Remove' ng-click=""><span class="glyphicon glyphicon-trash"></span></a>
+					<a href="" ng-class="{'text-danger' : !networks.isConverted(net)}"  class="net-action float-right" title='Rename' ng-click=""><span class="glyphicon glyphicon-pencil"></span></a>
+					<a href="" ng-class="{'text-danger' : !networks.isConverted(net)}"  class="net-action float-right" title='Download' ng-click=""><span class="glyphicon glyphicon-cloud-download"></span></a>
 				</div>
 
 				<p ng-show='networks.list == null'>

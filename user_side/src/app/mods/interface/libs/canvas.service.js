@@ -6,13 +6,16 @@
         return function (q, http) {
             var self = this;
 
+            /**
+             * Default network
+             * @type {Object}
+             */
             self.elements = {
                 nodes: [
                     { data: { id: "n1", name: "Welcome" } },
                     { data: { id: "n2", name: "to" } },
                     { data: { id: "n3", name: "SOGI" } }
                 ],
-
                 edges: [
                     { data: { id: "e1", source: "n1", target: "n2" } },
                     { data: { id: "e2", source: "n2", target: "n3" } },
@@ -20,6 +23,9 @@
                 ]
             };
 
+            /**
+             * Initialize cytoscape and load the default network
+             */
             self.init = function () {
                 // Initialize canvas
                 window.cy = cytoscape({
@@ -65,6 +71,37 @@
                     }
 
                 });
+            };
+
+            /**
+             * Loads a network in the canvas
+             * @param  {Object} network    from networks.list
+             * @param  {string} session_id
+             */
+            self.load = function (network, session_id) {
+                var qwait = q.defer();
+
+                http({
+
+                    method: 'POST',
+                    data: {
+                        action: 'get_network',
+                        id: session_id,
+                        network_id: network.id
+                    },
+                    url: 's/'
+
+                }).
+                    success(function (data) {
+                        if ( 0 == data['err'] ) {
+                            cy.load(data.network);
+                        } else {
+                            console.log(data);
+                        }
+                        qwait.resolve(data);
+                    });
+
+                return qwait.promise;
             };
 
         };

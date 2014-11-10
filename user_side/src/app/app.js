@@ -4,6 +4,7 @@
     var def_requirements = ['angular',
         './libs/model', './libs/controller', './libs/route_config',
         './mods/homepage/libs/controller', './mods/interface/libs/controller',
+        './mods/interface/libs/network.service',
         './mods/interface/libs/inspector.service', './mods/interface/libs/panels.service',
         './mods/interface/libs/commander.service', './mods/interface/libs/canvas.service',
         './mods/uploader/libs/controller', './mods/uploader/libs/service', 
@@ -13,6 +14,7 @@
     define(def_requirements,
         function (angular, model, controller, routeConfig,
             homepageController, interfaceController,
+            networkService,
             inspectorService, panelsService,
             commanderService, canvasService,
             uploaderController, uploaderService,
@@ -29,8 +31,9 @@
             service('canvasService', ['$q', '$http', canvasService]).
             service('commanderService', ['$q', '$http', commanderService]).
             service('inspectorService', [inspectorService]).
+            service('networkService', ['$q', '$http', networkService]).
             service('panelsService', [panelsService]).
-            controller('interfaceController', ['$scope', 'appModel', '$routeParams',
+            controller('interfaceController', ['$scope', 'appModel', '$routeParams', 'networkService',
                 'panelsService', 'inspectorService', 'commanderService', 'canvasService', interfaceController]).
 
             service('uploaderService', ['$http', '$q', '$timeout', uploaderService]).

@@ -61,6 +61,12 @@ class SOGIsession extends SOGIdb {
 	 */
 	private $node_thr;
 
+	/**
+	 * List of networks with conversion status
+	 * @var stdClass
+	 */
+	private $network_list;
+
 	// public FUNCTIONS
 
 	/**
@@ -132,6 +138,12 @@ class SOGIsession extends SOGIdb {
 				return $this->node_thr;
 				break;
 			}
+			case 'network_list': {
+				$this->list_networks();
+				return $this->network_list;
+				break;
+			}
+			default: return null;
 		}
 	}
 
@@ -162,6 +174,57 @@ class SOGIsession extends SOGIdb {
 		}
 
 		return $id;
+	}
+
+	/**
+	 * Executes a shell query
+	 * @param  String $name         Query action name
+	 * @param  String $query        Shell query
+	 * @return Boolean              Whether everything went smoothly
+	 */
+	public function exec($name, $query) {
+		if ( 0 == $this->running ) {
+			// Update session attributes
+			$this->running = 1;
+			$this->last = $name;
+			$this->time = time();
+			$this->_dump();
+
+			exec($query, $res);
+
+			$this->running = 0;
+			$this->_dump();
+
+			return(TRUE);
+		} else {
+			return FALSE;
+		}
+	}
+
+	/**
+	 * Executes a shell query
+	 * @param  String $name         Query action name
+	 * @param  String $query        Shell query
+	 * @return mix 					The result of the query
+	 * @return null 				If already running
+	 */
+	public function exec_return($name, $query) {
+		if ( 0 == $this->running ) {
+			// Update session attributes
+			$this->running = 1;
+			$this->last = $name;
+			$this->time = time();
+			$this->_dump();
+
+			exec($query, $res);
+
+			$this->running = 0;
+			$this->_dump();
+
+			return($res);
+		} else {
+			return null;
+		}
 	}
 
 	// private FUNCTIONS
@@ -209,7 +272,73 @@ class SOGIsession extends SOGIdb {
 			$this->last_query_when = $q['last_query_when'];
 			$this->current_net = $q['current_net'];
 			$this->node_thr = $q['node_thr'];
+
+			$this->list_networks();
 		}
+	}
+
+	/**
+	 * Update the session attributes on the database
+	 * @return Boolean If an error occured
+	 */
+	private function _dump() {
+		$sql = "UPDATE sessions SET " .
+			"folder_path='" . $this->folder_path . "', " .
+			"interface_uri='" . $this->interface_uri . "', " .
+			"running='" . $this->running . "', " .
+			"last_query='" . $this->last_query . "', " .
+			"last_query_when='" . $this->last_query_when . "', " .
+			"current_net='" . $this->current_net . "', " .
+			"node_thr='" . $this->node_thr . "' " .
+			"WHERE seed='" . $this->id . "'";
+
+		parent::query($sql);
+		return parent::isError();
+	}
+
+	/**
+	 * Updates the network_list of the current session
+	 * @return null
+	 */
+	private function list_networks() {
+
+		// Check file list
+		$file_list = glob($this->folder_path . '/*');
+		if ( 0 == count($file_list) ) $this->network_list = new stdClass;
+
+		// Clean file list
+		$network_list = array();
+		foreach ($file_list as $file) {
+			// Remove path
+			$file = explode('/', $file);
+			$file = $file[count($file) - 1];
+
+			if ( !in_array($file, $GLOBALS['FILENAME_BAN']) ) {
+				$file_exp = explode('.', $file);
+
+				// Get extension
+				$ext = $file_exp[count($file_exp) - 1];
+
+				// Get non-extension
+				$file_name = $file_exp;
+				array_splice($file_name, count($file_name) - 1, 1);
+				$file_name = implode('.', $file_name);
+
+				// Add to $network_list (0: to-convert, 1: converted)
+				if ( isset($network_list[$file_name]) ) {
+					if ( 'json' == $ext ) {
+						$network_list[$file_name] = 1;
+					}
+				} else {
+					if ( 'json' == $ext ) {
+						$network_list[$file_name] = 1;
+					} else {
+						$network_list[$file_name] = 0;
+					}
+				}
+			}
+		}
+		$this->network_list = $network_list;
 	}
 
 }

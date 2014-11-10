@@ -26,12 +26,15 @@ if( isset($data->action) ) {
 
 		switch($data->action) {
 
-			case 'get_network_list':
+			case 'convert_network':
+			case 'get_network': case 'get_network_list':
 			case 'session_new': case 'session_load': 
 			case 'upload_network': {
 				require_once('action/' . $data->action . '.php');
 				break;
 			}
+
+			default: die('{"err":-1}');
 
 		}
 
