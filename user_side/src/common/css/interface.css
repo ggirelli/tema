@@ -147,7 +147,7 @@ html {
 	bottom: 0;
 	left: 60px;
 
-	height: 30px;
+	height: 0;
 
 	margin: 0;
 	padding: 0;
@@ -161,6 +161,9 @@ html {
 }
 
 #interface #console {
+	position: relative;
+	top: -30px;
+
 	height: 31px;
 
 	margin: 0;
@@ -210,7 +213,7 @@ html {
 	display: block !important;
 
 	position: relative;
-	top: -350px;
+	top: -380px;
 
 	height: 380px;
 	
@@ -231,7 +234,7 @@ html {
 }
 
 #interface #inspector.ng-hide {
-	top: 30px;
+	top: 0px;
 }
 
 /* CANVAS */
@@ -239,7 +242,7 @@ html {
 #interface #canvas {
 	position: fixed;
 	right: 0;
-	bottom: 30px;
+	bottom: 0;
 	left: 60px;
-	top: 0px;
+	top: 0;
 }
