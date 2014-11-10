@@ -30,6 +30,10 @@
                 // Initialize canvas
                 window.cy = cytoscape({
                     container: document.getElementById('canvas'),
+                    maxZoom: 5,
+                    hideEdgesOnViewport: true,
+                    hideLabelsOnViewport: true,
+                    textureOnViewport: true,
                     layout: {
                         name: 'grid',
                         fit: true,
@@ -64,6 +68,33 @@
 
                     ready: function () {
                         var cy = this;
+
+                        cy.on('tap', 'node', function(e){
+                            var node = e.cyTarget; 
+                            var neighborhood = node.neighborhood().add(node);
+
+                            cy.elements().addClass('faded');
+                            neighborhood.removeClass('faded');
+
+                            // Broadcast to inspector
+                        });
+
+                        cy.on('tap', 'edge', function(e){
+                            var edge = e.cyTarget;
+
+                            cy.elements().addClass('faded');
+                            edge.source().removeClass('faded');
+                            edge.target().removeClass('faded');
+
+                            // Broadcast to inspector
+                        });
+
+                        cy.on('tap', function(e){
+                            if( e.cyTarget === cy ){
+                                // Broadcast to inspector
+                                cy.elements().removeClass('faded');
+                            }
+                        });
 
                         cy.load(self.elements, undefined);
                     },
