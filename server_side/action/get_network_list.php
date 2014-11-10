@@ -16,13 +16,17 @@ if ( $s->exists($data->id) ) {
 	$s->init($data->id);
 
 	$fl = $s->get('network_list');
-
+	
 	// Prepare in JSON format
 	$sfl = '';
 	$i = 0;
 	foreach ($fl as $k => $v) {
 		if ( '' != $sfl ) $sfl .= ', ';
-		$sfl .= '{"name":"' . $k . '","status":' . $v . ',"id":' . $i . '}';
+		if ( isset($v->data) ) {
+			$sfl .= '{"name":"' . $k . '","status":' . $v->status . ',"id":' . $i . ', "data":' . $v->data . '}';
+		} else {
+			$sfl .= '{"name":"' . $k . '","status":' . $v->status . ',"id":' . $i .  ', "data":{"e_count":"~","v_count":"~"}}';
+		}
 		$i++;
 	}
 

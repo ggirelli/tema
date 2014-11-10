@@ -157,6 +157,23 @@ html {
 	margin: 2px 0;
 }
 
+#interface .left-panel.operations-panel .operation-btn,
+#interface .left-panel.operations-panel .operation-panel {
+	display: block;
+	margin: 4px auto;
+}
+
+#interface .left-panel.operations-panel .operation-panel .end-btn {
+	float: right;
+	
+	margin-left: 4px;
+
+	font-variant: small-caps;
+}
+
+#interface .left-panel.operations-panel .operation-panel .single-network-select {
+	display: block;
+}
 
 /* BOTTOM BAR */
 

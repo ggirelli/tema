@@ -18,11 +18,12 @@ if ( $s->exists($data->id) ) {
 	// Read network
 	$network_list = $s->get('network_list');
 	$network_name = array_keys($network_list)[$data->network_id];
-	$network_status = array_values($network_list)[$data->network_id];
+	$network_status = array_values($network_list)[$data->network_id]->status;
 
 	if ( 1 == $network_status ) {
 		$network = file_get_contents($s->get('folder_path') . '/' . $network_name . '.json');
-		die('{"err":0,"network":' .  $network . '}');
+		$data = file_get_contents($s->get('folder_path') . '/' . $network_name . '.dat');
+		die('{"err":0,"network":' .  $network . ', "data":' . $data . '}');
 	} else {
 		die('{"err":4}');
 	}

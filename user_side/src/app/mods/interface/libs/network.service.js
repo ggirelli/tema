@@ -29,8 +29,11 @@
 
                     }).
                         success(function (data) {
-                            self.list[network.id].status = data['status'];
                             console.log(data);
+                            if ( undefined != data['status'] ) {
+                                self.list[network.id].status = parseInt(data['status']);
+                                self.list[network.id].data = data['data'];
+                            }
                             qwait.resolve(data);
                         });
 

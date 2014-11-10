@@ -327,13 +327,21 @@ class SOGIsession extends SOGIdb {
 				// Add to $network_list (0: to-convert, 1: converted)
 				if ( isset($network_list[$file_name]) ) {
 					if ( 'json' == $ext ) {
-						$network_list[$file_name] = 1;
+						$network_list[$file_name]->status = 1;
+					} elseif ( 'dat' == $ext ) {
+						$network_list[$file_name]->data = file_get_contents($this->folder_path . '/' . $file_name . '.dat');
 					}
 				} else {
 					if ( 'json' == $ext ) {
-						$network_list[$file_name] = 1;
-					} else {
-						$network_list[$file_name] = 0;
+						$network_list[$file_name] = new stdClass;
+						$network_list[$file_name]->status = 1;
+					} elseif ( 'dat' == $ext ) {
+						$network_list[$file_name] = new stdClass;
+						$network_list[$file_name]->data = file_get_contents($this->folder_path . '/' . $file_name . '.dat');
+
+					} elseif ( 'graphml' == $ext) {
+						$network_list[$file_name] = new stdClass;
+						$network_list[$file_name]->status = 0;
 					}
 				}
 			}

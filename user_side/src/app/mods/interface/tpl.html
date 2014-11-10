@@ -41,10 +41,12 @@
 			<div class="panel-body">
 
 				<div class="alert" ng-show='networks.list != null' ng-repeat='net in networks.list' ng-class="{'alert-info' : networks.isConverted(net), 'alert-danger' : !networks.isConverted(net)}">
-					<a href="" ng-class="{'text-danger' : !networks.isConverted(net)}" ng-click="networks.init_file(net)">{{net.name}} <span class="glyphicon glyphicon-flag" ng-show="!networks.isConverted(net)"> </span></a>
-					<a href="" ng-class="{'text-danger' : !networks.isConverted(net)}"  class="net-action float-right" title='Remove' ng-click=""><span class="glyphicon glyphicon-trash"></span></a>
-					<a href="" ng-class="{'text-danger' : !networks.isConverted(net)}"  class="net-action float-right" title='Rename' ng-click=""><span class="glyphicon glyphicon-pencil"></span></a>
-					<a href="" ng-class="{'text-danger' : !networks.isConverted(net)}"  class="net-action float-right" title='Download' ng-click=""><span class="glyphicon glyphicon-cloud-download"></span></a>
+					<a href="" ng-class="{'text-danger' : !networks.isConverted(net)}" ng-click="networks.init_file(net)" title="N: {{net.data.v_count}} | E: {{net.data.e_count}}">{{net.name}} <span class="glyphicon glyphicon-flag" ng-show="!networks.isConverted(net)"> </span></a>
+
+					<a href="" ng-class="{'text-danger' : !networks.isConverted(net)}" class="net-action float-right" title='Remove' ng-click=""><span class="glyphicon glyphicon-trash"></span></a>
+					<a href="" ng-class="{'text-danger' : !networks.isConverted(net)}" class="net-action float-right" title='Rename' ng-click=""><span class="glyphicon glyphicon-pencil"></span></a>
+					<a href="" ng-class="{'text-danger' : !networks.isConverted(net)}" class="net-action float-right" title='Download' ng-click=""><span class="glyphicon glyphicon-cloud-download"></span></a>
+					<a href="" ng-class="{'text-danger' : !networks.isConverted(net)}" class="net-action float-right" title='Inspect' ng-click=""><span class="glyphicon glyphicon-search"></span></a>
 				</div>
 
 				<p ng-show='networks.list == null'>
@@ -58,7 +60,59 @@
 		<div class='left-panel operations-panel panel panel-danger' ng-show='panels.show.operations'>
 			<div class="panel-heading">Operations</div>
 			<div class="panel-body">
-				...
+
+				<div class="btn operation-btn btn-danger btn-block" ng-show="!commander.operation.status" ng-click="commander.init_operation('merge')">
+					Merge networks
+				</div>
+				<div class="panel operation-panel panel-danger" ng-show="commander.is_operation('merge')">
+					<div class="panel-heading">Merge networks</div>
+					<div class="panel-body">
+						<p>
+							Select the networks to merge them!
+						</p>
+
+						<p>
+							<span class="single-network-select" ng-repeat="net in networks.list">
+								<input id="check-{{net.id}}" name="check-{{net.id}}" type="checkbox" ng-model="commander.operation.selected[net.id]"> <label for="check-{{net.id}}">{{net.name}}</label>
+							</span>
+						</p>
+
+						<button class="btn end-btn btn-success" ng-click='commander.merge()'>merge</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
+					</div>
+				</div>
+
+				<div class="btn operation-btn btn-danger btn-block" ng-show="!commander.operation.status" ng-click="commander.init_operation('intersect')">
+					Intersect networks
+				</div>
+				<div class="panel operation-panel panel-danger" ng-show="commander.is_operation('intersect')">
+					<div class="panel-heading">Intersect networks</div>
+					<div class="panel-body">
+						Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit assumenda corporis officia reiciendis, possimus delectus laboriosam, magnam obcaecati enim. Dolorum autem animi, culpa fugiat eveniet expedita ad aut commodi beatae?
+						<button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
+					</div>
+				</div>
+
+				<div class="btn operation-btn btn-danger btn-block" ng-show="!commander.operation.status" ng-click="commander.init_operation('subtract')">
+					Subtract networks
+				</div>
+				<div class="panel operation-panel panel-danger" ng-show="commander.is_operation('subtract')">
+					<div class="panel-heading">Subtract networks</div>
+					<div class="panel-body">
+						Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit assumenda corporis officia reiciendis, possimus delectus laboriosam, magnam obcaecati enim. Dolorum autem animi, culpa fugiat eveniet expedita ad aut commodi beatae?
+						<button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
+					</div>
+				</div>
+
+				<div class="btn operation-btn btn-info btn-block" ng-show="!commander.operation.status" ng-click="commander.init_operation('contains')">
+					is Subnetwork
+				</div>
+				<div class="panel operation-panel panel-info" ng-show="commander.is_operation('contains')">
+					<div class="panel-heading">is Subnetwork</div>
+					<div class="panel-body">
+						Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit assumenda corporis officia reiciendis, possimus delectus laboriosam, magnam obcaecati enim. Dolorum autem animi, culpa fugiat eveniet expedita ad aut commodi beatae?
+						<button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
+					</div>
+				</div>
 			</div>
 		</div>
 
