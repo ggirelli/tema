@@ -138,6 +138,25 @@ html {
 	margin-left: 8px;
 }
 
+#interface .left-panel.layout-panel {
+	width: 72px;
+
+	-moz-transition:all linear 0.5s;
+	-o-transition:all linear 0.5s;
+	transition:all linear 0.5s;
+	-webkit-transition:all linear 0.5s;
+	transition:all linear 0.5s;
+}
+
+#interface .left-panel.layout-panel.ng-hide {
+	left: -12px;
+	opacity: 1;
+}
+
+#interface .left-panel.layout-panel .btn {
+	margin: 2px 0;
+}
+
 
 /* BOTTOM BAR */
 

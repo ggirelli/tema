@@ -102,6 +102,21 @@
                 return qwait.promise;
             };
 
+            /**
+             * Applies the specified layout to the canvas
+             * @param  {Object} params
+             */
+            self.layout = function (params) {
+                cy.layout(params);
+            }
+
+            /**
+             * Centers the current network in the canvas
+             */
+            self.center = function () {
+                cy.center(cy.$('*'));
+            }
+
         };
 
     });

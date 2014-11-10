@@ -25,7 +25,7 @@
 		<span class="btn btn-default btn-circle" ng-click="panels.toggle('settings')" ng-class="{'open' : panels.show.settings}" title="Settings">
 			<span class="glyphicon glyphicon-cog"></span>
 		</span>
-		<a href="" class="btn btn-info btn-circle" title="Help" ng-click='inspector.toggle()'>
+		<a href="#/help" class="btn btn-info btn-circle" title="Help">
 			<span class="glyphicon glyphicon-heart-empty"></span>
 		</a>
 
@@ -65,7 +65,23 @@
 		<div class='left-panel layout-panel panel panel-warning' ng-show='panels.show.layout'>
 			<div class="panel-heading">Layout</div>
 			<div class="panel-body">
-				...
+				
+				<button type="button" class="btn btn-warning btn-md" ng-click="canvas.layout({name:'circle'})" >
+					<span class="glyphicon glyphicon-repeat"></span>
+				</button>
+				<button type="button" class="btn btn-warning btn-md" ng-click="canvas.layout({name:'grid'})">
+					<span class="glyphicon glyphicon-th"></span>
+				</button>
+				<button type="button" class="btn btn-warning btn-md" ng-click="canvas.layout({name:'breadthfirst'})">
+					<span class="glyphicon glyphicon-tree-deciduous"></span>
+				</button>
+				<button type="button" class="btn btn-warning btn-md" ng-click="canvas.layout({name:'random'})">
+					<span class="glyphicon glyphicon-asterisk"></span>
+				</button>
+				<button type="button" class="btn btn-danger btn-md" ng-click="canvas.center()">
+					<span class="glyphicon glyphicon-screenshot"></span>
+				</button>
+
 			</div>
 		</div>
 
