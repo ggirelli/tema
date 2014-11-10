@@ -18,7 +18,7 @@ define('SCRIPATH', dirname(__FILE__) . '/Rscripts');
 define('RURI', 'http://localhost/public_html/SOGIv020');
 
 // Uploader
-$GLOBALS['FILENAME_BAN'] = array('.', '..', 'config');
+$GLOBALS['FILENAME_BAN'] = array('.', '..', 'config', 'sif.dat', 'sif.json');
 $GLOBALS['ALLOWED_EXT'] = array('graphml');
 
 ?>

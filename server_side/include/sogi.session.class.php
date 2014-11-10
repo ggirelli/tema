@@ -67,6 +67,12 @@ class SOGIsession extends SOGIdb {
 	 */
 	private $network_list;
 
+	/**
+	 * Sample column of the SIF
+	 * @var String
+	 */
+	private $sif_sample_col;
+
 	// public FUNCTIONS
 
 	/**
@@ -143,9 +149,27 @@ class SOGIsession extends SOGIdb {
 				return $this->network_list;
 				break;
 			}
+			case 'sif_sample_col': {
+				return $this->sif_sample_col;
+				break;
+			}
 			default: return null;
 		}
 	}
+
+	/**
+	 * Sets session attributes
+	 * @param String $k attribute label
+	 * @param mix $v attribute value
+	 */
+	public function set($k, $v) {
+		switch($k) {
+			case 'sif_sample_col': {
+				$this->sif_sample_col = mysqli::escape_string($v);
+				break;
+			}
+		}
+ 	}
 
 	/**
 	 * Determines whether a certain SOGIsession exists

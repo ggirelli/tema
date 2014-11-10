@@ -1,6 +1,6 @@
 <?php
 /**
- * Loads session network list.
+ * Upload a network.
  * @author Gabriele Girelli <gabriele@filopoe.it>
  * @since  0.2.0
  */

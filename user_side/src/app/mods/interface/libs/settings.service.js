@@ -1,0 +1,162 @@
+(function () {
+    "use strict";
+
+    define([], function () {
+
+        return function (q, http) {
+            var self = this;
+
+            self.info = {
+                sif: undefined,
+                sif_keys: [],
+                sif_sample_col: null
+            };
+
+            /**
+             * Uploads the SIF
+             * @param  {Striung} session_id
+             */
+            self.sif_upload = function (session_id) {
+                $('#sif-input').on('change', function (e) {
+                    e.preventDefault();
+                    var fTmp = $(this)[0].files[0];
+                    
+                    http({
+
+                        method: 'POST',
+                        data: {
+                            id: session_id,
+                            file: fTmp,
+                            action: 'upload_sif'
+                        },
+                        url: 's/',
+                        headers: {
+                            'Content-Type': undefined
+                        },
+                        transformRequest: function (data) {
+                            var fd = new FormData();
+
+                            angular.forEach(data, function (value, key) {
+                                fd.append(key, value);
+                            });
+
+                            return fd;
+                        }
+
+                    }).
+                        success(function (data) {
+
+                            self.get_sif(session_id).then(function (data) {
+                                if ( 0 == data['err']) {
+                                    self.info.sif = data.sif;
+                                    if ( self.is_sif_ready() ) {
+                                        self.info.sif_keys = Object.keys(self.info.sif);
+                                    }
+                                }
+                            });
+
+                        });
+
+                });
+
+                $('#sif-input').trigger('click');
+            };
+
+            /**
+             * @param  {String} session_id
+             * @return {promise}            contains sif as data
+             */
+            self.get_sif = function (session_id) {
+                var qwait = q.defer();
+
+                http({
+
+                    method: 'POST',
+                    data: {
+                        action: 'get_sif',
+                        id: session_id
+                    },
+                    url: 's/'
+
+                }).
+                    success(function (data) {
+                        qwait.resolve(data);
+                    });
+
+                return qwait.promise;
+            };
+
+            /**
+             * @param  {String}  session_id
+             * @return {Boolean}            if a SIF is present in the given session
+             */
+            self.is_sif = function (session_id) {
+                var qwait = q.defer();
+
+                http({
+
+                    method: 'POST',
+                    data: {
+                        action: 'get_sif',
+                        id: session_id
+                    },
+                    url: 's/'
+
+                }).
+                    error(function (data) {
+                        qwait.resolve(false);
+                    }).
+                    success(function (data) {
+                        qwait.resolve(true);
+                    });
+
+                return qwait.promise;
+            };
+
+            /**
+             * @return {Boolean} if the SIF is loaded in angularJS
+             */
+            self.is_sif_ready = function () {
+                if ( undefined != self.info.sif ) {
+                    return true;
+                }
+                return false;
+            };
+
+            /**
+             * Loads the settings in angularJS
+             * @param  {String} session_id
+             */
+            self.read = function (session_id) {
+                var qwait = q.defer();
+
+                http({
+
+                    method: 'POST',
+                    data: {
+                        action: 'get_settings',
+                        id: session_id
+                    },
+                    url: 's/'
+
+                }).
+                    success(function (data) {
+                        qwait.resolve(data);
+                    });
+
+                return qwait.promise;
+            };
+
+            /**
+             * Applies settings changes to the session
+             * @param  {String} session_id
+             */
+            self.apply = function (session_id) {
+
+            };
+
+        };
+
+    });
+
+}());

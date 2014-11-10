@@ -58,7 +58,8 @@ class SOGIdb extends C2MySQL {
 			"last_query VARCHAR(100), " .
 			"last_query_when INTEGER, " .
 			"current_net VARCHAR(100), " .
-			"node_thr INTEGER" .
+			"node_thr INTEGER, " .
+			"sif_sample_col VARCHAR(100)" .
 			")";
 		
 		// Create table

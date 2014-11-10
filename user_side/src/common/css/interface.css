@@ -175,6 +175,16 @@ html {
 	display: block;
 }
 
+#interface .left-panel.settings-panel #sif-input {
+	display: none;
+}
+
+#interface .left-panel.settings-panel .btn-apply {
+	float: right;
+
+	font-variant: small-caps;
+}
+
 /* BOTTOM BAR */
 
 #interface #bottom-bar {

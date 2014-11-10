@@ -39,7 +39,7 @@
 				<a href='#/upload/{{m.session_id}}' class="glyphicon glyphicon-cloud-upload float-right"></a>
 			</div>
 			<div class="panel-body">
-
+				
 				<div class="alert" ng-show='networks.list != null' ng-repeat='net in networks.list' ng-class="{'alert-info' : networks.isConverted(net), 'alert-danger' : !networks.isConverted(net)}">
 					<a href="" ng-class="{'text-danger' : !networks.isConverted(net)}" ng-click="networks.init_file(net)" title="N: {{net.data.v_count}} | E: {{net.data.e_count}}">{{net.name}} <span class="glyphicon glyphicon-flag" ng-show="!networks.isConverted(net)"> </span></a>
 
@@ -156,7 +156,19 @@
 		<div class='left-panel settings-panel panel panel-default' ng-show='panels.show.settings'>
 			<div class="panel-heading">Settings</div>
 			<div class="panel-body">
-				...
+				<div ng-show="!settings.is_sif_ready()">
+					<button class="btn btn-default" ng-click="settings.sif_upload(m.session_id)">Upload SIF</button>
+					<input type="file" id="sif-input" />
+				</div>
+				<div ng-show="settings.is_sif_ready()">
+					SIF sample column:
+					<select name="" id="" ng-model="settings.info.sif_sample_col">
+						<option value="null">Select a column</option>
+						<option value="{{k}}" ng-repeat="k in settings.info.sif_keys">{{k}}</option>
+					</select>
+				</div>
+
+				<button class="btn btn-apply btn-sm btn-success">apply</button>
 			</div>
 		</div>
 
@@ -173,7 +185,6 @@
 				<div class="panel-heading">Inspector</div>
 				<div class="panel-body"></div>
 			</div>
-
 		</div>
 	</div>
 

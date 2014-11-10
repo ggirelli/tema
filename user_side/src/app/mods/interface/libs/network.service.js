@@ -29,7 +29,6 @@
 
                     }).
                         success(function (data) {
-                            console.log(data);
                             if ( undefined != data['status'] ) {
                                 self.list[network.id].status = parseInt(data['status']);
                                 self.list[network.id].data = data['data'];
