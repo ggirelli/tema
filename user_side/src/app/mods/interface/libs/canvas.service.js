@@ -31,7 +31,7 @@
                 window.cy = cytoscape({
                     container: document.getElementById('canvas'),
                     layout: {
-                        name: 'circle',
+                        name: 'grid',
                         fit: true,
                         padding: 5
                     },
@@ -65,12 +65,10 @@
                     ready: function () {
                         var cy = this;
 
-                        cy.load(self.elements, undefined, function () {
-                            cy.layout({name:"random"});
-                        });
-                    }
-
+                        cy.load(self.elements, undefined);
+                    },
                 });
+
             };
 
             /**
