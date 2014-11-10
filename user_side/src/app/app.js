@@ -5,7 +5,7 @@
         './libs/model', './libs/controller', './libs/route_config',
         './mods/homepage/libs/controller', './mods/interface/libs/controller',
         './mods/interface/libs/inspector.service', './mods/interface/libs/panels.service',
-        './mods/interface/libs/commander.service',
+        './mods/interface/libs/commander.service', './mods/interface/libs/canvas.service',
         './mods/uploader/libs/controller', './mods/uploader/libs/service', 
         './mods/uploader/libs/directive', './mods/uploader/libs/submit_form.directive',
         'angular-route', 'angular-animate', 'jquery'];
@@ -13,7 +13,8 @@
     define(def_requirements,
         function (angular, model, controller, routeConfig,
             homepageController, interfaceController,
-            inspectorService, panelsService, commanderService,
+            inspectorService, panelsService,
+            commanderService, canvasService,
             uploaderController, uploaderService,
             autoclickDirective, submitformDirective) {
         
@@ -25,31 +26,18 @@
 
             controller('homepageController', ['$scope', 'appModel', '$http', '$timeout', homepageController]).
             
+            service('canvasService', ['$q', '$http', canvasService]).
+            service('commanderService', ['$q', '$http', commanderService]).
             service('inspectorService', [inspectorService]).
             service('panelsService', [panelsService]).
-            service('commanderService', ['$q', '$http', commanderService]).
-            controller('interfaceController', ['$scope', 'appModel', '$routeParams', 'panelsService', 'inspectorService', 'commanderService', interfaceController]).
+            controller('interfaceController', ['$scope', 'appModel', '$routeParams',
+                'panelsService', 'inspectorService', 'commanderService', 'canvasService', interfaceController]).
 
             service('uploaderService', ['$http', '$q', '$timeout', uploaderService]).
             controller('uploaderController', ['$scope', 'appModel', '$routeParams', 'uploaderService', uploaderController]).
 
-            directive('uploaderAutoclick', ['$parse', function ($parse) {
-
-                return {
-                    restrict: 'A',
-                    link: autoclickDirective
-                };
-
-            }]).
-
-            directive('submitForm', [function () {
-
-                return {
-                    restrict: 'A',
-                    link: submitformDirective
-                };
-
-            }])
+            directive('uploaderAutoclick', ['$parse', function ($parse) { return { restrict: 'A', link: autoclickDirective }; }]).
+            directive('submitForm', [function () { return { restrict: 'A', link: submitformDirective }; }])
 
     });
 
