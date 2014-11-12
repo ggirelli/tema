@@ -335,7 +335,6 @@
 
                 }).
                     success(function (data) {
-                        console.log(data);
                         qwait.resolve(data);
                     });
 

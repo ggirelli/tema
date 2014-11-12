@@ -68,7 +68,6 @@
             scope.settings._read(scope.m.session_id).then(function (data) {
                 scope.settings.info.sif_sample_col = data['sif_sample_col'];
                 scope.settings.info.node_thr = data['node_thr'];
-                console.log(scope.settings.info);
             });
 
         };
