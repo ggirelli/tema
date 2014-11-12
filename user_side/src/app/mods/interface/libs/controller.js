@@ -15,8 +15,10 @@
             scope.canvas = canvas;
             scope.settings = settings;
 
+            /*-------------------------*/
             /* Initialize network list */
-            
+            /*-------------------------*/
+
             scope.networks = networks;
             scope.commander.get_network_list(scope.m.session_id).then(function (data) {
                 console.log(data);
@@ -43,11 +45,15 @@
                 }
             }
 
+            /*-------------------*/
             /* Initialize canvas */
+            /*-------------------*/
 
             scope.canvas.init();
 
+            /*---------------------*/
             /* Initialize settings */
+            /*---------------------*/
 
             // Check SIF
             scope.settings.is_sif(scope.m.session_id).then(function (data) {
@@ -68,8 +74,17 @@
             scope.settings._read(scope.m.session_id);
 
             // React to apply_sif event
-            scope.$on('apply_sif', function(e, info) {
+            scope.$on('apply_sif', function (e, info) {
                 scope.networks.apply_sif(info);
+            });
+
+            /*-----------*/
+            /* Inspector */
+            /*-----------*/
+
+            // React to inspect_network
+            scope.$on('inspect_network', function (e, network) {
+                scope.inspector.load_network(network);
             });
 
         };

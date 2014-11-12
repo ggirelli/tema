@@ -33,7 +33,7 @@
             service('canvasService', ['$q', '$http', canvasService]).
             service('commanderService', ['$q', '$http', commanderService]).
             service('inspectorService', [inspectorService]).
-            service('networkService', ['$q', '$http', networkService]).
+            service('networkService', ['$q', '$http', '$rootScope', networkService]).
             service('panelsService', [panelsService]).
             service('settingsService', ['$q', '$http', '$rootScope', settingsService]).
             controller('interfaceController', ['$scope', 'appModel', '$routeParams', 'networkService',

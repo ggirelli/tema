@@ -134,8 +134,14 @@ html {
 
 /* PANEL-SPECIFIC */
 
-.graph-list-panel .net-action {
+#interface .left-panel.graph-list-panel .net-action {
 	margin-left: 8px;
+}
+
+#interface .left-panel.graph-list-panel .load-network-link {
+	display: inline-block;
+	
+	width: 240px;
 }
 
 #interface .left-panel.layout-panel {
@@ -286,6 +292,16 @@ html {
 
 #interface #inspector.ng-hide {
 	top: 0px;
+}
+
+#interface #inspector .panel-body {
+	height: 340px;
+
+	overflow: auto;
+}
+
+#interface #inspector .panel-body p+ul {
+	margin-top: -0.75em;
 }
 
 /* CANVAS */

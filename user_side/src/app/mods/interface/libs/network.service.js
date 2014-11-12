@@ -3,7 +3,7 @@
 
     define([], function () {
 
-        return function (q, http) {
+        return function (q, http, rootScope) {
             var self = this;
 
             self.list = null;
@@ -88,7 +88,7 @@
                             self.list[i]['sif_data'] = sif_data;
 
                             // Assign single-sample status
-                            if ( {} == sif_data ) {
+                            if ( 0 == Object.keys(sif_data).length ) {
                                 // multi-sample network
                                 self.list[i]['single'] = false;
                             } else {
@@ -98,6 +98,14 @@
                         };
                     }
                 }
+            };
+
+            /**
+             * Trigger network inspection
+             * @param  {integer} network_id
+             */
+            self.inspect = function (network_id) {
+                rootScope.$broadcast('inspect_network', self.list[network_id]);
             };
 
         };
