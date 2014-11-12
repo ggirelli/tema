@@ -131,6 +131,10 @@
                 return false;
             };
 
+            self.is_sif_sample_col = function (col) {
+                return self.info.sif_sample_col == col;
+            };
+
             /**
              * Uploads the GOA
              * @param  {String} session_id
@@ -305,7 +309,7 @@
 
                 }).
                     success(function (data) {
-                        console.log(data);
+                        data['node_thr'] = parseInt(data['node_thr']);
                         qwait.resolve(data);
                     });
 
@@ -324,7 +328,8 @@
                     method: 'POST',
                     data: {
                         action: 'set_settings',
-                        id: session_id
+                        id: session_id,
+                        data: self.info
                     },
                     url: 's/'
 

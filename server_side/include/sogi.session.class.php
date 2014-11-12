@@ -68,10 +68,19 @@ class SOGIsession extends SOGIdb {
 	private $network_list;
 
 	/**
-	 * Sample column of the SIF
-	 * @var String
+	 * Settings labels
+	 * @var array
 	 */
-	private $sif_sample_col;
+	private $settings_labels = array(
+		'sif_sample_col',
+		'node_thr'
+	);
+
+	/**
+	 * Settings
+	 * @var stdClass
+	 */
+	private $settings;
 
 	// public FUNCTIONS
 
@@ -149,8 +158,8 @@ class SOGIsession extends SOGIdb {
 				return $this->network_list;
 				break;
 			}
-			case 'sif_sample_col': {
-				return $this->sif_sample_col;
+			case 'settings': {
+				return $this->settings;
 				break;
 			}
 			default: return null;
@@ -251,6 +260,21 @@ class SOGIsession extends SOGIdb {
 		}
 	}
 
+
+	public function apply_settings($settings) {
+		$updated = false;
+		foreach ($this->settings_labels as $label) {
+			if ( isset($settings[$label]) ) {
+				$this->settings[$label] = $settings[$label];
+				$updated = true;
+			}
+		}
+		
+		if ( $updated ) {
+			$this->write_settings();
+		}
+	}
+
 	// private FUNCTIONS
 
 	/**
@@ -271,6 +295,7 @@ class SOGIsession extends SOGIdb {
 				"'" . RURI . "/s/" . $id . "', " .
 				"0)";
 			$this->query($sql);
+			$this->set_default_settings($id);
 
 			// Load session
 			$this->_load($id);
@@ -298,6 +323,7 @@ class SOGIsession extends SOGIdb {
 			$this->node_thr = $q['node_thr'];
 
 			$this->list_networks();
+			$this->read_settings();
 		}
 	}
 
@@ -371,6 +397,57 @@ class SOGIsession extends SOGIdb {
 			}
 		}
 		$this->network_list = $network_list;
+	}
+
+	/**
+	 * Reads the settings from the database
+	 */
+	private function read_settings() {
+		$sql = "SELECT * FROM sessions_settings WHERE seed = '" . $this->id . "'";
+		$q = $this->query($sql);
+
+		$this->settings = array();
+		while ( $row = $q->fetch() ) {
+			$this->settings[$row['setting_key']] = $row['setting_value'];
+		}
+
+		foreach ($this->settings_labels as $label) {
+			if ( !isset($this->settings[$label]) ) {
+				$this->settings[$label] = null;
+			}
+		}
+	}
+
+	/**
+	 * Sets the default values of the settings
+	 * Called when creating a new session
+	 * @param String $id session_id
+	 */
+	private function set_default_settings($id) {
+		// node_thr
+		$sql = "INSERT INTO sessions_settings (seed, setting_key, setting_value) " .
+				"VALUES ( '" . $id . "', 'node_thr', '1000' )";
+		$q = $this->query($sql);
+	}
+
+	private function write_settings() {
+		foreach ( $this->settings_labels as $label ) {
+			if ( isset($this->settings[$label]) ) {
+				$sql = "SELECT * FROM sessions_settings WHERE seed = '" . $this->id . "' AND setting_key = '" . $label . "'";
+				$q = $this->query($sql);
+
+				if ( $q->size() != 0 ) {
+					$sql = "UPDATE sessions_settings SET " .
+					"setting_value = '" . $this->settings[$label] . "' " .
+					"WHERE seed = '" . $this->id . "' AND setting_key = '" . $label . "'";
+					$q = $this->query($sql);
+				} else {
+					$sql = "INSERT INTO sessions_settings (seed, setting_key, setting_value) " .
+					"VALUES ( '" . $this->id . "', '" . $label . "', '" . $this->settings[$label] . "' )";
+					$q = $this->query($sql);
+				}
+			}
+		}
 	}
 
 }

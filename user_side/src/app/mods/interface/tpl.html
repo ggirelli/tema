@@ -168,8 +168,8 @@
 				<div ng-show="settings.is_sif_ready()">
 					SIF sample column:
 					<select name="" id="" ng-model="settings.info.sif_sample_col">
-						<option value="null">Select a column</option>
-						<option value="{{k}}" ng-repeat="k in settings.info.sif_keys">{{k}}</option>
+						<option value="">Select a column</option>
+						<option value="{{k}}" ng-repeat="k in settings.info.sif_keys" ng-selected="settings.is_sif_sample_col(k)">{{k}}</option>
 					</select>
 				</div>
 
@@ -221,7 +221,7 @@
 				<hr />
 
 				<!-- save_button -->
-				<button class="btn btn-apply btn-sm btn-success">apply</button>
+				<button class="btn btn-apply btn-sm btn-success" ng-click="settings._apply(m.session_id)">apply</button>
 			</div>
 		</div>
 
