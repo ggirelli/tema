@@ -38,9 +38,10 @@
 				Network list
 				<a href='#/upload/{{m.session_id}}' class="btn-panel glyphicon glyphicon-cloud-upload float-right" title='Upload'></a>
 				<a href="#/interface/{{m.session_id}}" class="btn-panel glyphicon glyphicon-refresh float-right" title='Refresh' ng-click="networks.reload_list(m.session_id)"></a>
+				<a href="#/interface/{{m.session_id}}" class="btn-panel glyphicon glyphicon-transfer float-right" title="Convert" ng-click="networks.toggle_convert_many(m.session_id)"></a>
 			</div>
-			<div class="panel-body">
-				
+
+			<div class="panel-body" ng-show="!networks.is_converting_many()">
 				<div class="alert" ng-show='networks.list != null' ng-repeat='net in networks.list' ng-class="{'alert-info' : networks.isConverted(net), 'alert-danger' : !networks.isConverted(net)}">
 					<a href="#/interface/{{m.session_id}}" class="load-network-link" ng-class="{'text-danger' : !networks.isConverted(net)}" ng-click="networks.init_file(net)" title="N: {{net.data.v_count}} | E: {{net.data.e_count}}">{{net.name}} <span class="glyphicon glyphicon-flag" ng-show="!networks.isConverted(net)"> </span></a>
 					<!-- remove -->
@@ -57,7 +58,20 @@
 					<i>You have not uploaded any network yet...</i><br />
 					Visit the <a href="#/upload/{{m.session_id}}">uploader</a>!
 				</p>
+			</div>
 
+			<div class="panel-body" ng-show="networks.is_converting_many()">
+				<input type="checkbox" id="all" name="all" ng-model="networks.converting_many.all" ng-click="networks.un_select_all()" />
+				<label class="alert alert-warning" for="all">Un/Select all</label>
+
+				<div ng-repeat='net in networks.list | filter:networks.isToConvert'>
+					<input id="net-{{net.id}}" name="net-{{net.id}}" type="checkbox" ng-model="networks.converting_many.networks[net.name]" ng-click="networks.check_selection(net.name)" />
+					<label for="net-{{net.id}}" class="alert" ng-show='networks.list != null' ng-class="{'alert-info' : networks.isConverted(net), 'alert-danger' : !networks.isConverted(net)}">
+						{{net.name}}
+					</label>
+				</div>
+
+				<button class="btn btn-convert_many btn-sm btn-success" ng-click="networks.start_converting_many()">convert selection</button>
 			</div>
 		</div>
 

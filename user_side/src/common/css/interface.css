@@ -145,6 +145,11 @@ html {
 	width: 240px;
 }
 
+#interface .left-panel.graph-list-panel .btn-convert_many {
+	float: right;
+	font-variant: small-caps;
+}
+
 #interface .left-panel.layout-panel {
 	width: 72px;
 

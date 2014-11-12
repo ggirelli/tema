@@ -8,6 +8,13 @@
 
             self.list = null;
 
+            self.converting_many = {
+                status: false,
+                all: false,
+                doing: false,
+                networks: {}
+            };
+
             /**
              * @param  {String} session_id
              * @return {promise} it contains as .list the network list
@@ -88,11 +95,16 @@
              * @return {Boolean}         If the given network is converted
              */
             self.isConverted = function (network) {
-                if ( 1 == network.status) {
-                    return true;
-                }
-                return false;
+                return 1 == network.status;
             };
+
+            /**
+             * @param  {Object}  network from self.list
+             * @return {Boolean}         If the given network is to convert
+             */
+            self.isToConvert = function (network) {
+                return 0 == network.status;
+            }
 
             /**
              * Applies SIF information to the network list
@@ -162,7 +174,7 @@
                 // Check if new_name is already in use
                 var checked = true;
                 for (var i = self.list.length - 1; i >= 0; i--) {
-                    if ( new_name == self.list[i].name ) {
+                    if ( new_name == self.list[i].name || null == new_name ) {
                         checked = false;
                     }
                 }
@@ -205,7 +217,7 @@
                 } else {
                     alert('Non-existent option.');
                 }
-            }
+            };
 
             /**
              * Removes a network
@@ -235,6 +247,98 @@
                             self.reload_list(session_id);
                         });
                 }
+            };
+
+            /**
+             * @return {Boolean} if the group action interface is open
+             */
+            self.is_converting_many = function () {
+                return self.converting_many.status;
+            };
+
+            /**
+             * Toggles the group action interface
+             * @param  {String} session_id
+             */
+            self.toggle_convert_many = function (session_id) {
+                self.converting_many.id = session_id;
+                self.converting_many.status = !self.converting_many.status;
+
+                if ( self.converting_many.status ) {
+                    for (var i = self.list.length - 1; i >= 0; i--) {
+                        if ( self.isToConvert(self.list[i]) ) {
+                            self.converting_many.networks[self.list[i].name] = false;
+                        }
+                    };
+                } else {
+                    self.converting_many.all = false;
+                }
+            };
+
+            /**
+             * Un/Selects all networks
+             */
+            self.un_select_all = function () {
+                var ks = Object.keys(self.converting_many.networks);
+                self.converting_many.all = !self.converting_many.all;
+                for (var i = ks.length - 1; i >= 0; i--) {
+                    self.converting_many.networks[ks[i]] = self.converting_many.all;
+                }
+            };
+
+            /**
+             * Updates selection and checks un/select-all button
+             * @param  {String} name network name
+             */
+            self.check_selection = function (name) {
+                self.converting_many.networks[name] = !self.converting_many.networks[name];
+
+                var all_checked = true;
+                var ks = Object.keys(self.converting_many.networks);
+                for (var i = ks.length - 1; i >= 0; i--) {
+                    if ( !self.converting_many.networks[ks[i]] ) {
+                        all_checked = false;
+                    }
+                }
+                self.converting_many.all = all_checked;
+            };
+
+            /**
+             * Begins the conversion of multiple networks
+             */
+            self.start_converting_many = function () {
+                var toConvert = [];
+
+                var ks = Object.keys(self.converting_many.networks);
+                for (var i = ks.length - 1; i >= 0; i--) {
+                    var k = ks[i];
+                    for (var j = self.list.length - 1; j >= 0; j--) {
+                        var network = self.list[j];
+                        if ( k == network.name ) {
+                            toConvert.push(network);
+                        }
+                    };
+                };
+
+                self.convert_many(toConvert);
+            };
+
+            /**
+             * Iteratively converts a list of networks
+             * @param  {array} networks array of networks to convert
+             */
+            self.convert_many = function (networks) {
+
+                var net = networks.pop();
+                console.log(net);
+                self.convert(net, self.converting_many.id).then(function (data) {
+                    console.log(data);
+                    if ( 0 == networks.length ) {
+                        self.toggle_convert_many(networks);
+                    } else {
+                        self.convert_many(networks);
+                    }
+                });
             }
 
         };
