@@ -28,7 +28,7 @@ if ( $s->exists($data->id) ) {
 	$r = $s->exec_return('convert', $q);
 
 	// Answer call
-	//echo '{"err":0}';
+	echo '{"err":0}';
 
 } else {
 	echo '{"err":3}';

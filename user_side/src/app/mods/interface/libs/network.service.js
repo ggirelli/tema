@@ -336,7 +336,40 @@
                         self.convert_many(networks);
                     }
                 });
-            }
+            };
+
+            /**
+             * Overwrites current visualization on the given network
+             * @param  {string} session_id
+             * @param  {string} network_id
+             */
+            self.overwrite = function (session_id, network_id) {
+                var qwait = q.defer();
+
+                // Save
+                
+                http({
+
+                    method: 'POST',
+                    data: {
+                        action: 'save_network',
+                        id: session_id,
+                        network: JSON.stringify(cy.json().elements),
+                        name: self.list[network_id].name
+                    },
+                    url: 's/'
+
+                }).
+                    success(function (data) {
+                        if ( 0 == data['err'] ) {
+                            alert('Overwritten.');
+                        }
+                        self.reload_list(session_id);
+                        qwait.resolve(data);
+                    });
+
+                return q.promise;
+            };
 
         };
 

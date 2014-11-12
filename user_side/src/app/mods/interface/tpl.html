@@ -45,6 +45,8 @@
 			<div class="panel-body" ng-show="!networks.is_converting_many()">
 				<div class="alert" ng-show='networks.list != null' ng-repeat='net in networks.list' ng-class="{'alert-info' : networks.isConverted(net)&&!canvas.isLoaded(net.name), 'alert-danger' : !networks.isConverted(net), 'alert-success' : canvas.isLoaded(net.name)}">
 					<a href="#/interface/{{m.session_id}}" class="load-network-link" ng-class="{'text-danger' : !networks.isConverted(net), 'text-success' : canvas.isLoaded(net.name)}" ng-click="networks.init_file(net)" title="N: {{net.data.v_count}} | E: {{net.data.e_count}}">{{net.name}} <span class="glyphicon glyphicon-flag" ng-show="!networks.isConverted(net)"></span><span class="glyphicon glyphicon-eye-open" ng-show="canvas.isLoaded(net.name)"></span></a>
+					<!-- overwrite -->
+					<a href="#/interface/{{m.session_id}}" ng-class="{'text-danger' : !networks.isConverted(net)}" class="net-action float-right" title='Overwrite' ng-click="networks.overwrite(m.session_id, net.id)"><span class="glyphicon glyphicon-import"></span></a>
 					<!-- remove -->
 					<a href="#/interface/{{m.session_id}}" ng-class="{'text-danger' : !networks.isConverted(net)}" class="net-action float-right" title='Remove' ng-click="networks.remove(m.session_id, net.id)"><span class="glyphicon glyphicon-trash"></span></a>
 					<!-- rename -->
