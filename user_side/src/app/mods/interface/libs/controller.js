@@ -19,6 +19,7 @@
             
             scope.networks = networks;
             scope.commander.get_network_list(scope.m.session_id).then(function (data) {
+                console.log(data);
                 if (0 != data['err'] ) {
                     document.location.hash = '#/';
                 } else {
@@ -40,7 +41,6 @@
                 } else {
                     scope.canvas.load(network, scope.m.session_id)
                 }
-
             }
 
             /* Initialize canvas */

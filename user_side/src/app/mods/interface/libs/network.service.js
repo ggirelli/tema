@@ -67,34 +67,36 @@
                     // SIF sample column
                     var sample_col = info['sif_sample_col'];
 
-                    // Apply to each network in self.list
-                    for (var i = self.list.length - 1; i >= 0; i--) {
-                        var network = self.list[i];
+                    if ( null != self.list) {
+                        // Apply to each network in self.list
+                        for (var i = self.list.length - 1; i >= 0; i--) {
+                            var network = self.list[i];
 
-                        // Look for the network in the SIF
-                        var j = sif[sample_col].indexOf(network.name);
+                            // Look for the network in the SIF
+                            var j = sif[sample_col].indexOf(network.name);
 
-                        // Start building network-specific SIF_data
-                        var sif_data = {}
-                        if ( -1 != j ) {
-                            // Retrieve SIF data
-                            for (var k = cols.length - 1; k >= 0; k--) {
-                                var col = cols[k];
-                                sif_data[col] = sif[col][j];
-                            };
-                        }
-                        // Assign SIF data
-                        self.list[i]['sif_data'] = sif_data;
+                            // Start building network-specific SIF_data
+                            var sif_data = {}
+                            if ( -1 != j ) {
+                                // Retrieve SIF data
+                                for (var k = cols.length - 1; k >= 0; k--) {
+                                    var col = cols[k];
+                                    sif_data[col] = sif[col][j];
+                                };
+                            }
+                            // Assign SIF data
+                            self.list[i]['sif_data'] = sif_data;
 
-                        // Assign single-sample status
-                        if ( {} == sif_data ) {
-                            // multi-sample network
-                            self.list[i]['single'] = false;
-                        } else {
-                            // single-sample network
-                            self.list[i]['single'] = true;
-                        }
-                    };
+                            // Assign single-sample status
+                            if ( {} == sif_data ) {
+                                // multi-sample network
+                                self.list[i]['single'] = false;
+                            } else {
+                                // single-sample network
+                                self.list[i]['single'] = true;
+                            }
+                        };
+                    }
                 }
             };
 

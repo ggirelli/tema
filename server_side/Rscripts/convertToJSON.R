@@ -21,7 +21,8 @@ if(file.exists(paste0('/home/gire/public_html/SOGIv020/server_side/session/', ar
 
 		cat('Preparing config file.\n')
 		l <- list(e_attributes=list.edge.attributes(g), e_count=ecount(g), v_attributes=list.vertex.attributes(g), v_count=vcount(g))
-		
+
+		cat('Writing DAT file.\n')		
 		write(toJSON(l), paste0(args[2], '.dat'))
 
 		cat('Writing JSON file.\n')

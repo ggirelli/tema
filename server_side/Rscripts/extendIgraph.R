@@ -223,7 +223,7 @@ get.edge.attr = function(name, e) {
 	# 	
 	# Returns:
 	# 	Attribute value
-	
+
 	return(eval(parse(text=paste0("E(get('graph', attr(e, 'env')))[e]$", name))))
 }
 
@@ -235,6 +235,12 @@ get.edge.attributes = function(e, id=FALSE, path=FALSE) {
 	# 	
 	# Returns:
 	# 	List of attributes values
+
+	# Check for edges
+	if ( 0 == ecount(get('graph', attr(e, 'env')))) {
+		cat('No edges to be retrieved.', '\n')
+		return(NULL)
+	}
 
 	# Retrieve edge attributes list
 	el <- list.edge.attributes(get('graph', attr(e, 'env')))
@@ -306,13 +312,21 @@ write.graph.json = function(graph, file) {
 	})
 
 	# EDGES
-	l$edges <- apply(get.edge.attributes(E(g), id=TRUE, path=TRUE), MARGIN=1, FUN=function(x, index) {
-		data <- list(id=paste0('e', as.vector(x['id'])))
-		for(attr in names(x)[which(names(x) != 'id')]) {
-			data <- append(data, eval(parse(text=paste0('x[\'', attr, '\']'))))
-		}
-		return(list(data=data))
-	})
+	e.attrs <- get.edge.attributes(E(g), id=TRUE, path=TRUE)
+	if(!is.null(e.attrs)) {
+		l$edges <- apply(e.attrs, MARGIN=1, FUN=function(x, index) {
+			data <- list(id=paste0('e', as.vector(x['id'])))
+			if (0 == length(data)) {
+				data <- 1:length(x)
+			}
+			for(attr in names(x)[which(names(x) != 'id')]) {
+				data <- append(data, eval(parse(text=paste0('x[\'', attr, '\']'))))
+			}
+			return(list(data=data))
+		})
+	} else {
+
+	}
 
 	write(toJSON(l), file)
 }
