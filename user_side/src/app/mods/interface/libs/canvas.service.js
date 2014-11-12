@@ -6,6 +6,8 @@
         return function (q, http) {
             var self = this;
 
+            self.current_network = {};
+
             /**
              * Default network
              * @type {Object}
@@ -99,7 +101,6 @@
                         cy.load(self.elements, undefined);
                     },
                 });
-
             };
 
             /**
@@ -123,6 +124,7 @@
                 }).
                     success(function (data) {
                         if ( 0 == data['err'] ) {
+                            self.current_network = network;
                             cy.load(data.network);
                         } else {
                             console.log(data);
@@ -146,6 +148,14 @@
              */
             self.center = function () {
                 cy.center(cy.$('*'));
+            }
+
+            /**
+             * @param  {String}  network_name
+             * @return {Boolean}      if the network is loaded
+             */
+            self.isLoaded = function (network_name) {
+                return self.current_network.name == network_name;
             }
 
         };

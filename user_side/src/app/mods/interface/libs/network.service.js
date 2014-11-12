@@ -328,11 +328,8 @@
              * @param  {array} networks array of networks to convert
              */
             self.convert_many = function (networks) {
-
                 var net = networks.pop();
-                console.log(net);
                 self.convert(net, self.converting_many.id).then(function (data) {
-                    console.log(data);
                     if ( 0 == networks.length ) {
                         self.toggle_convert_many(networks);
                     } else {
