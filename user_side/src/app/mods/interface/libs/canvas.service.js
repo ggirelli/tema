@@ -3,7 +3,7 @@
 
     define([], function () {
 
-        return function (q, http) {
+        return function (q, http, rootScope) {
             var self = this;
 
             self.current_network = {};
@@ -156,6 +156,44 @@
              */
             self.isLoaded = function (network_name) {
                 return self.current_network.name == network_name;
+            }
+
+            self.save = function (session_id, networks) {
+                var new_name = prompt('Insert the name for the new network:');
+
+                if ( null == new_name ) {
+                    alert('A name is required to save the current visualization.');
+                } else {
+                    // Check if new_name is already in use
+                    var checked = true;
+                    for (var i = networks.length - 1; i >= 0; i--) {
+                        if ( new_name == networks[i].name || null == new_name || '' == new_name ) {
+                            checked = false;
+                        }
+                    }
+
+                    if( !checked ) {
+                        alert('Name already in use.');
+                    } else {
+                        // Save
+                        
+                        http({
+
+                            method: 'POST',
+                            data: {
+                                action: 'save_network',
+                                id: session_id,
+                                network: JSON.stringify(cy.json().elements),
+                                name: new_name
+                            },
+                            url: 's/'
+
+                        }).
+                            success(function (data) {
+                                rootScope.$broadcast('reload_network_list', session_id);
+                            });
+                    }
+                }
             }
 
         };

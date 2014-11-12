@@ -50,6 +50,11 @@
                 settings.trigger_apply_sif();
             });
 
+            // React to reload_network_list event
+            scope.$on('reload_network_list', function (e, session_id) {
+                scope.networks.reload_list(session_id);
+            });
+
             /*-------------------*/
             /* Initialize canvas */
             /*-------------------*/

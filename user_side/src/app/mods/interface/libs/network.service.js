@@ -174,7 +174,7 @@
                 // Check if new_name is already in use
                 var checked = true;
                 for (var i = self.list.length - 1; i >= 0; i--) {
-                    if ( new_name == self.list[i].name || null == new_name ) {
+                    if ( new_name == self.list[i].name || null == new_name || '' == new_name ) {
                         checked = false;
                     }
                 }

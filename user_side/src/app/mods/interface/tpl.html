@@ -39,6 +39,7 @@
 				<a href='#/upload/{{m.session_id}}' class="btn-panel glyphicon glyphicon-cloud-upload float-right" title='Upload'></a>
 				<a href="#/interface/{{m.session_id}}" class="btn-panel glyphicon glyphicon-refresh float-right" title='Refresh' ng-click="networks.reload_list(m.session_id)"></a>
 				<a href="#/interface/{{m.session_id}}" class="btn-panel glyphicon glyphicon-transfer float-right" title="Convert" ng-click="networks.toggle_convert_many(m.session_id)"></a>
+				<a href="#/interface/{{m.session_id}}" class="btn-panel glyphicon glyphicon-floppy-disk float-right" title="Save" ng-click="canvas.save(m.session_id, networks.list)"></a>
 			</div>
 
 			<div class="panel-body" ng-show="!networks.is_converting_many()">

@@ -30,7 +30,7 @@
 
             controller('homepageController', ['$scope', 'appModel', '$http', '$timeout', homepageController]).
             
-            service('canvasService', ['$q', '$http', canvasService]).
+            service('canvasService', ['$q', '$http', '$rootScope', canvasService]).
             service('commanderService', ['$q', '$http', commanderService]).
             service('inspectorService', [inspectorService]).
             service('networkService', ['$q', '$http', '$rootScope', networkService]).
