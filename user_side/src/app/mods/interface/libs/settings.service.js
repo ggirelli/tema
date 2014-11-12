@@ -3,7 +3,7 @@
 
     define([], function () {
 
-        return function (q, http) {
+        return function (q, http, rootScope) {
             var self = this;
 
             self.info = {
@@ -309,7 +309,9 @@
 
                 }).
                     success(function (data) {
-                        data['node_thr'] = parseInt(data['node_thr']);
+                        self.info.sif_sample_col = data['sif_sample_col'];
+                        self.info.node_thr = parseInt(data['node_thr']);
+
                         qwait.resolve(data);
                     });
 
@@ -335,6 +337,9 @@
 
                 }).
                     success(function (data) {
+                        // Trigger networks.apply_sif
+                        rootScope.$broadcast('apply_sif', self.info);
+
                         qwait.resolve(data);
                     });
 

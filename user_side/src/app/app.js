@@ -35,7 +35,7 @@
             service('inspectorService', [inspectorService]).
             service('networkService', ['$q', '$http', networkService]).
             service('panelsService', [panelsService]).
-            service('settingsService', ['$q', '$http', settingsService]).
+            service('settingsService', ['$q', '$http', '$rootScope', settingsService]).
             controller('interfaceController', ['$scope', 'appModel', '$routeParams', 'networkService',
                 'panelsService', 'inspectorService', 'commanderService', 'canvasService', 'settingsService', interfaceController]).
 

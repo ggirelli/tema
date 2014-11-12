@@ -19,7 +19,6 @@
             
             scope.networks = networks;
             scope.commander.get_network_list(scope.m.session_id).then(function (data) {
-                console.log(data);
                 if (0 != data['err'] ) {
                     document.location.hash = '#/';
                 } else {
@@ -58,6 +57,7 @@
                             scope.settings.info.sif = data.sif;
                             if ( scope.settings.is_sif_ready() ) {
                                 scope.settings.info.sif_keys = Object.keys(scope.settings.info.sif);
+                                scope.$broadcast('apply_sif', scope.settings.info);
                             }
                         }
                     });
@@ -65,9 +65,11 @@
             });
 
             // Read settings
-            scope.settings._read(scope.m.session_id).then(function (data) {
-                scope.settings.info.sif_sample_col = data['sif_sample_col'];
-                scope.settings.info.node_thr = data['node_thr'];
+            scope.settings._read(scope.m.session_id);
+
+            // React to apply_sif event
+            scope.$on('apply_sif', function(e, info) {
+                scope.networks.apply_sif(info);
             });
 
         };
