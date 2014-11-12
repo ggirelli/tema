@@ -156,10 +156,15 @@
 		<div class='left-panel settings-panel panel panel-default' ng-show='panels.show.settings'>
 			<div class="panel-heading">Settings</div>
 			<div class="panel-body">
+
+				<h4>Sample Info File</h4>
+
+				<!-- SIF -->
 				<div ng-show="!settings.is_sif_ready()">
-					<button class="btn btn-default" ng-click="settings.sif_upload(m.session_id)">Upload SIF</button>
-					<input type="file" id="sif-input" />
+					<button class="btn btn-default" ng-click="settings.upload_sif(m.session_id)">Upload SIF</button>
+					<input type="file" id="sif-input" class='hidden-file-input' />
 				</div>
+
 				<div ng-show="settings.is_sif_ready()">
 					SIF sample column:
 					<select name="" id="" ng-model="settings.info.sif_sample_col">
@@ -168,6 +173,54 @@
 					</select>
 				</div>
 
+				<hr />
+
+				<h4>Visualization</h4>
+
+				<!-- node_threshold -->
+				<div>
+					<label for="node_thr">Node threshold: </label>
+					<input id="node_thr" name="node_thr" type="number" ng-model="settings.info.node_thr" />
+				</div>
+
+				<hr />
+
+				<h4>Gene Ontologies</h4>
+
+				<!-- GO files -->
+				<div>
+					<label for="goa-input">GO basic: </label>
+					<button class="btn btn-default btn-block" ng-click="settings.upload_goa(m.session_id)" ng-show="!settings.is_goa_ready()">Upload GOA</button>
+					<div ng-show="settings.is_goa_ready()">
+						<span>{{settings.info.goa}}</span>
+						<button class="btn btn-default btn-block" ng-click="settings.upload_goa(m.session_id)">Change GOA</button>
+					</div>
+					<input type="file" id="goa-input" name="goa-input" class='hidden-file-input' />
+				</div>
+
+				<br />
+
+				<div>
+					<label for="gob-input">GO annotations: </label>
+					<button class="btn btn-default btn-block" ng-click="settings.upload_gob(session_id)" ng-show="!settings.is_gob_ready()">Upload GOB</button>
+					<div ng-show="settings.is_gob_ready()">
+						<span>{{settings.info.gob}}</span>
+						<button class="btn btn-default btn-block" ng-click="settings.upload_gob(session_id)">Change GOB</button>
+					</div>
+					<input type="file" id="gob-input" name="gob-input" class='hidden-file-input' />
+				</div>
+
+				<br />
+
+				<div>
+					<label for="go_status">Status: </label>
+					<span class="text-success" ng-show="settings.info.go_status">ready</span>
+					<span class="text-danger" ng-show="!settings.info.go_status">wating</span>
+				</div>
+
+				<hr />
+
+				<!-- save_button -->
 				<button class="btn btn-apply btn-sm btn-success">apply</button>
 			</div>
 		</div>

@@ -175,8 +175,13 @@ html {
 	display: block;
 }
 
-#interface .left-panel.settings-panel #sif-input {
-	display: none;
+#interface .left-panel.settings-panel hr {
+	margin-bottom: 3em;
+	margin-top: 1em;
+	
+	border-color: #989898;
+	border-style: dotted;
+	border-width: -1px;
 }
 
 #interface .left-panel.settings-panel .btn-apply {

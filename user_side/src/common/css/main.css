@@ -17,3 +17,7 @@ body {
 .float-right {
 	float: right;
 }
+
+.hidden-file-input {
+	display: none !important;
+}

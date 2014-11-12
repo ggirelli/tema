@@ -19,10 +19,15 @@
             
             scope.networks = networks;
             scope.commander.get_network_list(scope.m.session_id).then(function (data) {
-                if ( 0 == data.list.length ) {
-                    scope.networks.list = null;
+                if (0 != data['err'] ) {
+                    document.location.hash = '#/';
                 } else {
-                    scope.networks.list = data.list;
+                    if ( 0 == data.list.length ) {
+                        scope.networks.list = null;
+                    } else {
+                        scope.networks.list = data.list;
+                    }
+                    console.log(scope.networks.list);
                 }
             });
 
@@ -60,7 +65,7 @@
             });
 
             // Read settings
-            settings.read(scope.m.session_id);
+            settings._read(scope.m.session_id);
 
         };
 
