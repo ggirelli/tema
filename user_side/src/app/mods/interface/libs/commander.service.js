@@ -11,30 +11,6 @@
             };
 
             /**
-             * @param  {String} session_id
-             * @return {promise} it contains as .list the network list
-             */
-            self.get_network_list = function (session_id) {
-                var qwait = q.defer();
-
-                http({
-
-                    method: 'POST',
-                    data: {
-                        action: 'get_network_list',
-                        id: session_id
-                    },
-                    url: 's/'
-
-                }).
-                    success(function(data) {
-                        qwait.resolve(data);
-                    });
-
-                return qwait.promise;
-            };
-
-            /**
              * Initializes the operation UI
              * @param  {String} name operation name
              */

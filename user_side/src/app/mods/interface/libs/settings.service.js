@@ -346,6 +346,12 @@
                 return qwait.promise;
             };
 
+            self.trigger_apply_sif = function () {
+                if ( self.is_sif_ready() ) {
+                    rootScope.$broadcast('apply_sif', self.info);
+                }
+            }
+
         };
 
     });

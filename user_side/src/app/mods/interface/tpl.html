@@ -36,15 +36,20 @@
 		<div class='left-panel graph-list-panel panel panel-primary' ng-show='panels.show.graph_list'>
 			<div class="panel-heading">
 				Network list
-				<a href='#/upload/{{m.session_id}}' class="glyphicon glyphicon-cloud-upload float-right"></a>
+				<a href='#/upload/{{m.session_id}}' class="btn-panel glyphicon glyphicon-cloud-upload float-right" title='Upload'></a>
+				<a href="#/interface/{{m.session_id}}" class="btn-panel glyphicon glyphicon-refresh float-right" title='Refresh' ng-click="networks.reload_list(m.session_id)"></a>
 			</div>
 			<div class="panel-body">
 				
 				<div class="alert" ng-show='networks.list != null' ng-repeat='net in networks.list' ng-class="{'alert-info' : networks.isConverted(net), 'alert-danger' : !networks.isConverted(net)}">
 					<a href="#/interface/{{m.session_id}}" class="load-network-link" ng-class="{'text-danger' : !networks.isConverted(net)}" ng-click="networks.init_file(net)" title="N: {{net.data.v_count}} | E: {{net.data.e_count}}">{{net.name}} <span class="glyphicon glyphicon-flag" ng-show="!networks.isConverted(net)"> </span></a>
-					<a href="#/interface/{{m.session_id}}" ng-class="{'text-danger' : !networks.isConverted(net)}" class="net-action float-right" title='Remove' ng-click=""><span class="glyphicon glyphicon-trash"></span></a>
-					<a href="#/interface/{{m.session_id}}" ng-class="{'text-danger' : !networks.isConverted(net)}" class="net-action float-right" title='Rename' ng-click=""><span class="glyphicon glyphicon-pencil"></span></a>
-					<a href="#/interface/{{m.session_id}}" ng-class="{'text-danger' : !networks.isConverted(net)}" class="net-action float-right" title='Download' ng-click=""><span class="glyphicon glyphicon-cloud-download"></span></a>
+					<!-- remove -->
+					<a href="#/interface/{{m.session_id}}" ng-class="{'text-danger' : !networks.isConverted(net)}" class="net-action float-right" title='Remove' ng-click="networks.remove(m.session_id, net.id)"><span class="glyphicon glyphicon-trash"></span></a>
+					<!-- rename -->
+					<a href="#/interface/{{m.session_id}}" ng-class="{'text-danger' : !networks.isConverted(net)}" class="net-action float-right" title='Rename' ng-click="networks.rename(m.session_id, net.id)"><span class="glyphicon glyphicon-pencil"></span></a>
+					<!-- download -->
+					<a href="#/interface/{{m.session_id}}" ng-class="{'text-danger' : !networks.isConverted(net)}" class="net-action float-right" title='Download' ng-click="networks.download(m.session_id, net.id)"><span class="glyphicon glyphicon-cloud-download"></span></a>
+					<!-- inspect -->
 					<a href="#/interface/{{m.session_id}}" ng-class="{'text-danger' : !networks.isConverted(net)}" class="net-action float-right" title='Inspect' ng-click="networks.inspect(net.id)"><span class="glyphicon glyphicon-search"></span></a>
 				</div>
 

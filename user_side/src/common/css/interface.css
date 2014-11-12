@@ -134,6 +134,7 @@ html {
 
 /* PANEL-SPECIFIC */
 
+#interface .left-panel.graph-list-panel .btn-panel,
 #interface .left-panel.graph-list-panel .net-action {
 	margin-left: 8px;
 }

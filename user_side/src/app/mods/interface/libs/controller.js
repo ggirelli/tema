@@ -20,7 +20,7 @@
             /*-------------------------*/
 
             scope.networks = networks;
-            scope.commander.get_network_list(scope.m.session_id).then(function (data) {
+            scope.networks.get_list(scope.m.session_id).then(function (data) {
                 console.log(data);
                 if (0 != data['err'] ) {
                     document.location.hash = '#/';
@@ -44,6 +44,11 @@
                     scope.canvas.load(network, scope.m.session_id)
                 }
             }
+
+            // Trigger apply_sif event
+            scope.$on('trigger_apply_sif', function () {
+                settings.trigger_apply_sif();
+            });
 
             /*-------------------*/
             /* Initialize canvas */
