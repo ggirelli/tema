@@ -161,22 +161,24 @@
 					<div class="alert alert-info" ng-repeat="attr in canvas.get_attributes('nodes')">
 						{{attr}}
 						<!-- overwrite -->
-						<a href="#/interface/{{m.session_id}}" class="attr-action float-right" title='Overwrite' ng-click=""><span class="glyphicon glyphicon-import"></span></a>
+						<a href="#/interface/{{m.session_id}}" class="attr-action float-right" title='Overwrite' ng-click="networks.do_attr('overwrite'); networks.attributes.options.type='nodes'; networks.attributes.options.name=attr;"><span class="glyphicon glyphicon-import"></span></a>
 						<!-- remove -->
 						<a href="#/interface/{{m.session_id}}" class="attr-action float-right" title='Remove' ng-click="networks.attr_remove(m.session_id, attr, 'nodes')"><span class="glyphicon glyphicon-trash"></span></a>
 						<!-- rename -->
 						<a href="#/interface/{{m.session_id}}" class="attr-action float-right" title='Rename' ng-click="networks.attr_rename(m.session_id, attr, 'nodes')"><span class="glyphicon glyphicon-pencil"></span></a>
 					</div>
+					<hr style="margin-bottom: 2em;" />
 					<h4>Edge attributes:</h4>
 					<div class="alert alert-info" ng-repeat="attr in canvas.get_attributes('edges')">
 						{{attr}}
 						<!-- overwrite -->
-						<a href="#/interface/{{m.session_id}}" class="attr-action float-right" title='Overwrite' ng-click=""><span class="glyphicon glyphicon-import"></span></a>
+						<a href="#/interface/{{m.session_id}}" class="attr-action float-right" title='Overwrite' ng-click="networks.do_attr('overwrite'); networks.attributes.options.type='edges'; networks.attributes.options.name=attr;"><span class="glyphicon glyphicon-import"></span></a>
 						<!-- remove -->
 						<a href="#/interface/{{m.session_id}}" class="attr-action float-right" title='Remove' ng-click="networks.attr_remove(m.session_id, attr, 'edges')"><span class="glyphicon glyphicon-trash"></span></a>
 						<!-- rename -->
 						<a href="#/interface/{{m.session_id}}" class="attr-action float-right" title='Rename' ng-click="networks.attr_rename(m.session_id, attr, 'edges')"><span class="glyphicon glyphicon-pencil"></span></a>
 					</div>
+					<hr />
 				</div>
 
 				<!-- add_new -->
@@ -197,11 +199,11 @@
 					</h4>
 					<p ng-show="-1 != ['manual', 'index'].indexOf(networks.attributes.options.input)">
 						<label for="attr_name">Attribute name: </label>
-						<input type="text" id="attr_name" name="attr_name" ng-model="networks.attributes.options.name" />
+						<input class="form-control" type="text" id="attr_name" name="attr_name" ng-model="networks.attributes.options.name" />
 					</p>
 					<p ng-show="'manual' == networks.attributes.options.input">
 						<label for="attr_values">Comma Separated Values:</label>
-						<textarea name="attr_values" id="attr_values" cols="40" rows="10" ng-model="networks.attributes.options.values"></textarea>
+						<textarea class="form-control" name="attr_values" id="attr_values" cols="40" rows="10" ng-model="networks.attributes.options.values"></textarea>
 					</p>
 					<p ng-show="'index' == networks.attributes.options.input">
 						<label for="index">Select index:</label>
@@ -231,7 +233,7 @@
 					<hr>
 					<p>
 						<label for="attr_name">New attribute name: </label>
-						<input type="text" id="attr_name" name="attr_name" ng-model="networks.attributes.options.name" />
+						<input class="form-control" type="text" id="attr_name" name="attr_name" ng-model="networks.attributes.options.name" />
 					</p>
 					<hr>
 					<div ng-show="null != networks.attributes.options.type">
@@ -243,7 +245,7 @@
 					<hr>
 					<div ng-show="networks.attr_selected()">
 						<h4>Write a function in R code:</h4>
-						<textarea name="attr_function" id="attr_function" cols="40" rows="5" ng-model="networks.attributes.options.function" placeholder="_0_*log(_1_)"></textarea>
+						<textarea class="form-control" name="attr_function" id="attr_function" cols="40" rows="5" ng-model="networks.attributes.options.function" placeholder="_0_*log(_1_)"></textarea>
 						<h4>In the function use the attributes as follows:</h4>
 						<ul>
 							<li ng-repeat="attr in networks.attr_get_selected()"><code>{{attr}}</code> as <code>_{{$index}}_</code></li>
@@ -253,6 +255,34 @@
 					<p class="alert alert-danger" ng-repeat="msg in networks.attributes.options.errMsg">{{msg}}</p>
 
 					<button class="btn abort-btn btn-success" ng-click="networks.attr_apply(m.session_id, 'combine')">apply</button> <button class="btn abort-btn btn-danger" ng-click="networks.do_attr(null)">abort</button>
+				</div>
+				<!-- overwrite -->
+				<div ng-show="networks.is_attr_doing('overwrite')">
+					
+					<h4>
+						Owerwrite <select name="attr_input" id="attr_input" ng-model="networks.attributes.options.input">
+							<option value="">--</option>
+							<option value="manual">manually</option>
+							<option value="index" ng-show="'nodes' == networks.attributes.options.type">with index</option>
+						</select>.
+					</h4>
+					<p ng-show="'manual' == networks.attributes.options.input">
+						<label for="attr_values">Comma Separated Values:</label>
+						<textarea class="form-control" name="attr_values" id="attr_values" cols="40" rows="10" ng-model="networks.attributes.options.values"></textarea>
+					</p>
+					<p ng-show="'index' == networks.attributes.options.input">
+						<label for="index">Select index:</label>
+						<select name="index" id="index" ng-model="networks.attributes.options.index">
+							<option value="">--</option>
+							<option value="degree">degree</option>
+							<option value="betweenness">betweenness</option>
+							<option value="closeness">closeness</option>
+						</select>
+					</p>
+
+					<p class="alert alert-danger" ng-repeat="msg in networks.attributes.options.errMsg">{{msg}}</p>
+
+					<button class="btn abort-btn btn-success" ng-click="networks.attr_apply(m.session_id, 'add_new')">apply</button> <button class="btn abort-btn btn-danger" ng-click="networks.do_attr(null)">abort</button>
 				</div>
 
 				<p class="footnote">

@@ -208,7 +208,7 @@
              */
             self.get_attributes = function (what) {
                 if ( -1 != ['edges', 'nodes'].indexOf(what) ) {
-                    if ( 0 != Object.keys(cy.json().elements).length ) {
+                    if ( -1 != Object.keys(cy.json().elements).indexOf(what) ) {
                         return Object.keys(cy.json().elements[what][0].data);
                     }
                 }
