@@ -596,6 +596,7 @@
             };
 
             self.attr_rename = function (session_id, old_name, group) {
+                console.log([session_id, old_name, group]);
                 var new_name = prompt('Insert the new name:');
                 var checked = true;
                 var attr_list = Object.keys(cy.json().elements[group][0].data);
@@ -628,6 +629,7 @@
 
                     }).
                         success(function (data) {
+                            console.log(data);
                             if ( 0 == data.err ) {
                                 cy.load(data.net);
                                 self.do_attr(null);

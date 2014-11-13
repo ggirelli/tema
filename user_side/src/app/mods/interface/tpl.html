@@ -143,7 +143,11 @@
 
 		<div class='left-panel attributes-panel panel panel-success' ng-show='panels.show.attributes'>
 			<div class="panel-heading">
-				<span ng-show="!networks.is_attr_doing()">Attributes</span>
+				<span ng-show="!networks.is_attr_doing()">
+					Attributes
+					<a href="#/interface/{{m.session_id}}" class="btn-panel text-success float-right" ng-click="networks.do_attr('add_new')" title="Add new"><span class="glyphicon glyphicon-plus"></span></a>
+					<a href="#/interface/{{m.session_id}}" class="btn-panel text-success float-right" ng-click="networks.do_attr('combine')" title="Combine"><span class="glyphicon glyphicon-resize-small"></span></a>
+				</span>
 				<span ng-show="networks.is_attr_doing('add_new')">Add new attribute</span>
 				<span ng-show="networks.is_attr_doing('combine')">Combine attributes</span>
 				<span ng-show="networks.is_attr_doing('rename')">Rename attribute</span>
@@ -152,7 +156,30 @@
 			</div>
 			<div class="panel-body">
 
-				<div class="btn operation-btn btn-success btn-block" ng-show="!networks.is_attr_doing()" ng-click="networks.do_attr('add_new')">Add new attribute</div>
+				<div ng-show="!networks.is_attr_doing()">
+					<h4>Node attributes:</h4>
+					<div class="alert alert-info" ng-repeat="attr in canvas.get_attributes('nodes')">
+						{{attr}}
+						<!-- overwrite -->
+						<a href="#/interface/{{m.session_id}}" class="attr-action float-right" title='Overwrite' ng-click=""><span class="glyphicon glyphicon-import"></span></a>
+						<!-- remove -->
+						<a href="#/interface/{{m.session_id}}" class="attr-action float-right" title='Remove' ng-click="networks.attr_remove(m.session_id, attr, 'nodes')"><span class="glyphicon glyphicon-trash"></span></a>
+						<!-- rename -->
+						<a href="#/interface/{{m.session_id}}" class="attr-action float-right" title='Rename' ng-click="networks.attr_rename(m.session_id, attr, 'nodes')"><span class="glyphicon glyphicon-pencil"></span></a>
+					</div>
+					<h4>Edge attributes:</h4>
+					<div class="alert alert-info" ng-repeat="attr in canvas.get_attributes('edges')">
+						{{attr}}
+						<!-- overwrite -->
+						<a href="#/interface/{{m.session_id}}" class="attr-action float-right" title='Overwrite' ng-click=""><span class="glyphicon glyphicon-import"></span></a>
+						<!-- remove -->
+						<a href="#/interface/{{m.session_id}}" class="attr-action float-right" title='Remove' ng-click="networks.attr_remove(m.session_id, attr, 'edges')"><span class="glyphicon glyphicon-trash"></span></a>
+						<!-- rename -->
+						<a href="#/interface/{{m.session_id}}" class="attr-action float-right" title='Rename' ng-click="networks.attr_rename(m.session_id, attr, 'edges')"><span class="glyphicon glyphicon-pencil"></span></a>
+					</div>
+				</div>
+
+				<!-- add_new -->
 				<div ng-show="networks.is_attr_doing('add_new')">
 					
 					<h4>
@@ -177,8 +204,7 @@
 
 					<button class="btn abort-btn btn-success" ng-click="networks.attr_apply(m.session_id, 'add_new')">apply</button> <button class="btn abort-btn btn-danger" ng-click="networks.do_attr(null)">abort</button>
 				</div>
-
-				<div class="btn operation-btn btn-warning btn-block" ng-show="!networks.is_attr_doing()" ng-click="networks.do_attr('combine')">Combine attributes</div>
+				<!-- combine -->
 				<div ng-show="networks.is_attr_doing('combine')">
 					<h4>
 						Combine 
@@ -214,31 +240,6 @@
 					<p class="alert alert-danger" ng-repeat="msg in networks.attributes.options.errMsg">{{msg}}</p>
 
 					<button class="btn abort-btn btn-success" ng-click="networks.attr_apply(m.session_id, 'combine')">apply</button> <button class="btn abort-btn btn-danger" ng-click="networks.do_attr(null)">abort</button>
-				</div>
-
-				<div class="btn operation-btn btn-info btn-block" ng-show="!networks.is_attr_doing()" ng-click="networks.do_attr('rename')">Rename attribute</div>
-				<div ng-show="networks.is_attr_doing('rename')">
-					<h4>Node attributes:</h4>
-					<div class="btn btn-block btn-info" ng-repeat="attr in canvas.get_attributes('nodes')" ng-click="networks.attr_rename(m.session_id, attr, 'nodes')">{{attr}}</div>
-					<h4>Edge attributes:</h4>
-					<div class="btn btn-block btn-info" ng-repeat="attr in canvas.get_attributes('edges')" ng-click="networks.attr_rename(m.session_id, attr, 'edges')">{{attr}}</div>
-
-					<button class="btn abort-btn btn-danger" ng-click="networks.do_attr(null)">abort</button>
-				</div>
-
-				<div class="btn operation-btn btn-danger btn-block" ng-show="!networks.is_attr_doing()" ng-click="networks.do_attr('remove')">Remove attribute</div>
-				<div ng-show="networks.is_attr_doing('remove')">
-					<h4>Node attributes:</h4>
-					<div class="btn btn-block btn-warning" ng-repeat="attr in canvas.get_attributes('nodes')" ng-click="networks.attr_remove(m.session_id, attr, 'nodes')">{{attr}}</div>
-					<h4>Edge attributes:</h4>
-					<div class="btn btn-block btn-warning" ng-repeat="attr in canvas.get_attributes('edges')" ng-click="networks.attr_remove(m.session_id, attr, 'edges')">{{attr}}</div>
-
-					<button class="btn abort-btn btn-danger" ng-click="networks.do_attr(null)">abort</button>
-				</div>
-
-				<div class="btn operation-btn btn-danger btn-block" ng-show="!networks.is_attr_doing()" ng-click="networks.do_attr('replace')">Replace attribute</div>
-				<div ng-show="networks.is_attr_doing('replace')">
-					<button class="btn abort-btn btn-danger" ng-click="networks.do_attr(null)">abort</button>
 				</div>
 
 				<p class="footnote">
