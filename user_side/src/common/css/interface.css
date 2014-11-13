@@ -134,6 +134,7 @@ html {
 
 /* PANEL-SPECIFIC */
 
+/* graph list */
 #interface .left-panel.graph-list-panel .btn-panel,
 #interface .left-panel.graph-list-panel .net-action {
 	margin-left: 8px;
@@ -149,6 +150,51 @@ html {
 	float: right;
 	font-variant: small-caps;
 }
+
+/* operations */
+
+#interface .left-panel.operations-panel .operation-btn,
+#interface .left-panel.operations-panel .operation-panel {
+	display: block;
+	margin: 4px auto;
+}
+
+#interface .left-panel.operations-panel .operation-panel .end-btn {
+	float: right;
+	
+	margin-left: 4px;
+
+	font-variant: small-caps;
+}
+
+#interface .left-panel.operations-panel .operation-panel .single-network-select {
+	display: block;
+}
+
+/* attributes */
+
+#interface .left-panel.attributes-panel .operation-btn {
+	margin: 4px auto;
+}
+
+#interface .left-panel.attributes-panel .abort-btn {
+	float: right;
+
+	margin: 4px 2px;
+	
+	font-variant: small-caps;
+}
+
+#interface .left-panel.attributes-panel .footnote {
+	float: left;
+
+	margin-top: 1em;
+	padding: 0 4px;
+
+	font-size: 0.8em;
+}
+
+/* layout */
 
 #interface .left-panel.layout-panel {
 	width: 72px;
@@ -169,23 +215,7 @@ html {
 	margin: 2px 0;
 }
 
-#interface .left-panel.operations-panel .operation-btn,
-#interface .left-panel.operations-panel .operation-panel {
-	display: block;
-	margin: 4px auto;
-}
-
-#interface .left-panel.operations-panel .operation-panel .end-btn {
-	float: right;
-	
-	margin-left: 4px;
-
-	font-variant: small-caps;
-}
-
-#interface .left-panel.operations-panel .operation-panel .single-network-select {
-	display: block;
-}
+/* settings */
 
 #interface .left-panel.settings-panel hr {
 	margin-bottom: 3em;

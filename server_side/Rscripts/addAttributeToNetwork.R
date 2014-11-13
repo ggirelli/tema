@@ -4,7 +4,7 @@ options(echo=TRUE)
 args <- commandArgs(trailingOnly = TRUE)
 
 # Check parameters
-if(length(args) != 2) stop('./convertToJSON.R session_id graph_name')
+if(length(args) != 5) stop('./addAttributeToNetwork.R session_id graph_name attr_type attr_name attr_val')
 
 # Load requirements
 library(igraph)
@@ -57,7 +57,7 @@ if(file.exists(paste0('/home/gire/public_html/SOGIv020/server_side/session/', ar
 			eval(parse(text=paste0('V(g)$', attr, ' <- as.numeric(nodes.table$', attr, ')')))
 		}
 	}
-
+	
 	tmp <- V(g)$name
 	V(g)$name <- V(g)$id
 	g <- g + edges(c(rbind(as.character(edges.table$source), as.character(edges.table$target))))
@@ -73,11 +73,17 @@ if(file.exists(paste0('/home/gire/public_html/SOGIv020/server_side/session/', ar
 		}
 	}
 
-	cat('> Write GraphML file\n')
-	write.graph(g, paste0(args[2], '.graphml'), format='graphml')
+	if ( 'x' %in% list.vertex.attributes(g) ) g <- remove.vertex.attribute(g, 'x')
+	if ( 'y' %in% list.vertex.attributes(g) ) g <- remove.vertex.attribute(g, 'y')
 
-	cat('> Write DAT file\n')
-	l <- list(e_attributes=list.edge.attributes(g), e_count=ecount(g), v_attributes=list.vertex.attributes(g), v_count=vcount(g))
-	write(toJSON(l), paste0(args[2], '.dat'))
+	cat('> Add attribute\n')
+	if ( 'nodes' == args[3] ) {
+		eval(parse(text=paste0('V(g)$', args[4], ' <- unlist(strsplit(args[5], ",", fixed=T))')))
+	} else if ( 'edges' == args[3] ) {
+		eval(parse(text=paste0('E(g)$', args[4], ' <- unlist(strsplit(args[5], ",", fixed=T))')))
+	}
 
+	cat('> Convert back to JSON\n')
+	source('../../Rscripts/extendIgraph.R')
+	write.graph(g, paste0(args[2], '.json'), format='json')
 }

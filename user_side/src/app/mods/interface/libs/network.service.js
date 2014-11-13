@@ -8,13 +8,6 @@
 
             self.list = null;
 
-            self.converting_many = {
-                status: false,
-                all: false,
-                doing: false,
-                networks: {}
-            };
-
             /**
              * @param  {String} session_id
              * @return {promise} it contains as .list the network list
@@ -250,6 +243,48 @@
             };
 
             /**
+             * Overwrites current visualization on the given network
+             * @param  {string} session_id
+             * @param  {string} network_id
+             */
+            self.overwrite = function (session_id, network_id) {
+                var qwait = q.defer();
+
+                // Save
+                
+                http({
+
+                    method: 'POST',
+                    data: {
+                        action: 'save_network',
+                        id: session_id,
+                        network: JSON.stringify(cy.json().elements),
+                        name: self.list[network_id].name
+                    },
+                    url: 's/'
+
+                }).
+                    success(function (data) {
+                        if ( 0 == data['err'] ) {
+                            alert('Overwritten.');
+                        }
+                        self.reload_list(session_id);
+                        qwait.resolve(data);
+                    });
+
+                return q.promise;
+            };
+
+            // GROUP ACTIONS
+
+            self.converting_many = {
+                status: false,
+                all: false,
+                doing: false,
+                networks: {}
+            };
+
+            /**
              * @return {Boolean} if the group action interface is open
              */
             self.is_converting_many = function () {
@@ -338,38 +373,112 @@
                 });
             };
 
-            /**
-             * Overwrites current visualization on the given network
-             * @param  {string} session_id
-             * @param  {string} network_id
-             */
-            self.overwrite = function (session_id, network_id) {
-                var qwait = q.defer();
-
-                // Save
-                
-                http({
-
-                    method: 'POST',
-                    data: {
-                        action: 'save_network',
-                        id: session_id,
-                        network: JSON.stringify(cy.json().elements),
-                        name: self.list[network_id].name
-                    },
-                    url: 's/'
-
-                }).
-                    success(function (data) {
-                        if ( 0 == data['err'] ) {
-                            alert('Overwritten.');
-                        }
-                        self.reload_list(session_id);
-                        qwait.resolve(data);
-                    });
-
-                return q.promise;
+            // ATTRIBUTES
+            
+            self.attributes = {
+                label: null,
+                options: null
             };
+
+            /**
+             * @return {Boolean} if the action to perform on the attributes has been decided
+             */
+            self.is_attr_doing = function (label) {
+                if ( undefined == label ) return null != self.attributes.label;
+                return label == self.attributes.label;
+            };
+
+            self.do_attr = function (label) {
+                self.attributes.label = label;
+                if ( null == label ) {
+                    self.attributes.options = null;
+                } else {
+                    self.attributes.options = {
+                        errMsg: []
+                    };
+                }
+            };
+
+            self.check_attr = function () {
+                self.attributes.options.errMsg = [];
+
+                if ( self.attributes.label == 'add_new' ) {
+
+                    // Check attr_type
+                    if ( undefined == self.attributes.options.type || null == self.attributes.options.type ) {
+                        self.attributes.options.errMsg.push('Please, select a type of attribute.');
+                        return;
+                    }
+
+                    // Check attr_name
+                    var checked = true;
+                    var attr_list = Object.keys(cy.json().elements[self.attributes.options.type][0].data);
+                    for (var i = attr_list.length - 1; i >= 0; i--) {
+                        if ( self.attributes.options.name == attr_list[i] ) {
+                            checked = false;
+                        }
+                    }
+
+                    if ( !checked ) {
+                        self.attributes.options.errMsg.push('Name already in use.');
+                    }
+                    if ( null == self.attributes.options.name || '' == self.attributes.options.name ) {
+                        checked = false;
+                        self.attributes.options.errMsg.push('Please, provide a name.');
+                    }
+
+                    // Check csv
+                    if ( checked ) {
+                        if ( undefined != self.attributes.options.values ) {
+                            var n_el = cy.json().elements[self.attributes.options.type].length;
+                            var n_val = self.attributes.options.values.split(',').length;
+                            if ( n_el !=  n_val ) {
+                                self.attributes.options.errMsg.push('Found ' + n_val + ' values for ' + n_el + ' ' + self.attributes.options.type + '.');
+                            }
+                        } else {
+                            self.attributes.options.errMsg.push('Please, provide attribute values.');
+                        }
+                    }
+                }
+
+                return 0 == self.attributes.options.errMsg;
+            };
+
+            self.is_attr_ok = function () {
+                if ( null == self.attributes.options ) return true;
+                return undefined == self.attributes.options.errMsg;
+            };
+
+            self.attr_add_new = function (session_id) {
+                if ( self.check_attr() ) {
+                    var qwait = q.defer();
+
+                    http({
+
+                        method: 'POST',
+                        data: {
+                            action: 'add_attr',
+                            id: session_id,
+                            name: 'json_tmp_net',
+                            network: JSON.stringify(cy.json().elements),
+                            attr_type: self.attributes.options.type,
+                            attr_name: self.attributes.options.name,
+                            attr_val: self.attributes.options.values
+                        },
+                        url: 's/'
+
+                    }).
+                        success(function (data) {
+                            if ( 0 == data['err'] ) {
+                                cy.load(data['net']);
+                                self.do_attr(null);
+                            }
+                            qwait.resolve(data);
+                        });
+
+                    return qwait.promise;
+                }
+            }
 
         };
 

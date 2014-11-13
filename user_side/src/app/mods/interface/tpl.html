@@ -13,14 +13,17 @@
 		<span class="btn btn-danger btn-circle" ng-click="panels.toggle('operations')" ng-class="{'open' : panels.show.operations}" title="Operations">
 			<span class="glyphicon glyphicon-pencil"></span>
 		</span>
+		<span class="btn btn-success btn-circle" ng-click="panels.toggle('attributes')" ng-class="{'open' : panels.show.attributes}" title="Attributes">
+			<span class="glyphicon glyphicon-tags"></span>
+		</span>
+		<span class="btn btn-success btn-circle" ng-click="panels.toggle('select')" ng-class="{'open' : panels.show.select}" title="Select">
+			<span class="glyphicon glyphicon-check"></span>
+		</span>
 		<span class="btn btn-warning btn-circle" ng-click="panels.toggle('layout')" ng-class="{'open' : panels.show.layout}" title="Layout">
 			<span class="glyphicon glyphicon-th"></span>
 		</span>
 		<span class="btn btn-warning btn-circle" ng-click="panels.toggle('style')" ng-class="{'open' : panels.show.style}" title="Style">
 			<span class="glyphicon glyphicon-adjust"></span>
-		</span>
-		<span class="btn btn-success btn-circle" ng-click="panels.toggle('select')" ng-class="{'open' : panels.show.select}" title="Select">
-			<span class="glyphicon glyphicon-check"></span>
 		</span>
 		<span class="btn btn-default btn-circle" ng-click="panels.toggle('settings')" ng-class="{'open' : panels.show.settings}" title="Settings">
 			<span class="glyphicon glyphicon-cog"></span>
@@ -77,6 +80,7 @@
 				<button class="btn btn-convert_many btn-sm btn-success" ng-click="networks.start_converting_many()">convert selection</button>
 			</div>
 		</div>
+
 
 		<div class='left-panel operations-panel panel panel-danger' ng-show='panels.show.operations'>
 			<div class="panel-heading">Operations</div>
@@ -137,6 +141,78 @@
 			</div>
 		</div>
 
+		<div class='left-panel attributes-panel panel panel-success' ng-show='panels.show.attributes'>
+			<div class="panel-heading">
+				<span ng-show="!networks.is_attr_doing()">Attributes</span>
+				<span ng-show="networks.is_attr_doing('add_new')">Add new attribute</span>
+				<span ng-show="networks.is_attr_doing('combine')">Combine attributes</span>
+				<span ng-show="networks.is_attr_doing('rename')">Rename attribute</span>
+				<span ng-show="networks.is_attr_doing('remove')">Remove attribute</span>
+				<span ng-show="networks.is_attr_doing('replace')">Replace attribute</span>
+			</div>
+			<div class="panel-body">
+
+				<div class="btn operation-btn btn-success btn-block" ng-show="!networks.is_attr_doing()" ng-click="networks.do_attr('add_new')">Add new attribute</div>
+				<div ng-show="networks.is_attr_doing('add_new')">
+					
+					<h4>
+						Add new 
+						<select name="attr_type" id="attr_type" ng-model="networks.attributes.options.type">
+							<option value="">--</option>
+							<option value="edges">edge</option>
+							<option value="nodes">node</option>
+						</select>
+						attribute.
+					</h4>
+					<p>
+						<label for="attr_name">Attribute name: </label>
+						<input type="text" id="attr_name" name="attr_name" ng-model="networks.attributes.options.name" />
+					</p>
+					<p>
+						<label for="attr_values">Comma Separated Values:</label>
+						<textarea name="attr_values" id="attr_values" cols="40" rows="10" ng-model="networks.attributes.options.values"></textarea>
+					</p>
+					<p class="alert alert-danger" ng-repeat="msg in networks.attributes.options.errMsg">{{msg}}</p>
+
+					<button class="btn abort-btn btn-success" ng-click="networks.attr_add_new(m.session_id)">apply</button> <button class="btn abort-btn btn-danger" ng-click="networks.do_attr(null)">abort</button>
+				</div>
+
+				<div class="btn operation-btn btn-warning btn-block" ng-show="!networks.is_attr_doing()" ng-click="networks.do_attr('combine')">Combine attributes</div>
+				<div ng-show="networks.is_attr_doing('combine')">
+					<button class="btn abort-btn btn-danger" ng-click="networks.do_attr(null)">abort</button>
+				</div>
+
+				<div class="btn operation-btn btn-info btn-block" ng-show="!networks.is_attr_doing()" ng-click="networks.do_attr('rename')">Rename attribute</div>
+				<div ng-show="networks.is_attr_doing('rename')">
+					<button class="btn abort-btn btn-danger" ng-click="networks.do_attr(null)">abort</button>
+				</div>
+
+				<div class="btn operation-btn btn-danger btn-block" ng-show="!networks.is_attr_doing()" ng-click="networks.do_attr('remove')">Remove attribute</div>
+				<div ng-show="networks.is_attr_doing('remove')">
+					<button class="btn abort-btn btn-danger" ng-click="networks.do_attr(null)">abort</button>
+				</div>
+
+				<div class="btn operation-btn btn-danger btn-block" ng-show="!networks.is_attr_doing()" ng-click="networks.do_attr('replace')">Replace attribute</div>
+				<div ng-show="networks.is_attr_doing('replace')">
+					<button class="btn abort-btn btn-danger" ng-click="networks.do_attr(null)">abort</button>
+				</div>
+
+				<p class="footnote">
+					All the changes applied to the attributes are applied only
+					to the current visualization and are not saved on the server.
+					To do so, please use the overwrite function.
+				</p>
+
+			</div>
+		</div>
+
+		<div class='left-panel select-panel panel panel-success' ng-show='panels.show.select'>
+			<div class="panel-heading">Select</div>
+			<div class="panel-body">
+				...
+			</div>
+		</div>
+
 		<div class='left-panel layout-panel panel panel-warning' ng-show='panels.show.layout'>
 			<div class="panel-heading">Layout</div>
 			<div class="panel-body">
@@ -162,13 +238,6 @@
 
 		<div class='left-panel style-panel panel panel-warning' ng-show='panels.show.style'>
 			<div class="panel-heading">Style</div>
-			<div class="panel-body">
-				...
-			</div>
-		</div>
-
-		<div class='left-panel select-panel panel panel-success' ng-show='panels.show.select'>
-			<div class="panel-heading">Select</div>
 			<div class="panel-body">
 				...
 			</div>

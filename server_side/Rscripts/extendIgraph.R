@@ -303,7 +303,7 @@ write.graph.json = function(graph, file) {
 	l <- list(nodes=list(), edges=list())
 
 	# NODES
-	l$nodes <- apply(get.vertex.attributes(V(g), id=TRUE), MARGIN=1, FUN=function(x, index) {
+	l$nodes <- apply(get.vertex.attributes(V(graph), id=TRUE), MARGIN=1, FUN=function(x, index) {
 		data <- list(id=paste0('n', as.vector(x['id'])))
 		for(attr in names(x)[which(names(x) != 'id')]) {
 			data <- append(data, eval(parse(text=paste0('x[\'', attr, '\']'))))
@@ -312,7 +312,7 @@ write.graph.json = function(graph, file) {
 	})
 
 	# EDGES
-	e.attrs <- get.edge.attributes(E(g), id=TRUE, path=TRUE)
+	e.attrs <- get.edge.attributes(E(graph), id=TRUE, path=TRUE)
 	if(!is.null(e.attrs)) {
 		l$edges <- apply(e.attrs, MARGIN=1, FUN=function(x, index) {
 			data <- list(id=paste0('e', as.vector(x['id'])))
@@ -324,8 +324,6 @@ write.graph.json = function(graph, file) {
 			}
 			return(list(data=data))
 		})
-	} else {
-
 	}
 
 	write(toJSON(l), file)

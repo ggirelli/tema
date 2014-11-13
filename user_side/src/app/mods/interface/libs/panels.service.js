@@ -13,6 +13,7 @@
             self.show = {
         		graph_list: false,
         		operations: false,
+                attributes: false,
         		layout: false,
         		style: false,
         		select: false,
@@ -38,7 +39,12 @@
              * @return {Boolean}
              */
             self.isOpen = function() {
-                if( self.show.graph_list || self.show.operations || self.show.layout || self.show.style || self.show.select || self.show.settings ) return(true);
+                var ks = Object.keys(self.show);
+                for (var i = ks.length - 1; i >= 0; i--) {
+                    if ( self.show[ks[i]] ) {
+                        return(true);
+                    }
+                }
                 return(false);
             };
 
@@ -48,12 +54,12 @@
              * @return {Boolean} FALSE if no panel is open
              */
             self.whoseOpen = function() {
-                if( self.show.graph_list ) return('graph_list');
-                if( self.show.operations ) return('operations');
-                if( self.show.layout ) return('layout');
-                if( self.show.style ) return('style');
-                if( self.show.select ) return('select');
-                if( self.show.settings ) return('settings');
+                var ks = Object.keys(self.show);
+                for (var i = ks.length - 1; i >= 0; i--) {
+                    if ( self.show[ks[i]] ) {
+                        return(ks[i]);
+                    }
+                }
                 return(false);
             };
 

@@ -21,3 +21,11 @@ body {
 .hidden-file-input {
 	display: none !important;
 }
+
+.small-caps {
+	font-variant: small-caps;
+}
+
+.bold {
+	font-weight: bold;
+}
