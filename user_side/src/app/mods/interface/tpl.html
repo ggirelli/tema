@@ -218,11 +218,21 @@
 
 				<div class="btn operation-btn btn-info btn-block" ng-show="!networks.is_attr_doing()" ng-click="networks.do_attr('rename')">Rename attribute</div>
 				<div ng-show="networks.is_attr_doing('rename')">
+					<h4>Node attributes:</h4>
+					<div class="btn btn-block btn-info" ng-repeat="attr in canvas.get_attributes('nodes')" ng-click="networks.attr_rename(m.session_id, attr, 'nodes')">{{attr}}</div>
+					<h4>Edge attributes:</h4>
+					<div class="btn btn-block btn-info" ng-repeat="attr in canvas.get_attributes('edges')" ng-click="networks.attr_rename(m.session_id, attr, 'edges')">{{attr}}</div>
+
 					<button class="btn abort-btn btn-danger" ng-click="networks.do_attr(null)">abort</button>
 				</div>
 
 				<div class="btn operation-btn btn-danger btn-block" ng-show="!networks.is_attr_doing()" ng-click="networks.do_attr('remove')">Remove attribute</div>
 				<div ng-show="networks.is_attr_doing('remove')">
+					<h4>Node attributes:</h4>
+					<div class="btn btn-block btn-warning" ng-repeat="attr in canvas.get_attributes('nodes')" ng-click="networks.attr_remove(m.session_id, attr, 'nodes')">{{attr}}</div>
+					<h4>Edge attributes:</h4>
+					<div class="btn btn-block btn-warning" ng-repeat="attr in canvas.get_attributes('edges')" ng-click="networks.attr_remove(m.session_id, attr, 'edges')">{{attr}}</div>
+
 					<button class="btn abort-btn btn-danger" ng-click="networks.do_attr(null)">abort</button>
 				</div>
 

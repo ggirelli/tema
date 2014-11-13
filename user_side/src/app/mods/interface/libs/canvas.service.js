@@ -208,10 +208,11 @@
              */
             self.get_attributes = function (what) {
                 if ( -1 != ['edges', 'nodes'].indexOf(what) ) {
-                    return Object.keys(cy.json().elements[what][0].data);
-                } else {
-                    return null;
+                    if ( 0 != Object.keys(cy.json().elements).length ) {
+                        return Object.keys(cy.json().elements[what][0].data);
+                    }
                 }
+                return null;
             }
 
         };

@@ -595,6 +595,84 @@
                 return [];
             };
 
+            self.attr_rename = function (session_id, old_name, group) {
+                var new_name = prompt('Insert the new name:');
+                var checked = true;
+                var attr_list = Object.keys(cy.json().elements[group][0].data);
+                for (var i = attr_list.length - 1; i >= 0; i--) {
+                    if (new_name == attr_list[i] ) {
+                        checked = false;
+                    }
+                }
+
+                if ( !checked ) {
+                    alert('Name already in use.');
+                } else if ( null == new_name || '' == new_name ) {
+                    alert('Please, provide a name.');
+                } else {
+                    var qwait = q.defer();
+
+                    http({
+
+                        method: 'POST',
+                        data: {
+                            action: 'rename_attr',
+                            id: session_id,
+                            name: 'json_tmp_net',
+                            network: JSON.stringify(cy.json().elements),
+                            attr_type: group,
+                            attr_name: old_name,
+                            attr_new_name: new_name
+                        },
+                        url: 's/'
+
+                    }).
+                        success(function (data) {
+                            if ( 0 == data.err ) {
+                                cy.load(data.net);
+                                self.do_attr(null);
+                            }
+                            qwait.resolve(data);
+                        });
+
+                    return q.promise;
+                }
+            };
+
+            self.attr_remove = function (session_id, old_name, group) {
+                var ans = prompt('Do you really want to remove the ' + group + ' attribute "' + old_name + '"? (y/n)');
+
+                if ( null == ans || '' == ans || -1 == ['y', 'n'].indexOf(ans) ) {
+                    alert('Non-existent option.');
+                } else if ( 'y' == ans ) {
+                    var qwait = q.defer();
+
+                    http({
+
+                        method: 'POST',
+                        data: {
+                            action: 'remove_attr',
+                            id: session_id,
+                            name: 'json_tmp_net',
+                            network: JSON.stringify(cy.json().elements),
+                            attr_type: group,
+                            attr_name: old_name,
+                        },
+                        url: 's/'
+
+                    }).
+                        success(function (data) {
+                            if ( 0 == data.err ) {
+                                cy.load(data.net);
+                                self.do_attr(null);
+                            }
+                            qwait.resolve(data);
+                        });
+
+                    return q.promise;
+                }
+            };            
+
         };
 
     });

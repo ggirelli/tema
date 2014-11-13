@@ -30,7 +30,8 @@ if( isset($data->action) ) {
 			case 'combine_attr': case 'convert_network':
 			case 'get_network': case 'get_network_list':
 			case 'get_settings': case 'get_sif':
-			case 'remove_network': case 'rename_network':
+			case 'remove_attr': case 'remove_network':
+			case 'rename_attr': case 'rename_network':
 			case 'save_network':
 			case 'session_new': case 'session_load':
 			case 'set_settings':
