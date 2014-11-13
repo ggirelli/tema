@@ -411,40 +411,74 @@
 
                 if ( 'add_new' == self.attributes.label ) {
 
-                    // Check attr_type
-                    if ( undefined == self.attributes.options.type || null == self.attributes.options.type ) {
-                        self.attributes.options.errMsg.push('Please, select a type of attribute.');
-                        return;
-                    }
+                    if ( 'manual' == self.attributes.options.input ) {
 
-                    // Check attr_name
-                    var checked = true;
-                    var attr_list = Object.keys(cy.json().elements[self.attributes.options.type][0].data);
-                    for (var i = attr_list.length - 1; i >= 0; i--) {
-                        if ( self.attributes.options.name == attr_list[i] ) {
-                            checked = false;
+                        // Check attr_type
+                        if ( undefined == self.attributes.options.type || null == self.attributes.options.type ) {
+                            self.attributes.options.errMsg.push('Please, select a type of attribute.');
+                            return;
                         }
-                    }
 
-                    if ( !checked ) {
-                        self.attributes.options.errMsg.push('Name already in use.');
-                    }
-                    if ( null == self.attributes.options.name || '' == self.attributes.options.name ) {
-                        checked = false;
-                        self.attributes.options.errMsg.push('Please, provide a name.');
-                    }
-
-                    // Check csv
-                    if ( checked ) {
-                        if ( undefined != self.attributes.options.values ) {
-                            var n_el = cy.json().elements[self.attributes.options.type].length;
-                            var n_val = self.attributes.options.values.split(',').length;
-                            if ( n_el !=  n_val ) {
-                                self.attributes.options.errMsg.push('Found ' + n_val + ' values for ' + n_el + ' ' + self.attributes.options.type + '.');
+                        // Check attr_name
+                        var checked = true;
+                        var attr_list = Object.keys(cy.json().elements[self.attributes.options.type][0].data);
+                        for (var i = attr_list.length - 1; i >= 0; i--) {
+                            if ( self.attributes.options.name == attr_list[i] ) {
+                                checked = false;
                             }
-                        } else {
-                            self.attributes.options.errMsg.push('Please, provide attribute values.');
                         }
+
+                        if ( !checked ) {
+                            self.attributes.options.errMsg.push('Name already in use.');
+                        }
+                        if ( null == self.attributes.options.name || '' == self.attributes.options.name ) {
+                            checked = false;
+                            self.attributes.options.errMsg.push('Please, provide a name.');
+                        }
+
+                        // Check csv
+                        if ( checked ) {
+                            if ( undefined != self.attributes.options.values ) {
+                                var n_el = cy.json().elements[self.attributes.options.type].length;
+                                var n_val = self.attributes.options.values.split(',').length;
+                                if ( n_el !=  n_val ) {
+                                    self.attributes.options.errMsg.push('Found ' + n_val + ' values for ' + n_el + ' ' + self.attributes.options.type + '.');
+                                }
+                            } else {
+                                self.attributes.options.errMsg.push('Please, provide attribute values.');
+                            }
+                        }
+
+                    } else if ( 'index' == self.attributes.options.input ) {
+
+                        // Check attr_name
+                        var checked = true;
+                        var attr_list = Object.keys(cy.json().elements.nodes[0].data);
+                        for (var i = attr_list.length - 1; i >= 0; i--) {
+                            if ( self.attributes.options.name == attr_list[i] ) {
+                                checked = false;
+                            }
+                        }
+
+                        if ( !checked ) {
+                            self.attributes.options.errMsg.push('Name already in use.');
+                        }
+                        if ( null == self.attributes.options.name || '' == self.attributes.options.name ) {
+                            checked = false;
+                            self.attributes.options.errMsg.push('Please, provide a name.');
+                        }
+
+                        // Check index
+                        if ( checked ) {
+                            if ( undefined != self.attributes.options.index ) {
+                                return true;
+                            } else {
+                                self.attributes.options.errMsg.push('Please, select an index.');
+                            }
+                        }
+
+                    } else {
+                        self.attributes.options.errMsg.push('Please, select an input manner.');
                     }
                 } else if ( 'combine' == self.attributes.label ) {
                     // Check attr_type
@@ -502,28 +536,53 @@
                     if ( 'add_new' == label ) {
                         var qwait = q.defer();
 
-                        http({
+                        if ( 'manual' == self.attributes.options.input ) {
+                            http({
 
-                            method: 'POST',
-                            data: {
-                                action: 'add_attr',
-                                id: session_id,
-                                name: 'json_tmp_net',
-                                network: JSON.stringify(cy.json().elements),
-                                attr_type: self.attributes.options.type,
-                                attr_name: self.attributes.options.name,
-                                attr_val: self.attributes.options.values
-                            },
-                            url: 's/'
+                                method: 'POST',
+                                data: {
+                                    action: 'add_attr',
+                                    id: session_id,
+                                    name: 'json_tmp_net',
+                                    network: JSON.stringify(cy.json().elements),
+                                    attr_type: self.attributes.options.type,
+                                    attr_name: self.attributes.options.name,
+                                    attr_val: self.attributes.options.values
+                                },
+                                url: 's/'
 
-                        }).
-                            success(function (data) {
-                                if ( 0 == data['err'] ) {
-                                    cy.load(data['net']);
-                                    self.do_attr(null);
-                                }
-                                qwait.resolve(data);
-                            });
+                            }).
+                                success(function (data) {
+                                    if ( 0 == data['err'] ) {
+                                        cy.load(data['net']);
+                                        self.do_attr(null);
+                                    }
+                                    qwait.resolve(data);
+                                });
+                        } else if ( 'index' == self.attributes.options.input ) {
+                            http({
+
+                                method: 'POST',
+                                data: {
+                                    action: 'add_attr_index',
+                                    id: session_id,
+                                    name: 'json_tmp_net',
+                                    network: JSON.stringify(cy.json().elements),
+                                    attr_name: self.attributes.options.name,
+                                    attr_index: self.attributes.options.index
+                                },
+                                url: 's/'
+
+                            }).
+                                success(function (data) {
+                                    console.log(data);
+                                    if ( 0 == data['err'] ) {
+                                        cy.load(data['net']);
+                                        self.do_attr(null);
+                                    }
+                                    qwait.resolve(data);
+                                });
+                        }
 
                         return qwait.promise;
                     } else if ( 'combine' == label ) {

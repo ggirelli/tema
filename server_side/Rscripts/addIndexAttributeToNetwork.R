@@ -4,7 +4,7 @@ options(echo=TRUE)
 args <- commandArgs(trailingOnly = TRUE)
 
 # Check parameters
-if(length(args) != 5) stop('./addAttributeToNetwork.R session_id graph_name attr_type attr_name attr_val')
+if(length(args) != 4) stop('./addAttributeToNetwork.R session_id graph_name attr_name attr_index')
 
 # Load requirements
 library(igraph)
@@ -76,11 +76,14 @@ if(file.exists(paste0('/home/gire/public_html/SOGIv020/server_side/session/', ar
 	}
 
 	cat('> Add attribute\n')
-	if ( 'nodes' == args[3] ) {
-		eval(parse(text=paste0('V(g)$', args[4], ' <- unlist(strsplit(args[5], ",", fixed=T))')))
-	} else if ( 'edges' == args[3] ) {
-		eval(parse(text=paste0('E(g)$', args[4], ' <- unlist(strsplit(args[5], ",", fixed=T))')))
+	if( 'degree' == args[4] ) {
+		ind <- degree(g, V(g))
+	} else if ( 'betweenness' == args[4] ) {
+		ind <- betweenness(g, V(g))
+	} else if ( 'closeness' == args[4] ) {
+		ind <- closeness(g, V(g))
 	}
+	eval(parse(text=paste0('V(g)$', args[3], ' <- ind')))
 
 	cat('> Convert back to JSON\n')
 	source('../../Rscripts/extendIgraph.R')

@@ -183,21 +183,34 @@
 				<div ng-show="networks.is_attr_doing('add_new')">
 					
 					<h4>
-						Add new 
-						<select name="attr_type" id="attr_type" ng-model="networks.attributes.options.type">
+						Add <select name="attr_input" id="attr_input" ng-model="networks.attributes.options.input">
 							<option value="">--</option>
-							<option value="edges">edge</option>
-							<option value="nodes">node</option>
+							<option value="manual">manually</option>
+							<option value="index">index as</option>
+						</select> new 
+						<select name="attr_type" id="attr_type" ng-model="networks.attributes.options.type">
+							<option value="" ng-show="'manual' == networks.attributes.options.input">--</option>
+							<option value="edges" ng-show="'manual' == networks.attributes.options.input">edge</option>
+							<option value="nodes" ng-show="-1 != ['manual', 'index'].indexOf(networks.attributes.options.input)" ng-selected="'index' == networks.attributes.options.input">node</option>
 						</select>
 						attribute.
 					</h4>
-					<p>
+					<p ng-show="-1 != ['manual', 'index'].indexOf(networks.attributes.options.input)">
 						<label for="attr_name">Attribute name: </label>
 						<input type="text" id="attr_name" name="attr_name" ng-model="networks.attributes.options.name" />
 					</p>
-					<p>
+					<p ng-show="'manual' == networks.attributes.options.input">
 						<label for="attr_values">Comma Separated Values:</label>
 						<textarea name="attr_values" id="attr_values" cols="40" rows="10" ng-model="networks.attributes.options.values"></textarea>
+					</p>
+					<p ng-show="'index' == networks.attributes.options.input">
+						<label for="index">Select index:</label>
+						<select name="index" id="index" ng-model="networks.attributes.options.index">
+							<option value="">--</option>
+							<option value="degree">degree</option>
+							<option value="betweenness">betweenness</option>
+							<option value="closeness">closeness</option>
+						</select>
 					</p>
 
 					<p class="alert alert-danger" ng-repeat="msg in networks.attributes.options.errMsg">{{msg}}</p>
