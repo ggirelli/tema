@@ -24,7 +24,7 @@ if ( $s->exists($data->id) ) {
 	file_put_contents($f, $data->network);
 
 	// Convert the network
-	$q = 'cd ' . SCRIPATH . '; ./combineNetworkAttributes.R ' . $s->get('id') . ' ' . $data->name . ' ' . $data->attr_type . ' ' . $data->attr_name . ' ' . $data->attr_list . ' ' . $data->attr_function;
+	$q = 'cd ' . SCRIPATH . '; ./combineNetworkAttributes.R ' . $s->get('id') . ' ' . $data->name . ' ' . $data->attr_type . ' ' . $data->attr_name . ' ' . $data->attr_list . ' ' . preg_quote($data->attr_function, "'");
 	$r = $s->exec_return('convert', $q);
 
 	// Answer call

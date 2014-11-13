@@ -587,7 +587,7 @@
                         return qwait.promise;
                     } else if ( 'combine' == label ) {
                         var qwait = q.defer();
-
+                        console.log(self.attributes.options.function);
                         http({
 
                             method: 'POST',
@@ -605,13 +605,12 @@
 
                         }).
                             success(function (data) {
-                                console.log(data);
                                 if ( 0 == data['err'] ) {
                                     if ( undefined != data.net[self.attributes.options.type][0].data[self.attributes.options.name] ) {
                                         cy.load(data.net);
                                         self.do_attr(null);
                                     } else {
-                                        self.attributes.options.errMsg = ['Please, provide a function.'];
+                                        self.attributes.options.errMsg = ['Something went wrong with the provided function.'];
                                     }
                                 }
                                 qwait.resolve(data);

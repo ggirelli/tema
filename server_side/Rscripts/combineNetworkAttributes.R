@@ -65,20 +65,18 @@ if(file.exists(paste0('/home/gire/public_html/SOGIv020/server_side/session/', ar
 	g <- g + edges(c(rbind(as.character(edges.table$source), as.character(edges.table$target))))
 	V(g)$name <- tmp
 	for (attr in colnames(edges.table)) {
-		if ( !attr %in% c('source', 'target') ) {
 			n <- eval(parse(text=paste0('as.numeric(as.character(edges.table$', attr, '))')))
 			if ( NA %in% n ) {
 				eval(parse(text=paste0('E(g)$', attr, ' <- as.character(edges.table$', attr, ')')))
 			} else {
 				eval(parse(text=paste0('E(g)$', attr, ' <- as.numeric(edges.table$', attr, ')')))
 			}
-		}
 	}
 
 	cat('> Add attribute\n')
 	if ( 'edges' == args[3] ) {
 		fun <- args[6]
-		attrs_list <- unlist(strsplit(args[5], ',', fixed=T))
+		attr_list <- unlist(strsplit(args[5], ',', fixed=T))
 		for (i in 1:length(attr_list)) {
 			fun <- gsub(paste0('_', i-1, '_'), paste0('E(g)$', attr_list[i]), fun)
 		}
