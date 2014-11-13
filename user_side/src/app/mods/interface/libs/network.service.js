@@ -377,7 +377,9 @@
             
             self.attributes = {
                 label: null,
-                options: null
+                options: null,
+                edges: {},
+                nodes: {}
             };
 
             /**
@@ -391,7 +393,12 @@
             self.do_attr = function (label) {
                 self.attributes.label = label;
                 if ( null == label ) {
-                    self.attributes.options = null;
+                    self.attributes = {
+                        label: null,
+                        options: null,
+                        edges: {},
+                        nodes: {}
+                    };
                 } else {
                     self.attributes.options = {
                         errMsg: []
@@ -402,7 +409,7 @@
             self.check_attr = function () {
                 self.attributes.options.errMsg = [];
 
-                if ( self.attributes.label == 'add_new' ) {
+                if ( 'add_new' == self.attributes.label ) {
 
                     // Check attr_type
                     if ( undefined == self.attributes.options.type || null == self.attributes.options.type ) {
@@ -439,6 +446,47 @@
                             self.attributes.options.errMsg.push('Please, provide attribute values.');
                         }
                     }
+                } else if ( 'combine' == self.attributes.label ) {
+                    // Check attr_type
+                    if ( undefined == self.attributes.options.type || null == self.attributes.options.type ) {
+                        self.attributes.options.errMsg.push('Please, select a type of attribute.');
+                        return;
+                    }
+
+                    // Check attr_name
+                    var checked = true;
+                    var attr_list = Object.keys(cy.json().elements[self.attributes.options.type][0].data);
+                    for (var i = attr_list.length - 1; i >= 0; i--) {
+                        if ( self.attributes.options.name == attr_list[i] ) {
+                            checked = false;
+                        }
+                    }
+
+                    if ( !checked ) {
+                        self.attributes.options.errMsg.push('Name already in use.');
+                    }
+                    if ( null == self.attributes.options.name || '' == self.attributes.options.name ) {
+                        checked = false;
+                        self.attributes.options.errMsg.push('Please, provide a name.');
+                    }
+
+                    // Check selection
+                    if ( checked ) {
+                        if ( 2 > self.attr_get_selected().length ) {
+                            checked = false;
+                            self.attributes.options.errMsg.push('Please, select at least 2 attributes.');
+                        }
+                    }
+
+                    // Check function
+                    if ( checked ) {
+                        if ( undefined == self.attributes.options.function && '' == self.attributes.options.function ) {
+                            self.attributes.options.errMsg.push('Please, provide a function.');
+                            checked = false;
+                        }
+                    }
+
+                    return checked;
                 }
 
                 return 0 == self.attributes.options.errMsg;
@@ -449,36 +497,103 @@
                 return undefined == self.attributes.options.errMsg;
             };
 
-            self.attr_add_new = function (session_id) {
+            self.attr_apply = function (session_id, label) {
                 if ( self.check_attr() ) {
-                    var qwait = q.defer();
+                    if ( 'add_new' == label ) {
+                        var qwait = q.defer();
 
-                    http({
+                        http({
 
-                        method: 'POST',
-                        data: {
-                            action: 'add_attr',
-                            id: session_id,
-                            name: 'json_tmp_net',
-                            network: JSON.stringify(cy.json().elements),
-                            attr_type: self.attributes.options.type,
-                            attr_name: self.attributes.options.name,
-                            attr_val: self.attributes.options.values
-                        },
-                        url: 's/'
+                            method: 'POST',
+                            data: {
+                                action: 'add_attr',
+                                id: session_id,
+                                name: 'json_tmp_net',
+                                network: JSON.stringify(cy.json().elements),
+                                attr_type: self.attributes.options.type,
+                                attr_name: self.attributes.options.name,
+                                attr_val: self.attributes.options.values
+                            },
+                            url: 's/'
 
-                    }).
-                        success(function (data) {
-                            if ( 0 == data['err'] ) {
-                                cy.load(data['net']);
-                                self.do_attr(null);
-                            }
-                            qwait.resolve(data);
-                        });
+                        }).
+                            success(function (data) {
+                                if ( 0 == data['err'] ) {
+                                    cy.load(data['net']);
+                                    self.do_attr(null);
+                                }
+                                qwait.resolve(data);
+                            });
 
-                    return qwait.promise;
+                        return qwait.promise;
+                    } else if ( 'combine' == label ) {
+                        var qwait = q.defer();
+
+                        http({
+
+                            method: 'POST',
+                            data: {
+                                action: 'combine_attr',
+                                id: session_id,
+                                name: 'json_tmp_net',
+                                network: JSON.stringify(cy.json().elements),
+                                attr_type: self.attributes.options.type,
+                                attr_name: self.attributes.options.name,
+                                attr_list: self.attr_get_selected().toString(),
+                                attr_function: self.attributes.options.function
+                            },
+                            url: 's/'
+
+                        }).
+                            success(function (data) {
+                                console.log(data);
+                                if ( 0 == data['err'] ) {
+                                    if ( undefined != data.net[self.attributes.options.type][0].data[self.attributes.options.name] ) {
+                                        cy.load(data.net);
+                                        self.do_attr(null);
+                                    } else {
+                                        self.attributes.options.errMsg = ['Please, provide a function.'];
+                                    }
+                                }
+                                qwait.resolve(data);
+                            });
+
+                        return qwait.promise;
+                    }
                 }
-            }
+            };
+
+            self.attr_selected = function () {
+                if ( null != self.attributes.options ) {
+                    if ( undefined != self.attributes.options.type ) {
+                        var ks = Object.keys(self.attributes[self.attributes.options.type]);
+                        for (var i = ks.length - 1; i >= 0; i--) {
+                            var k = ks[i];
+                            if ( self.attributes[self.attributes.options.type][k] ) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+                return false;
+            };
+
+            self.attr_get_selected = function () {
+                if ( null != self.attributes.options ) {
+                    if ( undefined != self.attributes.options.type ) {
+                        var list = [];
+                        var ks = Object.keys(self.attributes[self.attributes.options.type]);
+                        for (var i = ks.length - 1; i >= 0; i--) {
+                            var k = ks[i];
+                            if ( self.attributes[self.attributes.options.type][k] ) {
+                                list.push(k);
+                            }
+                        }
+                        return list;
+                    }
+                }
+                return [];
+            };
 
         };
 

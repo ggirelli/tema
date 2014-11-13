@@ -1,6 +1,6 @@
 <?php
 /**
- * Add an attribute to the network visualization.
+ * Combines attributes of the network visualization.
  * @author Gabriele Girelli <gabriele@filopoe.it>
  * @since  0.2.0
  */
@@ -24,7 +24,7 @@ if ( $s->exists($data->id) ) {
 	file_put_contents($f, $data->network);
 
 	// Convert the network
-	$q = 'cd ' . SCRIPATH . '; ./addAttributeToNetwork.R ' . $s->get('id') . ' ' . $data->name . ' ' . $data->attr_type . ' ' . $data->attr_name . ' ' . $data->attr_val;
+	$q = 'cd ' . SCRIPATH . '; ./combineNetworkAttributes.R ' . $s->get('id') . ' ' . $data->name . ' ' . $data->attr_type . ' ' . $data->attr_name . ' ' . $data->attr_list . ' ' . $data->attr_function;
 	$r = $s->exec_return('convert', $q);
 
 	// Answer call

@@ -177,6 +177,19 @@ html {
 	margin: 4px auto;
 }
 
+#interface .left-panel.attributes-panel .attr-list {
+	display: block;
+}
+
+#interface .left-panel.attributes-panel hr {
+	margin-bottom: 1em;
+	margin-top: 1em;
+	
+	border-color: #989898;
+	border-style: dotted;
+	border-width: -1px;
+}
+
 #interface .left-panel.attributes-panel .abort-btn {
 	float: right;
 

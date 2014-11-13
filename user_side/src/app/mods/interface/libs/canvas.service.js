@@ -141,14 +141,14 @@
              */
             self.layout = function (params) {
                 cy.layout(params);
-            }
+            };
 
             /**
              * Centers the current network in the canvas
              */
             self.center = function () {
                 cy.center(cy.$('*'));
-            }
+            };
 
             /**
              * @param  {String}  network_name
@@ -156,8 +156,13 @@
              */
             self.isLoaded = function (network_name) {
                 return self.current_network.name == network_name;
-            }
+            };
 
+            /**
+             * Saves current visualization on the server
+             * @param  {string} session_id
+             * @param  {Object} networks   network list
+             */
             self.save = function (session_id, networks) {
                 var new_name = prompt('Insert the name for the new network:');
 
@@ -193,6 +198,19 @@
                                 rootScope.$broadcast('reload_network_list', session_id);
                             });
                     }
+                }
+            };
+
+            /**
+             * @param  {string} what 'edges' or 'nodes'
+             * @return {list} attribute list
+             * @return {null} if what is wrong
+             */
+            self.get_attributes = function (what) {
+                if ( -1 != ['edges', 'nodes'].indexOf(what) ) {
+                    return Object.keys(cy.json().elements[what][0].data);
+                } else {
+                    return null;
                 }
             }
 
