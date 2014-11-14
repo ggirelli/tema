@@ -160,7 +160,7 @@
 			<!-- merge body -->
 			<div class="panel-body" ng-show="commander.is_operation('merge')">
 				<h4>Select the networks to merge:</h4>
-				<label class="group-selection-option alert alert-warning" for="merge-all"><input type="checkbox" id="merge-all" name="merge-all" ng-model="commander.merge.group.all" ng-click="commander.merge.un_select_all()" /> Un/Select all</label><label class="group-selection-option alert alert-success" for="merge-filter"><input type="checkbox" id="merge-filter" name="merge-filter" ng-model="commander.merge.group.filter" ng-click="commander.merge.toggle_filter()" /> Custom Filters</label>
+				<label class="group-selection-option alert alert-warning" for="merge-all"><input type="checkbox" id="merge-all" name="merge-all" ng-model="commander.merge.group.all" ng-click="commander.merge.un_select_all(); commander.merge.get_attrs();" /> Un/Select all</label><label class="group-selection-option alert alert-success" for="merge-filter"><input type="checkbox" id="merge-filter" name="merge-filter" ng-model="commander.merge.group.filter" ng-click="commander.merge.toggle_filter()" /> Custom Filters</label>
 
 				<div class="panel panel-success" ng-show="commander.merge.group.filter">
 					<div class="panel-success panel-heading">
@@ -244,6 +244,10 @@
 				<div>
 					<h5>Edges</h5>
 				</div>
+
+				<hr style="margin-bottom: 2em;" />
+
+				{{commander.merge.group}}
 
 				<button class="btn end-btn btn-success" ng-click='commander.apply_merge()'>merge</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
 			</div>
