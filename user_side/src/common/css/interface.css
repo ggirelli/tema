@@ -154,6 +154,10 @@ html {
 	font-variant: small-caps;
 }
 
+#interface .left-panel.graph-list-panel .group-selection-option {
+	margin-left: 8px;
+}
+
 /* operations */
 
 #interface .left-panel.operations-panel .operation-btn,

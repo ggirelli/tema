@@ -67,17 +67,20 @@
 			</div>
 
 			<div class="panel-body" ng-show="networks.is_converting_many()">
-				<input type="checkbox" id="all" name="all" ng-model="networks.converting_many.all" ng-click="networks.un_select_all()" />
-				<label class="alert alert-warning" for="all">Un/Select all</label>
+				<label class="group-selection-option alert alert-warning" for="all">
+					<input type="checkbox" id="all" name="all" ng-model="networks.converting_many.all" ng-click="networks.un_select_all()" /> Un/Select all
+				</label><label class="group-selection-option alert alert-success" for="filter">
+					<input type="checkbox" id="filter" name="filter" ng-model="networks.converting_many.filter" /> Custom Filter
+				</label>
 
-				<div ng-repeat='net in networks.list | filter:networks.isToConvert'>
+				<h4>Select the networks to convert:</h4>
+
+				<label for="net-{{net.id}}" class="alert" ng-repeat='net in networks.list | filter:networks.isToConvert' ng-show='networks.list != null' ng-class="{'alert-info' : networks.isConverted(net), 'alert-danger' : !networks.isConverted(net)}" style="width: 100%;">
 					<input id="net-{{net.id}}" name="net-{{net.id}}" type="checkbox" ng-model="networks.converting_many.networks[net.name]" ng-click="networks.check_selection(net.name)" />
-					<label for="net-{{net.id}}" class="alert" ng-show='networks.list != null' ng-class="{'alert-info' : networks.isConverted(net), 'alert-danger' : !networks.isConverted(net)}">
-						{{net.name}}
-					</label>
-				</div>
+					{{net.name}}
+				</label>
 
-				<button class="btn btn-convert_many btn-sm btn-success" ng-click="networks.start_converting_many()">convert selection</button>
+				<button class="btn btn-convert_many btn-success" ng-click="networks.start_converting_many()">apply</button>
 			</div>
 		</div>
 
