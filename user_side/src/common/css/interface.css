@@ -154,7 +154,8 @@ html {
 	font-variant: small-caps;
 }
 
-#interface .left-panel.graph-list-panel .group-selection-option {
+#interface .left-panel.graph-list-panel .group-selection-option,
+#interface .left-panel.operations-panel .group-selection-option {
 	margin-left: 8px;
 }
 
@@ -162,6 +163,8 @@ html {
 	width: 100%;
 }
 
+#interface .left-panel.operations-panel .filter-selection th,
+#interface .left-panel.operations-panel .filter-selection td,
 #interface .left-panel.graph-list-panel .filter-selection th,
 #interface .left-panel.graph-list-panel .filter-selection td {
 	text-align: center;
@@ -175,7 +178,7 @@ html {
 	margin: 4px auto;
 }
 
-#interface .left-panel.operations-panel .operation-panel .end-btn {
+#interface .left-panel.operations-panel .end-btn {
 	float: right;
 	
 	margin-left: 4px;
@@ -183,7 +186,7 @@ html {
 	font-variant: small-caps;
 }
 
-#interface .left-panel.operations-panel .operation-panel .single-network-select {
+#interface .left-panel.operations-panel .single-network-select {
 	display: block;
 }
 

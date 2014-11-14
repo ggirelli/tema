@@ -236,9 +236,9 @@
 
 
                             if ( 'e' == filter.condition ) {
-                                tmpRes = ( k == v );
+                                tmpRes = ( '' + k == '' + v );
                             } else if ( 'ne' == filter.condition ) {
-                                tmpRes = ( k != v );
+                                tmpRes = ( '' + k != '' + v );
                             } else if ( 'lt' == filter.condition ) {
                                 tmpRes = ( parseInt(k) < parseInt(v) );
                             } else if ( 'le' == filter.condition ) {

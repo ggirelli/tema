@@ -141,31 +141,84 @@
 
 			<div class="panel-body" ng-show="commander.is_operation()">
 				<!-- merge -->
-				<div class="btn operation-btn btn-danger btn-block" ng-show="!commander.operation.status" ng-click="commander.init_operation('merge')">
+				<div class="btn operation-btn btn-danger btn-block" ng-show="!commander.operation.status" ng-click="commander.init_operation('merge', networks.list, m.session_id)">
 					Merge networks
 				</div>
 				<!-- intersect -->
-				<div class="btn operation-btn btn-danger btn-block" ng-show="!commander.operation.status" ng-click="commander.init_operation('intersect')">
+				<div class="btn operation-btn btn-danger btn-block" ng-show="!commander.operation.status" ng-click="commander.init_operation('intersect', networks.list, m.session_id)">
 					Intersect networks
 				</div>
 				<!-- subtract -->
-				<div class="btn operation-btn btn-danger btn-block" ng-show="!commander.operation.status" ng-click="commander.init_operation('subtract')">
+				<div class="btn operation-btn btn-danger btn-block" ng-show="!commander.operation.status" ng-click="commander.init_operation('subtract', networks.list, m.session_id)">
 					Subtract networks
 				</div>
 				<!-- contains -->
-				<div class="btn operation-btn btn-info btn-block" ng-show="!commander.operation.status" ng-click="commander.init_operation('contains')">
+				<div class="btn operation-btn btn-info btn-block" ng-show="!commander.operation.status" ng-click="commander.init_operation('contains', networks.list, m.session_id)">
 					is Subnetwork
 				</div>
 			</div>
 
 			<div class="panel-body" ng-show="commander.is_operation('merge')">
-				<h4>Select the networks to convert:</h4>
-				<label for="net-{{net.id}}" class="alert" ng-repeat='net in networks.merge.group.net_list | filter:networks.isToConvert' ng-show='networks.list != null' ng-class="{'alert-info' : networks.isConverted(net), 'alert-danger' : !networks.isConverted(net)}" style="width: 100%;">
-					<input id="net-{{net.id}}" name="net-{{net.id}}" type="checkbox" ng-model="networks.merge.group.networks[net.name]" ng-click="networks.merge.check(net.name)" />
+				<h4>Select the networks to merge:</h4>
+				<label class="group-selection-option alert alert-warning" for="all"><input type="checkbox" id="all" name="all" ng-model="networks.conversion.group.all" ng-click="networks.conversion.un_select_all()" /> Un/Select all</label><label class="group-selection-option alert alert-success" for="filter"><input type="checkbox" id="filter" name="filter" ng-model="networks.conversion.group.filter" ng-click="networks.conversion.toggle_filter()" /> Custom Filters</label>
+
+				<div class="panel panel-success" ng-show="commander.merge.group.filter">
+					<div class="panel-success panel-heading">
+						Filter
+						<a href="#/interface/{{m.session_id}}" class="btn-panel float-right" ng-click="commander.merge.add_filter()" title="Add new"><span class="text-success glyphicon glyphicon-plus"></span></a>
+					</div>
+					<div class="panel-body">
+						<table class="filter-selection">
+							<tr>
+								<td></td>
+								<th>Attribute</th>
+								<th>Condition</th>
+								<th>Value</th>
+							</tr>
+							<tr ng-repeat="filter in commander.merge.filters">
+								<td class="text-align-left">
+									<select name="" id="" ng-show="!$first" ng-model="commander.merge.filters[$index].combine" ng-change="commander.merge.apply_filters()">
+										<option value="">--</option>
+										<option value="AND">AND</option>
+										<option value="OR">OR</option>
+									</select>
+								</td>
+								<td>
+									<select name="" id="" style="max-width: 100px;" ng-model="commander.merge.filters[$index].attribute" ng-change="commander.merge.apply_filters(); commander.merge.filters[$index].value=''">
+										<option value="">--</option>
+										<option value="{{attr}}" ng-repeat="attr in commander.merge.group.net_attributes">{{commander.merge.extract_attr_name(attr)}}</option>
+									</select>
+								</td>
+								<td>
+									<select name="" id="" ng-model="commander.merge.filters[$index].condition" ng-change="commander.merge.apply_filters()">
+										<option value="" ng-show="!commander.merge.filters[$index].object">--</option>
+										<option value="e" ng-show="!commander.merge.filters[$index].object">=</option>
+										<option value="ne" ng-show="!commander.merge.filters[$index].object">&#8800;</option>
+										<option value="lt" ng-show="!commander.merge.filters[$index].object">&lt;</option>
+										<option value="le" ng-show="!commander.merge.filters[$index].object">&le;</option>
+										<option value="gt" ng-show="!commander.merge.filters[$index].object">&gt;</option>
+										<option value="ge" ng-show="!commander.merge.filters[$index].object">&ge;</option>
+										<option value="c" ng-selected="commander.merge.filters[$index].object" ng-show="commander.merge.filters[$index].object">contains</option>
+									</select>
+								</td>
+								<td>
+									<select name="" id="" style="max-width: 100px;" ng-model="commander.merge.filters[$index].value" ng-change="commander.merge.apply_filters()">
+										<option value="" ng-selected="-1 == commander.merge.get_net_attr_values($index).indexOf(commander.merge.filters[$index].value)">--</option>
+										<option value="{{v}}" ng-repeat="v in commander.merge.get_net_attr_values($index)">{{v}}</option>
+									</select>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+
+				
+				<label for="net-{{net.id}}" class="alert" ng-repeat='net in commander.merge.group.net_list | filter:networks.isConverted' ng-show='networks.list != null' ng-class="{'alert-info' : networks.isConverted(net), 'alert-danger' : !networks.isConverted(net)}" style="width: 100%;">
+					<input id="net-{{net.id}}" name="net-{{net.id}}" type="checkbox" ng-model="commander.merge.group.networks[net.name]" ng-click="commander.merge.check(net.name)" />
 					{{net.name}}
 				</label>
 
-				<button class="btn end-btn btn-success" ng-click='commander.merge()'>merge</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
+				<button class="btn end-btn btn-success" ng-click='commander.apply_merge()'>merge</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
 			</div>
 
 			<div class="panel-body" ng-show="commander.is_operation('intersect')">
