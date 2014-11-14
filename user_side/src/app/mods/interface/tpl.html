@@ -41,11 +41,11 @@
 				Network list
 				<a href='#/upload/{{m.session_id}}' class="btn-panel glyphicon glyphicon-cloud-upload float-right" title='Upload'></a>
 				<a href="#/interface/{{m.session_id}}" class="btn-panel glyphicon glyphicon-refresh float-right" title='Refresh' ng-click="networks.reload_list(m.session_id)"></a>
-				<a href="#/interface/{{m.session_id}}" class="btn-panel glyphicon glyphicon-transfer float-right" title="Convert" ng-click="networks.toggle_select_group(m.session_id)"></a>
+				<a href="#/interface/{{m.session_id}}" class="btn-panel glyphicon glyphicon-transfer float-right" title="Convert" ng-click="networks.toggle_conversion_panel(m.session_id)"></a>
 				<a href="#/interface/{{m.session_id}}" class="btn-panel glyphicon glyphicon-floppy-disk float-right" title="Save" ng-click="canvas.save(m.session_id, networks.list)"></a>
 			</div>
 
-			<div class="panel-body" ng-show="!networks.is_selecting_group()">
+			<div class="panel-body" ng-show="!networks.conversion.is()">
 				<div class="alert" ng-show='networks.list != null' ng-repeat='net in networks.list' ng-class="{'alert-info' : networks.isConverted(net)&&!canvas.isLoaded(net.name), 'alert-danger' : !networks.isConverted(net), 'alert-success' : canvas.isLoaded(net.name)}">
 					<a href="#/interface/{{m.session_id}}" class="load-network-link" ng-class="{'text-danger' : !networks.isConverted(net), 'text-success' : canvas.isLoaded(net.name)}" ng-click="networks.init_file(net)" title="N: {{net.data.v_count}} | E: {{net.data.e_count}}">{{net.name}} <span class="glyphicon glyphicon-flag" ng-show="!networks.isConverted(net)"></span><span class="glyphicon glyphicon-eye-open" ng-show="canvas.isLoaded(net.name)"></span></a>
 					<!-- overwrite -->
@@ -66,13 +66,13 @@
 				</p>
 			</div>
 
-			<div class="panel-body" ng-show="networks.is_selecting_group()">
-				<label class="group-selection-option alert alert-warning" for="all"><input type="checkbox" id="all" name="all" ng-model="networks.selecting_group.all" ng-click="networks.un_select_all()" /> Un/Select all</label><label class="group-selection-option alert alert-success" for="filter"><input type="checkbox" id="filter" name="filter" ng-model="networks.selecting_group.filter" ng-click="networks.toggle_filter_select()" /> Custom Filters</label>
+			<div class="panel-body" ng-show="networks.conversion.is()">
+				<label class="group-selection-option alert alert-warning" for="all"><input type="checkbox" id="all" name="all" ng-model="networks.conversion.group.all" ng-click="networks.conversion.un_select_all()" /> Un/Select all</label><label class="group-selection-option alert alert-success" for="filter"><input type="checkbox" id="filter" name="filter" ng-model="networks.conversion.group.filter" ng-click="networks.conversion.toggle_filter()" /> Custom Filters</label>
 
-				<div class="panel panel-success" ng-show="networks.selecting_group.filter">
+				<div class="panel panel-success" ng-show="networks.conversion.group.filter">
 					<div class="panel-success panel-heading">
 						Filter
-						<a href="#/interface/{{m.session_id}}" class="btn-panel float-right" ng-click="networks.add_selection_filter()" title="Add new"><span class="text-success glyphicon glyphicon-plus"></span></a>
+						<a href="#/interface/{{m.session_id}}" class="btn-panel float-right" ng-click="networks.conversion.add_filter()" title="Add new"><span class="text-success glyphicon glyphicon-plus"></span></a>
 					</div>
 					<div class="panel-body">
 						<table class="filter-selection">
@@ -82,36 +82,36 @@
 								<th>Condition</th>
 								<th>Value</th>
 							</tr>
-							<tr ng-repeat="filter in networks.selection_filters">
+							<tr ng-repeat="filter in networks.conversion.filters">
 								<td class="text-align-left">
-									<select name="" id="" ng-show="!$first" ng-model="networks.selection_filters[$index].combine" ng-change="networks.apply_selection_filters()">
+									<select name="" id="" ng-show="!$first" ng-model="networks.conversion.filters[$index].combine" ng-change="networks.conversion.apply_filters()">
 										<option value="">--</option>
 										<option value="AND">AND</option>
 										<option value="OR">OR</option>
 									</select>
 								</td>
 								<td>
-									<select name="" id="" style="max-width: 100px;" ng-model="networks.selection_filters[$index].attribute" ng-change="networks.apply_selection_filters(); networks.selection_filters[$index].value=''">
+									<select name="" id="" style="max-width: 100px;" ng-model="networks.conversion.filters[$index].attribute" ng-change="networks.conversion.apply_filters(); networks.conversion.filters[$index].value=''">
 										<option value="">--</option>
-										<option value="{{attr}}" ng-repeat="attr in networks.selecting_group.net_attributes">{{networks.extract_attr_name(attr)}}</option>
+										<option value="{{attr}}" ng-repeat="attr in networks.conversion.group.net_attributes">{{networks.conversion.extract_attr_name(attr)}}</option>
 									</select>
 								</td>
 								<td>
-									<select name="" id="" ng-model="networks.selection_filters[$index].condition" ng-change="networks.apply_selection_filters()">
-										<option value="" ng-show="!networks.selection_filters[$index].object">--</option>
-										<option value="e" ng-show="!networks.selection_filters[$index].object">=</option>
-										<option value="ne" ng-show="!networks.selection_filters[$index].object">&#8800;</option>
-										<option value="lt" ng-show="!networks.selection_filters[$index].object">&lt;</option>
-										<option value="le" ng-show="!networks.selection_filters[$index].object">&le;</option>
-										<option value="gt" ng-show="!networks.selection_filters[$index].object">&gt;</option>
-										<option value="ge" ng-show="!networks.selection_filters[$index].object">&ge;</option>
-										<option value="c" ng-selected="networks.selection_filters[$index].object" ng-show="networks.selection_filters[$index].object">contains</option>
+									<select name="" id="" ng-model="networks.conversion.filters[$index].condition" ng-change="networks.conversion.apply_filters()">
+										<option value="" ng-show="!networks.conversion.filters[$index].object">--</option>
+										<option value="e" ng-show="!networks.conversion.filters[$index].object">=</option>
+										<option value="ne" ng-show="!networks.conversion.filters[$index].object">&#8800;</option>
+										<option value="lt" ng-show="!networks.conversion.filters[$index].object">&lt;</option>
+										<option value="le" ng-show="!networks.conversion.filters[$index].object">&le;</option>
+										<option value="gt" ng-show="!networks.conversion.filters[$index].object">&gt;</option>
+										<option value="ge" ng-show="!networks.conversion.filters[$index].object">&ge;</option>
+										<option value="c" ng-selected="networks.conversion.filters[$index].object" ng-show="networks.conversion.filters[$index].object">contains</option>
 									</select>
 								</td>
 								<td>
-									<select name="" id="" style="max-width: 100px;" ng-model="networks.selection_filters[$index].value" ng-change="networks.apply_selection_filters()">
-										<option value="" ng-selected="-1 == networks.get_net_attr_values($index).indexOf(networks.selection_filters[$index].value)">--</option>
-										<option value="{{v}}" ng-repeat="v in networks.get_net_attr_values($index)">{{v}}</option>
+									<select name="" id="" style="max-width: 100px;" ng-model="networks.conversion.filters[$index].value" ng-change="networks.conversion.apply_filters()">
+										<option value="" ng-selected="-1 == networks.conversion.get_net_attr_values($index).indexOf(networks.conversion.filters[$index].value)">--</option>
+										<option value="{{v}}" ng-repeat="v in networks.conversion.get_net_attr_values($index)">{{v}}</option>
 									</select>
 								</td>
 							</tr>
@@ -121,12 +121,12 @@
 
 				<h4>Select the networks to convert:</h4>
 
-				<label for="net-{{net.id}}" class="alert" ng-repeat='net in networks.selecting_group.net_list | filter:networks.isToConvert' ng-show='networks.list != null' ng-class="{'alert-info' : networks.isConverted(net), 'alert-danger' : !networks.isConverted(net)}" style="width: 100%;">
-					<input id="net-{{net.id}}" name="net-{{net.id}}" type="checkbox" ng-model="networks.selecting_group.networks[net.name]" ng-click="networks.check_selection(net.name)" />
+				<label for="net-{{net.id}}" class="alert" ng-repeat='net in networks.conversion.group.net_list | filter:networks.isToConvert' ng-show='networks.list != null' ng-class="{'alert-info' : networks.isConverted(net), 'alert-danger' : !networks.isConverted(net)}" style="width: 100%;">
+					<input id="net-{{net.id}}" name="net-{{net.id}}" type="checkbox" ng-model="networks.conversion.group.networks[net.name]" ng-click="networks.conversion.check(net.name)" />
 					{{net.name}}
 				</label>
 
-				<button class="btn btn-select_group btn-success" ng-click="networks.start_selecting_group()">apply</button>
+				<button class="btn btn-select_group btn-success" ng-click="networks.start_converting_group()">apply</button>
 			</div>
 		</div>
 

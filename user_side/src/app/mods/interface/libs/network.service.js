@@ -3,7 +3,7 @@
 
     define([], function () {
 
-        return function (q, http, rootScope) {
+        return function (q, http, rootScope, networkGroup) {
             var self = this;
 
             self.list = null;
@@ -275,314 +275,55 @@
                 return q.promise;
             };
 
-            // GROUP ACTIONS
+            // GROUP CONVERSION
 
-            self.selecting_group = {
-                status: false,
-                all: false,
-                doing: false,
-                networks: {}
-            };
-
-            /**
-             * @return {Boolean} if the group action interface is open
-             */
-            self.is_selecting_group = function () {
-                return self.selecting_group.status;
-            };
-
-            /**
-             * Toggles the group action interface
-             * @param  {String} session_id
-             */
-            self.toggle_select_group = function (session_id) {
-                self.selecting_group.id = session_id;
-                self.selecting_group.status = !self.selecting_group.status;
-
-                var net_list = [];
+            self.conversion = networkGroup;
+            self.toggle_conversion_panel = function (session_id) {
+                self.conversion.list = [];
                 for (var i = self.list.length - 1; i >= 0; i--) {
                     var net = self.list[i];
                     if ( self.isToConvert(net) ) {
-                        net_list.push(net);
+                        self.conversion.list.push(net);
                     }
                 }
-                self.selecting_group.net_list = net_list;
-
-                if ( self.selecting_group.status ) {
-                    for (var i = self.list.length - 1; i >= 0; i--) {
-                        if ( self.isToConvert(self.list[i]) ) {
-                            self.selecting_group.networks[self.list[i].name] = false;
-                        }
-                    };
-                } else {
-                    self.selecting_group.all = false;
-                }
-            };
-
-            /**
-             * Un/Selects all networks
-             */
-            self.un_select_all = function () {
-                var ks = Object.keys(self.selecting_group.networks);
-                self.selecting_group.all = !self.selecting_group.all;
-                for (var i = ks.length - 1; i >= 0; i--) {
-                    self.selecting_group.networks[ks[i]] = self.selecting_group.all;
-                }
-            };
-
-            /**
-             * Updates selection and checks un/select-all button
-             * @param  {String} name network name
-             */
-            self.check_selection = function (name) {
-                self.selecting_group.networks[name] = !self.selecting_group.networks[name];
-
-                var all_checked = true;
-                var ks = Object.keys(self.selecting_group.networks);
-                for (var i = ks.length - 1; i >= 0; i--) {
-                    if ( !self.selecting_group.networks[ks[i]] ) {
-                        all_checked = false;
-                    }
-                }
-                self.selecting_group.all = all_checked;
-            };
-
+                self.conversion.toggle(session_id);
+            }
+            
             /**
              * Begins the conversion of multiple networks
              */
-            self.start_selecting_group = function () {
+            self.start_converting_group = function () {
                 var toConvert = [];
 
-                var ks = Object.keys(self.selecting_group.networks);
+                var ks = Object.keys(self.conversion.group.networks);
                 for (var i = ks.length - 1; i >= 0; i--) {
                     var k = ks[i];
-                    for (var j = self.list.length - 1; j >= 0; j--) {
-                        var network = self.list[j];
-                        if ( k == network.name ) {
-                            toConvert.push(network);
+                    if ( self.conversion.group.networks[k] ) {
+                        for (var j = self.list.length - 1; j >= 0; j--) {
+                            var network = self.list[j];
+                            if ( k == network.name ) {
+                                toConvert.push(network);
+                            }
                         }
-                    };
-                };
+                    }
+                }
 
-                self.select_group(toConvert);
+                self.convert_group(toConvert);
             };
 
             /**
              * Iteratively converts a list of networks
              * @param  {array} networks array of networks to convert
              */
-            self.select_group = function (networks) {
+            self.convert_group = function (networks) {
                 var net = networks.pop();
-                self.convert(net, self.selecting_group.id).then(function (data) {
+                self.convert(net, self.conversion.group.id).then(function (data) {
                     if ( 0 == networks.length ) {
-                        self.toggle_select_group(networks);
+                        self.conversion.toggle(networks);
                     } else {
-                        self.select_group(networks);
+                        self.convert_group(networks);
                     }
                 });
-            };
-
-            // SELECTION FILTERS
-            
-            self.selection_filters = [];
-
-            self.toggle_filter_select = function () {
-                var net_list = [];
-                for (var i = self.list.length - 1; i >= 0; i--) {
-                    var net = self.list[i];
-                    if ( self.isToConvert(net) ) {
-                        net_list.push(net);
-                    }
-                }
-                self.selecting_group.net_list = net_list;
-
-                if ( undefined == self.selecting_group.filter ) {
-                    self.selecting_group.filter = true;
-                } else {
-                    self.selecting_group.filter = !self.selecting_group.filter;
-                }
-
-                if ( self.selecting_group.filter ) {
-                    self.selecting_group.net_attr_values = self.get_network_attrs_values(net_list);
-                    self.selecting_group.net_attributes = Object.keys(self.selecting_group.net_attr_values);
-                    self.selection_filters.push({
-                        combine: null,
-                        attribute: '',
-                        condition: '',
-                        value: '',
-                        object: false
-                    });
-                } else {
-                    self.selection_filters = [];
-                }
-            };
-
-            self.get_network_attrs_values = function (net_list) {
-                // Output object
-                var o = {};
-
-                // For each network
-                for (var i = net_list.length - 1; i >= 0; i--) {
-                    var net = net_list[i];
-
-                    // For each attribute
-                    var ks = Object.keys(net);
-                    for (var l = ks.length - 1; l >= 0; l--) {
-                        var k = ks[l];
-                        // is it an object
-                        if ( 'object' != typeof(net[k]) ) {
-                            if ( -1 == Object.keys(o).indexOf(k) ) {
-                                o[k] = [net[k]];
-                            } else {
-                                if ( -1 == o[k].indexOf(net[k]) ) {
-                                    o[k].push(net[k]);
-                                } else {
-                                }
-                            }
-                        } else {
-                            var js = Object.keys(net[k]);
-                            if ( 0 != js.length) {
-                                for (var m = js.length - 1; m >= 0; m--) {
-                                    var j = js[m];
-                                    var kj = k + ',' + j;
-                                    if ( -1 == Object.keys(o).indexOf(kj) ) {
-                                        o[kj] = [net[k][j]];
-                                    } else {
-                                        if ( -1 == o[kj].indexOf(net[k][j]) ) {
-                                            o[kj].push(net[k][j]);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                
-                // Clean it
-                var ks = Object.keys(o);
-                for (var i = ks.length - 1; i >= 0; i--) {
-                    var k = ks[i];
-                    if ( -1 != k.indexOf('$') || 2 > o[k].length ) {
-                        delete o[k];
-                    }
-                };
-
-                return o;
-            };
-
-            self.add_selection_filter = function () {
-                self.selection_filters.push({
-                    combine: '',
-                    attribute: '',
-                    condition: '',
-                    value: '',
-                    object: false
-                });
-            };
-
-            self.get_net_attr_values = function (i) {
-                var out = self.selecting_group.net_attr_values[self.selection_filters[i].attribute];
-                if ( undefined != out ) {
-                    // If an array, signal it
-                    self.selection_filters[i].object = Array.isArray(out[0]);
-                    if ( self.selection_filters[i].object ) {
-                        var new_out = [];
-                        for (var i = out.length - 1; i >= 0; i--) {
-                            for (var j = out[i].length - 1; j >= 0; j--) {
-                                var el = out[i][j];
-                                if ( -1 == new_out.indexOf(el) ) {
-                                    new_out.push(el);
-                                }
-                           }
-                        }
-                        return new_out;
-                    } else {
-                        return out;
-                    }
-                }
-            };
-
-            self.check_selection_filters = function () {
-                for (var i = self.selection_filters.length - 1; i >= 0; i--) {
-                    var filter = self.selection_filters[i];
-                    if ( '' == filter.combine ) return false;
-                    if ( '' == filter.attribute ) return false;
-                    if ( '' == filter.condition ) return false;
-                    if ( '' == filter.value ) return false;
-                    return true;
-                };
-            };
-
-            self.apply_selection_filters = function () {
-                var net_list = [];
-                for (var i = self.list.length - 1; i >= 0; i--) {
-                    var net = self.list[i];
-                    if ( self.isToConvert(net) ) {
-                        net_list.push(net);
-                    }
-                }
-                self.selecting_group.net_list = net_list;
-
-                var net_list_clean = [];
-                if ( self.check_selection_filters() ) {
-                    for (var i = net_list.length - 1; i >= 0; i--) {
-                        var net = net_list[i];
-                        var res = false;
-                        for (var j = 0; j < self.selection_filters.length; j++ ) {
-                            var filter = self.selection_filters[j];
-                            
-                            if ( -1 != filter.attribute.indexOf(',') ) {
-                                var a_attr = filter.attribute.split(',');
-                                var k = net[a_attr[0]][a_attr[1]];
-                            } else {
-                                var k = net[filter.attribute];
-                            }
-                            var v = filter.value;
-                            var tmpRes = false;
-
-
-                            if ( 'e' == filter.condition ) {
-                                tmpRes = ( k == v );
-                            } else if ( 'ne' == filter.condition ) {
-                                tmpRes = ( k != v );
-                            } else if ( 'lt' == filter.condition ) {
-                                tmpRes = ( parseInt(k) < parseInt(v) );
-                            } else if ( 'le' == filter.condition ) {
-                                tmpRes = ( parseInt(k) <= parseInt(v) );
-                            } else if ( 'gt' == filter.condition ) {
-                                tmpRes = ( parseInt(k) > parseInt(v) );
-                            } else if ( 'ge' == filter.condition ) {
-                                tmpRes = ( parseInt(k) >= parseInt(v) );
-                            } else if ( 'c' == filter.condition ) {
-                                tmpRes = ( -1 != k.indexOf(v) );
-                            }
-
-                            if ( null == filter.combine ) {
-                                res = tmpRes;
-                            } else if ( 'AND' == filter.combine ) {
-                                res = res && tmpRes;
-                            } else if ( 'OR' == filter.combine ) {
-                                res = res || tmpRes;
-                            }
-
-                        }
-
-                        if ( res ) {
-                            net_list_clean.push(net);
-                        }
-
-                    }
-                    self.selecting_group.net_list = net_list_clean;
-                }
-            };
-
-            self.extract_attr_name = function (attr) {
-                if ( -1 != attr.indexOf(',') ) {
-                    var a_attr = attr.split(',');
-                    return a_attr[a_attr.length - 1];
-                } else {
-                    return attr;
-                }
             };
 
             // ATTRIBUTES
