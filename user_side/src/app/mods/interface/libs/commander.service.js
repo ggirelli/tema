@@ -53,12 +53,7 @@
 
             // GROUP MERGE
 
-            /**
-             * Merges the selected networks
-             */
-            self.apply_merge = function() {
-                console.log(1);
-            };
+            
 
             // GENERAL
             

@@ -190,6 +190,19 @@ html {
 	display: block;
 }
 
+#interface .left-panel.operations-panel hr {
+	margin-bottom: 1em;
+	margin-top: 1em;
+	
+	border-color: #989898;
+	border-style: dotted;
+	border-width: -1px;
+}
+
+#interface .left-panel.operations-panel .attr-select {
+	margin: 4px 4px;
+}
+
 /* attributes */
 
 #interface .left-panel.attributes-panel .operation-btn {

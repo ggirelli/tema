@@ -70,6 +70,43 @@
                 self.group.all = all_checked;
             };
 
+            self.get_attrs = function () {
+                // Empty attribute list
+                var n_list = [];
+                var e_list = [];
+
+                // For each network in the shown list
+                for (var i = self.list.length - 1; i >= 0; i--) {
+                    var net = self.list[i];
+
+                    // If it was selected
+                    if ( self.group.networks[net.name] ) {
+                        var nks = net.data.v_attributes;
+                        if ( Array.isArray(nks) ) {
+                            for (var j = nks.length - 1; j >= 0; j--) {
+                                var nk = nks[j];
+                                if ( -1 == n_list.indexOf(nk) ) n_list.push(nk);
+                            }
+                        } else {
+                            if ( -1 == n_list.indexOf(nks) ) n_list.push(nks);
+                        }
+                        var eks = net.data.e_attributes;
+                        if ( Array.isArray(eks) ) {
+                            for (var j = eks.length - 1; j >= 0; j--) {
+                                var ek = eks[j];
+                                if ( -1 == e_list.indexOf(ek) ) e_list.push(ek);
+                            }
+                        } else {
+                            if ( -1 == e_list.indexOf(eks) ) e_list.push(eks);
+                        }
+                    }
+                }
+
+                // Save attribute lists
+                self.group.nodes = n_list;
+                self.group.edges = e_list;
+            };
+
             // SELECTION FILTERS
             
             self.filters = [];
@@ -87,7 +124,7 @@
                 }
 
                 if ( self.group.filter ) {
-                    self.group.net_attr_values = self.get_network_attrs_values(self.list);
+                    self.group.net_attr_values = self.get_net_attrs_values(self.list);
                     self.group.net_attributes = Object.keys(self.group.net_attr_values);
                     self.filters.push({
                         combine: null,
@@ -105,7 +142,7 @@
              * @param  {object} net_list
              * @return {object} networks attributes with values
              */
-            self.get_network_attrs_values = function (net_list) {
+            self.get_net_attrs_values = function (net_list) {
                 // Output object
                 var o = {};
 

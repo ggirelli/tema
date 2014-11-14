@@ -40,7 +40,7 @@
             service('commanderService', ['$q', '$http', 'mergeGroupService', commanderService]).
             service('inspectorService', [inspectorService]).
             service('networkService', ['$q', '$http', '$rootScope', 'convertGroupService', 'networkAttributeService', networkService]).
-            service('panelsService', ['$rootScope', '$timeout', panelsService]).
+            service('panelsService', ['$rootScope', panelsService]).
             service('settingsService', ['$q', '$http', '$rootScope', settingsService]).
             controller('interfaceController', ['$scope', 'appModel', '$routeParams', 'networkService',
                 'panelsService', 'inspectorService', 'commanderService', 'canvasService', 'settingsService', interfaceController]).
