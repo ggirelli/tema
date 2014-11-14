@@ -149,13 +149,22 @@ html {
 	width: 225px;
 }
 
-#interface .left-panel.graph-list-panel .btn-convert_many {
+#interface .left-panel.graph-list-panel .btn-select_group {
 	float: right;
 	font-variant: small-caps;
 }
 
 #interface .left-panel.graph-list-panel .group-selection-option {
 	margin-left: 8px;
+}
+
+#interface .left-panel.graph-list-panel .filter-selection {
+	width: 100%;
+}
+
+#interface .left-panel.graph-list-panel .filter-selection th,
+#interface .left-panel.graph-list-panel .filter-selection td {
+	text-align: center;
 }
 
 /* operations */
