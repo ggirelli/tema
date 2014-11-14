@@ -398,7 +398,18 @@
 
                     return q.promise;
                 }
-            };            
+            };
+
+            // GENERAL
+            
+            self.reset_service = function () {
+                self.list = {
+                    label: null,
+                    options: null,
+                    edges: {},
+                    nodes: {}
+                };
+            }; 
 
         };
 

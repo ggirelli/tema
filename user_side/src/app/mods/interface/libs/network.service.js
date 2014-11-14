@@ -3,7 +3,7 @@
 
     define([], function () {
 
-        return function (q, http, rootScope, networkGroup, networkAttribute) {
+        return function (q, http, rootScope, convertGroup, networkAttribute) {
             var self = this;
 
             self.list = null;
@@ -278,7 +278,7 @@
 
             // GROUP CONVERSION
 
-            self.conversion = networkGroup;
+            self.conversion = convertGroup;
             self.toggle_conversion_panel = function (session_id) {
                 self.conversion.list = [];
                 for (var i = self.list.length - 1; i >= 0; i--) {
@@ -325,6 +325,13 @@
                         self.convert_group(networks);
                     }
                 });
+            };
+
+            // GENERAL
+            
+            self.reset_ui = function () {
+                self.conversion.reset_service();
+                self.attributes.reset_service();
             };
 
         };

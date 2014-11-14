@@ -3,7 +3,7 @@
 
     define([], function () {
 
-        return function () {
+        return function (rootScope, timeout) {
             var self = this;
         	
             /**
@@ -76,6 +76,9 @@
                     select: false,
                     settings: false
                 };
+                timeout(function () {
+                    rootScope.$broadcast('reset-panels');
+                }, 900);
             };
         };
 

@@ -3,14 +3,14 @@
 
     define([], function () {
 
-        return function (q, http, networkGroup) {
+        return function (q, http, mergeGroup) {
             var self = this;
 
             self.operation = {
                 status: false
             };
 
-            self.merge = networkGroup;
+            self.merge = mergeGroup;
 
             /**
              * Initializes the operation UI
@@ -29,9 +29,7 @@
                             self.merge.list.push(net);
                         }
                     }
-                    console.log(self.merge.list);
                     self.merge.toggle(session_id);
-                    console.log(self.merge.list);
                 }
             };
 
@@ -60,6 +58,15 @@
              */
             self.apply_merge = function() {
                 console.log(1);
+            };
+
+            // GENERAL
+            
+            self.reset_ui = function () {
+                self.operation = {
+                    status: false
+                };
+                self.merge.reset_service();
             };
 
         };

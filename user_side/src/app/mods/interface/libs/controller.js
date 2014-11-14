@@ -97,6 +97,15 @@
                 scope.inspector.load_network(network);
             });
 
+            /*----------------*/
+            /* General events */
+            /*----------------*/
+
+            scope.$on('reset-panels', function (e) {
+                scope.networks.reset_ui();
+                scope.commander.reset_ui();
+            });
+
         };
 
     });

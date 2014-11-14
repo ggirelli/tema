@@ -33,13 +33,14 @@
             controller('homepageController', ['$scope', 'appModel', '$http', '$timeout', homepageController]).
             
             service('networkAttributeService', ['$q', '$http', networkAttributeService]).
-            service('networkGroupService', [networkGroupService]).
+            service('convertGroupService', [networkGroupService]).
+            service('mergeGroupService', [networkGroupService]).
 
             service('canvasService', ['$q', '$http', '$rootScope', canvasService]).
-            service('commanderService', ['$q', '$http', 'networkGroupService', commanderService]).
+            service('commanderService', ['$q', '$http', 'mergeGroupService', commanderService]).
             service('inspectorService', [inspectorService]).
-            service('networkService', ['$q', '$http', '$rootScope', 'networkGroupService', 'networkAttributeService', networkService]).
-            service('panelsService', [panelsService]).
+            service('networkService', ['$q', '$http', '$rootScope', 'convertGroupService', 'networkAttributeService', networkService]).
+            service('panelsService', ['$rootScope', '$timeout', panelsService]).
             service('settingsService', ['$q', '$http', '$rootScope', settingsService]).
             controller('interfaceController', ['$scope', 'appModel', '$routeParams', 'networkService',
                 'panelsService', 'inspectorService', 'commanderService', 'canvasService', 'settingsService', interfaceController]).

@@ -288,7 +288,20 @@
                 } else {
                     return attr;
                 }
-            };   
+            };
+
+            // GENERAL
+            
+            self.reset_service = function () {
+                self.list = [];
+                self.group = {
+                    status: false,
+                    all: false,
+                    doing: false,
+                    networks: {}
+                };
+                self.filters = [];
+            };
 
         };
 
