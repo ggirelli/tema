@@ -4,7 +4,8 @@
     var def_requirements = ['angular',
         './libs/model', './libs/controller', './libs/route_config',
         './mods/homepage/libs/controller', './mods/interface/libs/controller',
-        './mods/interface/libs/network.service', './mods/interface/libs/network_group.service',
+        './mods/interface/libs/network.service',
+        './mods/interface/libs/network_attribute.service', './mods/interface/libs/network_group.service',
         './mods/interface/libs/inspector.service', './mods/interface/libs/panels.service',
         './mods/interface/libs/commander.service', './mods/interface/libs/canvas.service',
         './mods/interface/libs/settings.service',
@@ -15,7 +16,8 @@
     define(def_requirements,
         function (angular, model, controller, routeConfig,
             homepageController, interfaceController,
-            networkService, networkGroupService,
+            networkService,
+            networkAttributeService, networkGroupService,
             inspectorService, panelsService,
             commanderService, canvasService,
             settingsService,
@@ -30,11 +32,13 @@
 
             controller('homepageController', ['$scope', 'appModel', '$http', '$timeout', homepageController]).
             
-            service('canvasService', ['$q', '$http', '$rootScope', canvasService]).
-            service('commanderService', ['$q', '$http', commanderService]).
-            service('inspectorService', [inspectorService]).
+            service('networkAttributeService', ['$q', '$http', networkAttributeService]).
             service('networkGroupService', [networkGroupService]).
-            service('networkService', ['$q', '$http', '$rootScope', 'networkGroupService', networkService]).
+
+            service('canvasService', ['$q', '$http', '$rootScope', canvasService]).
+            service('commanderService', ['$q', '$http', 'networkGroupService', commanderService]).
+            service('inspectorService', [inspectorService]).
+            service('networkService', ['$q', '$http', '$rootScope', 'networkGroupService', 'networkAttributeService', networkService]).
             service('panelsService', [panelsService]).
             service('settingsService', ['$q', '$http', '$rootScope', settingsService]).
             controller('interfaceController', ['$scope', 'appModel', '$routeParams', 'networkService',

@@ -3,7 +3,7 @@
 
     define([], function () {
 
-        return function (q, http) {
+        return function (q, http, networkGroup) {
             var self = this;
 
             self.operation = {
@@ -37,6 +37,10 @@
                     status: false
                 };
             };
+
+            // GROUP MERGE
+            
+            self.merge = networkGroup;
 
             /**
              * Merges the selected networks
