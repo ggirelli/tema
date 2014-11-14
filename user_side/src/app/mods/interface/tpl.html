@@ -131,61 +131,51 @@
 		</div>
 
 		<div class='left-panel operations-panel panel panel-danger' ng-show='panels.show.operations'>
-			<div class="panel-heading">Operations</div>
-			<div class="panel-body">
+			<div class="panel-heading">
+				<span ng-show="commander.is_operation()">Operate on networks</span>
+				<span ng-show="commander.is_operation('merge')">Merge networks</span>
+				<span ng-show="commander.is_operation('intersect')">Intersect networks</span>
+				<span ng-show="commander.is_operation('subtract')">Subtract networks</span>
+				<span ng-show="commander.is_operation('contains')">Is Subnetwork?</span>
+			</div>
 
+			<div class="panel-body" ng-show="commander.is_operation()">
+				<!-- merge -->
 				<div class="btn operation-btn btn-danger btn-block" ng-show="!commander.operation.status" ng-click="commander.init_operation('merge')">
 					Merge networks
 				</div>
-				<div class="panel operation-panel panel-danger" ng-show="commander.is_operation('merge')">
-					<div class="panel-heading">Merge networks</div>
-					<div class="panel-body">
-						<p>
-							Select the networks to merge them!
-						</p>
-
-						<p>
-							<span class="single-network-select" ng-repeat="net in networks.list">
-								<input id="check-{{net.id}}" name="check-{{net.id}}" type="checkbox" ng-model="commander.operation.selected[net.id]"> <label for="check-{{net.id}}">{{net.name}}</label>
-							</span>
-						</p>
-
-						<button class="btn end-btn btn-success" ng-click='commander.merge()'>merge</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
-					</div>
-				</div>
-
+				<!-- intersect -->
 				<div class="btn operation-btn btn-danger btn-block" ng-show="!commander.operation.status" ng-click="commander.init_operation('intersect')">
 					Intersect networks
 				</div>
-				<div class="panel operation-panel panel-danger" ng-show="commander.is_operation('intersect')">
-					<div class="panel-heading">Intersect networks</div>
-					<div class="panel-body">
-						Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit assumenda corporis officia reiciendis, possimus delectus laboriosam, magnam obcaecati enim. Dolorum autem animi, culpa fugiat eveniet expedita ad aut commodi beatae?
-						<button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
-					</div>
-				</div>
-
+				<!-- subtract -->
 				<div class="btn operation-btn btn-danger btn-block" ng-show="!commander.operation.status" ng-click="commander.init_operation('subtract')">
 					Subtract networks
 				</div>
-				<div class="panel operation-panel panel-danger" ng-show="commander.is_operation('subtract')">
-					<div class="panel-heading">Subtract networks</div>
-					<div class="panel-body">
-						Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit assumenda corporis officia reiciendis, possimus delectus laboriosam, magnam obcaecati enim. Dolorum autem animi, culpa fugiat eveniet expedita ad aut commodi beatae?
-						<button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
-					</div>
-				</div>
-
+				<!-- contains -->
 				<div class="btn operation-btn btn-info btn-block" ng-show="!commander.operation.status" ng-click="commander.init_operation('contains')">
 					is Subnetwork
 				</div>
-				<div class="panel operation-panel panel-info" ng-show="commander.is_operation('contains')">
-					<div class="panel-heading">is Subnetwork</div>
-					<div class="panel-body">
-						Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit assumenda corporis officia reiciendis, possimus delectus laboriosam, magnam obcaecati enim. Dolorum autem animi, culpa fugiat eveniet expedita ad aut commodi beatae?
-						<button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
-					</div>
-				</div>
+			</div>
+
+			<div class="panel-body" ng-show="commander.is_operation('merge')">
+				merge
+				<button class="btn end-btn btn-success" ng-click='commander.merge()'>merge</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
+			</div>
+
+			<div class="panel-body" ng-show="commander.is_operation('intersect')">
+				intersect
+				<button class="btn end-btn btn-success" ng-click='commander.intersect()'>intersect</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
+			</div>
+
+			<div class="panel-body" ng-show="commander.is_operation('subtract')">
+				subtract
+				<button class="btn end-btn btn-success" ng-click='commander.subtract()'>subtract</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
+			</div>
+
+			<div class="panel-body" ng-show="commander.is_operation('contains')">
+				contains
+				<button class="btn end-btn btn-success" ng-click='commander.contains()'>contains</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
 			</div>
 		</div>
 

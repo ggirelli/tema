@@ -25,6 +25,7 @@
              * @return {Boolean}      if the given operation is running
              */
             self.is_operation = function (name) {
+                if ( null == name ) return undefined == self.operation.name;
                 return name == self.operation.name;
             };
 
