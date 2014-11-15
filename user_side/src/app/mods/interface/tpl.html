@@ -300,6 +300,11 @@
 				<hr style="margin-bottom: 2em;" />
 
 				<div class="alert alert-danger" ng-show="undefined != commander.merge.errMsg">{{commander.merge.errMsg}}</div>
+
+				<p class="footnote" ng-show="commander.merge.is_page(2)">
+					Remember to standardize correctly map the attributes of the networks of interest
+					using the attribute management tools.
+				</p>
 			</div>
 			<!-- intersect body -->
 			<div class="panel-body" ng-show="commander.is_operation('intersect')">
@@ -332,7 +337,7 @@
 				<span ng-show="networks.attributes.is_attr_doing('replace')">Replace attribute</span>
 			</div>
 			<div class="panel-body">
-
+				<!-- list -->
 				<div ng-show="!networks.attributes.is_attr_doing()">
 					<h4>Node attributes:</h4>
 					<div class="alert alert-info" ng-repeat="attr in canvas.get_attributes('nodes')">
@@ -357,7 +362,6 @@
 					</div>
 					<hr />
 				</div>
-
 				<!-- add_new -->
 				<div ng-show="networks.attributes.is_attr_doing('add_new')">
 					

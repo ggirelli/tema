@@ -230,6 +230,7 @@ html {
 	font-variant: small-caps;
 }
 
+#interface .left-panel.operations-panel .footnote,
 #interface .left-panel.attributes-panel .footnote {
 	float: left;
 
