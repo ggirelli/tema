@@ -5,7 +5,6 @@
 <div id='interface' ng-app='sogi' ng-controller='interfaceController as iCtrl' ng-model='iCtrl'>
 
 	<div id='left-bar'>
-
 		<a class="title" href='#/'>SOGI</a>
 		<span class="btn btn-primary btn-circle" ng-click="panels.toggle('graph_list')" ng-class="{'open' : panels.show.graph_list}" title="Network list">
 			<span class="glyphicon glyphicon-th-list"></span>
@@ -31,7 +30,6 @@
 		<a href="#/help" class="btn btn-info btn-circle" title="Help">
 			<span class="glyphicon glyphicon-heart-empty"></span>
 		</a>
-
 	</div>
 
 	<div class='left-panel-wrap'>
@@ -159,97 +157,149 @@
 			</div>
 			<!-- merge body -->
 			<div class="panel-body" ng-show="commander.is_operation('merge')">
-				<h4>Select the networks to merge:</h4>
-				<label class="group-selection-option alert alert-warning" for="merge-all"><input type="checkbox" id="merge-all" name="merge-all" ng-model="commander.merge.group.all" ng-click="commander.merge.un_select_all(); commander.merge.get_attrs();" /> Un/Select all</label><label class="group-selection-option alert alert-success" for="merge-filter"><input type="checkbox" id="merge-filter" name="merge-filter" ng-model="commander.merge.group.filter" ng-click="commander.merge.toggle_filter()" /> Custom Filters</label>
+				<div class="merge-page-1" ng-show="commander.merge.is_page(1)">
+					<h4>Select the networks to merge:</h4>
+					<label class="group-selection-option alert alert-warning" for="merge-all"><input type="checkbox" id="merge-all" name="merge-all" ng-model="commander.merge.group.all" ng-click="commander.merge.un_select_all(); commander.merge.get_attrs();" /> Un/Select all</label><label class="group-selection-option alert alert-success" for="merge-filter"><input type="checkbox" id="merge-filter" name="merge-filter" ng-model="commander.merge.group.filter" ng-click="commander.merge.toggle_filter()" /> Custom Filters</label>
 
-				<div class="panel panel-success" ng-show="commander.merge.group.filter">
-					<div class="panel-success panel-heading">
-						Filter
-						<a href="#/interface/{{m.session_id}}" class="btn-panel float-right" ng-click="commander.merge.add_filter()" title="Add new"><span class="text-success glyphicon glyphicon-plus"></span></a>
+					<div class="panel panel-success" ng-show="commander.merge.group.filter">
+						<div class="panel-success panel-heading">
+							Filter
+							<a href="#/interface/{{m.session_id}}" class="btn-panel float-right" ng-click="commander.merge.add_filter()" title="Add new"><span class="text-success glyphicon glyphicon-plus"></span></a>
+						</div>
+						<div class="panel-body">
+							<table class="filter-selection">
+								<tr>
+									<td></td>
+									<th>Attribute</th>
+									<th>Condition</th>
+									<th>Value</th>
+								</tr>
+								<tr ng-repeat="filter in commander.merge.filters">
+									<td class="text-align-left">
+										<select name="" id="" ng-show="!$first" ng-model="commander.merge.filters[$index].combine" ng-change="commander.merge.apply_filters()">
+											<option value="">--</option>
+											<option value="AND">AND</option>
+											<option value="OR">OR</option>
+										</select>
+									</td>
+									<td>
+										<select name="" id="" style="max-width: 100px;" ng-model="commander.merge.filters[$index].attribute" ng-change="commander.merge.apply_filters(); commander.merge.filters[$index].value=''">
+											<option value="">--</option>
+											<option value="{{attr}}" ng-repeat="attr in commander.merge.group.net_attributes">{{commander.merge.extract_attr_name(attr)}}</option>
+										</select>
+									</td>
+									<td>
+										<select name="" id="" ng-model="commander.merge.filters[$index].condition" ng-change="commander.merge.apply_filters()">
+											<option value="" ng-show="!commander.merge.filters[$index].object">--</option>
+											<option value="e" ng-show="!commander.merge.filters[$index].object">=</option>
+											<option value="ne" ng-show="!commander.merge.filters[$index].object">&#8800;</option>
+											<option value="lt" ng-show="!commander.merge.filters[$index].object">&lt;</option>
+											<option value="le" ng-show="!commander.merge.filters[$index].object">&le;</option>
+											<option value="gt" ng-show="!commander.merge.filters[$index].object">&gt;</option>
+											<option value="ge" ng-show="!commander.merge.filters[$index].object">&ge;</option>
+											<option value="c" ng-selected="commander.merge.filters[$index].object" ng-show="commander.merge.filters[$index].object">contains</option>
+										</select>
+									</td>
+									<td>
+										<select name="" id="" style="max-width: 100px;" ng-model="commander.merge.filters[$index].value" ng-change="commander.merge.apply_filters()">
+											<option value="" ng-selected="-1 == commander.merge.get_net_attr_values($index).indexOf(commander.merge.filters[$index].value)">--</option>
+											<option value="{{v}}" ng-repeat="v in commander.merge.get_net_attr_values($index)">{{v}}</option>
+										</select>
+									</td>
+								</tr>
+							</table>
+						</div>
 					</div>
-					<div class="panel-body">
-						<table class="filter-selection">
-							<tr>
-								<td></td>
-								<th>Attribute</th>
-								<th>Condition</th>
-								<th>Value</th>
-							</tr>
-							<tr ng-repeat="filter in commander.merge.filters">
-								<td class="text-align-left">
-									<select name="" id="" ng-show="!$first" ng-model="commander.merge.filters[$index].combine" ng-change="commander.merge.apply_filters()">
-										<option value="">--</option>
-										<option value="AND">AND</option>
-										<option value="OR">OR</option>
-									</select>
-								</td>
-								<td>
-									<select name="" id="" style="max-width: 100px;" ng-model="commander.merge.filters[$index].attribute" ng-change="commander.merge.apply_filters(); commander.merge.filters[$index].value=''">
-										<option value="">--</option>
-										<option value="{{attr}}" ng-repeat="attr in commander.merge.group.net_attributes">{{commander.merge.extract_attr_name(attr)}}</option>
-									</select>
-								</td>
-								<td>
-									<select name="" id="" ng-model="commander.merge.filters[$index].condition" ng-change="commander.merge.apply_filters()">
-										<option value="" ng-show="!commander.merge.filters[$index].object">--</option>
-										<option value="e" ng-show="!commander.merge.filters[$index].object">=</option>
-										<option value="ne" ng-show="!commander.merge.filters[$index].object">&#8800;</option>
-										<option value="lt" ng-show="!commander.merge.filters[$index].object">&lt;</option>
-										<option value="le" ng-show="!commander.merge.filters[$index].object">&le;</option>
-										<option value="gt" ng-show="!commander.merge.filters[$index].object">&gt;</option>
-										<option value="ge" ng-show="!commander.merge.filters[$index].object">&ge;</option>
-										<option value="c" ng-selected="commander.merge.filters[$index].object" ng-show="commander.merge.filters[$index].object">contains</option>
-									</select>
-								</td>
-								<td>
-									<select name="" id="" style="max-width: 100px;" ng-model="commander.merge.filters[$index].value" ng-change="commander.merge.apply_filters()">
-										<option value="" ng-selected="-1 == commander.merge.get_net_attr_values($index).indexOf(commander.merge.filters[$index].value)">--</option>
-										<option value="{{v}}" ng-repeat="v in commander.merge.get_net_attr_values($index)">{{v}}</option>
-									</select>
-								</td>
-							</tr>
-						</table>
+
+					<label for="net-{{net.id}}" class="alert" ng-repeat='net in commander.merge.group.net_list | filter:networks.isConverted' ng-show='networks.list != null' ng-class="{'alert-info' : networks.isConverted(net), 'alert-danger' : !networks.isConverted(net)}" style="width: 100%;">
+						<input id="net-{{net.id}}" name="net-{{net.id}}" type="checkbox" ng-model="commander.merge.group.networks[net.name]" ng-click="commander.merge.check(net.name); commander.merge.get_attrs();" />
+						{{net.name}}
+					</label>
+
+					<button class="btn end-btn btn-success" ng-click='commander.merge_set_page(2)'>next</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
+				</div>
+
+				<div class="merge-page-2" ng-show="commander.merge.is_page(2)">
+					<h4>Select the attributes to use for identity definitions:</h4>
+					<div>
+						<h5>Nodes</h5>
+						<label class="alert alert-warning attr-select" for="attr-node-{{attr}}" ng-repeat="attr in commander.merge.group.nodes">
+							<input type="checkbox" name="attr-node-{{attr}}" id="attr-node-{{attr}}" ng-model="commander.merge.n_attr_identity[attr]" />
+							{{attr}}
+						</label>
 					</div>
+					<div>
+						<h5>Edges</h5>
+						<label class="alert alert-warning attr-select" for="attr-edge-{{attr}}" ng-repeat="attr in commander.merge.group.edges">
+							<input type="checkbox" name="attr-edge-{{attr}}" id="attr-edge-{{attr}}" ng-model="commander.merge.e_attr_identity[attr]" />
+							{{attr}}
+						</label>
+					</div>
+
+					<br />
+					<button class="btn end-btn btn-success" ng-click='commander.merge_set_page(3)'>next</button><button class="btn end-btn btn-warning" ng-click='commander.merge.set_page(1)'>back</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
 				</div>
 
-				<label for="net-{{net.id}}" class="alert" ng-repeat='net in commander.merge.group.net_list | filter:networks.isConverted' ng-show='networks.list != null' ng-class="{'alert-info' : networks.isConverted(net), 'alert-danger' : !networks.isConverted(net)}" style="width: 100%;">
-					<input id="net-{{net.id}}" name="net-{{net.id}}" type="checkbox" ng-model="commander.merge.group.networks[net.name]" ng-click="commander.merge.check(net.name); commander.merge.get_attrs();" />
-					{{net.name}}
-				</label>
+				<div class="merge-page-3" ng-show="commander.merge.is_page(3)">
+					<h4>Select the behavior for non-identity attributes:</h4>
+					<div>
+						<div ng-repeat="(attr, behavior) in commander.merge.n_attr_behavior">
+							node-{{attr}}
+							<select class='form-control' name="node-{{attr}}-behavior" id="node-{{attr}}-behavior" ng-model="commander.merge.n_attr_behavior[attr]">
+								<option value="ignore">ignore</option>
+								<option value="sum">sum</option>
+								<option value="prod">prod</option>
+								<option value="min">min</option>
+								<option value="max">max</option>
+								<option value="random">random</option>
+								<option value="mean">mean</option>
+								<option value="median">median</option>
+								<option value="concat">concat</option>
+								<option value="first">first</option>
+								<option value="last">last</option>
+							</select>
+						</div>
+					</div>
+					<div>
+						<div ng-repeat="(attr, behavior) in commander.merge.e_attr_behavior">
+							edge-{{attr}}
+							<select class='form-control' name="edge-{{attr}}-behavio" id="edge-{{attr}}-behavio" ng-model="commander.merge.e_attr_behavior[attr]">
+								<option value="ignore">ignore</option>
+								<option value="sum">sum</option>
+								<option value="prod">prod</option>
+								<option value="min">min</option>
+								<option value="max">max</option>
+								<option value="random">random</option>
+								<option value="mean">mean</option>
+								<option value="median">median</option>
+								<option value="concat">concat</option>
+								<option value="first">first</option>
+								<option value="last">last</option>
+							</select>
+						</div>
+					</div>
 
-				<hr style="margin-bottom: 2em;" />
+					<br />
+					<button class="btn end-btn btn-success" ng-click='commander.merge_set_page(4)'>next</button><button class="btn end-btn btn-warning" ng-click='commander.merge.set_page(2)'>back</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
+				</div>
 
-				<h4>Select the attributes to use for identity definitions:</h4>
-				<div>
-					<h5>Nodes</h5>
-					<label class="alert alert-warning attr-select" for="attr-node-{{attr}}" ng-repeat="attr in commander.merge.group.nodes">
-						<input type="checkbox" name="attr-node-{{attr}}" id="attr-node-{{attr}}" />
-						{{attr}}
+				<div class="merge-page-4" ng-show="commander.merge.is_page(4)">
+					<label for="add-node-count-attr" class="alert alert-info">
+						<input type="checkbox" id="add-node-count-attr" name="add-node-count-attr" ng-model="commander.merge.add_node_count_attr" />
+						Add node <u>count</u> attribute.
 					</label>
-				</div>
-				<div>
-					<h5>Edges</h5>
-					<label class="alert alert-warning attr-select" for="attr-edge-{{attr}}" ng-repeat="attr in commander.merge.group.edges">
-						<input type="checkbox" name="attr-edge-{{attr}}" id="attr-edge-{{attr}}" />
-						{{attr}}
+					<label for="add-edge-count-attr" class="alert alert-info">
+						<input type="checkbox" id="add-edge-count-attr" name="add-edge-count-attr" ng-model="commander.merge.add_edge_count_attr" />
+						Add edge <u>count</u> attribute.
 					</label>
+
+					<br />
+					<button class="btn end-btn btn-success" ng-click='commander.apply_merge(m.session_id)'>merge</button><button class="btn end-btn btn-warning" ng-click='commander.merge.set_page(3)'>back</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
 				</div>
 
 				<hr style="margin-bottom: 2em;" />
 
-				<h4>Select the behavior for non-identity attributes:</h4>
-				<div>
-					<h5>Nodes</h5>
-				</div>
-				<div>
-					<h5>Edges</h5>
-				</div>
-
-				<hr style="margin-bottom: 2em;" />
-
-				{{commander.merge.group}}
-
-				<button class="btn end-btn btn-success" ng-click='commander.apply_merge()'>merge</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
+				<div class="alert alert-danger" ng-show="undefined != commander.merge.errMsg">{{commander.merge.errMsg}}</div>
 			</div>
 			<!-- intersect body -->
 			<div class="panel-body" ng-show="commander.is_operation('intersect')">
@@ -571,8 +621,6 @@
 		</div>
 	</div>
 
-	<div id="canvas" ng-click='panels.closeAll(); inspector.close();'>
-		
-	</div>
+	<div id="canvas" ng-click='panels.closeAll(); inspector.close();'></div>
 
 </div>

@@ -37,7 +37,7 @@
             service('mergeGroupService', [networkGroupService]).
 
             service('canvasService', ['$q', '$http', '$rootScope', canvasService]).
-            service('commanderService', ['$q', '$http', 'mergeGroupService', commanderService]).
+            service('commanderService', ['$q', '$http', '$timeout', 'mergeGroupService', commanderService]).
             service('inspectorService', [inspectorService]).
             service('networkService', ['$q', '$http', '$rootScope', 'convertGroupService', 'networkAttributeService', networkService]).
             service('panelsService', ['$rootScope', panelsService]).

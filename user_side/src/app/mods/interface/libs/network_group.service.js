@@ -14,7 +14,8 @@
                 status: false,
                 all: false,
                 doing: false,
-                networks: {}
+                networks: {},
+                page: 1
             };
 
             /**
@@ -70,6 +71,9 @@
                 self.group.all = all_checked;
             };
 
+            /**
+             * Saves in self.group the list of node/edge attributes of the selected networks
+             */
             self.get_attrs = function () {
                 // Empty attribute list
                 var n_list = [];
@@ -105,6 +109,35 @@
                 // Save attribute lists
                 self.group.nodes = n_list;
                 self.group.edges = e_list;
+            };
+
+            /**
+             * @return {Array} List of selected networks
+             */
+            self.get_selected_list = function () {
+                var list = [];
+                var ks = Object.keys(self.group.networks);
+                for (var i = ks.length - 1; i >= 0; i--) {
+                    var k = ks[i];
+                    if ( self.group.networks[k] ) list.push(k);
+                }
+                return list;
+            };
+
+            /**
+             * @return {Array} List of selected network names
+             */
+            self.get_selected = function () {
+                var list = [];
+                var ks = self.get_selected_list();
+                for (var i = ks.length - 1; i >= 0; i--) {
+                    var k = ks[i];
+                    for (var j = self.list.length - 1; j >= 0; j--) {
+                        var net = self.list[j];
+                        if ( k == net.name ) list.push(net);
+                    };
+                }
+                return list;
             };
 
             // SELECTION FILTERS
@@ -338,6 +371,31 @@
                     networks: {}
                 };
                 self.filters = [];
+            };
+
+            // PAGES
+            
+            /**
+             * Sets the current page index
+             * @param {integer} i page index
+             */
+            self.set_page = function (i) {
+                self.group.page = i;
+            };
+
+            /**
+             * @return {integer} current page index
+             */
+            self.get_page = function () {
+                return self.group.page;
+            };
+
+            /**
+             * @param  {integer}  i page index
+             * @return {Boolean}   if the current page has index i
+             */
+            self.is_page = function (i) {
+                return i == self.group.page;
             };
 
         };
