@@ -3,7 +3,8 @@
 
     define([], function () {
 
-        return function (q, http, timeout, rootScope, mergeGroup, intersectGroup, subtractGroup) {
+        return function (q, http, timeout, rootScope,
+            mergeGroup, intersectGroup, subtractGroup, containsGroup) {
             var self = this;
 
             self.operation = {
@@ -13,6 +14,7 @@
             self.merge = mergeGroup;
             self.intersect = intersectGroup;
             self.subtract = subtractGroup;
+            self.contains = containsGroup;
 
             /**
              * Initializes the operation UI
@@ -23,7 +25,7 @@
                 self.operation.status = true;
                 self.selected = {};
 
-                if ( -1 != ['intersect', 'merge', 'subtract'].indexOf(name) ) {
+                if ( -1 != ['contains', 'intersect', 'merge', 'subtract'].indexOf(name) ) {
                     self[name].name_list = []
                     self[name].list = [];
                     for (var i = 0; i < net_list.length; i++) {
@@ -402,6 +404,117 @@
                         if ( 0 == data.err ) {
                             rootScope.$broadcast('reload_network_list', session_id);
                             alert('Subtracted networks.');
+                        }
+                        qwait.resolve(data);
+                    });
+
+                self.reset_ui();
+                return qwait.promise;
+            };
+
+            // GROUP CONTAINS
+            
+            /**
+             * Changes page of merge UI after checking the form
+             * @param  {integer} index page
+             */
+            self.contains_set_page = function (index, session_id) {
+                if ( 2 == index ) {
+                    // Check super network
+                    if ( undefined == self.contains.group.super ) {
+                        self.contains.errMsg = 'Select the super-network.';
+                    } else {
+                        // Clear previous errors
+                        self.contains.errMsg = undefined;
+
+                        // Go to next page
+                        self.contains.set_page(index)
+                    }
+                } else if ( 3 == index ) {
+                    // Check sub network
+                    if ( undefined == self.contains.group.sub ) {
+                        self.contains.errMsg = 'Select the sub-network.';
+                    } else {
+                        // Clear previous errors
+                        self.contains.errMsg = undefined;
+
+                        // (re-)Define vars for next page
+                        self.contains.n_attr_identity = {};
+                        self.contains.e_attr_identity = {};
+
+                        // Go to next page
+                        self.contains.set_page(index)
+                    }
+                } else if ( 4 == index ) {
+                    // Check that at least 1 attribute was selected for NODES
+                    var n = 0;
+                    var nks = Object.keys(self.contains.n_attr_identity);
+                    for (var i = nks.length - 1; i >= 0; i--) {
+                        if ( self.contains.n_attr_identity[nks[i]] ) n++;
+                    }
+
+                    if ( n > 0 ) {
+                        // Clear previous errors
+                        self.contains.errMsg = undefined;
+
+                        // (re-)Define vars for next page
+                        self.contains.n_attr_behavior = {};
+                        for (var i = self.contains.group.nodes.length - 1; i >= 0; i--) {
+                            var node = self.contains.group.nodes[i];
+                            if ( !self.contains.n_attr_identity[node] ) self.contains.n_attr_behavior[node] = 'ignore';
+                        };
+                        self.contains.e_attr_behavior = {};
+                        for (var i = self.contains.group.edges.length - 1; i >= 0; i--) {
+                            var edge = self.contains.group.edges[i];
+                            if ( !self.contains.e_attr_identity[edge] ) self.contains.e_attr_behavior[edge] = 'ignore';
+                        };
+
+                        // Act
+                        self.apply_contains(session_id);
+                    } else {
+                        self.contains.errMsg = 'Select at least ONE attribute for the nodes identity function.';
+                    }                    
+                }
+            };
+
+            /**
+             * @return {Object} The super network
+             */
+            self.contains.get_super = function () {
+                for (var i = self.contains.list.length - 1; i >= 0; i--) {
+                    var network = self.contains.list[i];
+                    if ( self.contains.group.super == network.name ) return(network);
+                };
+            };
+
+            /**
+             * Runs the contains operation
+             * @param  {string} session_id
+             */
+            self.apply_contains = function (session_id) {
+                var qwait = q.defer();
+
+                http({
+
+                    method: 'POST',
+                    data: {
+                        action: 'network_contains',
+                        id: session_id,
+                        super: self.contains.group.super,
+                        sub: self.contains.group.sub,
+                        n_identity: self.contains.n_attr_identity,
+                        e_identity: self.contains.e_attr_identity
+                    },
+                    url: 's/'
+
+                }).
+                    success(function (data) {
+                        if ( 0 == data.err ) {
+                            if ( 1 == data.res ) {
+                                alert('"' + self.contains.group.super + '" does contain "' + self.contains.group.sub + '"');
+                            } else if ( 0 == data.res ) {
+                                alert('"' + self.contains.group.super + '" does not contain "' + self.contains.group.sub + '"');
+                            }
                         }
                         qwait.resolve(data);
                     });

@@ -133,7 +133,7 @@
 				<span ng-show="commander.is_operation()">Operate on networks</span>
 				<span ng-show="commander.is_operation('merge')">Merge networks</span>
 				<span ng-show="commander.is_operation('intersect')">Intersect networks</span>
-				<s\an ng-show="commander.is_operation('subtract')">Subtract networks</span>
+				<span ng-show="commander.is_operation('subtract')">Subtract networks</span>
 				<span ng-show="commander.is_operation('contains')">Is Subnetwork?</span>
 			</div>
 			<!-- operation index -->
@@ -560,15 +560,63 @@
 
 				<div class="alert alert-danger" ng-show="undefined != commander.subtract.errMsg">{{commander.subtract.errMsg}}</div>
 
-				<p class="footnote" ng-show="commander.merge.is_page(3)">
+				<p class="footnote" ng-show="commander.subtract.is_page(3)">
 					Remember to standardize correctly map the attributes of the networks of interest
 					using the attribute management tools.
 				</p>
 			</div>
 			<!-- contains body -->
 			<div class="panel-body" ng-show="commander.is_operation('contains')">
-				contains
-				<button class="btn end-btn btn-success" ng-click='commander.contains()'>contains</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
+				<div class="contains-page-1" ng-show="commander.contains.is_page(1)">
+					<h4>Select the super-network:</h4>
+					<label for="net-super-{{net.id}}" class="alert" ng-repeat='net in commander.contains.group.net_list | filter:networks.isConverted' ng-show='networks.list != null' ng-class="{'alert-info' : networks.isConverted(net), 'alert-danger' : !networks.isConverted(net)}" style="width: 100%;">
+						<input id="net-super-{{net.id}}" name="net-super" type="radio" ng-model="commander.contains.group.super" value="{{net.name}}" />
+						{{net.name}}
+					</label>
+
+					<button class="btn end-btn btn-success" ng-click='commander.contains_set_page(2, m.session_id)'>next</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
+				</div>
+
+                <div class="contains-page-2" ng-show="commander.contains.is_page(2)">
+                    <h4>Select the sub-network:</h4>
+
+                    <label for="net-sub-{{net.id}}" class="alert" ng-repeat='net in commander.contains.group.net_list | filter:networks.isConverted' ng-show='networks.list != null' ng-class="{'alert-info' : networks.isConverted(net), 'alert-danger' : !networks.isConverted(net)}" style="width: 100%;">
+                        <input id="net-sub-{{net.id}}" name="net-sub" type="radio" ng-model="commander.contains.group.sub" value="{{net.name}}" ng-click="commander.contains.get_attrs(commander.contains.get_attrs_from_net(networks.get_network_from_name(commander.contains.group.super), commander.contains.get_attrs_from_net(networks.get_network_from_name(net.name), {nodes:[],edges:[]})));" />
+                        {{net.name}}
+                    </label>
+
+                    <button class="btn end-btn btn-success" ng-click='commander.contains_set_page(3, m.session_id)'>next</button><button class="btn end-btn btn-warning" ng-click='commander.contains.set_page(1)'>back</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
+                </div>
+
+                <div class="contains-page-3" ng-show="commander.contains.is_page(3)">
+                    <h4>Select the attributes to use for identity definitions:</h4>
+                    <div>
+                        <h5>Nodes</h5>
+                        <label class="alert alert-warning attr-select" for="attr-node-{{attr}}" ng-repeat="attr in commander.contains.group.nodes">
+                            <input type="checkbox" name="attr-node-{{attr}}" id="attr-node-{{attr}}" ng-model="commander.contains.n_attr_identity[attr]" />
+                            {{attr}}
+                        </label>
+                    </div>
+                    <div>
+                        <h5>Edges</h5>
+                        <label class="alert alert-warning attr-select" for="attr-edge-{{attr}}" ng-repeat="attr in commander.contains.group.edges">
+                            <input type="checkbox" name="attr-edge-{{attr}}" id="attr-edge-{{attr}}" ng-model="commander.contains.e_attr_identity[attr]" />
+                            {{attr}}
+                        </label>
+                    </div>
+
+                    <br />
+                    <button class="btn end-btn btn-success" ng-click='commander.contains_set_page(4, m.session_id)'>contains</button><button class="btn end-btn btn-warning" ng-click='commander.contains.set_page(2)'>back</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
+                </div>
+
+				<hr style="margin-bottom: 2em;" />
+
+				<div class="alert alert-danger" ng-show="undefined != commander.contains.errMsg">{{commander.contains.errMsg}}</div>
+
+				<p class="footnote" ng-show="commander.contains.is_page(3)">
+					Remember to standardize correctly map the attributes of the networks of interest
+					using the attribute management tools.
+				</p>
 			</div>
 		</div>
 
