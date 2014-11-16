@@ -40,7 +40,7 @@
             service('containsGroupService', [networkGroupService]).
 
             service('canvasService', ['$q', '$http', '$rootScope', canvasService]).
-            service('commanderService', ['$q', '$http', '$timeout', '$rootScope',
+            service('commanderService', ['$q', '$http', '$timeout',
                 'mergeGroupService', 'intersectGroupService', 'subtractGroupService', 'containsGroupService', commanderService]).
             service('inspectorService', [inspectorService]).
             service('networkService', ['$q', '$http', '$rootScope', 'convertGroupService', 'networkAttributeService', networkService]).

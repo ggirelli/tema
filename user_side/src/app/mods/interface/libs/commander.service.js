@@ -3,7 +3,7 @@
 
     define([], function () {
 
-        return function (q, http, timeout, rootScope,
+        return function (q, http, timeout,
             mergeGroup, intersectGroup, subtractGroup, containsGroup) {
             var self = this;
 
@@ -165,7 +165,6 @@
                 }).
                     success(function (data) {
                         if ( 0 == data.err ) {
-                            rootScope.$broadcast('reload_network_list', session_id);
                             alert('Merged networks.');
                         }
                         qwait.resolve(data);
@@ -273,7 +272,6 @@
                 }).
                     success(function (data) {
                         if ( 0 == data.err ) {
-                            rootScope.$broadcast('reload_network_list', session_id);
                             alert('Intersected networks.');
                         }
                         qwait.resolve(data);
@@ -402,7 +400,6 @@
                     success(function (data) {
                         console.log(data);
                         if ( 0 == data.err ) {
-                            rootScope.$broadcast('reload_network_list', session_id);
                             alert('Subtracted networks.');
                         }
                         qwait.resolve(data);
