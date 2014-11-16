@@ -158,6 +158,12 @@
 			<!-- merge body -->
 			<div class="panel-body" ng-show="commander.is_operation('merge')">
 				<div class="merge-page-1" ng-show="commander.merge.is_page(1)">
+					<label for="merge-new-name">
+						New name:
+						<input class="form-control" type="text" id="merge-new-name" name="merge-new-name" ng-model="commander.merge.group.new_name" />
+					</label>
+					<hr />
+
 					<h4>Select the networks to merge:</h4>
 					<label class="group-selection-option alert alert-warning" for="merge-all"><input type="checkbox" id="merge-all" name="merge-all" ng-model="commander.merge.group.all" ng-click="commander.merge.un_select_all(); commander.merge.get_attrs();" /> Un/Select all</label><label class="group-selection-option alert alert-success" for="merge-filter"><input type="checkbox" id="merge-filter" name="merge-filter" ng-model="commander.merge.group.filter" ng-click="commander.merge.toggle_filter()" /> Custom Filters</label>
 

@@ -22,9 +22,11 @@
                 self.selected = {};
 
                 if ( 'merge' == name ) {
+                    self.merge.name_list = []
                     self.merge.list = [];
-                    for (var i = net_list.length - 1; i >= 0; i--) {
+                    for (var i = 0; i < net_list.length; i++) {
                         var net = net_list[i];
+                        self.merge.name_list.push(net.name);
                         if ( 1 == net.status ) {
                             self.merge.list.push(net);
                         }
@@ -56,6 +58,15 @@
 
             self.merge_set_page = function (index) {
                 if ( 2 == index ) {
+                    // Check new name
+                    if ( undefined == self.merge.group.new_name || null == self.merge.group.new_name || '' == self.merge.group.new_name ) {
+                        self.merge.errMsg = 'Please, provide a name.';
+                        return;
+                    } else if ( -1 != self.merge.name_list.indexOf(self.merge.group.new_name) ) {
+                        self.merge.errMsg = 'Name alredy in use.';
+                        return;
+                    }
+
                     // Check number of selected networks
                     var c = 0;
                     var ks = Object.keys(self.merge.group.networks);
@@ -120,7 +131,6 @@
             };
 
             self.apply_merge = function (session_id) {
-                console.log(self.merge);
                 var qwait = q.defer();
 
                 http({
@@ -129,6 +139,7 @@
                     data: {
                         action: 'networks_merge',
                         id: session_id,
+                        new_name: self.merge.group.new_name,
                         networks: self.merge.get_selected_list(),
                         n_identity: self.merge.n_attr_identity,
                         e_identity: self.merge.e_attr_identity,
@@ -142,10 +153,14 @@
 
                 }).
                     success(function (data) {
-                        console.log(data);
+                        if ( 0 == data.err ) {
+                            rootScope.$broadcast('reload_network_list', session_id);
+                            alert('Merged networks.');
+                        }
                         qwait.resolve(data);
                     });
 
+                self.reset_ui();
                 return qwait.promise;
             }
 

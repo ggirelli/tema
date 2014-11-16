@@ -15,8 +15,14 @@ if ( $s->exists($data->id) ) {
 	// Load session
 	$s->init($data->id);
 
-	print_r($data);
+	$f = SPATH . '/' . $data->id . '/tmp_r_config.json';
+	file_put_contents($f, json_encode($data));
+	
+	$q = 'cd ' . SCRIPATH . '; ./mergeNetworks.R ' . $s->get('id') . ' tmp_r_config';
+	$r = $s->exec_return('convert', $q);
+	print_r($r);
 
+	unlink($f);
 	die('{"err":0}');
 
 } else {
