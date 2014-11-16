@@ -402,6 +402,9 @@
 
             // GENERAL
             
+            /**
+             * Resets service
+             */
             self.reset_service = function () {
                 self.list = {
                     label: null,

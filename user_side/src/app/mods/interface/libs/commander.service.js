@@ -3,7 +3,7 @@
 
     define([], function () {
 
-        return function (q, http, timeout, mergeGroup) {
+        return function (q, http, timeout, mergeGroup, intersectGroup) {
             var self = this;
 
             self.operation = {
@@ -11,6 +11,7 @@
             };
 
             self.merge = mergeGroup;
+            self.intersect = intersectGroup;
 
             /**
              * Initializes the operation UI
@@ -21,18 +22,18 @@
                 self.operation.status = true;
                 self.selected = {};
 
-                if ( 'merge' == name ) {
-                    self.merge.name_list = []
-                    self.merge.list = [];
+                if ( -1 != ['intersect', 'merge'].indexOf(name) ) {
+                    self[name].name_list = []
+                    self[name].list = [];
                     for (var i = 0; i < net_list.length; i++) {
                         var net = net_list[i];
-                        self.merge.name_list.push(net.name);
+                        self[name].name_list.push(net.name);
                         if ( 1 == net.status ) {
-                            self.merge.list.push(net);
+                            self[name].list.push(net);
                         }
                     }
-                    self.merge.set_page(1);
-                    self.merge.toggle(session_id);
+                    self[name].set_page(1);
+                    self[name].toggle(session_id);
                 }
             };
 
@@ -56,6 +57,10 @@
 
             // GROUP MERGE
 
+            /**
+             * Changes page of merge UI after checking the form
+             * @param  {integer} index page
+             */
             self.merge_set_page = function (index) {
                 if ( 2 == index ) {
                     // Check new name
@@ -130,6 +135,10 @@
                 }
             };
 
+            /**
+             * Runs the merge operation
+             * @param  {string} session_id
+             */
             self.apply_merge = function (session_id) {
                 var qwait = q.defer();
 
@@ -147,7 +156,6 @@
                         e_behavior: self.merge.e_attr_behavior,
                         n_count_attr: self.merge.add_node_count_attr,
                         e_count_attr: self.merge.add_edge_count_attr
-
                     },
                     url: 's/'
 
@@ -162,15 +170,127 @@
 
                 self.reset_ui();
                 return qwait.promise;
-            }
+            };
+
+            // GROUP INTERSECT
+            
+            /**
+             * Changes page of merge UI after checking the form
+             * @param  {integer} index page
+             */
+            self.intersect_set_page = function (index) {
+                if ( 2 == index ) {
+                    // Check new name
+                    if ( undefined == self.intersect.group.new_name || null == self.intersect.group.new_name || '' == self.intersect.group.new_name ) {
+                        self.intersect.errMsg = 'Please, provide a name.';
+                        return;
+                    } else if ( -1 != self.intersect.name_list.indexOf(self.intersect.group.new_name) ) {
+                        self.intersect.errMsg = 'Name alredy in use.';
+                        return;
+                    }
+
+                    // Check number of selected networks
+                    var c = 0;
+                    var ks = Object.keys(self.intersect.group.networks);
+                    for (var i = ks.length - 1; i >= 0; i--) {
+                        var k = ks[i];
+                        if ( self.intersect.group.networks[k] ) {
+                            c++;
+                        }
+                    }
+
+                    // Minimum of 2 selected networks, otherwise trigger error
+                    if ( c >= 2 ) {
+                        // Clear previous errors
+                        self.intersect.errMsg = undefined;
+
+                        // (re-)Define vars for next page
+                        self.intersect.n_attr_identity = {};
+                        self.intersect.e_attr_identity = {};
+
+                        // Go to next page
+                        self.intersect.set_page(index)
+                    } else {
+                        self.intersect.errMsg = 'Select at least 2 networks.';
+                    }
+                } else if ( 3 == index ) {
+                    // Check that at least 1 attribute was selected for NODES
+                    var n = 0;
+                    var nks = Object.keys(self.intersect.n_attr_identity);
+                    for (var i = nks.length - 1; i >= 0; i--) {
+                        if ( self.intersect.n_attr_identity[nks[i]] ) n++;
+                    }
+
+                    if ( n > 0 ) {
+                        // Clear previous errors
+                        self.intersect.errMsg = undefined;
+
+                        // (re-)Define vars for next page
+                        self.intersect.n_attr_behavior = {};
+                        for (var i = self.intersect.group.nodes.length - 1; i >= 0; i--) {
+                            var node = self.intersect.group.nodes[i];
+                            if ( !self.intersect.n_attr_identity[node] ) self.intersect.n_attr_behavior[node] = 'ignore';
+                        };
+                        self.intersect.e_attr_behavior = {};
+                        for (var i = self.intersect.group.edges.length - 1; i >= 0; i--) {
+                            var edge = self.intersect.group.edges[i];
+                            if ( !self.intersect.e_attr_identity[edge] ) self.intersect.e_attr_behavior[edge] = 'ignore';
+                        };
+
+                        // Go to next page
+                        self.intersect.set_page(index)
+                    } else {
+                        self.intersect.errMsg = 'Select at least ONE attribute for the nodes identity function.';
+                    }
+                }
+            };
+
+            /**
+             * Runs the intersect operation
+             * @param  {string} session_id
+             */
+            self.apply_intersect = function (session_id) {
+                var qwait = q.defer();
+
+                http({
+
+                    method: 'POST',
+                    data: {
+                        action: 'networks_intersect',
+                        id: session_id,
+                        new_name: self.intersect.group.new_name,
+                        networks: self.intersect.get_selected_list(),
+                        n_identity: self.intersect.n_attr_identity,
+                        e_identity: self.intersect.e_attr_identity,
+                        n_behavior: self.intersect.n_attr_behavior,
+                        e_behavior: self.intersect.e_attr_behavior,
+                    },
+                    url: 's/'
+
+                }).
+                    success(function (data) {
+                        if ( 0 == data.err ) {
+                            //rootScope.$broadcast('reload_network_list', session_id);
+                            alert('Intersected networks.');
+                        }
+                        qwait.resolve(data);
+                    });
+
+                self.reset_ui();
+                return qwait.promise;
+            };
 
             // GENERAL
             
+            /**
+             * Resets commander UI
+             */
             self.reset_ui = function () {
                 self.operation = {
                     status: false
                 };
                 self.merge.reset_service();
+                self.intersect.reset_service();
             };
 
         };

@@ -141,13 +141,13 @@ if(file.exists(paste0('/home/gire/public_html/SOGIv020/server_side/session/', ar
 		}
 
 		n_id_col <- n_attr_tables[,'sogi_node_identity']
-		n_id_u_col <- unique(n_id_col)
 		e_id_col <- e_attr_tables[,'sogi_edge_identity']
-		e_id_u_col <- unique(e_id_col)
 
 		cat('> Prepare node output table\n')
 		# Prepare output node table
-		n_out_table <- n_attr_tables[which(!duplicated(n_id_col)),]
+		n_out_table <- n_attr_tables[which(n_id_col %in% names(table(n_id_col))[table(n_id_col) == length(l$networks)]),]
+		n_out_table <- n_out_table[which(!duplicated(n_out_table[,'sogi_node_identity'])),]
+		n_id_u_col <- n_out_table[,'sogi_node_identity']
 		# Select behaviors
 		n_b_list <- c()
 		for (attr in names(l$n_behavior)) {
@@ -157,11 +157,6 @@ if(file.exists(paste0('/home/gire/public_html/SOGIv020/server_side/session/', ar
 			} else {
 				n_b_list <- append(n_b_list, attr)
 			}
-		}
-		# Add column for new attribute
-		if ( l$n_count_attr ) {
-			n_out_table <- cbind(n_out_table, NA)
-			colnames(n_out_table)[ncol(n_out_table)] <- 'merge_count'
 		}
 		# Act as indicated from behavior
 		for (i in 1:length(n_id_u_col)) {
@@ -193,18 +188,13 @@ if(file.exists(paste0('/home/gire/public_html/SOGIv020/server_side/session/', ar
 					}
 				}
 			}
-			if ( l$n_count_attr ) {
-				if ( is.null(nrow(sub_table)) ) {
-					n_out_table[i, 'merge_count'] <- 1
-				} else {
-					n_out_table[i, 'merge_count'] <- nrow(sub_table)
-				}
-			}
 		}
 
 		cat('> Prepare edge output table\n')
 		# Prepare output edge table
-		e_out_table <- e_attr_tables[which(!duplicated(e_attr_tables[,'sogi_edge_identity'])),]
+		e_out_table <- e_attr_tables[which(e_id_col %in% names(table(e_id_col))[table(e_id_col) == length(l$networks)]),]
+		e_out_table <- e_out_table[which(!duplicated(e_out_table[,'sogi_edge_identity'])),]
+		e_id_u_col <- e_out_table[,'sogi_edge_identity']
 		# Select behaviors
 		e_b_list <- c()
 		for (attr in names(l$e_behavior)) {
@@ -214,11 +204,6 @@ if(file.exists(paste0('/home/gire/public_html/SOGIv020/server_side/session/', ar
 			} else {
 				e_b_list <- append(e_b_list, attr)
 			}
-		}
-		# Add column for new attribute
-		if ( l$e_count_attr ) {
-			e_out_table <- cbind(e_out_table, NA)
-			colnames(e_out_table)[ncol(e_out_table)] <- 'merge_count'
 		}
 		# Act as indicated from behavior
 		for (i in 1:length(e_id_u_col)) {
@@ -248,13 +233,6 @@ if(file.exists(paste0('/home/gire/public_html/SOGIv020/server_side/session/', ar
 					} else if ( 'last' == l$e_behavior[attr] ) {
 						e_out_table[i, attr] <- sub_table[nrow(sub_table), attr]
 					}
-				}
-			}
-			if ( l$e_count_attr ) {
-				if ( is.null(nrow(sub_table)) ) {
-					e_out_table[i, 'merge_count'] <- 1
-				} else {
-					e_out_table[i, 'merge_count'] <- nrow(sub_table)
 				}
 			}
 		}
