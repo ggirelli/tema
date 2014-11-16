@@ -3,7 +3,7 @@
 
     define([], function () {
 
-        return function (q, http, timeout, mergeGroup, intersectGroup, subtractGroup) {
+        return function (q, http, timeout, rootScope, mergeGroup, intersectGroup, subtractGroup) {
             var self = this;
 
             self.operation = {
@@ -389,8 +389,8 @@
                         action: 'networks_subtract',
                         id: session_id,
                         new_name: self.subtract.group.new_name,
-                        minuend: self.subtract.get_minuend(),
-                        subtrahends: self.subtract.get_selected_list(),
+                        minuend: self.subtract.group.minuend,
+                        networks: self.subtract.get_selected_list(),
                         n_identity: self.subtract.n_attr_identity,
                         e_identity: self.subtract.e_attr_identity
                     },
@@ -406,7 +406,7 @@
                         qwait.resolve(data);
                     });
 
-                //self.reset_ui();
+                self.reset_ui();
                 return qwait.promise;
             };
 

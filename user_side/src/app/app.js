@@ -39,7 +39,8 @@
             service('subtractGroupService', [networkGroupService]).
 
             service('canvasService', ['$q', '$http', '$rootScope', canvasService]).
-            service('commanderService', ['$q', '$http', '$timeout', 'mergeGroupService', 'intersectGroupService', 'subtractGroupService', commanderService]).
+            service('commanderService', ['$q', '$http', '$timeout', '$rootScope',
+                'mergeGroupService', 'intersectGroupService', 'subtractGroupService', commanderService]).
             service('inspectorService', [inspectorService]).
             service('networkService', ['$q', '$http', '$rootScope', 'convertGroupService', 'networkAttributeService', networkService]).
             service('panelsService', ['$rootScope', panelsService]).

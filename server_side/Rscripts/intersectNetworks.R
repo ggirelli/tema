@@ -110,15 +110,7 @@ if(file.exists(paste0('/home/gire/public_html/SOGIv020/server_side/session/', ar
 							colnames(e_attr_table)[ncol(e_attr_table)] <- attr
 						}
 					}
-
-					# Expand with missing attributes
-					for (attr in c(e_identity, names(l$e_behavior)) ) {
-						if ( !attr %in% colnames(e_attr_table) ) {
-							e_attr_table <- cbind(e_attr_table, NA)
-							colnames(e_attr_table)[ncol(e_attr_table)] <- attr
-						}
-					}
-
+					
 					# Add edge identity column
 					e_identity_col <- paste0(e_attr_table[,'source'], '->', e_attr_table[,'target'])
 					for (attr in e_identity) {
