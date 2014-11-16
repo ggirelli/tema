@@ -73,11 +73,11 @@
 
             /**
              * Saves in self.group the list of node/edge attributes of the selected networks
+             * @param  {Object} lists  {nodes: n_list, edges: e_list}
              */
-            self.get_attrs = function () {
-                // Empty attribute list
-                var n_list = [];
-                var e_list = [];
+            self.get_attrs = function (lists) {
+                var n_list = lists.nodes;
+                var e_list = lists.edges;
 
                 // For each network in the shown list
                 for (var i = self.list.length - 1; i >= 0; i--) {
@@ -85,30 +85,49 @@
 
                     // If it was selected
                     if ( self.group.networks[net.name] ) {
-                        var nks = net.data.v_attributes;
-                        if ( Array.isArray(nks) ) {
-                            for (var j = nks.length - 1; j >= 0; j--) {
-                                var nk = nks[j];
-                                if ( -1 == n_list.indexOf(nk) ) n_list.push(nk);
-                            }
-                        } else {
-                            if ( -1 == n_list.indexOf(nks) ) n_list.push(nks);
-                        }
-                        var eks = net.data.e_attributes;
-                        if ( Array.isArray(eks) ) {
-                            for (var j = eks.length - 1; j >= 0; j--) {
-                                var ek = eks[j];
-                                if ( -1 == e_list.indexOf(ek) ) e_list.push(ek);
-                            }
-                        } else {
-                            if ( -1 == e_list.indexOf(eks) ) e_list.push(eks);
-                        }
+                        var list = self.get_attrs_from_net(net, {nodes:n_list,edges:e_list});
+                        n_list = list.nodes;
+                        e_list = list.edges;
                     }
                 }
 
                 // Save attribute lists
                 self.group.nodes = n_list;
                 self.group.edges = e_list;
+            };
+
+            /**
+             * 
+             * Gets the edge/node attributes of a given network
+             * @param  {Object} network
+             * @param  {Object} lists  {nodes: n_list, edges: e_list}
+             * @return {Object}         {nodes: n_list, edges: e_list}
+             */
+            self.get_attrs_from_net = function (network, lists) {
+                var n_list = lists.nodes;
+                var e_list = lists.edges;
+
+                var nks = network.data.v_attributes;
+                if ( Array.isArray(nks) ) {
+                    for (var j = nks.length - 1; j >= 0; j--) {
+                        var nk = nks[j];
+                        if ( -1 == n_list.indexOf(nk) ) n_list.push(nk);
+                    }
+                } else {
+                    if ( -1 == n_list.indexOf(nks) ) n_list.push(nks);
+                }
+
+                var eks = network.data.e_attributes;
+                if ( Array.isArray(eks) ) {
+                    for (var j = eks.length - 1; j >= 0; j--) {
+                        var ek = eks[j];
+                        if ( -1 == e_list.indexOf(ek) ) e_list.push(ek);
+                    }
+                } else {
+                    if ( -1 == e_list.indexOf(eks) ) e_list.push(eks);
+                }
+
+                return({nodes: n_list, edges: e_list});
             };
 
             /**

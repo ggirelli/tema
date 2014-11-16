@@ -1,6 +1,6 @@
 <?php
 /**
- * Merges networks.
+ * Subtracts networks.
  * @author Gabriele Girelli <gabriele@filopoe.it>
  * @since  0.2.0
  */
@@ -18,8 +18,9 @@ if ( $s->exists($data->id) ) {
 	$f = SPATH . '/' . $data->id . '/tmp_r_config.json';
 	file_put_contents($f, json_encode($data));
 	
-	$q = 'cd ' . SCRIPATH . '; ./mergeNetworks.R ' . $s->get('id') . ' tmp_r_config';
+	$q = 'cd ' . SCRIPATH . '; ./subtractNetworks.R ' . $s->get('id') . ' tmp_r_config';
 	$r = $s->exec_return('convert', $q);
+	print_r($r);
 
 	unlink($f);
 	die('{"err":0}');

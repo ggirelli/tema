@@ -276,6 +276,18 @@
                 return q.promise;
             };
 
+            /**
+             * Returns 
+             * @param  {String} network_name
+             * @return {Object]}      network
+             */
+            self.get_network_from_name = function (network_name) {
+                for (var i = self.list.length - 1; i >= 0; i--) {
+                    var network = self.list[i];
+                    if ( network_name == network.name ) return(network);
+                }
+            };
+
             // GROUP CONVERSION
 
             self.conversion = convertGroup;

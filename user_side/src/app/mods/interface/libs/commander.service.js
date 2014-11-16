@@ -3,7 +3,7 @@
 
     define([], function () {
 
-        return function (q, http, timeout, mergeGroup, intersectGroup) {
+        return function (q, http, timeout, mergeGroup, intersectGroup, subtractGroup) {
             var self = this;
 
             self.operation = {
@@ -12,6 +12,7 @@
 
             self.merge = mergeGroup;
             self.intersect = intersectGroup;
+            self.subtract = subtractGroup;
 
             /**
              * Initializes the operation UI
@@ -22,7 +23,7 @@
                 self.operation.status = true;
                 self.selected = {};
 
-                if ( -1 != ['intersect', 'merge'].indexOf(name) ) {
+                if ( -1 != ['intersect', 'merge', 'subtract'].indexOf(name) ) {
                     self[name].name_list = []
                     self[name].list = [];
                     for (var i = 0; i < net_list.length; i++) {
@@ -270,13 +271,142 @@
                 }).
                     success(function (data) {
                         if ( 0 == data.err ) {
-                            //rootScope.$broadcast('reload_network_list', session_id);
+                            rootScope.$broadcast('reload_network_list', session_id);
                             alert('Intersected networks.');
                         }
                         qwait.resolve(data);
                     });
 
                 self.reset_ui();
+                return qwait.promise;
+            };
+
+            // GROUP SUBTRACT
+
+            /**
+             * Changes page of merge UI after checking the form
+             * @param  {integer} index page
+             */
+            self.subtract_set_page = function (index, session_id) {
+                if ( 2 == index ) {
+                    // Check new name
+                    if ( undefined == self.subtract.group.new_name || null == self.subtract.group.new_name || '' == self.subtract.group.new_name ) {
+                        self.subtract.errMsg = 'Please, provide a name.';
+                        return;
+                    } else if ( -1 != self.subtract.name_list.indexOf(self.subtract.group.new_name) ) {
+                        self.subtract.errMsg = 'Name alredy in use.';
+                        return;
+                    }
+
+                    // Check minuend network
+                    if ( undefined == self.subtract.group.minuend ) {
+                        self.subtract.errMsg = 'Select the minuend networks.';
+                    } else {
+                        // Clear previous errors
+                        self.subtract.errMsg = undefined;
+
+                        // Go to next page
+                        self.subtract.set_page(index)
+                    }
+                } else if ( 3 == index ) {
+                    // Check number of selected networks
+                    var c = 0;
+                    var ks = Object.keys(self.subtract.group.networks);
+                    for (var i = ks.length - 1; i >= 0; i--) {
+                        var k = ks[i];
+                        if ( self.subtract.group.networks[k] ) {
+                            c++;
+                        }
+                    }
+
+                    // Minimum of 1 selected network, otherwise trigger error
+                    if ( c >= 1 ) {
+                        // Clear previous errors
+                        self.subtract.errMsg = undefined;
+
+                        // (re-)Define vars for next page
+                        self.subtract.n_attr_identity = {};
+                        self.subtract.e_attr_identity = {};
+
+                        // Go to next page
+                        self.subtract.set_page(index)
+                    } else {
+                        self.subtract.errMsg = 'Select at least 1 networks.';
+                    }
+                } else if ( 4 == index ) {
+                    // Check that at least 1 attribute was selected for NODES
+                    var n = 0;
+                    var nks = Object.keys(self.subtract.n_attr_identity);
+                    for (var i = nks.length - 1; i >= 0; i--) {
+                        if ( self.subtract.n_attr_identity[nks[i]] ) n++;
+                    }
+
+                    if ( n > 0 ) {
+                        // Clear previous errors
+                        self.subtract.errMsg = undefined;
+
+                        // (re-)Define vars for next page
+                        self.subtract.n_attr_behavior = {};
+                        for (var i = self.subtract.group.nodes.length - 1; i >= 0; i--) {
+                            var node = self.subtract.group.nodes[i];
+                            if ( !self.subtract.n_attr_identity[node] ) self.subtract.n_attr_behavior[node] = 'ignore';
+                        };
+                        self.subtract.e_attr_behavior = {};
+                        for (var i = self.subtract.group.edges.length - 1; i >= 0; i--) {
+                            var edge = self.subtract.group.edges[i];
+                            if ( !self.subtract.e_attr_identity[edge] ) self.subtract.e_attr_behavior[edge] = 'ignore';
+                        };
+
+                        // Act
+                        self.apply_subtract(session_id);
+                    } else {
+                        self.subtract.errMsg = 'Select at least ONE attribute for the nodes identity function.';
+                    }                    
+                }
+            };
+
+            /**
+             * @return {Object} The minuend network
+             */
+            self.subtract.get_minuend = function () {
+                for (var i = self.subtract.list.length - 1; i >= 0; i--) {
+                    var network = self.subtract.list[i];
+                    if ( self.subtract.group.minuend == network.name ) return(network);
+                };
+            };
+
+            /**
+             * Runs the subtract operation
+             * @param  {string} session_id
+             */
+            self.apply_subtract = function (session_id) {
+                var qwait = q.defer();
+
+                http({
+
+                    method: 'POST',
+                    data: {
+                        action: 'networks_subtract',
+                        id: session_id,
+                        new_name: self.subtract.group.new_name,
+                        minuend: self.subtract.get_minuend(),
+                        subtrahends: self.subtract.get_selected_list(),
+                        n_identity: self.subtract.n_attr_identity,
+                        e_identity: self.subtract.e_attr_identity
+                    },
+                    url: 's/'
+
+                }).
+                    success(function (data) {
+                        console.log(data);
+                        if ( 0 == data.err ) {
+                            rootScope.$broadcast('reload_network_list', session_id);
+                            alert('Subtracted networks.');
+                        }
+                        qwait.resolve(data);
+                    });
+
+                //self.reset_ui();
                 return qwait.promise;
             };
 
