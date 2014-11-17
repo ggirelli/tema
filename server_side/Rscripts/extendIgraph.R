@@ -315,7 +315,11 @@ write.graph.json = function(graph, file) {
 	e.attrs <- get.edge.attributes(E(graph), id=TRUE, path=TRUE)
 	if(!is.null(e.attrs)) {
 		l$edges <- apply(e.attrs, MARGIN=1, FUN=function(x, index) {
-			data <- list(id=paste0('e', as.vector(x['id'])), target=paste0('n', as.vector(x['target'])), source=paste0('n', as.vector(x['source'])))
+			if (0 != length(which(is.na(as.numeric(as.vector(x['target'])))))) {
+				data <- list(id=paste0('e', as.vector(x['id'])), target=as.vector(x['target']), source=as.vector(x['source']))
+			} else {
+				data <- list(id=paste0('e', as.vector(x['id'])), target=paste0('n', as.vector(x['target'])), source=paste0('n', as.vector(x['source'])))
+			}
 			if (0 == length(data)) {
 				data <- 1:length(x)
 			}
