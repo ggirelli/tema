@@ -341,8 +341,9 @@ write.graph.json = function(graph, file) {
 			})
 		}
 	} else {
-		l <- list(data=as.list(n.attrs), group='nodes')
-
+		if ( 0 != length(n.attrs) ) {
+			l <- list(data=as.list(n.attrs), group='nodes')
+		}
 	}
 
 	write(toJSON(l), file)
