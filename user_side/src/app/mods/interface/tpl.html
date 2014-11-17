@@ -574,26 +574,21 @@
 			<div class="panel-body" ng-show="commander.is_operation('contains')">
 				<div class="contains-page-1" ng-show="commander.contains.is_page(1)">
 					<h4>Select the super-network:</h4>
-					<label for="net-super-{{net.id}}" class="alert" ng-repeat='net in commander.contains.group.net_list | filter:networks.isConverted' ng-show='networks.list != null' ng-class="{'alert-info' : networks.isConverted(net), 'alert-danger' : !networks.isConverted(net)}" style="width: 100%;">
-						<input id="net-super-{{net.id}}" name="net-super" type="radio" ng-model="commander.contains.group.super" value="{{net.name}}" />
-						{{net.name}}
-					</label>
+					<select name="" id="" class="form-control" ng-model="commander.contains.group.super" ng-change="commander.contains.get_attrs(commander.contains.get_attrs_from_net(networks.get_network_from_name(commander.contains.group.super), commander.contains.get_attrs_from_net(networks.get_network_from_name(commander.contains.group.sub), {nodes:[],edges:[]})));">
+						<option value="">--</option>
+						<option value="{{net.name}}" ng-repeat="net in commander.contains.group.net_list | filter:networks.isConverted">{{net.name}}</option>
+					</select>
 
-					<button class="btn end-btn btn-success" ng-click='commander.contains_set_page(2, m.session_id)'>next</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
-				</div>
+					<hr style="margin-bottom: 2em;" />
 
-                <div class="contains-page-2" ng-show="commander.contains.is_page(2)">
-                    <h4>Select the sub-network:</h4>
+					<h4>Select the sub-network:</h4>
+					<select name="" id="" class="form-control" ng-model="commander.contains.group.sub" ng-change="commander.contains.get_attrs(commander.contains.get_attrs_from_net(networks.get_network_from_name(commander.contains.group.super), commander.contains.get_attrs_from_net(networks.get_network_from_name(commander.contains.group.sub), {nodes:[],edges:[]})));">
+						<option value="">--</option>
+						<option value="{{net.name}}" ng-repeat="net in commander.contains.group.net_list | filter:networks.isConverted">{{net.name}}</option>
+					</select>
+					
+					<hr style="margin-bottom: 2em;" />
 
-                    <label for="net-sub-{{net.id}}" class="alert" ng-repeat='net in commander.contains.group.net_list | filter:networks.isConverted' ng-show='networks.list != null' ng-class="{'alert-info' : networks.isConverted(net), 'alert-danger' : !networks.isConverted(net)}" style="width: 100%;">
-                        <input id="net-sub-{{net.id}}" name="net-sub" type="radio" ng-model="commander.contains.group.sub" value="{{net.name}}" ng-click="commander.contains.get_attrs(commander.contains.get_attrs_from_net(networks.get_network_from_name(commander.contains.group.super), commander.contains.get_attrs_from_net(networks.get_network_from_name(net.name), {nodes:[],edges:[]})));" />
-                        {{net.name}}
-                    </label>
-
-                    <button class="btn end-btn btn-success" ng-click='commander.contains_set_page(3, m.session_id)'>next</button><button class="btn end-btn btn-warning" ng-click='commander.contains.set_page(1)'>back</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
-                </div>
-
-                <div class="contains-page-3" ng-show="commander.contains.is_page(3)">
                     <h4>Select the attributes to use for identity definitions:</h4>
                     <div>
                         <h5>Nodes</h5>
@@ -611,7 +606,7 @@
                     </div>
 
                     <br />
-                    <button class="btn end-btn btn-success" ng-click='commander.contains_set_page(4, m.session_id)'>contains</button><button class="btn end-btn btn-warning" ng-click='commander.contains.set_page(2)'>back</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
+                    <button class="btn end-btn btn-success" ng-click='commander.contains_set_page(2, m.session_id)'>contains</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
                 </div>
 
 				<hr style="margin-bottom: 2em;" />

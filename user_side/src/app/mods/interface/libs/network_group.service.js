@@ -107,6 +107,8 @@
                 var n_list = lists.nodes;
                 var e_list = lists.edges;
 
+                if ( undefined == network ) return({nodes: n_list, edges: e_list});
+
                 var nks = network.data.v_attributes;
                 if ( Array.isArray(nks) ) {
                     for (var j = nks.length - 1; j >= 0; j--) {

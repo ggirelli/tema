@@ -39,6 +39,11 @@
                     self[name].set_page(1);
                     self[name].toggle(session_id);
                 }
+
+                if ( 'contains' == name ) {
+                    self.contains.n_attr_identity = {};
+                    self.contains.e_attr_identity = {};
+                }
             };
 
             /**
@@ -421,32 +426,21 @@
              */
             self.contains_set_page = function (index, session_id) {
                 if ( 2 == index ) {
+                    // Clear previous errors
+                    self.contains.errMsg = undefined;
+
                     // Check super network
-                    if ( undefined == self.contains.group.super ) {
+                    if ( undefined == self.contains.group.super || '' == self.contains.group.super ) {
                         self.contains.errMsg = 'Select the super-network.';
-                    } else {
-                        // Clear previous errors
-                        self.contains.errMsg = undefined;
-
-                        // Go to next page
-                        self.contains.set_page(index)
+                        return;
                     }
-                } else if ( 3 == index ) {
+
                     // Check sub network
-                    if ( undefined == self.contains.group.sub ) {
+                    if ( undefined == self.contains.group.sub || '' == self.contains.group.sub ) {
                         self.contains.errMsg = 'Select the sub-network.';
-                    } else {
-                        // Clear previous errors
-                        self.contains.errMsg = undefined;
-
-                        // (re-)Define vars for next page
-                        self.contains.n_attr_identity = {};
-                        self.contains.e_attr_identity = {};
-
-                        // Go to next page
-                        self.contains.set_page(index)
+                        return;
                     }
-                } else if ( 4 == index ) {
+
                     // Check that at least 1 attribute was selected for NODES
                     var n = 0;
                     var nks = Object.keys(self.contains.n_attr_identity);
@@ -474,6 +468,7 @@
                         self.apply_contains(session_id);
                     } else {
                         self.contains.errMsg = 'Select at least ONE attribute for the nodes identity function.';
+                        return;
                     }                    
                 }
             };
@@ -512,6 +507,7 @@
 
                 }).
                     success(function (data) {
+                        console.log(data);
                         if ( 0 == data.err ) {
                             if ( 1 == data.res ) {
                                 alert('"' + sup + '" does contain "' + sub + '"');
