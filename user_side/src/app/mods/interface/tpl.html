@@ -135,6 +135,7 @@
 				<span ng-show="commander.is_operation('intersect')">Intersect networks</span>
 				<span ng-show="commander.is_operation('subtract')">Subtract networks</span>
 				<span ng-show="commander.is_operation('contains')">Is Subnetwork?</span>
+				<span ng-show="commander.is_operation('distances')">Calculate distance</span>
 			</div>
 			<!-- operation index -->
 			<div class="panel-body" ng-show="commander.is_operation()">
@@ -153,6 +154,10 @@
 				<!-- contains -->
 				<div class="btn operation-btn btn-info btn-block" ng-show="!commander.operation.status" ng-click="commander.init_operation('contains', networks.list, m.session_id)">
 					is Subnetwork
+				</div>
+				<!-- distances -->
+				<div class="btn operation-btn btn-success btn-block" ng-show="!commander.operation.status" ng-click="commander.init_operation('distances', networks.list, m.session_id)">
+					Calculate distance
 				</div>
 			</div>
 			<!-- merge body -->
@@ -617,6 +622,146 @@
 					Remember to standardize correctly map the attributes of the networks of interest
 					using the attribute management tools.
 				</p>
+			</div>
+			<!-- distance -->
+			<div class="panel-body" ng-show="commander.is_operation('distances')">
+				<div class="distances-page-1" ng-show="commander.distances.is_page(1)">
+					<h4>Select the networks to calculate their pair-wise distance:</h4>
+					<label class="group-selection-option alert alert-warning" for="distances-all"><input type="checkbox" id="distances-all" name="distances-all" ng-model="commander.distances.group.all" ng-click="commander.distances.un_select_all(); commander.distances.get_attrs({nodes:[],edges:[]});" /> Un/Select all</label><label class="group-selection-option alert alert-success" for="distances-filter"><input type="checkbox" id="distances-filter" name="distances-filter" ng-model="commander.distances.group.filter" ng-click="commander.distances.toggle_filter()" /> Custom Filters</label>
+
+					<div class="panel panel-success" ng-show="commander.distances.group.filter">
+						<div class="panel-success panel-heading">
+							Filter
+							<a href="#/interface/{{m.session_id}}" class="btn-panel float-right" ng-click="commander.distances.add_filter()" title="Add new"><span class="text-success glyphicon glyphicon-plus"></span></a>
+						</div>
+						<div class="panel-body">
+							<table class="filter-selection">
+								<tr>
+									<td></td>
+									<th>Attribute</th>
+									<th>Condition</th>
+									<th>Value</th>
+								</tr>
+								<tr ng-repeat="filter in commander.distances.filters">
+									<td class="text-align-left">
+										<select name="" id="" ng-show="!$first" ng-model="commander.distances.filters[$index].combine" ng-change="commander.distances.apply_filters()">
+											<option value="">--</option>
+											<option value="AND">AND</option>
+											<option value="OR">OR</option>
+										</select>
+									</td>
+									<td>
+										<select name="" id="" style="max-width: 100px;" ng-model="commander.distances.filters[$index].attribute" ng-change="commander.distances.apply_filters(); commander.distances.filters[$index].value=''">
+											<option value="">--</option>
+											<option value="{{attr}}" ng-repeat="attr in commander.distances.group.net_attributes">{{commander.distances.extract_attr_name(attr)}}</option>
+										</select>
+									</td>
+									<td>
+										<select name="" id="" ng-model="commander.distances.filters[$index].condition" ng-change="commander.distances.apply_filters()">
+											<option value="" ng-show="!commander.distances.filters[$index].object">--</option>
+											<option value="e" ng-show="!commander.distances.filters[$index].object">=</option>
+											<option value="ne" ng-show="!commander.distances.filters[$index].object">&#8800;</option>
+											<option value="lt" ng-show="!commander.distances.filters[$index].object">&lt;</option>
+											<option value="le" ng-show="!commander.distances.filters[$index].object">&le;</option>
+											<option value="gt" ng-show="!commander.distances.filters[$index].object">&gt;</option>
+											<option value="ge" ng-show="!commander.distances.filters[$index].object">&ge;</option>
+											<option value="c" ng-selected="commander.distances.filters[$index].object" ng-show="commander.distances.filters[$index].object">contains</option>
+										</select>
+									</td>
+									<td>
+										<select name="" id="" style="max-width: 100px;" ng-model="commander.distances.filters[$index].value" ng-change="commander.distances.apply_filters()">
+											<option value="" ng-selected="-1 == commander.distances.get_net_attr_values($index).indexOf(commander.distances.filters[$index].value)">--</option>
+											<option value="{{v}}" ng-repeat="v in commander.distances.get_net_attr_values($index)">{{v}}</option>
+										</select>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+
+					<label for="net-{{net.id}}" class="alert" ng-repeat='net in commander.distances.group.net_list | filter:networks.isConverted' ng-show='networks.list != null' ng-class="{'alert-info' : networks.isConverted(net), 'alert-danger' : !networks.isConverted(net)}" style="width: 100%;">
+						<input id="net-{{net.id}}" name="net-{{net.id}}" type="checkbox" ng-model="commander.distances.group.networks[net.name]" ng-click="commander.distances.check(net.name); commander.distances.get_attrs({nodes:[],edges:[]});" />
+						{{net.name}}
+					</label>
+
+					<button class="btn end-btn btn-success" ng-click='commander.distances_set_page(2)'>next</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
+				</div>
+
+				<div class="distances-page-2" ng-show="commander.distances.is_page(2)">
+					<h4>Select the attributes to use for identity definitions:</h4>
+					<div>
+						<h5>Nodes</h5>
+						<label class="alert alert-warning attr-select" for="attr-node-{{attr}}" ng-repeat="attr in commander.distances.group.nodes">
+							<input type="checkbox" name="attr-node-{{attr}}" id="attr-node-{{attr}}" ng-model="commander.distances.n_attr_identity[attr]" />
+							{{attr}}
+						</label>
+					</div>
+					<div>
+						<h5>Edges</h5>
+						<label class="alert alert-warning attr-select" for="attr-edge-{{attr}}" ng-repeat="attr in commander.distances.group.edges">
+							<input type="checkbox" name="attr-edge-{{attr}}" id="attr-edge-{{attr}}" ng-model="commander.distances.e_attr_identity[attr]" />
+							{{attr}}
+						</label>
+					</div>
+
+					<br />
+					<button class="btn end-btn btn-success" ng-click='commander.distances_set_page(3)'>next</button><button class="btn end-btn btn-warning" ng-click='commander.distances.set_page(1)'>back</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
+				</div>
+
+				<div class="distances-page-3" ng-show="commander.distances.is_page(3)">
+					<h4>Select the distances:</h4>
+
+					<label for="dist-hamming" class="alert alert-info" style="width: 100%;">
+						<input id="dist-hamming" name="dist-hamming" type="checkbox" ng-model="commander.distances.measures['h']" />
+						Hamming
+					</label>
+					<label for="dist-HIM" class="alert alert-info" style="width: 100%;">
+						<input id="dist-HIM" name="dist-HIM" type="checkbox" ng-model="commander.distances.measures['him']" />
+						HIM
+					</label>
+					<label for="dist-IM" class="alert alert-info" style="width: 100%;">
+						<input id="dist-IM" name="dist-IM" type="checkbox" ng-model="commander.distances.measures['im']" />
+						Ipsen-Mikhailov
+					</label>
+					<label for="dist-jaccard" class="alert alert-info" style="width: 100%;">
+						<input id="dist-jaccard" name="dist-jaccard" type="checkbox" ng-model="commander.distances.measures['j']" />
+						Jaccard
+					</label>
+					<label for="dist-JIM" class="alert alert-info" style="width: 100%;">
+						<input id="dist-JIM" name="dist-JIM" type="checkbox" ng-model="commander.distances.measures['jim']" />
+						JIM
+					</label>
+					<label for="dist-jaccard-subset" class="alert alert-info" style="width: 100%;">
+						<input id="dist-jaccard-subset" name="dist-jaccard-subset" type="checkbox" ng-model="commander.distances.measures['js']" />
+						Jaccard subset
+					</label>
+					<label for="dist-JSIM" class="alert alert-info" style="width: 100%;">
+						<input id="dist-JSIM" name="dist-JSIM" type="checkbox" ng-model="commander.distances.measures['js']" />
+						JSIM
+					</label>
+
+					
+					<br />
+					<button class="btn end-btn btn-success" ng-click='commander.distances_set_page(4)'>next</button><button class="btn end-btn btn-warning" ng-click='commander.distances.set_page(2)'>back</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
+				</div>
+
+				<div class="distances-page-4" ng-show="commander.distances.is_page(4)">
+					<label for="auto-plot" class="alert alert-info" style="width: 100%;">
+						<input type="checkbox" id="auto-plot" name="auto-plot" ng-model="commander.distances.out_plot" />
+						Output plots and heatmaps.
+					</label>
+					<label for="auto-table" class="alert alert-info" style="width: 100%;">
+						<input type="checkbox" id="auto-table" name="auto-table" ng-model="commander.distances.out_table" />
+						Output distances table.
+					</label>
+
+					<br />
+					<button class="btn end-btn btn-success" ng-click='commander.apply_distances(m.session_id)'>distances</button><button class="btn end-btn btn-warning" ng-click='commander.distances.set_page(3)'>back</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
+				</div>
+
+				<hr style="margin-bottom: 2em;" />
+
+				<div class="alert alert-danger" ng-show="undefined != commander.distances.errMsg">{{commander.distances.errMsg}}</div>
 			</div>
 		</div>
 

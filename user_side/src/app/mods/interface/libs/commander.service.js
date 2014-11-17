@@ -4,7 +4,7 @@
     define([], function () {
 
         return function (q, http, timeout,
-            mergeGroup, intersectGroup, subtractGroup, containsGroup) {
+            mergeGroup, intersectGroup, subtractGroup, containsGroup, distancesGroup) {
             var self = this;
 
             self.operation = {
@@ -15,6 +15,7 @@
             self.intersect = intersectGroup;
             self.subtract = subtractGroup;
             self.contains = containsGroup;
+            self.distances = distancesGroup;
 
             /**
              * Initializes the operation UI
@@ -25,7 +26,7 @@
                 self.operation.status = true;
                 self.selected = {};
 
-                if ( -1 != ['contains', 'intersect', 'merge', 'subtract'].indexOf(name) ) {
+                if ( -1 != ['contains', 'distances', 'intersect', 'merge', 'subtract'].indexOf(name) ) {
                     self[name].name_list = []
                     self[name].list = [];
                     for (var i = 0; i < net_list.length; i++) {
@@ -512,6 +513,121 @@
                             } else if ( 0 == data.res ) {
                                 alert('"' + self.contains.group.super + '" does not contain "' + self.contains.group.sub + '"');
                             }
+                        }
+                        qwait.resolve(data);
+                    });
+
+                self.reset_ui();
+                return qwait.promise;
+            };
+
+            // GROUP DISTANCES
+            
+            /**
+             * Changes page of distances UI after checking the form
+             * @param  {integer} index page
+             */
+            self.distances_set_page = function (index) {
+                if ( 2 == index ) {
+                    // Check number of selected networks
+                    var c = 0;
+                    var ks = Object.keys(self.distances.group.networks);
+                    for (var i = ks.length - 1; i >= 0; i--) {
+                        var k = ks[i];
+                        if ( self.distances.group.networks[k] ) {
+                            c++;
+                        }
+                    }
+
+                    // Minimum of 2 selected networks, otherwise trigger error
+                    if ( c >= 2 ) {
+                        // Clear previous errors
+                        self.distances.errMsg = undefined;
+
+                        // (re-)Define vars for next page
+                        self.distances.n_attr_identity = {};
+                        self.distances.e_attr_identity = {};
+
+                        // Go to next page
+                        self.distances.set_page(index)
+                    } else {
+                        self.distances.errMsg = 'Select at least 2 networks.';
+                    }
+                } else if ( 3 == index ) {
+                    // Check that at least 1 attribute was selected for NODES
+                    var n = 0;
+                    var nks = Object.keys(self.distances.n_attr_identity);
+                    for (var i = nks.length - 1; i >= 0; i--) {
+                        if ( self.distances.n_attr_identity[nks[i]] ) n++;
+                    }
+
+                    if ( n > 0 ) {
+                        // Clear previous errors
+                        self.distances.errMsg = undefined;
+
+                        // (re-)Define vars for next page
+                        self.distances.measures = {
+                            h: false,
+                            him: false,
+                            im: false,
+                            j: false,
+                            jim: false,
+                            js: false,
+                            jsim: false
+                        }
+
+                        // Go to next page
+                        self.distances.set_page(index)
+                    } else {
+                        self.distances.errMsg = 'Select at least ONE attribute for the nodes identity function.';
+                    }
+                } else if ( 4 == index ) {
+                    // Check that at least 1 measure was selected
+                    var n = 0;
+                    var nks = Object.keys(self.distances.measures);
+                    for (var i = nks.length - 1; i >= 0; i--) {
+                        if ( self.distances.measures[nks[i]] ) n++;
+                    }
+
+                    if ( n > 0 ) {
+                        // Clear previous errors
+                        self.distances.errMsg = undefined;
+
+                        // (re-)Define vars for next page
+                        self.distances.out_plot = false;
+                        self.distances.out_table = false;
+
+                        // Go to next page
+                        self.distances.set_page(index);
+                    } else {
+                        self.distances.errMsg = 'Select at least ONE measure of distance.';
+                    }
+                }
+            };
+
+            /**
+             * Runs the distances operation
+             * @param  {string} session_id
+             */
+            self.apply_distances = function (session_id) {
+                var qwait = q.defer();
+
+                http({
+
+                    method: 'POST',
+                    data: {
+                        action: 'networks_distances',
+                        id: session_id,
+                        networks: self.distances.get_selected_list(),
+                        n_identity: self.distances.n_attr_identity,
+                        e_identity: self.distances.e_attr_identity
+                    },
+                    url: 's/'
+
+                }).
+                    success(function (data) {
+                        if ( 0 == data.err ) {
+                            alert('Done.');
                         }
                         qwait.resolve(data);
                     });
