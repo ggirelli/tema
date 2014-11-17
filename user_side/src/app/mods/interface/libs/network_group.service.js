@@ -187,7 +187,14 @@
                     });
                 } else {
                     self.filters = [];
+                    self.group.net_list = self.list;
+                    for (var i = self.list.length - 1; i >= 0; i--) {
+                        var net = self.list[i];
+                        self.group.networks[net.name] = false;
+                    }
                 }
+
+                self.check();
             };
 
             /**
@@ -362,7 +369,14 @@
                         tmpNetworks[net_list_clean[i].name] = false;
                     }
                     self.group.networks = tmpNetworks;
+                } else {
+                    self.group.net_list = self.list;
+                    for (var i = self.list.length - 1; i >= 0; i--) {
+                        var net = self.list[i];
+                        self.group.networks[net.name] = false;
+                    }
                 }
+                self.check();
             };
 
             /**
