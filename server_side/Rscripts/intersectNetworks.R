@@ -155,44 +155,46 @@ if(file.exists(paste0('/home/gire/public_html/SOGIv020/server_side/session/', ar
 		# Prepare output node table
 		n_out_table <- n_attr_tables[which(n_id_col %in% names(table(n_id_col))[table(n_id_col) == length(l$networks)]),]
 		n_out_table <- n_out_table[which(!duplicated(n_out_table[,'sogi_node_identity'])),]
-		n_id_u_col <- n_out_table[,'sogi_node_identity']
-		# Select behaviors
-		n_b_list <- c()
-		for (attr in names(l$n_behavior)) {
-			if ( 'ignore' == l$n_behavior[attr] ) {
-				n_out_table <- n_out_table[,-which(attr == colnames(n_out_table))]
-				n_attr_tables <- n_attr_tables[,-which(attr == colnames(n_attr_tables))]
-			} else {
-				n_b_list <- append(n_b_list, attr)
-			}
-		}
-		# Act as indicated from behavior
-		for (i in 1:length(n_id_u_col)) {
-			sub_table <- n_attr_tables[which(n_id_col == n_id_u_col[i]),]
-			for (attr in n_b_list) {
-				if ( is.null(nrow(sub_table)) ) {
-					n_out_table[i, attr] <- sub_table[attr]
+		if ( !is.null(nrow(n_out_table)) ) {
+			n_id_u_col <- n_out_table[,'sogi_node_identity']
+			# Select behaviors
+			n_b_list <- c()
+			for (attr in names(l$n_behavior)) {
+				if ( 'ignore' == l$n_behavior[attr] ) {
+					n_out_table <- n_out_table[,-which(attr == colnames(n_out_table))]
+					n_attr_tables <- n_attr_tables[,-which(attr == colnames(n_attr_tables))]
 				} else {
-					if ( 'sum' == l$n_behavior[attr] ) {
-						n_out_table[i, attr] <- sum(as.numeric(sub_table[, attr]))
-					} else if ( 'prod' == l$n_behavior[attr] ) {
-						n_out_table[i, attr] <- prod(as.numeric(sub_table[, attr]))
-					} else if ( 'min' == l$n_behavior[attr] ) {
-						n_out_table[i, attr] <- min(as.numeric(sub_table[, attr]))
-					} else if ( 'max' == l$n_behavior[attr] ) {
-						n_out_table[i, attr] <- max(as.numeric(sub_table[, attr]))
-					} else if ( 'random' == l$n_behavior[attr] ) {
-						n_out_table[i, attr] <- sub_table[round(runif(1,0,1)*(nrow(sub_table)-1))+1, attr]
-					} else if ( 'mean' == l$n_behavior[attr] ) {
-						n_out_table[i, attr] <- mean(as.numeric(sub_table[, attr]))
-					} else if ( 'median' == l$n_behavior[attr] ) {
-						n_out_table[i, attr] <- median(as.numeric(sub_table[, attr]))
-					} else if ( 'concat' == l$n_behavior[attr] ) {
-						n_out_table[i, attr] <- paste(sub_talbe[, attr], collapse='~')
-					} else if ( 'first' == l$n_behavior[attr] ) {
-						n_out_table[i, attr] <- sub_table[1, attr]
-					} else if ( 'last' == l$n_behavior[attr] ) {
-						n_out_table[i, attr] <- sub_table[nrow(sub_table), attr]
+					n_b_list <- append(n_b_list, attr)
+				}
+			}
+			# Act as indicated from behavior
+			for (i in 1:length(n_id_u_col)) {
+				sub_table <- n_attr_tables[which(n_id_col == n_id_u_col[i]),]
+				for (attr in n_b_list) {
+					if ( is.null(nrow(sub_table)) ) {
+						n_out_table[i, attr] <- sub_table[attr]
+					} else {
+						if ( 'sum' == l$n_behavior[attr] ) {
+							n_out_table[i, attr] <- sum(as.numeric(sub_table[, attr]))
+						} else if ( 'prod' == l$n_behavior[attr] ) {
+							n_out_table[i, attr] <- prod(as.numeric(sub_table[, attr]))
+						} else if ( 'min' == l$n_behavior[attr] ) {
+							n_out_table[i, attr] <- min(as.numeric(sub_table[, attr]))
+						} else if ( 'max' == l$n_behavior[attr] ) {
+							n_out_table[i, attr] <- max(as.numeric(sub_table[, attr]))
+						} else if ( 'random' == l$n_behavior[attr] ) {
+							n_out_table[i, attr] <- sub_table[round(runif(1,0,1)*(nrow(sub_table)-1))+1, attr]
+						} else if ( 'mean' == l$n_behavior[attr] ) {
+							n_out_table[i, attr] <- mean(as.numeric(sub_table[, attr]))
+						} else if ( 'median' == l$n_behavior[attr] ) {
+							n_out_table[i, attr] <- median(as.numeric(sub_table[, attr]))
+						} else if ( 'concat' == l$n_behavior[attr] ) {
+							n_out_table[i, attr] <- paste(sub_talbe[, attr], collapse='~')
+						} else if ( 'first' == l$n_behavior[attr] ) {
+							n_out_table[i, attr] <- sub_table[1, attr]
+						} else if ( 'last' == l$n_behavior[attr] ) {
+							n_out_table[i, attr] <- sub_table[nrow(sub_table), attr]
+						}
 					}
 				}
 			}
@@ -202,44 +204,46 @@ if(file.exists(paste0('/home/gire/public_html/SOGIv020/server_side/session/', ar
 		# Prepare output edge table
 		e_out_table <- e_attr_tables[which(e_id_col %in% names(table(e_id_col))[table(e_id_col) == length(l$networks)]),]
 		e_out_table <- e_out_table[which(!duplicated(e_out_table[,'sogi_edge_identity'])),]
-		e_id_u_col <- e_out_table[,'sogi_edge_identity']
-		# Select behaviors
-		e_b_list <- c()
-		for (attr in names(l$e_behavior)) {
-			if ( 'ignore' == l$e_behavior[attr] ) {
-				e_out_table <- e_out_table[,-which(attr == colnames(e_out_table))]
-				e_attr_tables <- e_attr_tables[,-which(attr == colnames(e_attr_tables))]
-			} else {
-				e_b_list <- append(e_b_list, attr)
-			}
-		}
-		# Act as indicated from behavior
-		for (i in 1:length(e_id_u_col)) {
-			sub_table <- e_attr_tables[which(e_id_col == e_id_u_col[i]),]
-			for (attr in e_b_list) {
-				if ( is.null(nrow(sub_table)) ) {
-					e_out_table[i, attr] <- sub_table[attr]
+		if ( !is.null(nrow(e_out_table)) ) {
+			e_id_u_col <- e_out_table[,'sogi_edge_identity']
+			# Select behaviors
+			e_b_list <- c()
+			for (attr in names(l$e_behavior)) {
+				if ( 'ignore' == l$e_behavior[attr] ) {
+					e_out_table <- e_out_table[,-which(attr == colnames(e_out_table))]
+					e_attr_tables <- e_attr_tables[,-which(attr == colnames(e_attr_tables))]
 				} else {
-					if ( 'sum' == l$e_behavior[attr] ) {
-						e_out_table[i, attr] <- sum(as.numeric(sub_table[, attr]))
-					} else if ( 'prod' == l$e_behavior[attr] ) {
-						e_out_table[i, attr] <- prod(as.numeric(sub_table[, attr]))
-					} else if ( 'min' == l$e_behavior[attr] ) {
-						e_out_table[i, attr] <- min(as.numeric(sub_table[, attr]))
-					} else if ( 'max' == l$e_behavior[attr] ) {
-						e_out_table[i, attr] <- max(as.numeric(sub_table[, attr]))
-					} else if ( 'random' == l$e_behavior[attr] ) {
-						e_out_table[i, attr] <- sub_table[round(runif(1,0,1)*(nrow(sub_table)-1))+1, attr]
-					} else if ( 'mean' == l$e_behavior[attr] ) {
-						e_out_table[i, attr] <- mean(as.numeric(sub_table[, attr]))
-					} else if ( 'median' == l$e_behavior[attr] ) {
-						e_out_table[i, attr] <- median(as.numeric(sub_table[, attr]))
-					} else if ( 'concat' == l$e_behavior[attr] ) {
-						e_out_table[i, attr] <- paste(sub_talbe[, attr], collapse='~')
-					} else if ( 'first' == l$e_behavior[attr] ) {
-						e_out_table[i, attr] <- sub_table[1, attr]
-					} else if ( 'last' == l$e_behavior[attr] ) {
-						e_out_table[i, attr] <- sub_table[nrow(sub_table), attr]
+					e_b_list <- append(e_b_list, attr)
+				}
+			}
+			# Act as indicated from behavior
+			for (i in 1:length(e_id_u_col)) {
+				sub_table <- e_attr_tables[which(e_id_col == e_id_u_col[i]),]
+				for (attr in e_b_list) {
+					if ( is.null(nrow(sub_table)) ) {
+						e_out_table[i, attr] <- sub_table[attr]
+					} else {
+						if ( 'sum' == l$e_behavior[attr] ) {
+							e_out_table[i, attr] <- sum(as.numeric(sub_table[, attr]))
+						} else if ( 'prod' == l$e_behavior[attr] ) {
+							e_out_table[i, attr] <- prod(as.numeric(sub_table[, attr]))
+						} else if ( 'min' == l$e_behavior[attr] ) {
+							e_out_table[i, attr] <- min(as.numeric(sub_table[, attr]))
+						} else if ( 'max' == l$e_behavior[attr] ) {
+							e_out_table[i, attr] <- max(as.numeric(sub_table[, attr]))
+						} else if ( 'random' == l$e_behavior[attr] ) {
+							e_out_table[i, attr] <- sub_table[round(runif(1,0,1)*(nrow(sub_table)-1))+1, attr]
+						} else if ( 'mean' == l$e_behavior[attr] ) {
+							e_out_table[i, attr] <- mean(as.numeric(sub_table[, attr]))
+						} else if ( 'median' == l$e_behavior[attr] ) {
+							e_out_table[i, attr] <- median(as.numeric(sub_table[, attr]))
+						} else if ( 'concat' == l$e_behavior[attr] ) {
+							e_out_table[i, attr] <- paste(sub_talbe[, attr], collapse='~')
+						} else if ( 'first' == l$e_behavior[attr] ) {
+							e_out_table[i, attr] <- sub_table[1, attr]
+						} else if ( 'last' == l$e_behavior[attr] ) {
+							e_out_table[i, attr] <- sub_table[nrow(sub_table), attr]
+						}
 					}
 				}
 			}
@@ -254,18 +258,40 @@ if(file.exists(paste0('/home/gire/public_html/SOGIv020/server_side/session/', ar
 		}, nlist=n_out_table[,which('sogi_node_identity' == colnames(n_out_table))]))
 
 		# Remove identity columns
-		n_out_table <- n_out_table[, -which('sogi_node_identity' == colnames(n_out_table))]
-		e_out_table <- e_out_table[, -which('sogi_edge_identity' == colnames(e_out_table))]
+		if ( !is.null(nrow(n_out_table)) ) {
+			n_out_table <- n_out_table[, -which('sogi_node_identity' == colnames(n_out_table))]
+		} else {
+			n_out_table <- n_out_table[-which('sogi_node_identity' == names(n_out_table))]
+		}
+		if ( !is.null(nrow(e_out_table)) ) {
+			e_out_table <- e_out_table[, -which('sogi_node_identity' == colnames(e_out_table))]
+		} else {
+			e_out_table <- e_out_table[-which('sogi_node_identity' == names(e_out_table))]
+		}
 
 		cat('> Convert to graph\n')
 		g.out <- graph.empty()
-		g.out <- add.vertices(g.out, nrow(n_out_table))
-		for (attr in colnames(n_out_table)) {
-			eval(parse(text=paste0('V(g.out)$', attr, ' <- n_out_table[, attr]')))
+		if ( !is.null(nrow(n_out_table)) ) {
+			g.out <- add.vertices(g.out, nrow(n_out_table))
+			for (attr in colnames(n_out_table)) {
+				eval(parse(text=paste0('V(g.out)$', attr, ' <- n_out_table[, attr]')))
+			}
+		} else {
+			g.out <- add.vertices(g.out, 1)
+			for (attr in names(n_out_table)) {
+				eval(parse(text=paste0('V(g.out)$', attr, ' <- n_out_table[attr]')))
+			}
 		}
-		g.out <- add.edges(g.out, c(rbind(V(g.out)[as.numeric(e_out_table[,'source'])],V(g.out)[as.numeric(e_out_table[,'target'])])))
-		for (attr in colnames(e_out_table)) {
-			eval(parse(text=paste0('E(g.out)$', attr, ' <- e_out_table[, attr]')))
+		if ( !is.null(nrow(e_out_table)) ) {
+			g.out <- add.edges(g.out, c(rbind(V(g.out)[as.numeric(e_out_table[,'source'])],V(g.out)[as.numeric(e_out_table[,'target'])])))
+			for (attr in colnames(e_out_table)) {
+				eval(parse(text=paste0('E(g.out)$', attr, ' <- e_out_table[, attr]')))
+			}
+		} else {
+			g.out <- add.edges(g.out, c(rbind(V(g.out)[as.numeric(e_out_table['source'])],V(g.out)[as.numeric(e_out_table['target'])])))
+			for (attr in colnames(e_out_table)) {
+				eval(parse(text=paste0('E(g.out)$', attr, ' <- e_out_table[attr]')))
+			}
 		}
 
 		cat('> Write GraphML network\n')
