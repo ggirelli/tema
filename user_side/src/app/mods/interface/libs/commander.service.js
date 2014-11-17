@@ -3,7 +3,7 @@
 
     define([], function () {
 
-        return function (q, http, timeout,
+        return function (q, http, timeout, rootScope,
             mergeGroup, intersectGroup, subtractGroup, containsGroup, distancesGroup) {
             var self = this;
 
@@ -165,10 +165,12 @@
 
                 }).
                     success(function (data) {
+                        console.log(data);
                         if ( 0 == data.err ) {
                             alert('Merged networks.');
                         }
                         qwait.resolve(data);
+                        rootScope.$broadcast('reload_network_list', session_id);
                     });
 
                 self.reset_ui();
@@ -276,6 +278,7 @@
                             alert('Intersected networks.');
                         }
                         qwait.resolve(data);
+                        rootScope.$broadcast('reload_network_list', session_id);
                     });
 
                 self.reset_ui();
@@ -399,11 +402,11 @@
 
                 }).
                     success(function (data) {
-                        console.log(data);
                         if ( 0 == data.err ) {
                             alert('Subtracted networks.');
                         }
                         qwait.resolve(data);
+                        rootScope.$broadcast('reload_network_list', session_id);
                     });
 
                 self.reset_ui();
@@ -491,6 +494,8 @@
              */
             self.apply_contains = function (session_id) {
                 var qwait = q.defer();
+                var sup = self.contains.group.super;
+                var sub = self.contains.group.sub;
 
                 http({
 
@@ -498,8 +503,8 @@
                     data: {
                         action: 'network_contains',
                         id: session_id,
-                        super: self.contains.group.super,
-                        sub: self.contains.group.sub,
+                        super: sup,
+                        sub: sub,
                         n_identity: self.contains.n_attr_identity,
                         e_identity: self.contains.e_attr_identity
                     },
@@ -509,11 +514,12 @@
                     success(function (data) {
                         if ( 0 == data.err ) {
                             if ( 1 == data.res ) {
-                                alert('"' + self.contains.group.super + '" does contain "' + self.contains.group.sub + '"');
+                                alert('"' + sup + '" does contain "' + sub + '"');
                             } else if ( 0 == data.res ) {
-                                alert('"' + self.contains.group.super + '" does not contain "' + self.contains.group.sub + '"');
+                                alert('"' + sup + '" does not contain "' + sub + '"');
                             }
                         }
+                        rootScope.$broadcast('reload_network_list', session_id);
                         qwait.resolve(data);
                     });
 
@@ -630,6 +636,7 @@
                             alert('Done.');
                         }
                         qwait.resolve(data);
+                        rootScope.$broadcast('reload_network_list', session_id);
                     });
 
                 self.reset_ui();
@@ -647,6 +654,9 @@
                 };
                 self.merge.reset_service();
                 self.intersect.reset_service();
+                self.subtract.reset_service();
+                self.contains.reset_service();
+                self.distances.reset_service();
             };
 
         };

@@ -19,7 +19,6 @@ if(file.exists(paste0('/home/gire/public_html/SOGIv020/server_side/session/', ar
 		cat('> Read config file\n')
 		s <- scan(paste0(args[2], '.json'), 'raw')
 		l <- fromJSON(s)
-		print(l)
 
 		n_attr_tables <- c()
 		e_attr_tables <- c()
@@ -216,11 +215,13 @@ if(file.exists(paste0('/home/gire/public_html/SOGIv020/server_side/session/', ar
 		# Select behaviors
 		e_b_list <- c()
 		for (attr in names(l$e_behavior)) {
-			if ( 'ignore' == l$e_behavior[attr] ) {
-				e_out_table <- e_out_table[,-which(attr == colnames(e_out_table))]
-				e_attr_tables <- e_attr_tables[,-which(attr == colnames(e_attr_tables))]
-			} else {
-				e_b_list <- append(e_b_list, attr)
+			if ( !attr %in% c('source', 'target') ) {
+				if ( 'ignore' == l$e_behavior[attr] ) {
+					e_out_table <- e_out_table[,-which(attr == colnames(e_out_table))]
+					e_attr_tables <- e_attr_tables[,-which(attr == colnames(e_attr_tables))]
+				} else {
+					e_b_list <- append(e_b_list, attr)
+				}
 			}
 		}
 		# Add column for new attribute

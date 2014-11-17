@@ -41,7 +41,7 @@
             service('distancesGroupService', [networkGroupService]).
 
             service('canvasService', ['$q', '$http', '$rootScope', canvasService]).
-            service('commanderService', ['$q', '$http', '$timeout',
+            service('commanderService', ['$q', '$http', '$timeout', '$rootScope',
                 'mergeGroupService', 'intersectGroupService', 'subtractGroupService', 'containsGroupService', 'distancesGroupService', commanderService]).
             service('inspectorService', [inspectorService]).
             service('networkService', ['$q', '$http', '$rootScope', 'convertGroupService', 'networkAttributeService', networkService]).

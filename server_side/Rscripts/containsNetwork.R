@@ -73,28 +73,28 @@ if(file.exists(paste0('/home/gire/public_html/SOGIv020/server_side/session/', ar
 				# Add source/target
 				if ( 'name' %in% list.vertex.attributes(g) ) {
 					if ( 'source' %in% colnames(e_attr_table) ) {
-						e_attr_table[,'source'] <- n_attr_table[unlist(lapply(get.edgelist(g)[,1], FUN=function(x,g) {return(c(V(g)[name==x]))}, g)), 'sogi_node_identity']
+						e_attr_table[,'source'] <- n_attr_table[unlist(lapply(get.edgelist(g)[,1], FUN=function(x,g) {return( which(V(g)$name == x)) }, g=g)), 'sogi_node_identity']
 					} else {
-						e_attr_table <- cbind(e_attr_table, n_attr_table[unlist(lapply(get.edgelist(g)[,1], FUN=function(x,g) {return(c(V(g)[name==x]))}, g)), 'sogi_node_identity'])
+						e_attr_table <- cbind(e_attr_table, n_attr_table[unlist(lapply(get.edgelist(g)[,1], FUN=function(x,g) {return( which(V(g)$name == x)) }, g=g)), 'sogi_node_identity'])
 						colnames(e_attr_table)[ncol(e_attr_table)] <- 'source'
 					}
 					if ( 'target' %in% colnames(e_attr_table) ) {
-						e_attr_table[,'target'] <- n_attr_table[unlist(lapply(get.edgelist(g)[,2], FUN=function(x,g) {return(c(V(g)[name==x]))}, g)), 'sogi_node_identity']
+						e_attr_table[,'target'] <- n_attr_table[unlist(lapply(get.edgelist(g)[,2], FUN=function(x,g) {return( which(V(g)$name == x)) }, g=g)), 'sogi_node_identity']
 					} else {
-						e_attr_table <- cbind(e_attr_table, n_attr_table[unlist(lapply(get.edgelist(g)[,2], FUN=function(x,g) {return(c(V(g)[name==x]))}, g)), 'sogi_node_identity'])
+						e_attr_table <- cbind(e_attr_table, n_attr_table[unlist(lapply(get.edgelist(g)[,2], FUN=function(x,g) {return( which(V(g)$name == x)) }, g=g)), 'sogi_node_identity'])
 						colnames(e_attr_table)[ncol(e_attr_table)] <- 'target'
 					}
 				} else {
 					if ( 'source' %in% colnames(e_attr_table) ) {
-						e_attr_table[,'source'] <- n_attr_table[unlist(lapply(get.edgelist(g)[,1], FUN=function(x,g) {return(c(V(g)[id==x]))}, g)), 'sogi_node_identity']
+						e_attr_table[,'source'] <- n_attr_table[unlist(lapply(get.edgelist(g)[,1], FUN=function(x,g) {return( which(V(g)$id == x)) }, g=g)), 'sogi_node_identity']
 					} else {
-						e_attr_table <- cbind(e_attr_table, n_attr_table[unlist(lapply(get.edgelist(g)[,1], FUN=function(x,g) {return(c(V(g)[id==x]))}, g)), 'sogi_node_identity'])
+						e_attr_table <- cbind(e_attr_table, n_attr_table[unlist(lapply(get.edgelist(g)[,1], FUN=function(x,g) {return( which(V(g)$id == x)) }, g=g)), 'sogi_node_identity'])
 						colnames(e_attr_table)[ncol(e_attr_table)] <- 'source'
 					}
 					if ( 'target' %in% colnames(e_attr_table) ) {
-						e_attr_table <- n_attr_table[unlist(lapply(get.edgelist(g)[,2], FUN=function(x,g) {return(c(V(g)[id==x]))}, g)), 'sogi_node_identity']
+						e_attr_table <- n_attr_table[unlist(lapply(get.edgelist(g)[,2], FUN=function(x,g) {return( which(V(g)$id == x)) }, g)), 'sogi_node_identity']
 					} else {
-						e_attr_table[,'target'] <- cbind(e_attr_table, n_attr_table[unlist(lapply(get.edgelist(g)[,2], FUN=function(x,g) {return(c(V(g)[id==x]))}, g)), 'sogi_node_identity'])
+						e_attr_table[,'target'] <- cbind(e_attr_table, n_attr_table[unlist(lapply(get.edgelist(g)[,2], FUN=function(x,g) {return( which(V(g)$id == x)) }, g=g)), 'sogi_node_identity'])
 						colnames(e_attr_table)[ncol(e_attr_table)] <- 'target'
 					}
 				}
@@ -129,7 +129,12 @@ if(file.exists(paste0('/home/gire/public_html/SOGIv020/server_side/session/', ar
 
 				# Append
 				e_sub_identity <- e_attr_table[,which('sogi_edge_identity' == colnames(e_attr_table))]
+			} else {
+				e_sub_identity <- c()
 			}
+		} else {
+			n_sub_identity <- c()
+			e_sub_identity <- c()
 		}
 
 		# Work on the super network
@@ -186,15 +191,31 @@ if(file.exists(paste0('/home/gire/public_html/SOGIv020/server_side/session/', ar
 
 				# Add source/target
 				if ( 'name' %in% list.vertex.attributes(g) ) {
-					e_super_attr_table <- cbind(e_super_attr_table, n_super_attr_table[unlist(lapply(get.edgelist(g)[,1], FUN=function(x,g) {return(c(V(g)[name==x]))}, g)), 'sogi_node_identity'])
-					colnames(e_super_attr_table)[ncol(e_super_attr_table)] <- 'source'
-					e_super_attr_table <- cbind(e_super_attr_table, n_super_attr_table[unlist(lapply(get.edgelist(g)[,2], FUN=function(x,g) {return(c(V(g)[name==x]))}, g)), 'sogi_node_identity'])
-					colnames(e_super_attr_table)[ncol(e_super_attr_table)] <- 'target'
+					if ( 'source' %in% colnames(e_super_attr_table) ) {
+						e_super_attr_table[,'source'] <- n_super_attr_table[unlist(lapply(get.edgelist(g)[,1], FUN=function(x,g) {return( which(V(g)$name == x)) }, g=g)), 'sogi_node_identity']
+					} else {
+						e_super_attr_table <- cbind(e_super_attr_table, n_super_attr_table[unlist(lapply(get.edgelist(g)[,1], FUN=function(x,g) {return( which(V(g)$name == x)) }, g=g)), 'sogi_node_identity'])
+						colnames(e_super_attr_table)[ncol(e_super_attr_table)] <- 'source'
+					}
+					if ( 'target' %in% colnames(e_super_attr_table) ) {
+						e_super_attr_table[,'target'] <- n_super_attr_table[unlist(lapply(get.edgelist(g)[,2], FUN=function(x,g) {return( which(V(g)$name == x)) }, g=g)), 'sogi_node_identity']
+					} else {
+						e_super_attr_table <- cbind(e_super_attr_table, n_super_attr_table[unlist(lapply(get.edgelist(g)[,2], FUN=function(x,g) {return( which(V(g)$name == x)) }, g=g)), 'sogi_node_identity'])
+						colnames(e_super_attr_table)[ncol(e_super_attr_table)] <- 'target'
+					}
 				} else {
-					e_super_attr_table <- cbind(e_super_attr_table, n_super_attr_table[unlist(lapply(get.edgelist(g)[,1], FUN=function(x,g) {return(c(V(g)[id==x]))}, g)), 'sogi_node_identity'])
-					colnames(e_super_attr_table)[ncol(e_super_attr_table)] <- 'source'
-					e_super_attr_table <- cbind(e_super_attr_table, n_super_attr_table[unlist(lapply(get.edgelist(g)[,2], FUN=function(x,g) {return(c(V(g)[id==x]))}, g)), 'sogi_node_identity'])
-					colnames(e_super_attr_table)[ncol(e_super_attr_table)] <- 'target'
+					if ( 'source' %in% colnames(e_super_attr_table) ) {
+						e_super_attr_table[,'source'] <- n_super_attr_table[unlist(lapply(get.edgelist(g)[,1], FUN=function(x,g) {return( which(V(g)$id == x)) }, g=g)), 'sogi_node_identity']
+					} else {
+						e_super_attr_table <- cbind(e_super_attr_table, n_super_attr_table[unlist(lapply(get.edgelist(g)[,1], FUN=function(x,g) {return( which(V(g)$id == x)) }, g=g)), 'sogi_node_identity'])
+						colnames(e_super_attr_table)[ncol(e_super_attr_table)] <- 'source'
+					}
+					if ( 'target' %in% colnames(e_super_attr_table) ) {
+						e_super_attr_table <- n_super_attr_table[unlist(lapply(get.edgelist(g)[,2], FUN=function(x,g) {return( which(V(g)$id == x)) }, g)), 'sogi_node_identity']
+					} else {
+						e_super_attr_table[,'target'] <- cbind(e_super_attr_table, n_super_attr_table[unlist(lapply(get.edgelist(g)[,2], FUN=function(x,g) {return( which(V(g)$id == x)) }, g=g)), 'sogi_node_identity'])
+						colnames(e_super_attr_table)[ncol(e_super_attr_table)] <- 'target'
+					}
 				}
 
 				# Get attributes for edge identity
