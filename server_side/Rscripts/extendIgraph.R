@@ -205,9 +205,14 @@ get.vertex.attributes = function(v, id=FALSE) {
 	t <- sapply(vl, FUN=function(name, v) { return(get.vertex.attr(name, v)) }, v=v)
 
 	# Add id column name
-	if(id) {
-		t <- cbind(1:length(t[,1]), t)
-		colnames(t)[1] <- 'id'
+	if(id && !'id' %in% vl) {
+		if(is.null(nrow(t))) {
+			t <- append(t, 0)
+			names(t[length(t)]) <- 'id'
+		} else {
+			t <- cbind(1:length(t[,1]), t)
+			colnames(t)[1] <- 'id'
+		}
 	}
 
 	# Terminate
@@ -263,7 +268,7 @@ get.edge.attributes = function(e, id=FALSE, path=FALSE) {
 	# Add source/target
 	if(path) {
 		el <- get.edgelist(get('graph', attr(e, 'env')), names=FALSE)
-		t <- cbind(t, paste0('n', el[,1]), paste0('n', el[,2]))
+		t <- cbind(t, paste0('n', el[,1]-1), paste0('n', el[,2]-1))
 		colnames(t)[(length(t[1,])-1):length(t[1,])] <- c('source', 'target')
 	}
 	
@@ -303,31 +308,41 @@ write.graph.json = function(graph, file) {
 	l <- list(nodes=list(), edges=list())
 
 	# NODES
-	l$nodes <- apply(get.vertex.attributes(V(graph), id=TRUE), MARGIN=1, FUN=function(x, index) {
-		data <- list(id=paste0('n', as.vector(x['id'])))
-		for(attr in names(x)[which(names(x) != 'id')]) {
-			data <- append(data, eval(parse(text=paste0('x[\'', attr, '\']'))))
-		}
-		return(list(data=data))
-	})
-
-	# EDGES
-	e.attrs <- get.edge.attributes(E(graph), id=TRUE, path=TRUE)
-	if(!is.null(e.attrs)) {
-		l$edges <- apply(e.attrs, MARGIN=1, FUN=function(x, index) {
-			if (0 != length(which(is.na(as.numeric(as.vector(x['target'])))))) {
-				data <- list(id=paste0('e', as.vector(x['id'])), target=as.vector(x['target']), source=as.vector(x['source']))
+	n.attrs <- get.vertex.attributes(V(graph), id=TRUE)
+	if(!is.null(nrow(n.attrs))) {
+		l$nodes <- apply(n.attrs, MARGIN=1, FUN=function(x, index) {
+			if (0 != length(which(is.na(as.numeric(as.vector(x['id'])))))) {
+				data <- list(id=as.vector(x['id']))
 			} else {
-				data <- list(id=paste0('e', as.vector(x['id'])), target=paste0('n', as.vector(x['target'])), source=paste0('n', as.vector(x['source'])))
+				data <- list(id=paste0('n', as.vector(x['id'])))
 			}
-			if (0 == length(data)) {
-				data <- 1:length(x)
-			}
-			for(attr in names(x)[which(!names(x) %in% c('id', 'source', 'target'))]) {
+			for(attr in names(x)[which(names(x) != 'id')]) {
 				data <- append(data, eval(parse(text=paste0('x[\'', attr, '\']'))))
 			}
 			return(list(data=data))
 		})
+
+		# EDGES
+		e.attrs <- get.edge.attributes(E(graph), id=TRUE, path=TRUE)
+		if(!is.null(e.attrs)) {
+			l$edges <- apply(e.attrs, MARGIN=1, FUN=function(x, index) {
+				if (0 != length(which(is.na(as.numeric(as.vector(x['target'])))))) {
+					data <- list(id=paste0('e', as.vector(x['id'])), target=as.vector(x['target']), source=as.vector(x['source']))
+				} else {
+					data <- list(id=paste0('e', as.vector(x['id'])), target=paste0('n', as.vector(x['target'])), source=paste0('n', as.vector(x['source'])))
+				}
+				if (0 == length(data)) {
+					data <- 1:length(x)
+				}
+				for(attr in names(x)[which(!names(x) %in% c('id', 'source', 'target'))]) {
+					data <- append(data, eval(parse(text=paste0('x[\'', attr, '\']'))))
+				}
+				return(list(data=data))
+			})
+		}
+	} else {
+		l <- list(data=as.list(n.attrs), group='nodes')
+
 	}
 
 	write(toJSON(l), file)
