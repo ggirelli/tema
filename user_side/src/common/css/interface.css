@@ -376,6 +376,10 @@ html {
 	top: 0px;
 }
 
+#interface #inspector .close-btn {
+	float: right;
+}
+
 #interface #inspector .panel-body {
 	height: 340px;
 

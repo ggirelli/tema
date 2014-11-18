@@ -1031,7 +1031,10 @@
 			</div>
 			
 			<div id="inspector" class="col-md-4 col-md-offset-2 panel panel-info" ng-show='inspector.show'>
-				<div class="panel-heading">Inspector</div>
+				<div class="panel-heading">
+					Inspector
+					<a href="#/interface/{{m.session_id}}" class="close-btn" ng-click="inspector.close()"><span class="glyphicon glyphicon-remove"></span></a>
+				</div>
 				<div class="panel-body">
 					
 					<div ng-show="inspector.is_inspecting('network')">
