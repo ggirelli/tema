@@ -662,13 +662,13 @@ NetworkManager <- function() {
 			# Returns:
 			# 	The updated table
 			
-			if ( !is.null(table) ) {
+			if ( !is.null(nrow(table)) ) {
 
 				# Non-empty table
 				for (col in col.list) {
 					if ( col %in% colnames(table) ) {
-						rm <- -which(colnames(table) == col)
-						if ( 0 != length(rm) ) table <- table[, rm]
+						rm <- which(colnames(table) == col)
+						if ( 0 != length(rm) ) table <- table[, -rm]
 					}
 				}
 
@@ -745,8 +745,19 @@ NetworkManager <- function() {
 			} else if ( 1 == e.count ) {
 
 				# Single edge network
-				e.attr.table <- NetworkManager()$rm.cols(e.attr.table, c('source', 'target'))
-				e.attr.table <- append(e.attr.table, get.edgelist(graph, names=names))
+				e.attr.table.tmp <- NetworkManager()$rm.cols(e.attr.table, c('source', 'target'))
+
+				add.col.name <- FALSE
+				if ( is.null(nrow(e.attr.table.tmp)) ) {
+					add.col.name <- TRUE
+					col.name <- names(e.attr.table)[1]
+				}
+
+				e.attr.table <- append(e.attr.table.tmp, get.edgelist(graph, names=names))
+
+				if ( add.col.name) {
+					if ( 0 != length(col.name) ) names(e.attr.table)[1] <- col.name
+				}
 				names(e.attr.table)[length(e.attr.table)-1] <- 'source'
 				names(e.attr.table)[length(e.attr.table)] <- 'target'
 
@@ -754,12 +765,15 @@ NetworkManager <- function() {
 
 				# 'normal' network
 				e.attr.table.tmp <- NetworkManager()$rm.cols(e.attr.table, c('source', 'target'))
+
 				add.col.name <- FALSE
 				if ( is.null(nrow(e.attr.table.tmp)) ) {
 					add.col.name <- TRUE
 					col.name <- colnames(e.attr.table)[1]
 				}
+
 				e.attr.table <- cbind(e.attr.table.tmp, get.edgelist(graph, names=names))
+
 				if ( add.col.name) {
 					if ( 0 != length(col.name) ) colnames(e.attr.table)[1] <- col.name
 				}
@@ -914,18 +928,38 @@ NetworkManager <- function() {
 			if ( !is.null(nrow(e.attr.table)) ) {
 
 				# Non-empty table
-				e.attr.table <- NetworkManager()$rm.cols(e.attr.table, c('source', 'target'))
+				e.attr.table.tmp <- NetworkManager()$rm.cols(e.attr.table, c('source', 'target'))
+
+				add.col.name <- FALSE
+				if ( is.null(nrow(e.attr.table.tmp)) ) {
+					add.col.name <- TRUE
+					col.name <- colnames(e.attr.table)[1]
+				}
 
 				# Add numerical v.id as extremities
-				e.attr.table <- NetworkManager()$add.edges.extremities(e.attr.table, graph, F)
+				e.attr.table <- NetworkManager()$add.edges.extremities(e.attr.table.tmp, graph, F)
+
+				if ( add.col.name) {
+					if ( 0 != length(col.name) ) colnames(e.attr.table)[1] <- col.name
+				}
 
 			} else if ( 0 != length(e.attr.table) ) {
 
 				# Single-row table
-				e.attr.table <- NetworkManager()$rm.cols(e.attr.table, c('source,', 'target'))
+				e.attr.table.tmp <- NetworkManager()$rm.cols(e.attr.table, c('source,', 'target'))
+
+				add.col.name <- FALSE
+				if ( is.null(nrow(e.attr.table.tmp)) ) {
+					add.col.name <- TRUE
+					col.name <- names(e.attr.table)[1]
+				}
 
 				# Add numerical v.id as extremities
-				e.attr.table <- NetworkManager()$add.edges.extremities(e.attr.table, graph, F)
+				e.attr.table <- NetworkManager()$add.edges.extremities(e.attr.table.tmp, graph, F)
+
+				if ( add.col.name) {
+					if ( 0 != length(col.name) ) names(e.attr.table)[1] <- col.name
+				}
 
 			}
 
