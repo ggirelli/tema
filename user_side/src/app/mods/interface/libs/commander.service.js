@@ -170,7 +170,6 @@
 
                 }).
                     success(function (data) {
-                        console.log(data);
                         if ( 0 == data.err ) {
                             alert('Merged networks.');
                         }

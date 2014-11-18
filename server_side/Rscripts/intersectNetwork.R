@@ -10,6 +10,9 @@ if(length(args) != 2) stop('./convertToJSON.R session_id config_file')
 library(igraph)
 library(rjson)
 
+source('NetworkManager.class.R')
+nm <- NetworkManager()
+
 # Start
 if(file.exists(paste0('/home/gire/public_html/SOGIv020/server_side/session/', args[1], '/'))) {
 	setwd(paste0('/home/gire/public_html/SOGIv020/server_side/session/', args[1], '/'))
@@ -104,6 +107,79 @@ if(file.exists(paste0('/home/gire/public_html/SOGIv020/server_side/session/', ar
 		v.attr.table.merged <- nm$merge.tables.from.table.list(v.attr.table.list)
 
 		# Filter: remove those v.rows that do not appear length(l$networks) times
-names(table(n_id_col))[table(n_id_col) == length(l$networks)]
+		v.identity.col.id <- which('sogi_identity' == colnames(v.attr.table.merged))
+		v.identity.col <- v.attr.table.merged[, v.identity.col.id]
+		if ( !is.null(nrow(v.attr.table)) ) {
+			v.attr.table.merged <- v.attr.table.merged[which(
+				v.identity.col %in% names(table(v.identity.col))[which(
+					table(v.identity.col) == length(l$networks))]),]
+		} else {
+			v.attr.table.merged <- NULL
+		}
+		print(v.attr.table.merged)
+
+		# Apply behavior
+		v.attr.table.shrink <- nm$apply.fun.based.on.identity(v.attr.table.merged,
+			'sogi_identity', l$n_behavior, F, 'merge_count')
+
+		# Update IDs
+		v.attr.table <- nm$update.row.ids(v.attr.table.shrink)
+		v.attr.table <- nm$add.prefix.to.col(v.attr.table, 'id', 'n')
+
+		# EDGES #
+
+		cat('> Merging Edges\n')
+
+		# Merge table from table.list
+		e.attr.table.merged <- nm$merge.tables.from.table.list(e.attr.table.list)
+
+		# Filter: remove those e.rows that do not appear length(l$networks) times
+		e.identity.col.id <- which('sogi_identity' == colnames(e.attr.table.merged))
+		e.identity.col <- e.attr.table.merged[, e.identity.col.id]
+		if ( !is.null(nrow(e.attr.table)) ) {
+			e.attr.table.merged <- e.attr.table.merged[which(
+				e.identity.col %in% names(table(e.identity.col))[which(
+					table(e.identity.col) == length(l$networks))]),]
+		} else {
+			e.attr.table.merged <- NULL
+		}
+
+		# Apply behavior
+		e.attr.table.shrink <- nm$apply.fun.based.on.identity(e.attr.table.merged,
+			'sogi_identity', l$e_behavior, F, 'merge_count')
+
+		# Convert extremities to IDs
+		e.attr.table <- nm$convert.extremities.to.v.id.based.on.table(e.attr.table.shrink,
+			v.attr.table, 'sogi_identity')
+
+		# Updated IDs
+		e.attr.table <- nm$update.row.ids(e.attr.table)
+		e.attr.table <- nm$add.prefix.to.col(e.attr.table, 'id', 'e')
+
+		# CONCLUSION #
+		
+		cat('> Output\n')
+
+		# Remove identity columns
+		v.attr.table <- nm$rm.cols(v.attr.table, 'sogi_identity')
+		e.attr.table <- nm$rm.cols(e.attr.table, 'sogi_identity')
+
+		# Write GraphML
+		g.out <- nm$attr.tables.to.graph(v.attr.table, e.attr.table)
+		write.graph(g.out, paste0(l$new_name, '.graphml'), format='graphml')
+
+		# Write graph DAT
+		d <- list(
+			e_attributes=list.edge.attributes(g.out),
+			e_count=ecount(g.out), 
+			v_attributes=list.vertex.attributes(g.out),
+			v_count=vcount(g.out)
+		)
+		write(toJSON(d), paste0(l$new_name, '.dat'))
+
+		# Write JSON
+		graph.list <- nm$attr.tables.to.list(v.attr.table, e.attr.table)
+		write(toJSON(graph.list), paste0(l$new_name, '.json'))
+
 	}
 }
