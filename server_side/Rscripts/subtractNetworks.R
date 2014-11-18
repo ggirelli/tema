@@ -166,7 +166,6 @@ if(file.exists(paste0('/home/gire/public_html/SOGIv020/server_side/session/', ar
 		# Sort edge attribute table
 		e.minuend.attr.table <- nm$sort.table.cols(e.minuend.attr.table)
 
-
 		# SUBTRACT VERTICES #
 
 		cat('> Merging subtrahend Vertices\n')
