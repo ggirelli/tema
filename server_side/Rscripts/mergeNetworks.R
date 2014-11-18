@@ -155,7 +155,7 @@ if(file.exists(paste0('/home/gire/public_html/SOGIv020/server_side/session/', ar
 		write(toJSON(d), paste0(l$new_name, '.dat'))
 
 		# Write JSON
-		graph.list <- nm$graph.to.list(g.out)
+		graph.list <- nm$attr.tables.to.list(v.attr.table, e.attr.table)
 		write(toJSON(graph.list), paste0(l$new_name, '.json'))
 	}
 }

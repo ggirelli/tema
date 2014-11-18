@@ -132,8 +132,12 @@ NetworkManager <- function() {
 				# Non-empty table
 				source.col.id <- which(colnames(e.attr.table) == 'source')
 				target.col.id <- which(colnames(e.attr.table) == 'target')
-				edge.pairwise.list <- c(rbind(e.attr.table[, source.col.id],
-					e.attr.table[, target.col.id]))
+				edge.pairwise.list <- c(rbind(
+					unlist(lapply(e.attr.table[, source.col.id],
+						FUN=function(x,g) {return(V(g)[id==x]) },g=g)),
+					unlist(lapply(e.attr.table[, target.col.id],
+						FUN=function(x,g) { return(V(g)[id==x]) },g=g))
+				))
 				g <- add.edges(g, edge.pairwise.list)
 				for (attr in colnames(e.attr.table)) {
 					attr.col.id <- which(colnames(e.attr.table) == attr)
@@ -145,7 +149,10 @@ NetworkManager <- function() {
 				# Single-row table
 				source.col.id <- which(names(e.attr.table) == 'source')
 				target.col.id <- which(names(e.attr.table) == 'target')
-				edge.pairwise.list <- c(e.attr.table[source.col.id], e.attr.table[target.col.id])
+				edge.pairwise.list <- c(
+					V(g)[id == e.attr.table[source.col.id]],
+					V(g)[id == e.attr.table[target.col.id]]
+				)
 				g <- add.edges(g, edge.pairwise.list)
 				for (attr in names(e.attr.table)) {
 					attr.col.id <- which(names(e.attr.table) == attr)
@@ -203,6 +210,129 @@ NetworkManager <- function() {
 					l <- NetworkManager()$get.edge.attributes(e, graph)
 					return(list(data=l))
 				})
+
+			}
+
+			# RESTRUCTURE LIST #
+			
+			if ( 1 == v.count ) {
+				if ( 0 == e.count ) {
+
+					# Single node, no edges
+					graph.list$nodes$group <- 'nodes'
+					graph.list <- list(graph.list$nodes)
+
+				} else if ( 1 == e.count ) {
+
+					# Single node, single edge
+					graph.list$nodes$group <- 'nodes'
+					graph.list$edges$group <- 'edges'
+					graph.list <- list(graph.list$nodes, graph.list$edges)
+
+				} else {
+
+					# Single node, multiple edges
+					graph.list$nodes$group <- 'nodes'
+					edges <- graph.list$edges
+					graph.list <- list(graph.list$nodes)
+					for (edge in edges) {
+						edge$group <- 'edges'
+						graph.list <- append(graph.list, list(edge))
+					}
+
+				}
+			} else if ( 1 == e.count ) {
+
+				# Single edge, multiple nodes
+				graph.list$edges$group <- 'edges'
+				nodes <- graph.list$nodes
+				graph.list <- list(graph.list$edges)
+				for (node in nodes) {
+					node$group <- 'nodes'
+					graph.list <- append(graph.list, list(node))
+				}
+
+			}
+
+			# END #
+			return(graph.list)
+		},
+
+		attr.tables.to.list = function (v.attr.table, e.attr.table) {
+			# Converts a graph into a list, to allow JSON output
+			# Based on attribute tables
+			# 
+			# Args:
+			# 	v.attr.table
+			# 	e.attr.table
+			# 
+			# Returns:
+			# 	List graph for JSON output
+			
+			if ( !is.null(nrow(v.attr.table)) ) {
+				v.count <- nrow(v.attr.table)
+			} else if ( 0 != length(v.attr.table) ) {
+				v.count <- 1
+			} else {
+				v.count <- 0
+			}
+
+			if ( !is.null(nrow(e.attr.table)) ) {
+				e.count <- nrow(e.attr.table)
+			} else if ( 0 != length(e.attr.table) ) {
+				e.count <- 1
+			} else {
+				e.count <- 0
+			}
+
+			graph.list <- list(nodes=list(), edges=list())
+
+			# VERTICES #
+			if ( 1 == v.count ) {
+
+				# Single-node graph
+				l <- list()
+				for (col in names(v.attr.table)) {
+					col.id <- which(col == names(v.attr.table))
+					l[col] <- v.attr.table[col.id]
+				}
+				graph.list$nodes <- list(data=l)
+
+			} else {
+
+				# 'normal' graph
+				graph.list$nodes <- lapply(1:nrow(v.attr.table), FUN=function(x, v.attr.table) {
+					l <- list()
+					for (col in colnames(v.attr.table)) {
+						col.id <- which(col == colnames(v.attr.table))
+						l[col] <- v.attr.table[x, col.id]
+					}
+					return(list(data=l))
+				}, v.attr.table=v.attr.table)
+
+			}
+			# EDGES #
+			if ( 1 == e.count ) {
+
+				# Single-edge graph
+				l <- list()
+				for (col in names(e.attr.table)) {
+					col.id <- which(col == names(e.attr.table))
+					l[col] <- e.attr.table[col.id]
+				}
+				graph.list$edges <- list(data=l)
+
+			} else {
+
+				# 'normal' graph
+				graph.list$edges <- lapply(1:nrow(e.attr.table), FUN=function(x, e.attr.table) {
+					l <- list()
+					for (col in colnames(e.attr.table)) {
+						col.id <- which(col == colnames(e.attr.table))
+						l[col] <- e.attr.table[x, col.id]
+					}
+					return(list(data=l))
+				}, e.attr.table=e.attr.table)
 
 			}
 
