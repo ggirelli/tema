@@ -29,7 +29,6 @@ if(file.exists(paste0('/home/gire/public_html/SOGIv020/server_side/session/', ar
 
 		# For each selected network
 		for (network in l$networks) {
-
 			cat('> Work on graph "', network, '"\n')
 
 			# Read network
@@ -117,7 +116,6 @@ if(file.exists(paste0('/home/gire/public_html/SOGIv020/server_side/session/', ar
 		# EDGES #
 
 		cat('> Merging Edges\n')
-
 		# Merge table from table.list
 		e.attr.table.merged <- nm$merge.tables.from.table.list(e.attr.table.list)
 
@@ -140,7 +138,7 @@ if(file.exists(paste0('/home/gire/public_html/SOGIv020/server_side/session/', ar
 		# Remove identity columns
 		v.attr.table <- nm$rm.cols(v.attr.table, 'sogi_identity')
 		e.attr.table <- nm$rm.cols(e.attr.table, 'sogi_identity')
-
+		
 		# Write GraphML
 		g.out <- nm$attr.tables.to.graph(v.attr.table, e.attr.table)
 		write.graph(g.out, paste0(l$new_name, '.graphml'), format='graphml')

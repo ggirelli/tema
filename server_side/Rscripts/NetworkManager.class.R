@@ -1340,9 +1340,15 @@ NetworkManager <- function() {
 							# Non-empty subtable
 							single.row <- c()
 
-							# Remove ID from behaviors
+							# Remove cols from behaviors
 							if ( 'id' %in% names(behaviors) ) {
 								behaviors['id'] <- NULL
+							}
+							if ( 'source' %in% names(behaviors) ) {
+								behaviors['source'] <- NULL
+							}
+							if ( 'target' %in% names(behaviors) ) {
+								behaviors['target'] <- NULL
 							}
 
 							# Apply behaviors
@@ -1388,7 +1394,9 @@ NetworkManager <- function() {
 											subtable[nrow(subtable),
 											which(colnames(subtable) == col)])
 									}
-									names(single.row)[length(single.row)] <- col
+									if ( 'ignore' != behaviors[col] ) {
+										names(single.row)[length(single.row)] <- col
+									}
 								}
 							}
 
@@ -1415,6 +1423,17 @@ NetworkManager <- function() {
 							# Single-row subtable
 							single.row <- subtable
 
+							# Remove cols from behaviors
+							if ( 'id' %in% names(behaviors) ) {
+								behaviors['id'] <- NULL
+							}
+							if ( 'source' %in% names(behaviors) ) {
+								behaviors['source'] <- NULL
+							}
+							if ( 'target' %in% names(behaviors) ) {
+								behaviors['target'] <- NULL
+							}
+
 							# Remove ignored cols
 							cols.to.rm <- c()
 							for (col in names(single.row)) {
@@ -1434,10 +1453,9 @@ NetworkManager <- function() {
 
 							# Re-order columns, just in case
 							single.row <- NetworkManager()$sort.table.cols(single.row)
-
 						}
-
 						end.table <- rbind(end.table, single.row)
+
 					}
 
 				}
