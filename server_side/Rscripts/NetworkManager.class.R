@@ -753,8 +753,14 @@ NetworkManager <- function() {
 			} else {
 
 				# 'normal' network
-				e.attr.table <- NetworkManager()$rm.cols(e.attr.table, c('source', 'target'))
-				e.attr.table <- cbind(e.attr.table, get.edgelist(graph, names=names))
+				e.attr.table.tmp <- NetworkManager()$rm.cols(e.attr.table, c('source', 'target'))
+				add.col.name <- FALSE
+				if ( is.null(nrow(e.attr.table.tmp)) ) {
+					add.col.name <- TRUE
+					col.name <- colnames(e.attr.table)[1]
+				}
+				e.attr.table <- cbind(e.attr.table.tmp, get.edgelist(graph, names=names))
+				if ( add.col.name ) colnames(e.attr.table)[1] <- col.name
 				colnames(e.attr.table)[ncol(e.attr.table)-1] <- 'source'
 				colnames(e.attr.table)[ncol(e.attr.table)] <- 'target'
 
