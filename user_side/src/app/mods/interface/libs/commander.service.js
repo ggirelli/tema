@@ -507,7 +507,6 @@
 
                 }).
                     success(function (data) {
-                        console.log(data);
                         if ( 0 == data.err ) {
                             if ( 1 == data.res ) {
                                 alert('"' + sup + '" does contain "' + sub + '"');

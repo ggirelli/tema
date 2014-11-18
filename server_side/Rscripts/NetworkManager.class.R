@@ -1,0 +1,1103 @@
+library('igraph')
+
+# Class to manage graphml graphs and perform graph operations
+NetworkManager <- function() {
+
+	# Instantiate Graph Manager
+	nm <- list(
+
+		# ---------- #
+		# ATTRIBUTES #
+		# ---------- #
+		
+		graph.to.attr.table = function (graph) {
+			# Converts a graph into vertex/edge attribute tables
+			# 
+			# Args:
+			# 	graph: network instance
+			# 
+			# Returns:
+			# 	list(nodes=v.attr.table, edges=e.attr.table)
+			
+			# VERTICES #
+
+			v.attr.list <- list.vertex.attributes(graph)
+			v.count <- vcount(graph)
+
+			if ( 0 == v.count ) {
+
+				# Empty network
+				v.attr.table <- c()
+
+			} else if ( 1 == v.count ) {
+
+				# Single vertex network
+				v.attr.table <- c()
+				for (attr in v.attr.list) {
+					v.attr.table <- append(v.attr.table,
+						eval(parse(text=paste0('V(graph)[1]$', attr))))
+				}
+				names(v.attr.table) <- v.attr.list
+
+			} else {
+
+				# 'normal' network
+				v.attr.table <- c()
+				for (attr in v.attr.list) {
+					v.attr.table <- cbind(v.attr.table,
+						eval(parse(text=paste0('V(graph)$', attr))))
+				}
+				colnames(v.attr.table) <- v.attr.list
+
+			}
+
+			# EDGES #
+			
+			e.attr.list <- list.edge.attributes(graph)
+			e.count <- ecount(graph)
+
+			if ( 0 == e.count ) {
+
+				# Empty network
+				e.attr.table <- c()
+
+			} else if ( 1 == e.count ) {
+
+				# Single edge network
+				e.attr.table <- c()
+				for (attr in e.attr.list) {
+					e.attr.table <- append(e.attr.table,
+						eval(parse(text=paste0('E(g)[1]$', attr))))
+				}
+				names(e.attr.table) <- e.attr.list
+
+				# Add source/target columns
+				e.attr.table <- NetworkManager()$add.edges.extremities(e.attr.table, graph, T)
+
+			} else {
+
+				# 'normal' network
+				e.attr.table <- c()
+				for (attr in e.attr.list) {
+					e.attr.table <- cbind(e.attr.table,
+						eval(parse(text=paste0('E(g)$', attr))))
+				}
+				colnames(e.attr.table) <- e.attr.list
+
+				# Add source/target columns
+				e.attr.table <- NetworkManager()$add.edges.extremities(e.attr.table, graph, T)
+
+			}
+
+			# END #
+			return(list(nodes=v.attr.table, edges=e.attr.table))
+		},
+
+		attr.tables.to.graph = function (v.attr.table, e.attr.table) {
+			# Converts the attribute table of  a graph into a graph
+			# 
+			# Args:
+			# 	v.attr.table
+			# 	e.attr.table
+			# 
+			# Returns:
+			# 	graph
+			
+			g <- graph.empty()
+
+			# VERTICES #
+			if ( !is.null(nrow(v.attr.table)) ) {
+
+				# Non-empty table
+				g <- add.vertices(g, nrow(v.attr.table))
+				for (attr in colnames(v.attr.table)) {
+					attr.col.id <- which(colnames(v.attr.table) == attr)
+					eval(parse(text=paste0('V(g)$', attr, ' <- v.attr.table[, attr.col.id]')))
+				}
+
+			} else if ( 0 != length(v.attr.table) ) {
+
+				# Single-row table
+				g <- add.vertices(g, 1)
+				for (attr in names(v.attr.table)) {
+					attr.col.id <- which(names(v.attr.table) == attr)
+					eval(parse(text=paste0('V(g)$', attr, ' <- v.attr.table[attr.col.id]')))
+				}
+
+			}
+
+			# EDGES #
+			if ( !is.null(nrow(e.attr.table)) ) {
+
+				# Non-empty table
+				source.col.id <- which(colnames(e.attr.table) == 'source')
+				target.col.id <- which(colnames(e.attr.table) == 'target')
+				edge.pairwise.list <- c(rbind(e.attr.table[, source.col.id],
+					e.attr.table[, target.col.id]))
+				g <- add.edges(g, edge.pairwise.list)
+				for (attr in colnames(e.attr.table)) {
+					attr.col.id <- which(colnames(e.attr.table) == attr)
+					eval(parse(text=paste0('E(g)$', attr, ' <- e.attr.table[, attr.col.id]')))
+				}
+
+			} else if ( 0 != length(e.attr.table) ) {
+
+				# Single-row table
+				source.col.id <- which(names(e.attr.table) == 'source')
+				target.col.id <- which(names(e.attr.table) == 'target')
+				edge.pairwise.list <- c(e.attr.table[source.col.id], e.attr.table[target.col.id])
+				g <- add.edges(g, edge.pairwise.list)
+				for (attr in names(e.attr.table)) {
+					attr.col.id <- which(names(e.attr.table) == attr)
+					eval(parse(text=paste0('E(g)$', attr, ' <- e.attr.table[attr.col.id]')))
+				}
+
+			}
+
+			# END #
+			return(g)
+		},
+
+		graph.to.list = function (graph) {
+			# Converts a graph into a list, to allow JSON output
+			# 
+			# Args:
+			# 	graph
+			# 
+			# Returns:
+			# 	List graph for JSON output
+			
+			v.count <- vcount(graph)
+			e.count <- ecount(graph)
+
+			graph.list <- list(nodes=list(), edges=list())
+
+			# VERTICES #
+			if ( 1 == v.count ) {
+
+				# Single-node graph
+				graph.list$nodes <- list(data=
+					NetworkManager()$get.vertex.attributes(V(graph)[1], graph))
+
+			} else {
+
+				# 'normal' graph
+				graph.list$nodes <- lapply(V(graph), FUN=function(v) {
+					l <- NetworkManager()$get.vertex.attributes(v, graph)
+					return(list(data=l))
+				})
+
+			}
+
+			# EDGES #
+			if ( 1 == e.count ) {
+
+				# Single-edge graph
+				graph.list$edges <- list(data=
+					NetworkManager()$get.edge.attributes(E(graph)[1], graph))
+
+			} else {
+
+				# 'normal' graph
+				graph.list$edges <- lapply(E(graph), FUN=function(e) {
+					l <- NetworkManager()$get.edge.attributes(e, graph)
+					return(list(data=l))
+				})
+
+			}
+
+			# RESTRUCTURE LIST #
+			
+			if ( 1 == v.count ) {
+				if ( 0 == e.count ) {
+
+					# Single node, no edges
+					graph.list$nodes$group <- 'nodes'
+					graph.list <- list(graph.list$nodes)
+
+				} else if ( 1 == e.count ) {
+
+					# Single node, single edge
+					graph.list$nodes$group <- 'nodes'
+					graph.list$edges$group <- 'edges'
+					graph.list <- list(graph.list$nodes, graph.list$edges)
+
+				} else {
+
+					# Single node, multiple edges
+					graph.list$nodes$group <- 'nodes'
+					edges <- graph.list$edges
+					graph.list <- list(graph.list$nodes)
+					for (edge in edges) {
+						edge$group <- 'edges'
+						graph.list <- append(graph.list, list(edge))
+					}
+
+				}
+			} else if ( 1 == e.count ) {
+
+				# Single edge, multiple nodes
+				graph.list$edges$group <- 'edges'
+				nodes <- graph.list$nodes
+				graph.list <- list(graph.list$edges)
+				for (node in nodes) {
+					node$group <- 'nodes'
+					graph.list <- append(graph.list, list(node))
+				}
+
+			}
+
+			# END #
+			return(graph.list)
+		},
+
+		get.vertex.attributes = function (v, graph) {
+			# Retrieves the (attribute,value) couples of a given vertex
+			# 
+			# Args:
+			# 	v: the vertex
+			# 	graph
+			# 
+			# Returns:
+			# 	NULL if no vertex attributes were found
+			# 	A list with k=attr.name and v=attr.val
+
+			l <- list()
+
+			# Vertex attributes list
+			v.attr.list <- list.vertex.attributes(graph)
+
+			if ( 0 == length(v.attr.list) ) {
+
+				# No vertex attributes
+				l <- NULL
+
+			} else {
+
+				# Save attribute values in l
+				for (attr in v.attr.list) {
+					l[attr] <- eval(parse(text=paste0('V(graph)[v]$', attr)))
+				}
+
+			}
+
+			# END #
+			return(l)
+		},
+
+		get.edge.attributes = function (e, graph) {
+			# Retrieves the (attribute,value) couples of a given edge
+			# 
+			# Args:
+			# 	e: the edge
+			# 	graph
+			# 
+			# Returns:
+			# 	NULL if no edge attributes were found
+			# 	A list with k=attr.name and v=attr.val
+
+			l <- list()
+
+			# Edge attributes list
+			e.attr.list <- list.edge.attributes(graph)
+
+			if ( 0 == length(e.attr.list) ) {
+
+				# No edge attributes
+				l <- NULL
+
+			} else {
+
+				# Save attribute values in l
+				for (attr in e.attr.list) {
+					l[attr] <- eval(parse(text=paste0('E(graph)[e]$', attr)))
+				}
+
+			}
+
+			# END #
+			return(l)
+		},
+
+		expand.attr.table = function (table, attr.list) {
+			# Expands the column of an attribute table
+			# 
+			# Args:
+			# 	table
+			# 	attr.list
+			# 
+			# Returns:
+			# 	The expanded table
+			
+			if ( !is.null(nrow(table)) ) {
+				
+				# Non-empty table
+				for (attr in attr.list) {
+					if ( !attr %in% colnames(table) ) {
+						table <- cbind(table,NA)
+						colnames(table)[ncol(table)] <- attr
+					}
+				}
+				
+			} else if ( 0 != length(table) ) {
+				cat(2)
+				# Single-row table
+				for (attr in attr.list) {
+					if ( !attr %in% names(table) ) {
+						table <- append(table,NA)
+						names(table)[length(table)] <- attr
+					}
+				}
+
+			}
+
+			# END #
+			return(table)
+		},
+
+		add.collapsed.col = function (table, attr.list, col.name, sep) {
+			# Collapses columns of a table
+			# 
+			# Args:
+			# 	table
+			# 	attr.list
+			# 	sep: character for sep
+			# 
+			# Returns:
+			# 	The updated table
+			
+			if ( !is.null(nrow(table)) ) {
+
+				# Non-empty table
+				collapsed <- c()
+				for (attr in attr.list) {
+					collapsed <- paste0(collapsed, sep,
+						table[, which(attr == colnames(table)) ])
+				}
+				table <- cbind(table, collapsed)
+				colnames(table)[ncol(table)] <- col.name
+
+			} else if ( 0 != length(table) ) {
+
+				# Single-row table
+				collapsed <- ''
+				for (attr in attr.list) {
+					collapsed <- paste0(collapsed, sep,
+						table[ which(attr == names(table)) ])
+				}
+				table <- cbind(table, collapsed)
+				names(table)[ncol(table)] <- col.name
+
+			}
+
+			# END #
+			return(table)
+		},
+
+		add.prefix.to.col = function (table, col, prefix) {
+			# Adds a prefix to every cell of a given column
+			# 
+			# Args:
+			# 	table
+			# 	col: column label
+			# 	prefix
+			# 
+			# Returns:
+			# 	The updated table
+
+			if ( !is.null(nrow(table)) ) {
+
+				# Non-empty table
+				if ( col %in% colnames(table) ) {
+					col.id <- which(colnames(table) == col)
+					table[, col.id] <- paste0(prefix, table[, col.id])
+				}
+
+			} else if ( 0 != length(table) ) {
+
+				# Single-row table
+				if ( col %in% names(table) ) {
+					col.id <- which(names(table) == col)
+					table[col.id] <- paste0(prefix, table[col.id])
+				}
+
+			}
+
+			# END #
+			return(table)
+		},
+
+		get.col = function (table, col) {
+			# Extracts a column from a table
+			# 
+			# Args:
+			# 	table
+			# 	col
+			# 
+			# Returns:
+			# 	The column
+			
+			data <- NULL
+
+			if ( !is.null(nrow(table)) ) {
+
+				# Non-empty table
+				if ( col %in% colnames(table) ) {
+					data <- table[, which(col == colnames(table))]
+				}
+
+			} else if ( 0 != length(table) ) {
+
+				# Single-row table
+				if ( col %in% names(table) ) {
+					data <- table[which(col == cnames(table))]
+				}
+
+			}
+
+			# END #
+			return(data)
+		},
+
+		rm.cols = function (table, col.list) {
+			# Removes columns from table if present
+			# 
+			# Args:
+			# 	table
+			# 	col.list
+			# 	
+			# Returns:
+			# 	The updated table
+			
+			if ( !is.null(table) ) {
+
+				# Non-empty table
+				for (col in col.list) {
+					if ( col %in% colnames(table) ) {
+						rm <- -which(colnames(table) == col)
+						if ( 0 != length(rm) ) table <- table[, rm]
+					}
+				}
+
+			} else if ( 0 != length(table) ) {
+
+				# Single-row table
+				for (col in col.list) {
+					if ( col %in% names(table) ) {
+						rm <- which(names(table) == col)
+						if ( 0 != length(rm) ) table <- table[-rm]
+					}
+				}
+
+			}
+
+			# END #
+			return(table)
+		},
+
+		add.edges.extremities = function (e.attr.table, graph, names) {
+			# Adds source/target columns to an e.attr.table
+			# 
+			# Args:
+			# 	e.attr.table
+			# 	graph
+			# 	names: boolean for names or numerical ids
+			# 
+			# Returns:
+			# 	The updated table
+			
+			e.count <- ecount(graph)
+
+			if ( 0 == e.count ) {
+
+				# Empty network
+				e.attr.table <- c()
+
+			} else if ( 1 == e.count ) {
+
+				# Single edge network
+				e.attr.table <- NetworkManager()$rm.cols(e.attr.table, c('source', 'target'))
+				e.attr.table <- append(e.attr.table, get.edgelist(graph, names=names))
+				names(e.attr.table)[length(e.attr.table)-1] <- 'source'
+				names(e.attr.table)[length(e.attr.table)] <- 'target'
+
+			} else {
+
+				# 'normal' network
+				e.attr.table <- NetworkManager()$rm.cols(e.attr.table, c('source', 'target'))
+				e.attr.table <- cbind(e.attr.table, get.edgelist(graph, names=names))
+				colnames(e.attr.table)[ncol(e.attr.table)-1] <- 'source'
+				colnames(e.attr.table)[ncol(e.attr.table)] <- 'target'
+
+			}
+
+			# END #
+			return(e.attr.table)
+		},
+
+		update.row.ids = function (table) {
+			# ***TO APPLY ONLY ON TABLES SHRINKED BASED ON IDENTITY***
+			# Updates the id of the rows of the given table
+			# Id starts from '0'
+			# 
+			# Args:
+			# 	table
+			# 
+			# Returns:
+			# 	The updated table with numerical ids column 'id'
+
+			if ( !is.null(nrow(table)) ) {
+
+				# Non-empty table
+				table <- NetworkManager()$expand.attr.table(table, c('id'))
+				table[, which('id' == colnames(table))] <- 1:nrow(table)
+
+			} else if ( 0 != length(table) ) {
+
+				# Single-row table
+				table <- NetworkManager()$expand.attr.table(table, c('id'))
+				table[which('id' == names(table))] <- 0
+
+			}
+
+			# END #
+			return(table)
+		},
+
+		convert.extremities.to.v.identity = function (e.attr.table, v.attr.table,
+			v.identity.col, graph) {
+			# Converts edge extremities in vertex identities
+			# The actual extremities are first replaced with numerical v.id
+			# 
+			# Args:
+			# 	e.attr.table
+			# 	v.attr.table
+			# 	v.identity.col
+			# 	graph
+			# 
+			# Returns:
+			# 	The updated e.attr.table
+
+			if ( is.null(v.attr.table) ) {
+				return(NULL)
+			} else if ( is.null(nrow(v.attr.table)) ) {
+				if ( 0 == length(v.attr.table) ) return(NULL)
+			}
+
+			v.attr.table <- NetworkManager()$update.row.ids(v.attr.table)
+			e.attr.table <- NetworkManager()$convert.extremities.to.v.id(e.attr.table,
+				v.attr.table, v.identity.col, graph)
+
+			if ( !is.null(nrow(e.attr.table)) ) {
+
+				# Non-empty table
+
+				# Replace numerical v.id with v.identity
+				source.col.id <- which('source' == colnames(e.attr.table))
+				e.attr.table[, source.col.id] <- NetworkManager()$get.col(v.attr.table,
+					v.identity.col)[as.numeric(e.attr.table[, source.col.id])]
+				target.col.id <- which('target' == colnames(e.attr.table))
+				e.attr.table[, target.col.id] <- NetworkManager()$get.col(
+						v.attr.table, v.identity.col)[as.numeric(e.attr.table[, target.col.id])]
+
+			} else if ( 0!= length(e.attr.table) ) {
+
+				# Single-row table
+
+				# Replace numerical v.id with v.identity
+				source.col.id <- which('source' == names(e.attr.table))
+				e.attr.table[source.col.id] <- NetworkManager()$get.col(v.attr.table,
+					v.identity.col)[as.numeric(e.attr.table[source.col.id])]
+				target.col.id <- which('target' == names(e.attr.table))
+				e.attr.table[target.col.id] <- NetworkManager()$get.col(v.attr.table,
+					v.identity.col)[as.numeric(e.attr.table[target.col.id])]
+
+			}
+
+			# END #
+			return(e.attr.table)
+		},
+
+		convert.extremities.to.v.id = function (e.attr.table, v.attr.table,
+			v.identity.col, graph) {
+			# Converts edge extremities in numerical v.id based on the graph
+			# 
+			# Args:
+			# 	e.attr.table
+			# 	v.attr.table
+			# 	v.identity.col
+			# 	graph
+			# 
+			# Returns:
+			# 	The updated e.attr.table
+
+			if ( is.null(v.attr.table) ) {
+				return(NULL)
+			} else if ( is.null(nrow(v.attr.table)) ) {
+				if ( 0 == length(v.attr.table) ) return(NULL)
+			}
+
+			v.attr.table <- NetworkManager()$update.row.ids(v.attr.table)
+
+			if ( !is.null(nrow(e.attr.table)) ) {
+
+				# Non-empty table
+				e.attr.table <- NetworkManager()$rm.cols(e.attr.table, c('source', 'target'))
+
+				# Add numerical v.id as extremities
+				e.attr.table <- NetworkManager()$add.edges.extremities(e.attr.table, graph, F)
+
+			} else if ( 0 != length(e.attr.table) ) {
+
+				# Single-row table
+				e.attr.table <- NetworkManager()$rm.cols(e.attr.table, c('source,', 'target'))
+
+				# Add numerical v.id as extremities
+				e.attr.table <- NetworkManager()$add.edges.extremities(e.attr.table, graph, F)
+
+			}
+
+			# END #
+			return(e.attr.table)
+		},
+
+		convert.extremities.to.v.id.based.on.table = function (e.attr.table, v.attr.table,
+			v.identity.col) {
+			# Converts edge extremities in numerical v.id based on the v.attr.table
+			# The current source/target must be v.identity based
+			# 
+			# Args:
+			# 	e.attr.table
+			# 	v.attr.table
+			# 	v.identity.col
+			# 	graph
+			# 
+			# Returns:
+			# 	The updated e.attr.table
+
+			if ( is.null(v.attr.table) ) {
+				return(NULL)
+			} else if ( is.null(nrow(v.attr.table)) ) {
+				if ( 0 == length(v.attr.table) ) return(NULL)
+			}
+
+			if ( !is.null(nrow(e.attr.table)) ) {
+
+				# Non-empty table
+				e.attr.table <- NetworkManager()$expand.attr.table(e.attr.table,
+					c('source', 'target'))
+				source.col.id <- which('source' == colnames(e.attr.table))
+				target.col.id <- which('target' == colnames(e.attr.table))
+
+				if ( !is.null(nrow(v.attr.table)) ) {
+
+					# Non-empty table
+					v.identity.col.id <- which(v.identity.col == colnames(v.attr.table))
+					v.id.col.id <- which('id' == colnames(v.attr.table))
+
+					e.attr.table[, source.col.id] <- unlist(lapply(e.attr.table[, source.col.id],
+						FUN=function(x, v.id.col.id) {
+							return(v.attr.table[which(
+								v.attr.table[, v.identity.col.id] == x), v.id.col.id])
+						}, v.id.col.id=v.id.col.id))
+					e.attr.table[, target.col.id] <- unlist(lapply(e.attr.table[, target.col.id],
+						FUN=function(x, v.id.col.id) {
+							return(v.attr.table[which(
+								v.attr.table[, v.identity.col.id] == x), v.id.col.id])
+						}, v.id.col.id=v.id.col.id))
+
+				} else if ( 0 != length(v.attr.table) ) {
+
+					# Single.row table
+					e.attr.table[, source.col.id] <- v.attr.table[v.id.col.id]
+					e.attr.table[, target.col.id] <- v.attr.table[v.id.col.id]
+
+				}
+				
+
+			} else if ( 0 != length(e.attr.table) ) {
+
+				# Single-row table
+				e.attr.table <- NetworkManager()$expand.attr.table(e.attr.table,
+					c('source', 'target'))
+				source.col.id <- which('source' == names(e.attr.table))
+				target.col.id <- which('target' == names(e.attr.table))
+
+				if ( !is.null(nrow(v.attr.table)) ) {
+
+					# Non-empty table
+					v.identity.col.id <- which(v.identity.col == colnames(v.attr.table))
+					v.id.col.id <- which('id' == colnames(v.attr.table))
+
+					e.attr.table[source.col.id] <- v.attr.table[which(
+						v.attr.table[, v.identity.col.id] == e.attr.table[source.col.id]
+						), v.id.col.id]
+					e.attr.table[target.col.id] <- v.attr.table[which(
+						v.attr.table[, v.identity.col.id] == e.attr.table[target.col.id]
+						), v.id.col.id]
+
+				} else if ( 0 != length(v.attr.table) ) {
+
+					# Single-row table
+					e.attr.table[source.col.id] <- v.attr.table[v.id.col.id]
+					e.attr.table[target.col.id] <- v.attr.table[v.id.col.id]
+
+				}
+
+			}
+
+			# END #
+			return(e.attr.table)
+		},
+
+		sort.table.cols = function (table) {
+			# Orders a table columns
+			# 
+			# Args:
+			# 	table
+			# 
+			# Returns:
+			# 	The updated table
+			
+			if ( !is.null(nrow(table)) ) {
+
+				# Non-empty table
+				table <- table[, order(colnames(table))]
+
+			} else if ( 0 != length(table) ) {
+
+				# Single-row table
+				table <- table[order(names(table))]
+
+			}
+
+			# END #
+			return(table)
+		},
+
+		append.to.table.list = function (table.list, table) {
+			# Append a table to a table.list
+			# 
+			# Args:
+			# 	table.list
+			# 	table
+			# 
+			# Returns:
+			# 	The updated table.list
+			
+			if ( !is.null(nrow(table)) ) {
+
+				# Non-empty table
+				return(append(table.list, list(table)))
+
+			} else if ( 0 != length(table) ) {
+
+				# Single-row table
+				return(append(table.list, list(table)))
+			}
+
+			# END #
+			return(table.list)
+		},
+
+		get.colnames.from.table.list = function (table.list) {
+			# Returns the colnames of the tables in a table.list
+			# 
+			# Args:
+			# 	table.list
+			# 
+			# Returns:
+			# 	The colnames of the tables in a table.list	
+
+			colnames <- c()
+			for (table in table.list) {
+
+				if ( !is.null(nrow(table)) ) {
+
+					# Non-empty table
+					colnames <- append(colnames, colnames(table))
+
+				} else if ( 0 != length(table) ) {
+
+					# Single-row table
+					colnames <- append(colnames, names(table))
+
+				}
+
+			}
+
+			# END #
+			return(unique(colnames))
+		},
+
+		merge.tables.from.table.list = function (table.list) {
+			# Executes the rbind of the tables in a table.list
+			# 
+			# Args:
+			# 	table.list
+			# 	
+			# Returns:
+			# 	The rbound table.list
+
+			end.table <- c()
+			colnames <- NetworkManager()$get.colnames.from.table.list(table.list)
+
+			# RBIND TABLES #
+			for (table in table.list) {
+
+				if ( !is.null(nrow(table)) ) {
+
+					# Non-empty table
+					if ( 0 != length(which(!colnames(table) %in% colnames)) ) {
+						table <- NetworkManager()$expand.attr.table(table, colnames)
+						table <- sort.table.cols(table)
+					}
+					end.table <- rbind(end.table, table)
+
+				} else if ( 0 != length(table) ) {
+
+					# Single-row table
+					if ( 0 != length(which(!names(table) %in% colnames)) ) {
+						table <- NetworkManager()$expand.attr.table(table, colnames)
+						table <- sort.table.cols(table)
+					}
+					end.table <- rbind(end.table, table)
+
+				}
+
+			}
+
+			# ADD COLNAMES #
+			if ( !is.null(nrow(end.table)) ) {
+
+				# Non-empty table
+				colnames(end.table) <- colnames
+
+			} else if ( 0!= length(end.table) ) {
+
+				# Single-row table
+				names(end.table) <- colnames
+
+			}
+
+			# END #
+			return(end.table)
+		},
+
+		extract.subtable.based.on.identity = function (table, identity.col, identity.val) {
+			# Extract a subtable based on identity
+			# 
+			# Args:
+			# 	table
+			# 	identity.col name
+			# 	identity.val value
+			# 
+			# Returns:
+			# 	NULL if the identity.col or the identity.val were not found
+			# 	The extracted subtable
+
+			if( !is.null(nrow(table)) ) {
+
+				# Non-empty table
+				if ( !identity.col %in% colnames(table) ) return(NULL)
+
+				identity.list <- table[, which(colnames(table) == identity.col)]
+				if ( !identity.val %in% identity.list ) return(NULL)
+
+				subtable <- table[which(identity.list == identity.val),]
+
+			} else if ( 0 != length(table) ) {
+
+				# Single-row table
+				if ( !identity.col %in% names(table) ) return(NULL)
+				if ( !identity.val == table[which(names(table)) == identity.col] ) return(NULL)
+				subtable <- table
+
+			} else {
+
+				# Empty table
+				subtable <- NULL
+
+			}
+
+			# END #
+			return(subtable)
+		},
+
+		apply.fun.based.on.identity = function (table, identity.col, behaviors,
+			add.count, add.count.label) {
+			# Applies preset function to table columns based on identity
+			# 
+			# Args:
+			# 	table
+			# 	identity.col
+			# 	behaviors: the preset functions, a list with k=col and v=preset
+			# 	add.count: whether to add a row.count column {Boolean}
+			# 	add.count.label
+			# 
+			# Returns:
+			# 	The updated/shrinked table
+			
+			end.table <- c()
+
+			if ( !is.null(nrow(table)) ) {
+
+				# Non-empty table
+				if ( !identity.col %in% colnames(table) ) return(NULL)
+
+				identity.list <- table[, which(colnames(table) == identity.col)]
+				identity.list.unique <- unique(identity.list)
+
+				for (id in identity.list.unique) {
+					subtable <- NetworkManager()$extract.subtable.based.on.identity(
+						table, identity.col, id)
+
+					if ( !is.null(subtable) ) {
+						if ( !is.null(nrow(subtable)) ) {
+
+							# Non-empty subtable
+							single.row <- c()
+
+							# Remove ID from behaviors
+							if ( 'id' %in% names(behaviors) ) {
+								behaviors['id'] <- NULL
+							}
+
+							# Apply behaviors
+							for (col in names(behaviors)) {
+								if ( col %in% colnames(subtable) ) {
+									if ( 'sum' == behaviors[col] ) {
+										single.row <- append(single.row,
+											sum(as.numeric(subtable[,
+												which(colnames(subtable) == col)])))
+									} else if ( 'prod' == behaviors[col] ) {
+										single.row <- append(single.row,
+											prod(as.numeric(subtable[,
+												which(colnames(subtable) == col)])))
+									} else if ( 'min' == behaviors[col] ) {
+										single.row <- append(single.row,
+											min(as.numeric(subtable[,
+												which(colnames(subtable) == col)])))
+									} else if ( 'max' == behaviors[col] ) {
+										single.row <- append(single.row,
+											max(as.numeric(subtable[,
+												which(colnames(subtable) == col)])))
+									} else if ( 'random' == behaviors[col] ) {
+										single.row <- append(single.row,
+											subtable[round(runif(1, 0, 1) * nrow(subtable)),
+											which(colnames(subtable) == col)])
+									} else if ( 'mean' == behaviors[col] ) {
+										single.row <- append(single.row,
+											mean(as.numeric(subtable[,
+												which(colnames(subtable) == col)])))
+									} else if ( 'median' == behaviors[col] ) {
+										single.row <- append(single.row,
+											median(as.numeric(subtable[,
+												which(colnames(subtable) == col)])))
+									} else if ( 'concat' == behaviors[col] ) {
+										single.row <- append(single.row,
+											concat(as.numeric(subtable[,
+												which(colnames(subtable) == col)])))
+									} else if ( 'first' == behaviors[col] ) {
+										single.row <- append(single.row,
+											subtable[1, which(colnames(subtable) == col)])
+									} else if ( 'last' == behaviors[col] ) {
+										single.row <- append(single.row,
+											subtable[nrow(subtable),
+											which(colnames(subtable) == col)])
+									}
+									names(single.row)[length(single.row)] <- col
+								}
+							}
+
+							# Add row count column
+							if ( add.count ) {
+								single.row <- append(single.row, nrow(subtable))
+								names(single.row)[length(single.row)] <- add.count.label
+							}
+
+							# Add missing attributes
+							for (col in colnames(subtable)) {
+								if ( !col %in% names(behaviors) ) {
+									col.id <- which(col == colnames(subtable))
+									single.row <- append(single.row, subtable[1, col.id])
+									names(single.row)[length(single.row)] <- col
+								}
+							}
+
+							# Re-order columns, just in case
+							single.row <- NetworkManager()$sort.table.cols(single.row)
+
+						} else if ( 0 != length(subtable) ) {
+
+							# Single-row subtable
+							single.row <- subtable
+
+							# Remove ignored cols
+							cols.to.rm <- c()
+							for (col in names(single.row)) {
+								if ( col %in% names(behaviors) ) {
+									if ( 'ignore' == behaviors[col] ) {
+										cols.to.rm <- append(cols.to.rm, col)
+									}
+								}
+							}
+							single.row <- NetworkManager()$rm.cols(single.row, cols.to.rm)
+
+							# Add row count column
+							if ( add.count ) {
+								single.row <- append(single.row, 1)
+								names(single.row)[length(single.row)] <- add.count.label
+							}
+
+							# Re-order columns, just in case
+							single.row <- NetworkManager()$sort.table.cols(single.row)
+
+						}
+
+						end.table <- rbind(end.table, single.row)
+					}
+
+				}
+
+			} else if ( 0 != length(table) ) {
+
+				# Single-row table
+				single.row <- table
+
+				# Remove ignored cols
+				cols.to.rm <- c()
+				for (col in names(single.row)) {
+					if ( col %in% names(behaviors) ) {
+						if ( 'ignore' == behaviors[col] ) {
+							cols.to.rm <- append(cols.to.rm, col)
+						}
+					}
+				}
+				single.row <- NetworkManager()$rm.cols(single.row, cols.to.rm)
+
+				# Add row count column
+				if ( add.count ) {
+					single.row <- append(single.row, 1)
+					names(single.row)[length(single.row)] <- add.count.label
+				}
+
+				# Re-order columns, just in case
+				single.row <- NetworkManager()$sort.table.cols(single.row)
+
+				end.table <- single.row
+
+			}
+
+			# END #
+			return(end.table)
+		}
+
+	)
+
+	# Assign class attribute
+	class(nm) <- 'NetworkManager'
+
+	# Return instantiaded Graph Manager
+	return(nm)
+}
