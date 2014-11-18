@@ -382,6 +382,10 @@ NetworkManager <- function() {
 			return(graph.list)
 		},
 
+		graph.list.to.attr.tables = function (graph.list) {
+			
+		},
+
 		get.vertex.attributes = function (v, graph) {
 			# Retrieves the (attribute,value) couples of a given vertex
 			# 

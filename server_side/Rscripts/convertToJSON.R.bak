@@ -9,9 +9,7 @@ if(length(args) != 2) stop('./convertToJSON.R session_id graph_name')
 # Load requirements
 library(igraph)
 library(rjson)
-
-source('NetworkManager.class.R')
-nm <- NetworkManager()
+source('extendIgraph.R')
 
 # Start
 if(file.exists(paste0('/home/gire/public_html/SOGIv020/server_side/session/', args[1], '/'))) {
@@ -28,8 +26,7 @@ if(file.exists(paste0('/home/gire/public_html/SOGIv020/server_side/session/', ar
 		write(toJSON(l), paste0(args[2], '.dat'))
 
 		cat('Writing JSON file.\n')
-		graph.list <- nm$graph.to.attr.table(g)
-		write(toJSON(nm$attr.tables.to.list(graph.list$nodes, graph.list$edges)), paste0(args[2], '.json'))
+		write.graph(g, paste0(args[2], '.json'), format='json')
 
 		cat('Converted.\n')
 	}

@@ -182,7 +182,7 @@
             };
 
             // GROUP INTERSECT
-            
+
             /**
              * Changes page of merge UI after checking the form
              * @param  {integer} index page
