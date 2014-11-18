@@ -79,6 +79,7 @@
                             neighborhood.removeClass('faded');
 
                             // Broadcast to inspector
+                            rootScope.$broadcast('inspect_node', node);
                         });
 
                         cy.on('tap', 'edge', function(e){
@@ -89,12 +90,13 @@
                             edge.target().removeClass('faded');
 
                             // Broadcast to inspector
+                            rootScope.$broadcast('inspect_edge', edge);
                         });
 
                         cy.on('tap', function(e){
                             if( e.cyTarget === cy ){
-                                // Broadcast to inspector
                                 cy.elements().removeClass('faded');
+                                rootScope.$broadcast('close_inspector');
                             }
                         });
 

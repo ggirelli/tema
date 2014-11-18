@@ -1057,11 +1057,23 @@
 						<br />
 					</div>
 
+					<div ng-show="inspector.is_inspecting('node')">
+						<div ng-repeat="(k,v) in inspector.inspecting.node">
+							<b>{{k}}</b>: {{v}}
+						</div>
+					</div>
+
+					<div ng-show="inspector.is_inspecting('edge')">
+						<div ng-repeat="(k,v) in inspector.inspecting.edge">
+							<b>{{k}}</b>: {{v}}
+						</div>
+					</div>
+
 				</div>
 			</div>
 		</div>
 	</div>
 
-	<div id="canvas" ng-click='panels.closeAll(); inspector.close();'></div>
+	<div id="canvas" ng-click='panels.closeAll();'></div>
 
 </div>

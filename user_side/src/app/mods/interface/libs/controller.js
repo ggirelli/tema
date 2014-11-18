@@ -97,6 +97,21 @@
                 scope.inspector.load_network(network);
             });
 
+            // React to inspect_node
+            scope.$on('inspect_node', function (e, node) {
+                scope.inspector.load_node(node);
+            });
+
+            // React to inspect_edge
+            scope.$on('inspect_edge', function (e, edge) {
+                scope.inspector.load_edge(edge);
+            });
+
+            // Reacto to close_inspector
+            scope.$on('close_inspector', function (e) {
+                scope.inspector.close();
+            });
+
             /*----------------*/
             /* General events */
             /*----------------*/
