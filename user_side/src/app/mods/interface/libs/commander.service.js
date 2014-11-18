@@ -113,7 +113,7 @@
                         if ( self.merge.n_attr_identity[nks[i]] ) n++;
                     }
 
-                    if ( n > 0 ) {
+                    if ( n > 0 || (0 == self.merge.group.nodes.length && 0 == self.merge.group.edges.length) ) {
                         // Clear previous errors
                         self.merge.errMsg = undefined;
 

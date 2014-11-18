@@ -238,6 +238,7 @@
 							<input type="checkbox" name="attr-node-{{attr}}" id="attr-node-{{attr}}" ng-model="commander.merge.n_attr_identity[attr]" />
 							{{attr}}
 						</label>
+						<i ng-show="0 == commander.merge.group.nodes.length">No node attributes...</i>
 					</div>
 					<div>
 						<h5>Edges</h5>
@@ -245,6 +246,7 @@
 							<input type="checkbox" name="attr-edge-{{attr}}" id="attr-edge-{{attr}}" ng-model="commander.merge.e_attr_identity[attr]" />
 							{{attr}}
 						</label>
+						<i ng-show="0 == commander.merge.group.edges.length">No edge attributes...</i>
 					</div>
 
 					<br />
@@ -274,7 +276,7 @@
 					<div>
 						<div ng-repeat="(attr, behavior) in commander.merge.e_attr_behavior">
 							edge-{{attr}}
-							<select class='form-control' name="edge-{{attr}}-behavio" id="edge-{{attr}}-behavio" ng-model="commander.merge.e_attr_behavior[attr]">
+							<select class='form-control' name="edge-{{attr}}-behavior" id="edge-{{attr}}-behavior" ng-model="commander.merge.e_attr_behavior[attr]">
 								<option value="ignore">ignore</option>
 								<option value="sum">sum</option>
 								<option value="prod">prod</option>
@@ -289,6 +291,8 @@
 							</select>
 						</div>
 					</div>
+					<div ng-show="0 == commander.merge.group.nodes.length"><i>No node attributes...</i></div>
+					<div ng-show="0 == commander.merge.group.edges.length"><i>No edge attributes...</i></div>
 
 					<br />
 					<button class="btn end-btn btn-success" ng-click='commander.merge_set_page(4)'>next</button><button class="btn end-btn btn-warning" ng-click='commander.merge.set_page(2)'>back</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
