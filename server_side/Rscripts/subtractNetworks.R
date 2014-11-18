@@ -10,6 +10,9 @@ if(length(args) != 2) stop('./convertToJSON.R session_id config_file')
 library(igraph)
 library(rjson)
 
+source('NetworkManager.class.R')
+nm <- NetworkManager()
+
 # Start
 if(file.exists(paste0('/home/gire/public_html/SOGIv020/server_side/session/', args[1], '/'))) {
 	setwd(paste0('/home/gire/public_html/SOGIv020/server_side/session/', args[1], '/'))
@@ -19,312 +22,212 @@ if(file.exists(paste0('/home/gire/public_html/SOGIv020/server_side/session/', ar
 		cat('> Read config file\n')
 		s <- scan(paste0(args[2], '.json'), 'raw')
 		l <- fromJSON(s)
-		print(l)
 
-		n_subtrahend_identity <- c()
-		e_subtrahend_identity <- c()
+		graph.list <- list()
+		v.attr.table.list <- list()
+		e.attr.table.list <- list()
 
-		cat('> Start process\n')
-		# For each subtrahend network
+		# SUBTRAHENDS #
+
+		# For each selected subtrahend network
 		for (network in l$networks) {
+
+			cat('> Work on graph "', network, '"\n')
+
 			# Read network
 			g <- read.graph(paste0(network, '.graphml'), format='graphml')
-			
-			# If there are nodes
-			if ( 0 != vcount(g) ) {
-				# Build node attribute table
-				n_attr_table <- c()
-				for (attr in list.vertex.attributes(g)) {
-					n_attr_table <- cbind(n_attr_table, eval(parse(text=paste0('V(g)$', attr))))
-				}
-				colnames(n_attr_table) <- list.vertex.attributes(g)
 
-				# Get attributes for node identity
-				n_identity <- c()
-				for (attr in names(l$n_identity)) {
-					if (as.logical(l$n_identity[attr])) {
-						n_identity <- append(n_identity, attr)
-					}
-				}
+			# Build attribute tables
+			graph.list <- nm$graph.to.attr.table(g)
+			v.attr.table <- graph.list$nodes
+			e.attr.table <- graph.list$edges
 
-				# Expand with missing attributes
-				for (attr in c(n_identity, names(l$n_behavior)) ) {
-					if ( !attr %in% colnames(n_attr_table) ) {
-						n_attr_table <- cbind(n_attr_table, NA)
-						colnames(n_attr_table)[ncol(n_attr_table)] <- attr
-					}
-				}
-				
-				# Remove node id
-				if ( 'id' %in% list.vertex.attributes(g) ) {
-					n_attr_table <- n_attr_table[,-which('id' == colnames(n_attr_table))]
-				}
+			# VERTICES #
 
-				# Add node identity column
-				n_identity_col <- c()
-				for (attr in n_identity) {
-					if ( 0 == length(n_identity_col) ) {
-						n_identity_col <- n_attr_table[,attr]
-					} else {
-						n_identity_col <- paste0(n_identity_col, '~', n_attr_table[,attr])
-					}
-				}
-				n_attr_table <- cbind(n_attr_table, n_identity_col)
-				colnames(n_attr_table)[ncol(n_attr_table)] <- c('sogi_node_identity')
+			cat('\t- Vertices\n')
 
-				# Append
-				n_subtrahend_identity <- append(n_subtrahend_identity, n_attr_table[,which('sogi_node_identity' == colnames(n_attr_table))])
-
-				# If there are edges
-				if ( 0 != ecount(g) ) {
-					# Build edge attribute table
-					e_attr_table <- c()
-					for (attr in list.edge.attributes(g)) {
-						e_attr_table <- cbind(e_attr_table, eval(parse(text=paste0('E(g)$', attr))))
-					}
-					colnames(e_attr_table) <- list.edge.attributes(g)
-
-					# Add source/target
-					if ( 'name' %in% list.vertex.attributes(g) ) {
-						if ( 'source' %in% colnames(e_attr_table) ) {
-							e_attr_table[,'source'] <- n_attr_table[unlist(lapply(get.edgelist(g)[,1], FUN=function(x,g) { return(which(V(g)$name == x)) }, g=g)), 'sogi_node_identity']
-						} else {
-							e_attr_table <- cbind(e_attr_table, n_attr_table[unlist(lapply(get.edgelist(g)[,1], FUN=function(x,g) { return(which(V(g)$name == x)) }, g=g)), 'sogi_node_identity'])
-							colnames(e_attr_table)[ncol(e_attr_table)] <- 'source'
-						}
-						if ( 'target' %in% colnames(e_attr_table) ) {
-							e_attr_table[,'target'] <- n_attr_table[unlist(lapply(get.edgelist(g)[,2], FUN=function(x,g) { return(which(V(g)$name == x)) }, g=g)), 'sogi_node_identity']
-						} else {
-							e_attr_table <- cbind(e_attr_table, n_attr_table[unlist(lapply(get.edgelist(g)[,2], FUN=function(x,g) { return(which(V(g)$name == x)) }, g=g)), 'sogi_node_identity'])
-							colnames(e_attr_table)[ncol(e_attr_table)] <- 'target'
-						}
-					} else {
-						if ( 'source' %in% colnames(e_attr_table) ) {
-							e_attr_table[,'source'] <- n_attr_table[unlist(lapply(get.edgelist(g)[,1], FUN=function(x,g) { return(which(V(g)$id == x)) }, g=g)), 'sogi_node_identity']
-						} else {
-							e_attr_table <- cbind(e_attr_table, n_attr_table[unlist(lapply(get.edgelist(g)[,1], FUN=function(x,g) { return(which(V(g)$id == x)) }, g=g)), 'sogi_node_identity'])
-							colnames(e_attr_table)[ncol(e_attr_table)] <- 'source'
-						}
-						if ( 'target' %in% colnames(e_attr_table) ) {
-							e_attr_table <- n_attr_table[unlist(lapply(get.edgelist(g)[,2], FUN=function(x,g) { return(which(V(g)$id == x)) }, g=g)), 'sogi_node_identity']
-						} else {
-							e_attr_table[,'target'] <- cbind(e_attr_table, n_attr_table[unlist(lapply(get.edgelist(g)[,2], FUN=function(x,g) { return(which(V(g)$id == x)) }, g=g)), 'sogi_node_identity'])
-							colnames(e_attr_table)[ncol(e_attr_table)] <- 'target'
-						}
-					}
-
-					# Get attributes for edge identity
-					e_identity <- c()
-					for (attr in names(l$e_identity)) {
-						if (as.logical(l$e_identity[attr])) {
-							e_identity <- append(e_identity, attr)
-						}
-					}
-
-					# Expand with missing attributes
-					for (attr in c(e_identity, names(l$e_behavior)) ) {
-						if ( !attr %in% colnames(e_attr_table) ) {
-							e_attr_table <- cbind(e_attr_table, NA)
-							colnames(e_attr_table)[ncol(e_attr_table)] <- attr
-						}
-					}
-
-					# Add edge identity column
-					e_identity_col <- paste0(e_attr_table[,'source'], '->', e_attr_table[,'target'])
-					for (attr in e_identity) {
-						if ( 0 == length(e_identity_col) ) {
-							e_identity_col <- e_attr_table[,attr]
-						} else {
-							e_identity_col <- paste0(e_identity_col, '~', e_attr_table[,attr])
-						}
-					}
-					e_attr_table <- cbind(e_attr_table, e_identity_col)
-					colnames(e_attr_table)[ncol(e_attr_table)] <- c('sogi_edge_identity')
-
-					# Append
-					e_subtrahend_identity <- append(e_subtrahend_identity, e_attr_table[,which('sogi_edge_identity' == colnames(e_attr_table))])
-				}
-			}
-		}
-
-		# Work on the minuend network
-		# Read network
-		g <- read.graph(paste0(l$minuend, '.graphml'), format='graphml')
-		# If there are nodes
-		if ( 0 != vcount(g) ) {
-			# Build node attribute table
-			n_minuend_attr_table <- c()
-			for (attr in list.vertex.attributes(g)) {
-				n_minuend_attr_table <- cbind(n_minuend_attr_table, eval(parse(text=paste0('V(g)$', attr))))
-			}
-			colnames(n_minuend_attr_table) <- list.vertex.attributes(g)
-
-			# Get attributes for node identity
-			n_identity <- c()
+			# Get attributes for vertex identity
+			v.identity.list <- c()
 			for (attr in names(l$n_identity)) {
 				if (as.logical(l$n_identity[attr])) {
-					n_identity <- append(n_identity, attr)
+					v.identity.list <- append(v.identity.list, attr)
 				}
 			}
 
 			# Expand with missing attributes
-			for (attr in c(n_identity, names(l$n_behavior)) ) {
-				if ( !attr %in% colnames(n_minuend_attr_table) ) {
-					n_minuend_attr_table <- cbind(n_minuend_attr_table, NA)
-					colnames(n_minuend_attr_table)[ncol(n_minuend_attr_table)] <- attr
-				}
-			}
+			v.attr.table <- nm$expand.attr.table(v.attr.table,
+				c(v.identity.list, names(l$n_behavior)))
 
-			# Remove node id
-			if ( 'id' %in% list.vertex.attributes(g) ) {
-				n_minuend_attr_table <- n_minuend_attr_table[,-which('id' == colnames(n_minuend_attr_table))]
-			}
+			# Add vertex identity column
+			v.attr.table <- nm$add.collapsed.col(v.attr.table,
+				v.identity.list, 'sogi_identity', '~')
+
+			# Sort v.attr.table columns
+			v.attr.table <- nm$sort.table.cols(v.attr.table)
+
+			# EDGES #
 			
-			# Add node identity column
-			n_identity_col <- c()
-			for (attr in n_identity) {
-				if ( 0 == length(n_identity_col) ) {
-					n_identity_col <- n_minuend_attr_table[,attr]
-				} else {
-					n_identity_col <- paste0(n_identity_col, '~', n_minuend_attr_table[,attr])
+			cat('\t- Edges\n')
+
+			# Add extremities
+			e.attr.table <- nm$add.edges.extremities(e.attr.table, g, F)
+
+			# Convert edge extremities to v.identity
+			e.attr.table <- nm$convert.extremities.to.v.identity(e.attr.table, v.attr.table,
+				'sogi_identity', g)
+
+			# Get attributes for edge identity
+			e.identity.list <- c('source', 'target')
+			for (attr in names(l$e.identity.list)) {
+				if (as.logical(l$e.identity.list[attr])) {
+					e.identity.list <- append(e.identity.list, attr)
 				}
 			}
-			n_minuend_attr_table <- cbind(n_minuend_attr_table, n_identity_col)
-			colnames(n_minuend_attr_table)[ncol(n_minuend_attr_table)] <- c('sogi_node_identity')
 
-			# Sort node attribute table
-			n_minuend_attr_table <- n_minuend_attr_table[,order(colnames(n_minuend_attr_table))]
+			# Expand with missing attributes
+			e.attr.table <- nm$expand.attr.table(e.attr.table,
+				c(e.identity.list, names(l$e_behavior)))
 
-			# If there are edges
-			if ( 0 != ecount(g) ) {
-				# Build edge attribute table
-				e_minuend_attr_table <- c()
-				for (attr in list.edge.attributes(g)) {
-					e_minuend_attr_table <- cbind(e_minuend_attr_table, eval(parse(text=paste0('E(g)$', attr))))
-				}
-				colnames(e_minuend_attr_table) <- list.edge.attributes(g)
+			# Add edge identity column
+			e.attr.table <- nm$add.collapsed.col(e.attr.table,
+				e.identity.list, 'sogi_identity', '~')
 
-				# Add source/target
-				if ( 'name' %in% list.vertex.attributes(g) ) {
-					if ( 'source' %in% colnames(e_minuend_attr_table) ) {
-						e_minuend_attr_table[,'source'] <- n_minuend_attr_table[unlist(lapply(get.edgelist(g)[,1], FUN=function(x,g) { return(which(V(g)$name == x)) }, g=g)), 'sogi_node_identity']
-					} else {
-						e_minuend_attr_table <- cbind(e_minuend_attr_table, n_minuend_attr_table[unlist(lapply(get.edgelist(g)[,1], FUN=function(x,g) { return(which(V(g)$name == x)) }, g=g)), 'sogi_node_identity'])
-						colnames(e_minuend_attr_table)[ncol(e_minuend_attr_table)] <- 'source'
-					}
-					if ( 'target' %in% colnames(e_minuend_attr_table) ) {
-						e_minuend_attr_table[,'target'] <- n_minuend_attr_table[unlist(lapply(get.edgelist(g)[,2], FUN=function(x,g) { return(which(V(g)$name == x)) }, g=g)), 'sogi_node_identity']
-					} else {
-						e_minuend_attr_table <- cbind(e_minuend_attr_table, n_minuend_attr_table[unlist(lapply(get.edgelist(g)[,2], FUN=function(x,g) { return(which(V(g)$name == x)) }, g=g)), 'sogi_node_identity'])
-						colnames(e_minuend_attr_table)[ncol(e_minuend_attr_table)] <- 'target'
-					}
-				} else {
-					if ( 'source' %in% colnames(e_minuend_attr_table) ) {
-						e_minuend_attr_table[,'source'] <- n_minuend_attr_table[unlist(lapply(get.edgelist(g)[,1], FUN=function(x,g) { return(which(V(g)$id == x)) }, g=g)), 'sogi_node_identity']
-					} else {
-						e_minuend_attr_table <- cbind(e_minuend_attr_table, n_minuend_attr_table[unlist(lapply(get.edgelist(g)[,1], FUN=function(x,g) { return(which(V(g)$id == x)) }, g=g)), 'sogi_node_identity'])
-						colnames(e_minuend_attr_table)[ncol(e_minuend_attr_table)] <- 'source'
-					}
-					if ( 'target' %in% colnames(e_minuend_attr_table) ) {
-						e_minuend_attr_table <- n_minuend_attr_table[unlist(lapply(get.edgelist(g)[,2], FUN=function(x,g) { return(which(V(g)$id == x)) }, g)), 'sogi_node_identity']
-					} else {
-						e_minuend_attr_table[,'target'] <- cbind(e_minuend_attr_table, n_minuend_attr_table[unlist(lapply(get.edgelist(g)[,2], FUN=function(x,g) { return(which(V(g)$id == x)) }, g=g)), 'sogi_node_identity'])
-						colnames(e_minuend_attr_table)[ncol(e_minuend_attr_table)] <- 'target'
-					}
-				}
+			# Sort edge attribute table
+			e.attr.table <- nm$sort.table.cols(e.attr.table)
 
-				# Get attributes for edge identity
-				e_identity <- c()
-				for (attr in names(l$e_identity)) {
-					if (as.logical(l$e_identity[attr])) {
-						e_identity <- append(e_identity, attr)
-					}
-				}
+			# MAKE LISTS #
+			v.attr.table.list <- nm$append.to.table.list(v.attr.table.list, v.attr.table)
+			e.attr.table.list <- nm$append.to.table.list(e.attr.table.list, e.attr.table)
+			graph.list <- append(graph.list, g)
+		}
+		
+		# MINUEND #
+		
+		cat('> Work on graph "', l$minuend, '"\n')
 
-				# Expand with missing attributes
-				for (attr in c(e_identity, names(l$e_behavior)) ) {
-					if ( !attr %in% colnames(e_minuend_attr_table) ) {
-						e_minuend_attr_table <- cbind(e_minuend_attr_table, NA)
-						colnames(e_minuend_attr_table)[ncol(e_minuend_attr_table)] <- attr
-					}
-				}
+		# Read network
+		g <- read.graph(paste0(l$minuend, '.graphml'), format='graphml')
 
-				# Expand with missing attributes
-				for (attr in c(e_identity, names(l$e_behavior)) ) {
-					if ( !attr %in% colnames(e_minuend_attr_table) ) {
-						e_minuend_attr_table <- cbind(e_minuend_attr_table, NA)
-						colnames(e_minuend_attr_table)[ncol(e_minuend_attr_table)] <- attr
-					}
-				}
+		# Build attribute tables
+		graph.list <- nm$graph.to.attr.table(g)
+		v.minuend.attr.table <- graph.list$nodes
+		e.minuend.attr.table <- graph.list$edges
 
-				# Add edge identity column
-				e_identity_col <- paste0(e_minuend_attr_table[,'source'], '->', e_minuend_attr_table[,'target'])
-				for (attr in e_identity) {
-					if ( 0 == length(e_identity_col) ) {
-						e_identity_col <- e_minuend_attr_table[,attr]
-					} else {
-						e_identity_col <- paste0(e_identity_col, '~', e_minuend_attr_table[,attr])
-					}
-				}
-				e_minuend_attr_table <- cbind(e_minuend_attr_table, e_identity_col)
-				colnames(e_minuend_attr_table)[ncol(e_minuend_attr_table)] <- c('sogi_edge_identity')
+		# MINUEND VERTICES #
 
-				# Sort edge attribute table
-				e_minuend_attr_table <- e_minuend_attr_table[,order(colnames(e_minuend_attr_table))]
+		cat('\t- Vertices\n')
+
+		# Get attributes for vertex identity
+		v.identity.list <- c()
+		for (attr in names(l$n_identity)) {
+			if (as.logical(l$n_identity[attr])) {
+				v.identity.list <- append(v.identity.list, attr)
 			}
 		}
 
-		# Subtract
-		n_minuend <- n_minuend_attr_table
-		n_rm <- which(n_minuend[,which('sogi_node_identity' == colnames(n_minuend))] %in% n_subtrahend_identity)
-		if ( 0 != length(n_rm) ) {
-			n_minuend <- n_minuend[-n_rm,]
-		}
-		e_minuend <- e_minuend_attr_table
-		e_rm <- which(e_minuend[,which('sogi_edge_identity' == colnames(e_minuend))] %in% e_subtrahend_identity)
-		if ( 0 != length(e_rm) ) {
-			e_minuend <- e_minuend[-e_rm,]
+		# Expand with missing attributes
+		v.minuend.attr.table <- nm$expand.attr.table(v.minuend.attr.table,
+			c(v.identity.list, names(l$n_behavior)))
+
+		# Add vertex identity column
+		v.minuend.attr.table <- nm$add.collapsed.col(v.minuend.attr.table,
+			v.identity.list, 'sogi_identity', '~')
+
+		# Sort v.minuend.attr.table columns
+		v.minuend.attr.table <- nm$sort.table.cols(v.minuend.attr.table)
+
+		# MINUEND EDGES #
+
+		cat('\t- Edges\n')
+
+		# Add extremities
+		e.minuend.attr.table <- nm$add.edges.extremities(e.minuend.attr.table, g, F)
+
+		# Convert edge extremities to v.identity
+		e.minuend.attr.table <- nm$convert.extremities.to.v.identity(e.minuend.attr.table,
+			v.minuend.attr.table, 'sogi_identity', g)
+
+		# Get attributes for edge identity
+		e.identity.list <- c('source', 'target')
+		for (attr in names(l$e.identity.list)) {
+			if (as.logical(l$e.identity.list[attr])) {
+				e.identity.list <- append(e.identity.list, attr)
+			}
 		}
 
-		# Convert source/target in node IDs
-		e_minuend[,'source'] <- unlist(lapply(e_minuend[,'source'], FUN=function (x, nlist) { id <- which(nlist == x); if(0 == length(id)) id <- NA; return(id); }, nlist=n_minuend[,which('sogi_node_identity' == colnames(n_minuend))]))
-		e_minuend[,'target'] <- unlist(lapply(e_minuend[,'target'], FUN=function (x, nlist) { id <- which(nlist == x); if (0 == length(id)) id <- NA; return(id); }, nlist=n_minuend[,which('sogi_node_identity' == colnames(n_minuend))]))
-		# Remove NAs
-		e_rm <- union(which(is.na(e_minuend[,'source'])),which(is.na(e_minuend[,'target'])))
-		if ( 0 != length(e_rm) ) {
-			e_minuend <- e_minuend[-e_rm,]
-		}
+		# Expand with missing attributes
+		e.minuend.attr.table <- nm$expand.attr.table(e.minuend.attr.table,
+			c(e.identity.list, names(l$e_behavior)))
 
+		# Add edge identity column
+		e.minuend.attr.table <- nm$add.collapsed.col(e.minuend.attr.table,
+			e.identity.list, 'sogi_identity', '~')
+
+		# Sort edge attribute table
+		e.minuend.attr.table <- nm$sort.table.cols(e.minuend.attr.table)
+
+
+		# SUBTRACT VERTICES #
+
+		cat('> Merging subtrahend Vertices\n')
+
+		# Merge tables from table.list
+		v.attr.table.merged <- nm$merge.tables.from.table.list(v.attr.table.list)
+
+		# Retrieve subtrahend vertex identities
+		v.subtrahend.identity <- nm$get.col(v.attr.table.merged, 'sogi_identity')
+		v.subtrahend.identity.unique <- unique(v.subtrahend.identity)
+
+		# Remove subtrahend vertex identities from minuend
+		v.minuend.attr.table <- nm$rm.rows.based.on.identity(v.minuend.attr.table,
+			'sogi_identity', v.subtrahend.identity.unique)
+
+		# SUBTRACT EDGES #
+
+		cat('> Merging subtrahend Edges\n')
+
+		# Merge table from table.list
+		e.attr.table.merged <- nm$merge.tables.from.table.list(e.attr.table.list)
+
+		# Retrieve subtrahend edges identities
+		e.subtrahend.identity <- nm$get.col(e.attr.table.merged, 'sogi_identity')
+		e.subtrahend.identity.unique <- unique(e.subtrahend.identity)
+
+		# Remove subtrahend edges identities from minuend
+		e.minuend.attr.table <- nm$rm.rows.based.on.identity(e.minuend.attr.table,
+			'sogi_identity', e.subtrahend.identity.unique)
+
+		# Remove edges that lost one or both extremities
+		e.minuend.attr.table <- nm$check.extremities(e.minuend.attr.table,
+			v.attr.table, 'sogi_identity')
+
+		# CONCLUSION #
+		
+		cat('> Output\n')
+ù
+		# Update extremities and IDs
+		graph.list <- nm$update.row.ids.and.extremities(e.minuend.attr.table, 'e',
+			v.minuend.attr.table, 'n', 'sogi_identity')
+		
 		# Remove identity columns
-		n_minuend <- n_minuend[, -which('sogi_node_identity' == colnames(n_minuend))]
-		e_minuend <- e_minuend[, -which('sogi_edge_identity' == colnames(e_minuend))]
-
-		cat('> Convert to graph\n')
-		g.out <- graph.empty()
-		g.out <- add.vertices(g.out, nrow(n_minuend))
-		for (attr in colnames(n_minuend)) {
-			eval(parse(text=paste0('V(g.out)$', attr, ' <- n_minuend[, attr]')))
-		}
-		g.out <- add.edges(g.out, c(rbind(V(g.out)[as.numeric(e_minuend[,'source'])],V(g.out)[as.numeric(e_minuend[,'target'])])))
-		for (attr in colnames(e_minuend)) {
-			eval(parse(text=paste0('E(g.out)$', attr, ' <- e_minuend[, attr]')))
-		}
-
-		cat('> Write GraphML network\n')
+		v.minuend.attr.table <- nm$rm.cols(v.minuend.attr.table, 'sogi_identity')
+		e.minuend.attr.table <- nm$rm.cols(e.minuend.attr.table, 'sogi_identity')
+		
+		# Write GraphML
+		g.out <- nm$attr.tables.to.graph(v.minuend.attr.table, e.minuend.attr.table)
 		write.graph(g.out, paste0(l$new_name, '.graphml'), format='graphml')
-
-		cat('> Preparing config file.\n')
-		d <- list(e_attributes=list.edge.attributes(g.out), e_count=ecount(g.out), v_attributes=list.vertex.attributes(g.out), v_count=vcount(g.out))
-
-		cat('> Writing DAT file.\n')		
+		
+		# Write graph DAT
+		d <- list(
+			e_attributes=list.edge.attributes(g.out),
+			e_count=ecount(g.out), 
+			v_attributes=list.vertex.attributes(g.out),
+			v_count=vcount(g.out)
+		)
 		write(toJSON(d), paste0(l$new_name, '.dat'))
-
-		cat('> Writing JSON file.\n')
-		source('../../Rscripts/extendIgraph.R')
-		write.graph(g.out, paste0(l$new_name, '.json'), format='json')
-
-		cat('> Converted.\n')
-
-		cat('~ END ~')
+		
+		# Write JSON
+		graph.list <- nm$attr.tables.to.list(v.minuend.attr.table, e.minuend.attr.table)
+		write(toJSON(graph.list), paste0(l$new_name, '.json'))
 	}
 }

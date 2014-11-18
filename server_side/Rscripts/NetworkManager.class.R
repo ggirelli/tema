@@ -285,6 +285,7 @@ NetworkManager <- function() {
 				e.count <- 0
 			}
 
+
 			graph.list <- list(nodes=list(), edges=list())
 
 			# VERTICES #
@@ -298,7 +299,7 @@ NetworkManager <- function() {
 				}
 				graph.list$nodes <- list(data=l)
 
-			} else {
+			} else if ( 0 != v.count ) {
 
 				# 'normal' graph
 				graph.list$nodes <- lapply(1:nrow(v.attr.table), FUN=function(x, v.attr.table) {
@@ -322,7 +323,7 @@ NetworkManager <- function() {
 				}
 				graph.list$edges <- list(data=l)
 
-			} else {
+			} else if ( 0 != e.count ) {
 
 				# 'normal' graph
 				graph.list$edges <- lapply(1:nrow(e.attr.table), FUN=function(x, e.attr.table) {
@@ -625,6 +626,42 @@ NetworkManager <- function() {
 			return(table)
 		},
 
+		rm.rows.based.on.identity = function (table, identity.col, identity.to.rm) {
+			# Removes rows from table based on identity
+			# 
+			# Args:
+			# 	table
+			# 	identity.col name
+			# 	identity.to.rm {vector}
+			# 
+			# Returns:
+			# 	The updated table or NULL
+
+			if ( !is.null(nrow(table)) ) {
+
+				# Non-empty table
+				if ( !identity.col %in% colnames(table) ) return(NULL)
+
+				identity.col.id <- which(identity.col == colnames(table))
+				rows.to.rm <- which(table[, identity.col.id] %in% identity.to.rm)
+				if ( 0 != length(rows.to.rm) ) {
+					table <- table[-rows.to.rm, ]
+				}
+
+			} else if ( 0 != length(table) ) {
+
+				# Single-row table
+				if ( !identity.col %in% names(table) ) return(NULL)
+
+				identity.col.id <- which(identity.col == names(table))
+				if ( table[identity.col.id] %in% identity.to.rm ) return(NULL)
+
+			}
+
+			# END #
+			return(table)
+		},
+
 		add.edges.extremities = function (e.attr.table, graph, names) {
 			# Adds source/target columns to an e.attr.table
 			# 
@@ -692,6 +729,41 @@ NetworkManager <- function() {
 
 			# END #
 			return(table)
+		},
+
+		update.row.ids.and.extremities = function (e.attr.table, e.prefix,
+			v.attr.table, v.prefix, v.identity.col) {
+			# Updates ids and extremities of attribute tables
+			# v.attr.table must contain 'id'
+			# e.attr.table must contain 'id', 'source' and 'target'
+			# Extremities must be identity based
+			# 
+			# Args:
+			# 	e.attr.table
+			# 	e.prefix
+			# 	v.attr.table
+			# 	v.prefix
+			# 	v.identity.col
+			# 
+			# Returns:
+			# 	The updated tables: list(nodes=v.attr.table, edges=e.attr.table)
+
+			# VERTICES #
+
+			v.attr.table <- NetworkManager()$update.row.ids(v.attr.table)
+			v.attr.table <- NetworkManager()$add.prefix.to.col(v.attr.table, 'id', 'v')
+
+			# EDGES #
+			
+			e.attr.table <- NetworkManager()$check.extremities(e.attr.table, v.attr.table, v.identity.col)
+			e.attr.table <- NetworkManager()$convert.extremities.to.v.id.based.on.table(e.attr.table,
+				v.attr.table, v.identity.col)
+			e.attr.table <- NetworkManager()$update.row.ids(e.attr.table)
+			e.attr.table <- NetworkManager()$add.prefix.to.col(e.attr.table, 'id', 'e')
+
+
+			# END #
+			return(list(nodes=v.attr.table, edges=e.attr.table))
 		},
 
 		convert.extremities.to.v.identity = function (e.attr.table, v.attr.table,
@@ -878,6 +950,82 @@ NetworkManager <- function() {
 
 			# END #
 			return(e.attr.table)
+		},
+
+		check.extremities = function (e.attr.table, v.attr.table, v.identity.col) {
+			# Removes rows from e.attr.table that lost one or both extremities
+			# 'source' and 'target' columns must be present in e.attr.table
+			# Extremities must be identity-based
+			# 
+			# Args:
+			# 	e.attr.table
+			# 	v.attr.table
+			# 	v.identity.table
+			# 
+			# Returns:
+			# 	The updated table
+
+			# RETRIEVE V.IDENTITIES #
+
+			if ( !is.null(nrow(v.attr.table)) ) {
+
+				# Non-empty table
+				if ( !v.identity.col %in% colnames(v.attr.table) ) return(NULL)
+
+				v.identity.col.id <- which(v.identity.col == colnames(v.attr.table))
+				v.identity <- v.attr.table[, v.identity.col.id]
+
+			} else if ( 0 != length(v.attr.table) ) {
+
+				# Single-row table
+				if ( !v.identity.col %in% names(v.attr.table) ) return(NULL)
+
+				v.identity.col.id <- which(v.identity.col == names(v.attr.table))
+				v.identity <- v.attr.table[v.identity.col.id]
+
+			} else {
+
+				# No vertices, no edges
+				return(NULL)
+
+			}
+
+			# CHECK EDGES #
+			
+			if ( !is.null(nrow(e.attr.table)) ) {
+
+				# Non-empty table
+				if ( 0 != length(which(!c('source', 'target') %in% colnames(e.attr.table) ))) {
+					return(NULL)
+				}
+
+				source.col.id <- which('source' == colnames(e.attr.table))
+				rows.to.rm <- which(!e.attr.table[, source.col.id] %in% v.identity)
+				if ( 0!= length(rows.to.rm) ) {
+					e.attr.table <- e.attr.table[-rows.to.rm, ]
+				}
+				target.col.id <- which('target' == colnames(e.attr.table))
+				rows.to.rm <- which(!e.attr.table[, target.col.id] %in% v.identity)
+				if ( 0!= length(rows.to.rm) ) {
+					e.attr.table <- e.attr.table[-rows.to.rm, ]
+				}
+
+			} else if ( 0!= length(e.attr.table) ) {
+
+				# Single-row table
+				if ( 0 != length(which(!c('source', 'target') %in% names(e.attr.table))) ) {
+					return(NULL)
+				}
+
+				source.col.id <- which('source' == names(e.attr.table))
+				if ( !e.attr.table[source.col.id] %in% v.identity ) return(NULL)
+				target.col.id <- which('target' == names(e.attr.table))
+				if ( !e.attr.table[, target.col.id] %in% v.identity ) return(NULL)
+
+			}
+
+			# END #
+			return(NULL)
 		},
 
 		sort.table.cols = function (table) {

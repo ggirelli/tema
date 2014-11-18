@@ -20,8 +20,8 @@ if ( $s->exists($data->id) ) {
 	
 	$q = 'cd ' . SCRIPATH . '; ./subtractNetworks.R ' . $s->get('id') . ' tmp_r_config';
 	$r = $s->exec_return('convert', $q);
-
-	//unlink($f);
+	
+	unlink($f);
 	die('{"err":0}');
 
 } else {
