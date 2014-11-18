@@ -204,7 +204,7 @@ if(file.exists(paste0('/home/gire/public_html/SOGIv020/server_side/session/', ar
 		# CONCLUSION #
 		
 		cat('> Output\n')
-ù
+
 		# Update extremities and IDs
 		graph.list <- nm$update.row.ids.and.extremities(e.minuend.attr.table, 'e',
 			v.minuend.attr.table, 'n', 'sogi_identity')
