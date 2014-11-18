@@ -383,7 +383,65 @@ NetworkManager <- function() {
 		},
 
 		graph.list.to.attr.tables = function (graph.list) {
-			
+			# Converts a graph from JSON to attr.tables
+			# 
+			# Args:
+			# 	graph.list in JSON format
+			# 
+			# Returns:
+			# 	list(nodes=v.attr.table, edges=e.attr.table)
+
+			v.attr.table <- c()
+			e.attr.table <- c()
+
+			if ( !is.null(graph.list$nodes) ) {
+
+				# List divided into 'nodes' and 'edges'
+				for (node in graph.list$nodes) {
+					single.row <- c()
+					for (v in node$data) {
+						single.row <- append(single.row, v)
+					}
+					names(single.row) <- names(node$data)
+					v.attr.table <- rbind(v.attr.table, single.row)
+				}
+				for (edge in graph.list$edges) {
+					single.row <- c()
+					for (v in edge$data) {
+						single.row <- append(single.row, v)
+					}
+					names(single.row) <- names(edge$data)
+					e.attr.table <- rbind(e.attr.table, single.row)
+				}
+
+			} else {
+
+				# Mixed-list
+				for (el in graph.list) {
+					if ( 'nodes' == el$group ) {
+						node <- el
+						single.row <- c()
+						for (v in node$data) {
+							single.row <- append(single.row, v)
+						}
+						names(single.row) <- names(node$data)
+						v.attr.table <- rbind(v.attr.table, single.row)
+					}
+					if ( 'edges' == el$group ) {
+						edge <- el
+						single.row <- c()
+						for (v in edge$data) {
+							single.row <- append(single.row, v)
+						}
+						names(single.row) <- names(edge$data)
+						e.attr.table <- rbind(e.attr.table, single.row)
+					}
+				}
+
+			}
+
+			# END #
+			return(list(nodes=v.attr.table, edges=e.attr.table))
 		},
 
 		get.vertex.attributes = function (v, graph) {
