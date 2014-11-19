@@ -198,7 +198,11 @@ if(file.exists(paste0('/home/gire/public_html/SOGIv020/server_side/session/', ar
 
 		# Remove edges that lost one or both extremities
 		e.minuend.attr.table <- nm$check.extremities(e.minuend.attr.table,
-			v.attr.table, 'sogi_identity')
+			v.minuend.attr.table, 'sogi_identity')
+
+		# Convert extremities to id
+		e.minuend.attr.table <- nm$convert.extremities.to.v.id.based.on.table(e.minuend.attr.table,
+			v.minuend.attr.table, 'sogi_identity')
 
 		# CONCLUSION #
 		

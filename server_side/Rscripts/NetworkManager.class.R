@@ -1093,7 +1093,7 @@ NetworkManager <- function() {
 				return(NULL)
 
 			}
-
+			
 			# CHECK EDGES #
 			
 			if ( !is.null(nrow(e.attr.table)) ) {
@@ -1129,7 +1129,7 @@ NetworkManager <- function() {
 			}
 
 			# END #
-			return(NULL)
+			return(e.attr.table)
 		},
 
 		sort.table.cols = function (table) {
