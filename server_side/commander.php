@@ -30,7 +30,8 @@ if( isset($data->action) ) {
 			case 'combine_attr': case 'convert_network':
 			case 'get_network': case 'get_network_list':
 			case 'get_settings': case 'get_sif':
-			case 'network_contains': case 'networks_intersect':
+			case 'network_contains': case 'networks_distances':
+			case 'networks_intersect':
 			case 'networks_merge': case 'networks_subtract':
 			case 'remove_attr': case 'remove_network':
 			case 'rename_attr': case 'rename_network':
@@ -42,7 +43,7 @@ if( isset($data->action) ) {
 				break;
 			}
 
-			default: die('{"err":-1}');
+			default: die('{"err":-1,"a":"' . $data->action . '"}');
 
 		}
 
