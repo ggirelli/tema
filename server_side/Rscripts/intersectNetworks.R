@@ -131,18 +131,18 @@ if(file.exists(paste0('/home/gire/public_html/SOGIv020/server_side/session/', ar
 
 		# Merge table from table.list
 		e.attr.table.merged <- nm$merge.tables.from.table.list(e.attr.table.list)
-
+		
 		# Filter: remove those e.rows that do not appear length(l$networks) times
 		e.identity.col.id <- which('sogi_identity' == colnames(e.attr.table.merged))
 		e.identity.col <- e.attr.table.merged[, e.identity.col.id]
-		if ( !is.null(nrow(e.attr.table)) ) {
+		if ( !is.null(nrow(e.attr.table.merged)) ) {
 			e.attr.table.merged <- e.attr.table.merged[which(
 				e.identity.col %in% names(table(e.identity.col))[which(
 					table(e.identity.col) == length(l$networks))]),]
 		} else {
 			e.attr.table.merged <- NULL
 		}
-
+		
 		# Apply behavior
 		e.attr.table.shrink <- nm$apply.fun.based.on.identity(e.attr.table.merged,
 			'sogi_identity', l$e_behavior, F, 'merge_count')
