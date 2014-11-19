@@ -4,7 +4,7 @@
 
     requirejs.config({
 
-        baseUrl: '/public_html/SOGIv020/user_side/',
+        baseUrl: '/public_html/TEA/user_side/',
 
         paths: {
             // Folders
