@@ -54,11 +54,11 @@ if(file.exists(paste0('/home/gire/public_html/SOGIv020/server_side/session/', ar
 			# Expand with missing attributes
 			v.attr.table <- nm$expand.attr.table(v.attr.table,
 				c(v.identity.list, names(l$n_behavior)))
-
+			
 			# Add vertex identity column
 			v.attr.table <- nm$add.collapsed.col(v.attr.table,
 				v.identity.list, 'sogi_identity', '~')
-
+			
 			# Sort v.attr.table columns
 			v.attr.table <- nm$sort.table.cols(v.attr.table)
 
@@ -142,7 +142,7 @@ if(file.exists(paste0('/home/gire/public_html/SOGIv020/server_side/session/', ar
 		# Write GraphML
 		g.out <- nm$attr.tables.to.graph(v.attr.table, e.attr.table)
 		write.graph(g.out, paste0(l$new_name, '.graphml'), format='graphml')
-
+		
 		# Write graph DAT
 		d <- list(
 			e_attributes=list.edge.attributes(g.out),

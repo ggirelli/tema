@@ -533,7 +533,7 @@ NetworkManager <- function() {
 				}
 				
 			} else if ( 0 != length(table) ) {
-				cat(2)
+				
 				# Single-row table
 				for (attr in attr.list) {
 					if ( !attr %in% names(table) ) {
@@ -579,7 +579,7 @@ NetworkManager <- function() {
 						table[ which(attr == names(table)) ])
 				}
 				table <- append(table, collapsed)
-				names(table)[ncol(table)] <- col.name
+				names(table)[length(table)] <- col.name
 
 			}
 
