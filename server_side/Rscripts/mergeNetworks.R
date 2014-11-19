@@ -14,8 +14,8 @@ source('NetworkManager.class.R')
 nm <- NetworkManager()
 
 # Start
-if(file.exists(paste0('/home/gire/public_html/SOGIv020/server_side/session/', args[1], '/'))) {
-	setwd(paste0('/home/gire/public_html/SOGIv020/server_side/session/', args[1], '/'))
+if(file.exists(paste0('../session/', args[1], '/'))) {
+	setwd(paste0('../session/', args[1], '/'))
 	
 	if(file.exists(paste0(args[2], '.json'))) {
 

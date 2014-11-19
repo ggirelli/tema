@@ -11,7 +11,7 @@ library(rjson)
 source('extendIgraph.R')
 
 # Start
-wd <- paste0('/home/gire/public_html/SOGIv020/server_side/session/', args[1], '/')
+wd <- paste0('../session/', args[1], '/')
 if(file.exists(wd)) {
 	setwd(wd)
 

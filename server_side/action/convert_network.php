@@ -25,7 +25,7 @@ if ( $s->exists($data->id) ) {
 		// Convert the network
 		$q = 'cd ' . SCRIPATH . '; ./convertToJSON.R ' . $s->get('id') . ' ' . $network_name;
 		$r = $s->exec_return('convert', $q);
-
+		
 		// Update network status
 		$network_list = $s->get('network_list');
 		$network_name = array_keys($network_list)[$data->network_id];
