@@ -20,7 +20,7 @@ if ( $s->exists($data->id) ) {
 	
 	$q = 'cd ' . SCRIPATH . '; ./calculateNetworkDistances.R ' . $s->get('id') . ' tmp_r_config';
 	$r = $s->exec_return('convert', $q);
-	print_r($r);
+	
 	unlink($f);
 	die('{"err":0}');
 

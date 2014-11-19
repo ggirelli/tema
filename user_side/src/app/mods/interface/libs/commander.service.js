@@ -567,13 +567,9 @@
 
                         // (re-)Define vars for next page
                         self.distances.measures = {
-                            h: false,
-                            him: false,
                             im: false,
                             j: false,
-                            jim: false,
-                            js: false,
-                            jsim: false
+                            js: false
                         }
 
                         // Go to next page
@@ -620,7 +616,12 @@
                         id: session_id,
                         networks: self.distances.get_selected_list(),
                         n_identity: self.distances.n_attr_identity,
-                        e_identity: self.distances.e_attr_identity
+                        e_identity: self.distances.e_attr_identity,
+                        node_attr_list: self.distances.group.nodes,
+                        edge_attr_list: self.distances.group.edges,
+                        dist: self.distances.measures,
+                        out_plot: self.distances.out_plot,
+                        out_table: self.distances.out_table,
                     },
                     url: 's/'
 

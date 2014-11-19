@@ -9,9 +9,13 @@ if(length(args) != 2) stop('./convertToJSON.R session_id config_file')
 # Load requirements
 library(igraph)
 library(rjson)
+library(heatmap.plus)
 
 source('NetworkManager.class.R')
 nm <- NetworkManager()
+
+source('GraphManager.class.R')
+gm <- GraphManager()
 
 # Start
 if(file.exists(paste0('../session/', args[1], '/'))) {
@@ -23,7 +27,7 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 		s <- scan(paste0(args[2], '.json'), 'raw')
 		l <- fromJSON(s)
 
-		graph.list <- list()
+		net.list <- c()
 		v.attr.table.list <- list()
 		e.attr.table.list <- list()
 
@@ -50,11 +54,10 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 					v.identity.list <- append(v.identity.list, attr)
 				}
 			}
-
-			# Expand with missing attributes
-			v.attr.table <- nm$expand.attr.table(v.attr.table,
-				c(v.identity.list, names(l$n_behavior)))
 			
+			# Expand with missing attributes
+			v.attr.table <- nm$expand.attr.table(v.attr.table, l$node_attr_list)
+
 			# Add vertex identity column
 			v.attr.table <- nm$add.collapsed.col(v.attr.table,
 				v.identity.list, 'sogi_identity', '~')
@@ -82,8 +85,7 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 			}
 
 			# Expand with missing attributes
-			e.attr.table <- nm$expand.attr.table(e.attr.table,
-				c(e.identity.list, names(l$e_behavior)))
+			e.attr.table <- nm$expand.attr.table(e.attr.table, l$edge_attr_list)
 
 			# Add edge identity column
 			e.attr.table <- nm$add.collapsed.col(e.attr.table,
@@ -93,28 +95,183 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 			e.attr.table <- nm$sort.table.cols(e.attr.table)
 
 			# MAKE LISTS #
-			v.attr.table.list <- nm$append.to.table.list(v.attr.table.list, v.attr.table)
-			e.attr.table.list <- nm$append.to.table.list(e.attr.table.list, e.attr.table)
-			graph.list <- append(graph.list, g)
+			if ( 0 != nm$count.rows(e.attr.table) ) {
+				v.attr.table.list <- nm$append.to.table.list(v.attr.table.list, v.attr.table)
+				e.attr.table.list <- nm$append.to.table.list(e.attr.table.list, e.attr.table)
+				net.list <- append(net.list, network)
+			}
 		}
 
-		#print(v.attr.table.list)
-		#print(length(v.attr.table.list))
-		#print(e.attr.table.list)
-		#print(length(e.attr.table.list))
+		distances <- c()
 		done.list <- c()
 		for (i in 1:length(v.attr.table.list)) {
 			for (j in 1:length(v.attr.table.list)) {
-				if ( i != j ) {
-					if ( !paste0(j, '_', i) %in% done.list ) {
-						cat('Compare \'', l$networks[i], '\' with \'', l$networks[j], '\'\n')
+				if ( i != j && !paste0(j, '_', i) %in% done.list ) {
+					cat('Compare \'', net.list[i], '\' with \'', net.list[j], '\'\n')
+
+					# MERGE VERTICES #
+
+					v.attr.table.one <- v.attr.table.list[[i]]
+					v.attr.table.two <- v.attr.table.list[[j]]
+
+					v.attr.table.merged <- nm$merge.tables.from.table.list(list(
+						v.attr.table.one, v.attr.table.two))
+					v.attr.table.merged <- nm$rm.duplicated.identity(
+						v.attr.table.merged, 'sogi_identity')
+
+					# Update IDs
+					v.attr.table <- nm$update.row.ids(v.attr.table.merged)
+					v.attr.table <- nm$add.prefix.to.col(v.attr.table, 'id', 'n')
+
+					# I-GRAPH EDGES #
+					
+					e.attr.table.one <- e.attr.table.list[[i]]
+
+					# Convert extremities to IDs
+					e.attr.table.one <- nm$convert.extremities.to.v.id.based.on.table(
+						e.attr.table.one, v.attr.table, 'sogi_identity')
+
+					# J-GRAPH EDGES #
+
+					e.attr.table.two <- e.attr.table.list[[j]]
+
+					# Convert extremities to IDs
+					e.attr.table.two <- nm$convert.extremities.to.v.id.based.on.table(
+						e.attr.table.two, v.attr.table, 'sogi_identity')
+
+					# CALCULATE #
+					
+					single.row <- c(net.list[i], net.list[j])
 
 
+					# JACCARD DISTANCE #
+					
+					e.common <- length(intersect(
+						nm$get.col(e.attr.table.one, 'sogi_identity'),
+						nm$get.col(e.attr.table.two, 'sogi_identity')
+					))
 
+					if ( l$dist$j ) {
 
-						done.list <- append(done.list, paste0(i, '_', j))
+						e.total <- length(unique(union(
+							nm$get.col(e.attr.table.one, 'sogi_identity'),
+							nm$get.col(e.attr.table.two, 'sogi_identity')
+						)))
+
+						# Calc distance
+						dJ <- 1 - (e.common / e.total)
+						single.row <- append(single.row, dJ)
+
 					}
+
+					# JACCARD SUBSET DISTANCE #
+					
+					if ( l$dist$js ) {
+
+						e.total.sub <- min(nm$count.rows(e.attr.table.one),
+							nm$count.rows(e.attr.table.two))
+
+						# Calc distance
+						dJs <- 1 - (e.common / e.total.sub)
+						single.row <- append(single.row, dJs)
+
+					}
+
+					# IPSEN MIKHAILOV #
+					
+					if ( l$dist$im ) {
+
+						# Build i-graph
+						g.one <- nm$attr.tables.to.graph(v.attr.table, e.attr.table.one)
+
+						# Build j-graph
+						g.two <- nm$attr.tables.to.graph(v.attr.table, e.attr.table.two)
+
+						# Calc distance
+						dIM <- gm$calcIpsenDist(g.one, g.two)
+						single.row <- append(single.row, dIM)
+
+					}
+					distances <- rbind(distances, single.row)
+
+					# END FOR network #
+					done.list <- append(done.list, paste0(i, '_', j))
 				}
+			}
+		}
+
+		colnames <- c('g.one', 'g.two')
+		if ( l$dist$j ) colnames <- append(colnames, 'dJ')
+		if ( l$dist$js ) colnames <- append(colnames, 'dJs')
+		if ( l$dist$im ) colnames <- append(colnames, 'dIM')
+		distances <- nm$add.col.names(distances, colnames)
+		
+		if ( l$out_table ) {
+			if ( !file.exists('output_directory') ) dir.create('output_directory')
+			table_time <- as.numeric(Sys.time())
+			write.table(distances, paste0('output_directory/dist_table_', table_time, '.dat'),
+				quote=F, row.names=F, sep='\t')
+		}
+
+		if ( l$out_plot ) {
+			row.names(distances) <-NULL
+			distances <- as.data.frame(distances, stringsAsFactors=F)
+			if ( l$dist$j ) {
+				dJ.matrix <- matrix(NA, ncol=length(net.list), nrow=length(net.list))
+				colnames(dJ.matrix) <- net.list
+				rownames(dJ.matrix) <- net.list
+				for (k in 1:nrow(distances)) {
+					i <- which(net.list == distances[k,1])
+					j <- which(net.list == distances[k,2])
+					dJ.matrix[i,j] <- as.numeric(distances$dJ[k])
+					dJ.matrix[i,i] <- 0
+					dJ.matrix[j,i] <- as.numeric(distances$dJ[k])
+					dJ.matrix[j,j] <- 0
+				}
+				
+				dj_heat_time <- as.numeric(Sys.time())
+				svg(paste0('output_directory/heatmap_', dj_heat_time, '.svg'))
+				rownames(dJ.matrix) <- colnames(dJ.matrix)
+				heatmap.plus::heatmap.plus(dJ.matrix, na.rm=F, symm=T, main='Jaccard', Rowv=NA, Colv=NA, margins=c(5,5))
+				dev.off()
+			}
+			if ( l$dist$js ) {
+				dJs.matrix <- matrix(NA, ncol=length(net.list), nrow=length(net.list))
+				colnames(dJs.matrix) <- net.list
+				rownames(dJs.matrix) <- net.list
+				for (k in 1:nrow(distances)) {
+					i <- which(net.list == distances[k,1])
+					j <- which(net.list == distances[k,2])
+					dJs.matrix[i,j] <- as.numeric(distances$dJs[k])
+					dJs.matrix[i,i] <- 0
+					dJs.matrix[j,i] <- as.numeric(distances$dJs[k])
+					dJs.matrix[j,j] <- 0
+				}
+				
+				djs_heat_time <- as.numeric(Sys.time())
+				svg(paste0('output_directory/heatmap_', djs_heat_time, '.svg'))
+				rownames(dJs.matrix) <- colnames(dJs.matrix)
+				heatmap.plus::heatmap.plus(dJs.matrix, na.rm=F, symm=T, main='Jaccard subset', Rowv=NA, Colv=NA, margins=c(5,5))
+				dev.off()
+			}
+			if ( l$dist$im ) {
+				dIM.matrix <- matrix(NA, ncol=length(net.list), nrow=length(net.list))
+				colnames(dIM.matrix) <- net.list
+				rownames(dIM.matrix) <- net.list
+				for (k in 1:nrow(distances)) {
+					i <- which(net.list == distances[k,1])
+					j <- which(net.list == distances[k,2])
+					dIM.matrix[i,j] <- as.numeric(distances$dIM[k])
+					dIM.matrix[i,i] <- 0
+					dIM.matrix[j,i] <- as.numeric(distances$dIM[k])
+					dIM.matrix[j,j] <- 0
+				}
+
+				dim_heat_time <- as.numeric(Sys.time())
+				svg(paste0('output_directory/heatmap_', dim_heat_time, '.svg'))
+				rownames(dIM.matrix) <- colnames(dIM.matrix)
+				heatmap.plus::heatmap.plus(dIM.matrix, na.rm=F, symm=T, main='Ipsen Mikhailov', Rowv=NA, Colv=NA, margins=c(5,5))
+				dev.off()
 			}
 		}
 	}

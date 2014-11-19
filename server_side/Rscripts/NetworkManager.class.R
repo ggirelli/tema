@@ -620,6 +620,27 @@ NetworkManager <- function() {
 			return(table)
 		},
 
+		count.rows = function (table) {
+			#
+
+			c.count <- 0
+
+			if ( !is.null(nrow(table)) ) {
+
+				# Non-empty table
+				c.count <- nrow(table)
+
+			} else if ( 0 != length(table) ) {
+
+				# Single-row table
+				c.count <- 1
+
+			}
+
+			# END #
+			return(c.count)
+		},
+
 		get.col = function (table, col) {
 			# Extracts a column from a table
 			# 
@@ -650,6 +671,58 @@ NetworkManager <- function() {
 
 			# END #
 			return(data)
+		},
+
+		get.col.names = function (table) {
+			# Retrieves the list of colnames
+			# 
+			# Args:
+			# 	table
+			# 
+			# Returns:
+			# 	The list of colnames
+
+			c.list <- NULL
+
+			if ( !is.null(nrow(table)) ) {
+				c.list <- colnames(table)
+			} else if ( 0 != length(table) ) {
+				c.list <- names(table)
+			}
+
+			# END #
+			return(c.list)
+		},
+
+		add.col.names = function (table, col.names) {
+			# Adds colnames to a table
+			# ncol(table) must be equal to length(col.names)
+			# 
+			# Args:
+			# 	table
+			# 	col.names
+			# 	
+			# Returns:
+			# 	The updated table
+
+			if ( !is.null(nrow(table)) ) {
+
+				# Non-empty table
+				if ( length(col.names) == ncol(table) ) {
+					colnames(table) <- col.names
+				}
+
+			} else if ( 0 != length(table) ) {
+
+				# Single-row table
+				if ( length(col.names) == length(table) ) {
+					names(table) <- col.names
+				}
+
+			}
+
+			# END #
+			return(table)
 		},
 
 		rm.cols = function (table, col.list) {
@@ -717,6 +790,29 @@ NetworkManager <- function() {
 
 				identity.col.id <- which(identity.col == names(table))
 				if ( table[identity.col.id] %in% identity.to.rm ) return(NULL)
+
+			}
+
+			# END #
+			return(table)
+		},
+
+		rm.duplicated.identity = function (table, identity.col) {
+			# Removes rows with duplicated identity
+			# 
+			# Args:
+			# 	table
+			# 	identity.col
+			# 
+			# Returns:
+			# 	The updated table
+
+			if ( !is.null(nrow(table)) ) {
+
+				# Non-empty table
+				identity.col.id <- which(identity.col == colnames(table))
+				identity.dups <- which(duplicated(table[, identity.col.id]))
+				if ( 0 != length(identity.dups) ) table <- table[-identity.dups, ]
 
 			}
 
