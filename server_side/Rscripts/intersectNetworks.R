@@ -116,7 +116,6 @@ if(file.exists(paste0('/home/gire/public_html/SOGIv020/server_side/session/', ar
 		} else {
 			v.attr.table.merged <- NULL
 		}
-		print(v.attr.table.merged)
 
 		# Apply behavior
 		v.attr.table.shrink <- nm$apply.fun.based.on.identity(v.attr.table.merged,

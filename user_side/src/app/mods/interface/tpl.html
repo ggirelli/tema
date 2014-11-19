@@ -399,6 +399,7 @@
 							<input type="checkbox" name="attr-node-{{attr}}" id="attr-node-{{attr}}" ng-model="commander.intersect.n_attr_identity[attr]" />
 							{{attr}}
 						</label>
+						<i ng-show="0 == commander.intersect.group.nodes.length">No node attributes...</i>
 					</div>
 					<div>
 						<h5>Edges</h5>
@@ -406,6 +407,7 @@
 							<input type="checkbox" name="attr-edge-{{attr}}" id="attr-edge-{{attr}}" ng-model="commander.intersect.e_attr_identity[attr]" />
 							{{attr}}
 						</label>
+						<i ng-show="0 == commander.intersect.group.edges.length">No edge attributes...</i>
 					</div>
 
 					<br />
@@ -450,6 +452,9 @@
 							</select>
 						</div>
 					</div>
+					<div ng-show="0 == commander.intersect.group.nodes.length">No node attributes...</div>
+					<div ng-show="0 == commander.intersect.group.edges.length">No edge attributes...</div>
+
 
 					<br />
 					<button class="btn end-btn btn-success" ng-click='commander.apply_intersect(m.session_id)'>intersect</button><button class="btn end-btn btn-warning" ng-click='commander.intersect.set_page(2)'>back</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>

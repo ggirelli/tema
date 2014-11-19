@@ -230,7 +230,7 @@
                         if ( self.intersect.n_attr_identity[nks[i]] ) n++;
                     }
 
-                    if ( n > 0 ) {
+                    if ( n > 0 || (0 == self.intersect.group.nodes.length && 0 == self.intersect.group.edges.length)) {
                         // Clear previous errors
                         self.intersect.errMsg = undefined;
 
