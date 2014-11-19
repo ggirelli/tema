@@ -167,6 +167,7 @@
              */
             self.save = function (session_id, networks) {
                 var new_name = prompt('Insert the name for the new network:');
+                var network;
 
                 if ( null == new_name ) {
                     alert('A name is required to save the current visualization.');
@@ -184,13 +185,19 @@
                     } else {
                         // Save
                         
+                        if ( 0 == Object.keys(cy.json().elements).length ) {
+                            network = JSON.stringify({nodes:[], edges:{}});
+                        } else {
+                            network = JSON.stringify(cy.json().elements);
+                        }
+
                         http({
 
                             method: 'POST',
                             data: {
                                 action: 'save_network',
                                 id: session_id,
-                                network: JSON.stringify(cy.json().elements),
+                                network: network,
                                 name: new_name
                             },
                             url: 's/'

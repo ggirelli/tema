@@ -250,16 +250,23 @@
              */
             self.overwrite = function (session_id, network_id) {
                 var qwait = q.defer();
+                var network;
 
                 // Save
                 
+                if ( 0 == Object.keys(cy.json().elements).length ) {
+                    network = JSON.stringify({nodes:[], edges:{}});
+                } else {
+                    network = JSON.stringify(cy.json().elements);
+                }
+
                 http({
 
                     method: 'POST',
                     data: {
                         action: 'save_network',
                         id: session_id,
-                        network: JSON.stringify(cy.json().elements),
+                        network: network,
                         name: self.list[network_id].name
                     },
                     url: 's/'

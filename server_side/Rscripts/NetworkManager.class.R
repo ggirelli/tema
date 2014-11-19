@@ -578,7 +578,7 @@ NetworkManager <- function() {
 					collapsed <- paste0(collapsed, sep,
 						table[ which(attr == names(table)) ])
 				}
-				table <- cbind(table, collapsed)
+				table <- append(table, collapsed)
 				names(table)[ncol(table)] <- col.name
 
 			}
