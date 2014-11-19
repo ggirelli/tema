@@ -643,7 +643,7 @@ NetworkManager <- function() {
 
 				# Single-row table
 				if ( col %in% names(table) ) {
-					data <- table[which(col == cnames(table))]
+					data <- table[which(col == names(table))]
 				}
 
 			}

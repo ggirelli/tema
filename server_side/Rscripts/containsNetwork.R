@@ -141,7 +141,6 @@ if(file.exists(paste0('/home/gire/public_html/SOGIv020/server_side/session/', ar
 		e.subnet.attr.table <- nm$sort.table.cols(e.subnet.attr.table)
 
 		# CONTAINS #
-		
 		v.subnet.identity <- nm$get.col(v.subnet.attr.table, 'sogi_identity')
 		v.supernet.identity <- nm$get.col(v.supernet.attr.table, 'sogi_identity')
 		e.subnet.identity <- nm$get.col(e.subnet.attr.table, 'sogi_identity')

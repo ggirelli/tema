@@ -98,25 +98,25 @@ if(file.exists(paste0('/home/gire/public_html/SOGIv020/server_side/session/', ar
 			e.attr.table.list <- nm$append.to.table.list(e.attr.table.list, e.attr.table)
 			graph.list <- append(graph.list, g)
 		}
-
+		
 		# VERTICES #
 
 		cat('> Merging Vertices\n')
 
 		# Merge tables from table.list
 		v.attr.table.merged <- nm$merge.tables.from.table.list(v.attr.table.list)
-
+		
 		# Filter: remove those v.rows that do not appear length(l$networks) times
 		v.identity.col.id <- which('sogi_identity' == colnames(v.attr.table.merged))
 		v.identity.col <- v.attr.table.merged[, v.identity.col.id]
-		if ( !is.null(nrow(v.attr.table)) ) {
+		if ( !is.null(nrow(v.attr.table.merged)) ) {
 			v.attr.table.merged <- v.attr.table.merged[which(
 				v.identity.col %in% names(table(v.identity.col))[which(
 					table(v.identity.col) == length(l$networks))]),]
 		} else {
 			v.attr.table.merged <- NULL
 		}
-
+		
 		# Apply behavior
 		v.attr.table.shrink <- nm$apply.fun.based.on.identity(v.attr.table.merged,
 			'sogi_identity', l$n_behavior, F, 'merge_count')
@@ -166,7 +166,7 @@ if(file.exists(paste0('/home/gire/public_html/SOGIv020/server_side/session/', ar
 		# Write GraphML
 		g.out <- nm$attr.tables.to.graph(v.attr.table, e.attr.table)
 		write.graph(g.out, paste0(l$new_name, '.graphml'), format='graphml')
-
+		
 		# Write graph DAT
 		d <- list(
 			e_attributes=list.edge.attributes(g.out),
