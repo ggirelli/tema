@@ -58,6 +58,9 @@
                     network.data.e_attributes = ["NA"];
                 }
                 self.inspecting.network = network;
+                
+                network.data.v_attributes_array = Array.isArray(network.data.v_attributes);
+                network.data.e_attributes_array = Array.isArray(network.data.e_attributes);
             };
 
             /**

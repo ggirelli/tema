@@ -1039,11 +1039,17 @@
 
 						<p><b>Nodes: </b>{{inspector.inspecting.network.data.v_count}}</p>
 						<p><b>Node attributes:</b></p>
-						<ul><li ng-repeat="attr in inspector.inspecting.network.data.v_attributes">{{attr}}</li></ul>
+						<ul>
+							<li ng-show="!inspector.inspecting.network.data.v_attributes_array">{{inspector.inspecting.network.data.v_attributes}}</li>
+							<li ng-repeat="attr in inspector.inspecting.network.data.v_attributes" ng-show="inspector.inspecting.network.data.v_attributes_array">{{attr}}</li>
+						</ul>
 
 						<p><b>Edges: </b>{{inspector.inspecting.network.data.e_count}}</p>
 						<p><b>Edge attributes:</b></p>
-						<ul><li ng-repeat="attr in inspector.inspecting.network.data.e_attributes">{{attr}}</li></ul>
+						<ul>
+							<li ng-show="!inspector.inspecting.network.data.e_attributes_array">{{inspector.inspecting.network.data.e_attributes}}</li>
+							<li ng-repeat="attr in inspector.inspecting.network.data.e_attributes" ng-show="inspector.inspecting.network.data.e_attributes_array">{{attr}}</li>
+						</ul>
 
 						<p><b>Single-sample: </b>{{inspector.inspecting.network.single}}</p>
 
