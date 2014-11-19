@@ -349,7 +349,7 @@
                         if ( self.subtract.n_attr_identity[nks[i]] ) n++;
                     }
 
-                    if ( n > 0 ) {
+                    if ( n > 0 || (0 == self.subtract.group.nodes.length && 0 == self.subtract.group.edges.length) ) {
                         // Clear previous errors
                         self.subtract.errMsg = undefined;
 
