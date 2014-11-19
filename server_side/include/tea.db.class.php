@@ -4,11 +4,11 @@
 require_once('db.class.php');
 
 /**
-* Manages SOGI database
+* Manages TEA database
 * @author Gabriele Girelli <gabriele@filopoe.it>
 * @since 0.2.0
 */
-class SOGIdb extends C2MySQL {
+class TEAdb extends C2MySQL {
 	
 	// public FUNCTIONS
 

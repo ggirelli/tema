@@ -44,7 +44,7 @@
 
         // Angular bootstrapping
         angular.element(document).ready(function () {
-            angular.bootstrap(document, ['sogi']);
+            angular.bootstrap(document, ['tea']);
         });
 
     });

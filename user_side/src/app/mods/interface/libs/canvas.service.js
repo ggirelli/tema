@@ -16,7 +16,7 @@
                 nodes: [
                     { data: { id: "n1", name: "Welcome" } },
                     { data: { id: "n2", name: "to" } },
-                    { data: { id: "n3", name: "SOGI" } }
+                    { data: { id: "n3", name: "TEA" } }
                 ],
                 edges: [
                     { data: { id: "e1", source: "n1", target: "n2" } },

@@ -2,14 +2,14 @@
 
 // Requirements
 require_once('functions.lib.php');
-require_once('sogi.db.class.php');
+require_once('tea.db.class.php');
 
 /**
-* Class that manages SOGI sessions
+* Class that manages TEA sessions
 * @author Gabriele Girelli <gabriele@filopoe.it>
 * @since 0.2.0
 */
-class SOGIsession extends SOGIdb {
+class TEAsession extends TEAdb {
 	
 	// ATTRIBUTES
 	
@@ -181,7 +181,7 @@ class SOGIsession extends SOGIdb {
  	}
 
 	/**
-	 * Determines whether a certain SOGIsession exists
+	 * Determines whether a certain TEAsession exists
 	 * @param  String $id
 	 * @return boolean
 	 */

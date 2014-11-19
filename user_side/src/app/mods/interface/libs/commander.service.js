@@ -630,6 +630,24 @@
                         console.log(data)
                         if ( 0 == data.err ) {
                             alert('Done.');
+                            if ( self.distances.out_table ) {
+                                window.open('o/' + session_id + '/' + data.token + '_dist_table.dat');
+                            }
+                            if ( self.distances.measures.j ) {
+                                if ( self.distances.out_plot ) {
+                                    window.open('o/' + session_id + '/' + data.token + '_j_heatmap.svg');
+                                }
+                            }
+                            if ( self.distances.measures.js ) {
+                                if ( self.distances.out_plot ) {
+                                    window.open('o/' + session_id + '/' + data.token + '_js_heatmap.svg');
+                                }
+                            }
+                            if ( self.distances.measures.im ) {
+                                if ( self.distances.out_plot ) {
+                                    window.open('o/' + session_id + '/' + data.token + '_im_heatmap.svg');
+                                }
+                            }
                         }
                         qwait.resolve(data);
                         rootScope.$broadcast('reload_network_list', session_id);

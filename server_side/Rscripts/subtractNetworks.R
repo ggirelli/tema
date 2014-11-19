@@ -60,7 +60,7 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 
 			# Add vertex identity column
 			v.attr.table <- nm$add.collapsed.col(v.attr.table,
-				v.identity.list, 'sogi_identity', '~')
+				v.identity.list, 'tea_identity', '~')
 
 			# Sort v.attr.table columns
 			v.attr.table <- nm$sort.table.cols(v.attr.table)
@@ -74,7 +74,7 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 
 			# Convert edge extremities to v.identity
 			e.attr.table <- nm$convert.extremities.to.v.identity(e.attr.table, v.attr.table,
-				'sogi_identity', g)
+				'tea_identity', g)
 
 			# Get attributes for edge identity
 			e.identity.list <- c('source', 'target')
@@ -90,7 +90,7 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 
 			# Add edge identity column
 			e.attr.table <- nm$add.collapsed.col(e.attr.table,
-				e.identity.list, 'sogi_identity', '~')
+				e.identity.list, 'tea_identity', '~')
 
 			# Sort edge attribute table
 			e.attr.table <- nm$sort.table.cols(e.attr.table)
@@ -131,7 +131,7 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 
 		# Add vertex identity column
 		v.minuend.attr.table <- nm$add.collapsed.col(v.minuend.attr.table,
-			v.identity.list, 'sogi_identity', '~')
+			v.identity.list, 'tea_identity', '~')
 
 		# Sort v.minuend.attr.table columns
 		v.minuend.attr.table <- nm$sort.table.cols(v.minuend.attr.table)
@@ -145,7 +145,7 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 
 		# Convert edge extremities to v.identity
 		e.minuend.attr.table <- nm$convert.extremities.to.v.identity(e.minuend.attr.table,
-			v.minuend.attr.table, 'sogi_identity', g)
+			v.minuend.attr.table, 'tea_identity', g)
 
 		# Get attributes for edge identity
 		e.identity.list <- c('source', 'target')
@@ -161,7 +161,7 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 
 		# Add edge identity column
 		e.minuend.attr.table <- nm$add.collapsed.col(e.minuend.attr.table,
-			e.identity.list, 'sogi_identity', '~')
+			e.identity.list, 'tea_identity', '~')
 
 		# Sort edge attribute table
 		e.minuend.attr.table <- nm$sort.table.cols(e.minuend.attr.table)
@@ -174,12 +174,12 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 		v.attr.table.merged <- nm$merge.tables.from.table.list(v.attr.table.list)
 
 		# Retrieve subtrahend vertex identities
-		v.subtrahend.identity <- nm$get.col(v.attr.table.merged, 'sogi_identity')
+		v.subtrahend.identity <- nm$get.col(v.attr.table.merged, 'tea_identity')
 		v.subtrahend.identity.unique <- unique(v.subtrahend.identity)
 
 		# Remove subtrahend vertex identities from minuend
 		v.minuend.attr.table <- nm$rm.rows.based.on.identity(v.minuend.attr.table,
-			'sogi_identity', v.subtrahend.identity.unique)
+			'tea_identity', v.subtrahend.identity.unique)
 
 		# SUBTRACT EDGES #
 
@@ -189,20 +189,20 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 		e.attr.table.merged <- nm$merge.tables.from.table.list(e.attr.table.list)
 		
 		# Retrieve subtrahend edges identities
-		e.subtrahend.identity <- nm$get.col(e.attr.table.merged, 'sogi_identity')
+		e.subtrahend.identity <- nm$get.col(e.attr.table.merged, 'tea_identity')
 		e.subtrahend.identity.unique <- unique(e.subtrahend.identity)
 		
 		# Remove subtrahend edges identities from minuend
 		e.minuend.attr.table <- nm$rm.rows.based.on.identity(e.minuend.attr.table,
-			'sogi_identity', e.subtrahend.identity.unique)
+			'tea_identity', e.subtrahend.identity.unique)
 		
 		# Remove edges that lost one or both extremities
 		e.minuend.attr.table <- nm$check.extremities(e.minuend.attr.table,
-			v.minuend.attr.table, 'sogi_identity')
+			v.minuend.attr.table, 'tea_identity')
 		
 		# Convert extremities to id
 		e.minuend.attr.table <- nm$convert.extremities.to.v.id.based.on.table(e.minuend.attr.table,
-			v.minuend.attr.table, 'sogi_identity')
+			v.minuend.attr.table, 'tea_identity')
 
 		# CONCLUSION #
 		
@@ -210,11 +210,11 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 
 		# Update extremities and IDs
 		graph.list <- nm$update.row.ids.and.extremities(e.minuend.attr.table, 'e',
-			v.minuend.attr.table, 'n', 'sogi_identity')
+			v.minuend.attr.table, 'n', 'tea_identity')
 		
 		# Remove identity columns
-		v.minuend.attr.table <- nm$rm.cols(v.minuend.attr.table, 'sogi_identity')
-		e.minuend.attr.table <- nm$rm.cols(e.minuend.attr.table, 'sogi_identity')
+		v.minuend.attr.table <- nm$rm.cols(v.minuend.attr.table, 'tea_identity')
+		e.minuend.attr.table <- nm$rm.cols(e.minuend.attr.table, 'tea_identity')
 		
 		# Write GraphML
 		g.out <- nm$attr.tables.to.graph(v.minuend.attr.table, e.minuend.attr.table)

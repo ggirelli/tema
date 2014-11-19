@@ -6,10 +6,10 @@
  */
 
 // Requirements
-require_once(dirname(dirname(__FILE__)) . '/include/sogi.session.class.php');
+require_once(dirname(dirname(__FILE__)) . '/include/tea.session.class.php');
 
 // Connect to database
-$s = new SOGIsession(HOST, USER, PWD, DB_NAME);
+$s = new TEAsession(HOST, USER, PWD, DB_NAME);
 
 if ( $s->exists($data->id) ) {
 

@@ -57,7 +57,7 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 			
 			# Add vertex identity column
 			v.attr.table <- nm$add.collapsed.col(v.attr.table,
-				v.identity.list, 'sogi_identity', '~')
+				v.identity.list, 'tea_identity', '~')
 			
 			# Sort v.attr.table columns
 			v.attr.table <- nm$sort.table.cols(v.attr.table)
@@ -71,7 +71,7 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 
 			# Convert edge extremities to v.identity
 			e.attr.table <- nm$convert.extremities.to.v.identity(e.attr.table, v.attr.table,
-				'sogi_identity', g)
+				'tea_identity', g)
 
 			# Get attributes for edge identity
 			e.identity.list <- c('source', 'target')
@@ -87,7 +87,7 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 
 			# Add edge identity column
 			e.attr.table <- nm$add.collapsed.col(e.attr.table,
-				e.identity.list, 'sogi_identity', '~')
+				e.identity.list, 'tea_identity', '~')
 
 			# Sort edge attribute table
 			e.attr.table <- nm$sort.table.cols(e.attr.table)
@@ -107,7 +107,7 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 
 		# Apply behavior
 		v.attr.table.shrink <- nm$apply.fun.based.on.identity(v.attr.table.merged,
-			'sogi_identity', l$n_behavior, l$n_count_attr, 'merge_count')
+			'tea_identity', l$n_behavior, l$n_count_attr, 'merge_count')
 
 		# Update IDs
 		v.attr.table <- nm$update.row.ids(v.attr.table.shrink)
@@ -121,11 +121,11 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 
 		# Apply behavior
 		e.attr.table.shrink <- nm$apply.fun.based.on.identity(e.attr.table.merged,
-			'sogi_identity', l$e_behavior, l$e_count_attr, 'merge_count')
+			'tea_identity', l$e_behavior, l$e_count_attr, 'merge_count')
 
 		# Convert extremities to IDs
 		e.attr.table <- nm$convert.extremities.to.v.id.based.on.table(e.attr.table.shrink,
-			v.attr.table, 'sogi_identity')
+			v.attr.table, 'tea_identity')
 
 		# Updated IDs
 		e.attr.table <- nm$update.row.ids(e.attr.table)
@@ -136,8 +136,8 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 		cat('> Output\n')
 
 		# Remove identity columns
-		v.attr.table <- nm$rm.cols(v.attr.table, 'sogi_identity')
-		e.attr.table <- nm$rm.cols(e.attr.table, 'sogi_identity')
+		v.attr.table <- nm$rm.cols(v.attr.table, 'tea_identity')
+		e.attr.table <- nm$rm.cols(e.attr.table, 'tea_identity')
 		
 		# Write GraphML
 		g.out <- nm$attr.tables.to.graph(v.attr.table, e.attr.table)

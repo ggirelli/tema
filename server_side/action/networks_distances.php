@@ -6,10 +6,10 @@
  */
 
 // Requirements
-require_once(dirname(dirname(__FILE__)) . '/include/sogi.session.class.php');
+require_once(dirname(dirname(__FILE__)) . '/include/tea.session.class.php');
 
 // Connect to database
-$s = new SOGIsession(HOST, USER, PWD, DB_NAME);
+$s = new TEAsession(HOST, USER, PWD, DB_NAME);
 
 if ( $s->exists($data->id) ) {
 	// Load session
@@ -22,7 +22,7 @@ if ( $s->exists($data->id) ) {
 	$r = $s->exec_return('convert', $q);
 	
 	unlink($f);
-	die('{"err":0}');
+	die('{"err":0, "token":"' . $r[0] . '"}');
 
 } else {
 	die('{"err":3}');

@@ -70,10 +70,10 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 					}
 				}
 				n_attr_table <- cbind(n_attr_table, n_identity_col)
-				colnames(n_attr_table)[ncol(n_attr_table)] <- c('sogi_node_identity')
+				colnames(n_attr_table)[ncol(n_attr_table)] <- c('tea_node_identity')
 
 				# Append
-				n_subtrahend_identity <- append(n_subtrahend_identity, n_attr_table[,which('sogi_node_identity' == colnames(n_attr_table))])
+				n_subtrahend_identity <- append(n_subtrahend_identity, n_attr_table[,which('tea_node_identity' == colnames(n_attr_table))])
 
 				# If there are edges
 				if ( 0 != ecount(g) ) {
@@ -87,28 +87,28 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 					# Add source/target
 					if ( 'name' %in% list.vertex.attributes(g) ) {
 						if ( 'source' %in% colnames(e_attr_table) ) {
-							e_attr_table[,'source'] <- n_attr_table[unlist(lapply(get.edgelist(g)[,1], FUN=function(x,g) { return(which(V(g)$name == x)) }, g=g)), 'sogi_node_identity']
+							e_attr_table[,'source'] <- n_attr_table[unlist(lapply(get.edgelist(g)[,1], FUN=function(x,g) { return(which(V(g)$name == x)) }, g=g)), 'tea_node_identity']
 						} else {
-							e_attr_table <- cbind(e_attr_table, n_attr_table[unlist(lapply(get.edgelist(g)[,1], FUN=function(x,g) { return(which(V(g)$name == x)) }, g=g)), 'sogi_node_identity'])
+							e_attr_table <- cbind(e_attr_table, n_attr_table[unlist(lapply(get.edgelist(g)[,1], FUN=function(x,g) { return(which(V(g)$name == x)) }, g=g)), 'tea_node_identity'])
 							colnames(e_attr_table)[ncol(e_attr_table)] <- 'source'
 						}
 						if ( 'target' %in% colnames(e_attr_table) ) {
-							e_attr_table[,'target'] <- n_attr_table[unlist(lapply(get.edgelist(g)[,2], FUN=function(x,g) { return(which(V(g)$name == x)) }, g=g)), 'sogi_node_identity']
+							e_attr_table[,'target'] <- n_attr_table[unlist(lapply(get.edgelist(g)[,2], FUN=function(x,g) { return(which(V(g)$name == x)) }, g=g)), 'tea_node_identity']
 						} else {
-							e_attr_table <- cbind(e_attr_table, n_attr_table[unlist(lapply(get.edgelist(g)[,2], FUN=function(x,g) { return(which(V(g)$name == x)) }, g=g)), 'sogi_node_identity'])
+							e_attr_table <- cbind(e_attr_table, n_attr_table[unlist(lapply(get.edgelist(g)[,2], FUN=function(x,g) { return(which(V(g)$name == x)) }, g=g)), 'tea_node_identity'])
 							colnames(e_attr_table)[ncol(e_attr_table)] <- 'target'
 						}
 					} else {
 						if ( 'source' %in% colnames(e_attr_table) ) {
-							e_attr_table[,'source'] <- n_attr_table[unlist(lapply(get.edgelist(g)[,1], FUN=function(x,g) { return(which(V(g)$id == x)) }, g=g)), 'sogi_node_identity']
+							e_attr_table[,'source'] <- n_attr_table[unlist(lapply(get.edgelist(g)[,1], FUN=function(x,g) { return(which(V(g)$id == x)) }, g=g)), 'tea_node_identity']
 						} else {
-							e_attr_table <- cbind(e_attr_table, n_attr_table[unlist(lapply(get.edgelist(g)[,1], FUN=function(x,g) { return(which(V(g)$id == x)) }, g=g)), 'sogi_node_identity'])
+							e_attr_table <- cbind(e_attr_table, n_attr_table[unlist(lapply(get.edgelist(g)[,1], FUN=function(x,g) { return(which(V(g)$id == x)) }, g=g)), 'tea_node_identity'])
 							colnames(e_attr_table)[ncol(e_attr_table)] <- 'source'
 						}
 						if ( 'target' %in% colnames(e_attr_table) ) {
-							e_attr_table <- n_attr_table[unlist(lapply(get.edgelist(g)[,2], FUN=function(x,g) { return(which(V(g)$id == x)) }, g=g)), 'sogi_node_identity']
+							e_attr_table <- n_attr_table[unlist(lapply(get.edgelist(g)[,2], FUN=function(x,g) { return(which(V(g)$id == x)) }, g=g)), 'tea_node_identity']
 						} else {
-							e_attr_table[,'target'] <- cbind(e_attr_table, n_attr_table[unlist(lapply(get.edgelist(g)[,2], FUN=function(x,g) { return(which(V(g)$id == x)) }, g=g)), 'sogi_node_identity'])
+							e_attr_table[,'target'] <- cbind(e_attr_table, n_attr_table[unlist(lapply(get.edgelist(g)[,2], FUN=function(x,g) { return(which(V(g)$id == x)) }, g=g)), 'tea_node_identity'])
 							colnames(e_attr_table)[ncol(e_attr_table)] <- 'target'
 						}
 					}
@@ -139,10 +139,10 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 						}
 					}
 					e_attr_table <- cbind(e_attr_table, e_identity_col)
-					colnames(e_attr_table)[ncol(e_attr_table)] <- c('sogi_edge_identity')
+					colnames(e_attr_table)[ncol(e_attr_table)] <- c('tea_edge_identity')
 
 					# Append
-					e_subtrahend_identity <- append(e_subtrahend_identity, e_attr_table[,which('sogi_edge_identity' == colnames(e_attr_table))])
+					e_subtrahend_identity <- append(e_subtrahend_identity, e_attr_table[,which('tea_edge_identity' == colnames(e_attr_table))])
 				}
 			}
 		}
@@ -190,7 +190,7 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 				}
 			}
 			n_minuend_attr_table <- cbind(n_minuend_attr_table, n_identity_col)
-			colnames(n_minuend_attr_table)[ncol(n_minuend_attr_table)] <- c('sogi_node_identity')
+			colnames(n_minuend_attr_table)[ncol(n_minuend_attr_table)] <- c('tea_node_identity')
 
 			# Sort node attribute table
 			n_minuend_attr_table <- n_minuend_attr_table[,order(colnames(n_minuend_attr_table))]
@@ -207,28 +207,28 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 				# Add source/target
 				if ( 'name' %in% list.vertex.attributes(g) ) {
 					if ( 'source' %in% colnames(e_minuend_attr_table) ) {
-						e_minuend_attr_table[,'source'] <- n_minuend_attr_table[unlist(lapply(get.edgelist(g)[,1], FUN=function(x,g) { return(which(V(g)$name == x)) }, g=g)), 'sogi_node_identity']
+						e_minuend_attr_table[,'source'] <- n_minuend_attr_table[unlist(lapply(get.edgelist(g)[,1], FUN=function(x,g) { return(which(V(g)$name == x)) }, g=g)), 'tea_node_identity']
 					} else {
-						e_minuend_attr_table <- cbind(e_minuend_attr_table, n_minuend_attr_table[unlist(lapply(get.edgelist(g)[,1], FUN=function(x,g) { return(which(V(g)$name == x)) }, g=g)), 'sogi_node_identity'])
+						e_minuend_attr_table <- cbind(e_minuend_attr_table, n_minuend_attr_table[unlist(lapply(get.edgelist(g)[,1], FUN=function(x,g) { return(which(V(g)$name == x)) }, g=g)), 'tea_node_identity'])
 						colnames(e_minuend_attr_table)[ncol(e_minuend_attr_table)] <- 'source'
 					}
 					if ( 'target' %in% colnames(e_minuend_attr_table) ) {
-						e_minuend_attr_table[,'target'] <- n_minuend_attr_table[unlist(lapply(get.edgelist(g)[,2], FUN=function(x,g) { return(which(V(g)$name == x)) }, g=g)), 'sogi_node_identity']
+						e_minuend_attr_table[,'target'] <- n_minuend_attr_table[unlist(lapply(get.edgelist(g)[,2], FUN=function(x,g) { return(which(V(g)$name == x)) }, g=g)), 'tea_node_identity']
 					} else {
-						e_minuend_attr_table <- cbind(e_minuend_attr_table, n_minuend_attr_table[unlist(lapply(get.edgelist(g)[,2], FUN=function(x,g) { return(which(V(g)$name == x)) }, g=g)), 'sogi_node_identity'])
+						e_minuend_attr_table <- cbind(e_minuend_attr_table, n_minuend_attr_table[unlist(lapply(get.edgelist(g)[,2], FUN=function(x,g) { return(which(V(g)$name == x)) }, g=g)), 'tea_node_identity'])
 						colnames(e_minuend_attr_table)[ncol(e_minuend_attr_table)] <- 'target'
 					}
 				} else {
 					if ( 'source' %in% colnames(e_minuend_attr_table) ) {
-						e_minuend_attr_table[,'source'] <- n_minuend_attr_table[unlist(lapply(get.edgelist(g)[,1], FUN=function(x,g) { return(which(V(g)$id == x)) }, g=g)), 'sogi_node_identity']
+						e_minuend_attr_table[,'source'] <- n_minuend_attr_table[unlist(lapply(get.edgelist(g)[,1], FUN=function(x,g) { return(which(V(g)$id == x)) }, g=g)), 'tea_node_identity']
 					} else {
-						e_minuend_attr_table <- cbind(e_minuend_attr_table, n_minuend_attr_table[unlist(lapply(get.edgelist(g)[,1], FUN=function(x,g) { return(which(V(g)$id == x)) }, g=g)), 'sogi_node_identity'])
+						e_minuend_attr_table <- cbind(e_minuend_attr_table, n_minuend_attr_table[unlist(lapply(get.edgelist(g)[,1], FUN=function(x,g) { return(which(V(g)$id == x)) }, g=g)), 'tea_node_identity'])
 						colnames(e_minuend_attr_table)[ncol(e_minuend_attr_table)] <- 'source'
 					}
 					if ( 'target' %in% colnames(e_minuend_attr_table) ) {
-						e_minuend_attr_table <- n_minuend_attr_table[unlist(lapply(get.edgelist(g)[,2], FUN=function(x,g) { return(which(V(g)$id == x)) }, g)), 'sogi_node_identity']
+						e_minuend_attr_table <- n_minuend_attr_table[unlist(lapply(get.edgelist(g)[,2], FUN=function(x,g) { return(which(V(g)$id == x)) }, g)), 'tea_node_identity']
 					} else {
-						e_minuend_attr_table[,'target'] <- cbind(e_minuend_attr_table, n_minuend_attr_table[unlist(lapply(get.edgelist(g)[,2], FUN=function(x,g) { return(which(V(g)$id == x)) }, g=g)), 'sogi_node_identity'])
+						e_minuend_attr_table[,'target'] <- cbind(e_minuend_attr_table, n_minuend_attr_table[unlist(lapply(get.edgelist(g)[,2], FUN=function(x,g) { return(which(V(g)$id == x)) }, g=g)), 'tea_node_identity'])
 						colnames(e_minuend_attr_table)[ncol(e_minuend_attr_table)] <- 'target'
 					}
 				}
@@ -267,7 +267,7 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 					}
 				}
 				e_minuend_attr_table <- cbind(e_minuend_attr_table, e_identity_col)
-				colnames(e_minuend_attr_table)[ncol(e_minuend_attr_table)] <- c('sogi_edge_identity')
+				colnames(e_minuend_attr_table)[ncol(e_minuend_attr_table)] <- c('tea_edge_identity')
 
 				# Sort edge attribute table
 				e_minuend_attr_table <- e_minuend_attr_table[,order(colnames(e_minuend_attr_table))]
@@ -276,19 +276,19 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 
 		# Subtract
 		n_minuend <- n_minuend_attr_table
-		n_rm <- which(n_minuend[,which('sogi_node_identity' == colnames(n_minuend))] %in% n_subtrahend_identity)
+		n_rm <- which(n_minuend[,which('tea_node_identity' == colnames(n_minuend))] %in% n_subtrahend_identity)
 		if ( 0 != length(n_rm) ) {
 			n_minuend <- n_minuend[-n_rm,]
 		}
 		e_minuend <- e_minuend_attr_table
-		e_rm <- which(e_minuend[,which('sogi_edge_identity' == colnames(e_minuend))] %in% e_subtrahend_identity)
+		e_rm <- which(e_minuend[,which('tea_edge_identity' == colnames(e_minuend))] %in% e_subtrahend_identity)
 		if ( 0 != length(e_rm) ) {
 			e_minuend <- e_minuend[-e_rm,]
 		}
 
 		# Convert source/target in node IDs
-		e_minuend[,'source'] <- unlist(lapply(e_minuend[,'source'], FUN=function (x, nlist) { id <- which(nlist == x); if(0 == length(id)) id <- NA; return(id); }, nlist=n_minuend[,which('sogi_node_identity' == colnames(n_minuend))]))
-		e_minuend[,'target'] <- unlist(lapply(e_minuend[,'target'], FUN=function (x, nlist) { id <- which(nlist == x); if (0 == length(id)) id <- NA; return(id); }, nlist=n_minuend[,which('sogi_node_identity' == colnames(n_minuend))]))
+		e_minuend[,'source'] <- unlist(lapply(e_minuend[,'source'], FUN=function (x, nlist) { id <- which(nlist == x); if(0 == length(id)) id <- NA; return(id); }, nlist=n_minuend[,which('tea_node_identity' == colnames(n_minuend))]))
+		e_minuend[,'target'] <- unlist(lapply(e_minuend[,'target'], FUN=function (x, nlist) { id <- which(nlist == x); if (0 == length(id)) id <- NA; return(id); }, nlist=n_minuend[,which('tea_node_identity' == colnames(n_minuend))]))
 		# Remove NAs
 		e_rm <- union(which(is.na(e_minuend[,'source'])),which(is.na(e_minuend[,'target'])))
 		if ( 0 != length(e_rm) ) {
@@ -296,8 +296,8 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 		}
 
 		# Remove identity columns
-		n_minuend <- n_minuend[, -which('sogi_node_identity' == colnames(n_minuend))]
-		e_minuend <- e_minuend[, -which('sogi_edge_identity' == colnames(e_minuend))]
+		n_minuend <- n_minuend[, -which('tea_node_identity' == colnames(n_minuend))]
+		e_minuend <- e_minuend[, -which('tea_edge_identity' == colnames(e_minuend))]
 
 		cat('> Convert to graph\n')
 		g.out <- graph.empty()

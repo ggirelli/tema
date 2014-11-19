@@ -24,7 +24,7 @@
             uploaderController, uploaderService,
             autoclickDirective, submitformDirective) {
         
-        angular.module('sogi', ['ngRoute']).
+        angular.module('tea', ['ngRoute']).
         	config(['$routeProvider', routeConfig]).
 
         	service('appModel', [model]).

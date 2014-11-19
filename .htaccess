@@ -1,3 +1,4 @@
 RewriteEngine On
 RewriteRule ^s/$  server_side/commander.php
 RewriteRule ^s/(.*)/(.*)$ server_side/session/$1/$2
+RewriteRule ^o/(.*)/(.*)$ server_side/session/$1/output_directory/$2

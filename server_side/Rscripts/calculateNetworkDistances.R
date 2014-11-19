@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript
 
-options(echo=TRUE)
+#options(echo=FALSE, warn=-1)
 args <- commandArgs(trailingOnly = TRUE)
 
 # Check parameters
@@ -23,7 +23,6 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 	
 	if(file.exists(paste0(args[2], '.json'))) {
 
-		cat('> Read config file\n')
 		s <- scan(paste0(args[2], '.json'), 'raw')
 		l <- fromJSON(s)
 
@@ -33,7 +32,6 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 
 		# For each selected network
 		for (network in l$networks) {
-			cat('> Work on graph "', network, '"\n')
 
 			# Read network
 			g <- read.graph(paste0(network, '.graphml'), format='graphml')
@@ -44,8 +42,6 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 			e.attr.table <- graph.list$edges
 
 			# VERTICES #
-
-			cat('\t- Vertices\n')
 
 			# Get attributes for vertex identity
 			v.identity.list <- c()
@@ -60,21 +56,19 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 
 			# Add vertex identity column
 			v.attr.table <- nm$add.collapsed.col(v.attr.table,
-				v.identity.list, 'sogi_identity', '~')
+				v.identity.list, 'tea_identity', '~')
 			
 			# Sort v.attr.table columns
 			v.attr.table <- nm$sort.table.cols(v.attr.table)
 
 			# EDGES #
-			
-			cat('\t- Edges\n')
 
 			# Add extremities
 			e.attr.table <- nm$add.edges.extremities(e.attr.table, g, F)
 
 			# Convert edge extremities to v.identity
 			e.attr.table <- nm$convert.extremities.to.v.identity(e.attr.table, v.attr.table,
-				'sogi_identity', g)
+				'tea_identity', g)
 
 			# Get attributes for edge identity
 			e.identity.list <- c('source', 'target')
@@ -89,7 +83,7 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 
 			# Add edge identity column
 			e.attr.table <- nm$add.collapsed.col(e.attr.table,
-				e.identity.list, 'sogi_identity', '~')
+				e.identity.list, 'tea_identity', '~')
 
 			# Sort edge attribute table
 			e.attr.table <- nm$sort.table.cols(e.attr.table)
@@ -101,13 +95,12 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 				net.list <- append(net.list, network)
 			}
 		}
-
+		
 		distances <- c()
 		done.list <- c()
 		for (i in 1:length(v.attr.table.list)) {
 			for (j in 1:length(v.attr.table.list)) {
 				if ( i != j && !paste0(j, '_', i) %in% done.list ) {
-					cat('Compare \'', net.list[i], '\' with \'', net.list[j], '\'\n')
 
 					# MERGE VERTICES #
 
@@ -117,7 +110,7 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 					v.attr.table.merged <- nm$merge.tables.from.table.list(list(
 						v.attr.table.one, v.attr.table.two))
 					v.attr.table.merged <- nm$rm.duplicated.identity(
-						v.attr.table.merged, 'sogi_identity')
+						v.attr.table.merged, 'tea_identity')
 
 					# Update IDs
 					v.attr.table <- nm$update.row.ids(v.attr.table.merged)
@@ -129,7 +122,7 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 
 					# Convert extremities to IDs
 					e.attr.table.one <- nm$convert.extremities.to.v.id.based.on.table(
-						e.attr.table.one, v.attr.table, 'sogi_identity')
+						e.attr.table.one, v.attr.table, 'tea_identity')
 
 					# J-GRAPH EDGES #
 
@@ -137,25 +130,24 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 
 					# Convert extremities to IDs
 					e.attr.table.two <- nm$convert.extremities.to.v.id.based.on.table(
-						e.attr.table.two, v.attr.table, 'sogi_identity')
+						e.attr.table.two, v.attr.table, 'tea_identity')
 
 					# CALCULATE #
 					
 					single.row <- c(net.list[i], net.list[j])
 
-
 					# JACCARD DISTANCE #
 					
 					e.common <- length(intersect(
-						nm$get.col(e.attr.table.one, 'sogi_identity'),
-						nm$get.col(e.attr.table.two, 'sogi_identity')
+						nm$get.col(e.attr.table.one, 'tea_identity'),
+						nm$get.col(e.attr.table.two, 'tea_identity')
 					))
 
 					if ( l$dist$j ) {
 
 						e.total <- length(unique(union(
-							nm$get.col(e.attr.table.one, 'sogi_identity'),
-							nm$get.col(e.attr.table.two, 'sogi_identity')
+							nm$get.col(e.attr.table.one, 'tea_identity'),
+							nm$get.col(e.attr.table.two, 'tea_identity')
 						)))
 
 						# Calc distance
@@ -206,13 +198,13 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 		if ( l$dist$im ) colnames <- append(colnames, 'dIM')
 		distances <- nm$add.col.names(distances, colnames)
 		
+		time_token <- as.numeric(Sys.time())
 		if ( l$out_table ) {
 			if ( !file.exists('output_directory') ) dir.create('output_directory')
-			table_time <- as.numeric(Sys.time())
-			write.table(distances, paste0('output_directory/dist_table_', table_time, '.dat'),
+			write.table(distances, paste0('output_directory/', round(time_token), '_dist_table.dat'),
 				quote=F, row.names=F, sep='\t')
 		}
-
+		
 		if ( l$out_plot ) {
 			row.names(distances) <-NULL
 			distances <- as.data.frame(distances, stringsAsFactors=F)
@@ -229,8 +221,7 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 					dJ.matrix[j,j] <- 0
 				}
 				
-				dj_heat_time <- as.numeric(Sys.time())
-				svg(paste0('output_directory/heatmap_', dj_heat_time, '.svg'))
+				svg(paste0('output_directory/', round(time_token), '_j_heatmap.svg'))
 				rownames(dJ.matrix) <- colnames(dJ.matrix)
 				heatmap.plus::heatmap.plus(dJ.matrix, na.rm=F, symm=T, main='Jaccard', Rowv=NA, Colv=NA, margins=c(5,5))
 				dev.off()
@@ -248,8 +239,7 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 					dJs.matrix[j,j] <- 0
 				}
 				
-				djs_heat_time <- as.numeric(Sys.time())
-				svg(paste0('output_directory/heatmap_', djs_heat_time, '.svg'))
+				svg(paste0('output_directory/', round(time_token), '_js_heatmap.svg'))
 				rownames(dJs.matrix) <- colnames(dJs.matrix)
 				heatmap.plus::heatmap.plus(dJs.matrix, na.rm=F, symm=T, main='Jaccard subset', Rowv=NA, Colv=NA, margins=c(5,5))
 				dev.off()
@@ -267,12 +257,12 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 					dIM.matrix[j,j] <- 0
 				}
 
-				dim_heat_time <- as.numeric(Sys.time())
-				svg(paste0('output_directory/heatmap_', dim_heat_time, '.svg'))
+				svg(paste0('output_directory/', round(time_token), '_im_heatmap.svg'))
 				rownames(dIM.matrix) <- colnames(dIM.matrix)
 				heatmap.plus::heatmap.plus(dIM.matrix, na.rm=F, symm=T, main='Ipsen Mikhailov', Rowv=NA, Colv=NA, margins=c(5,5))
 				dev.off()
 			}
 		}
+		cat(time_token)
 	}
 }

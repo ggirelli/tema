@@ -48,7 +48,7 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 
 		# Add vertex identity column
 		v.supernet.attr.table <- nm$add.collapsed.col(v.supernet.attr.table,
-			v.identity.list, 'sogi_identity', '~')
+			v.identity.list, 'tea_identity', '~')
 
 		# Sort v.supernet.attr.table columns
 		v.supernet.attr.table <- nm$sort.table.cols(v.supernet.attr.table)
@@ -60,7 +60,7 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 
 		# Convert edge extremities to v.identity
 		e.supernet.attr.table <- nm$convert.extremities.to.v.identity(e.supernet.attr.table,
-			v.supernet.attr.table, 'sogi_identity', g)
+			v.supernet.attr.table, 'tea_identity', g)
 
 		# Get attributes for edge identity
 		e.identity.list <- c('source', 'target')
@@ -76,7 +76,7 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 
 		# Add edge identity column
 		e.supernet.attr.table <- nm$add.collapsed.col(e.supernet.attr.table,
-			e.identity.list, 'sogi_identity', '~')
+			e.identity.list, 'tea_identity', '~')
 
 		# Sort edge attribute table
 		e.supernet.attr.table <- nm$sort.table.cols(e.supernet.attr.table)
@@ -107,7 +107,7 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 
 		# Add vertex identity column
 		v.subnet.attr.table <- nm$add.collapsed.col(v.subnet.attr.table,
-			v.identity.list, 'sogi_identity', '~')
+			v.identity.list, 'tea_identity', '~')
 
 		# Sort v.subnet.attr.table columns
 		v.subnet.attr.table <- nm$sort.table.cols(v.subnet.attr.table)
@@ -119,7 +119,7 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 
 		# Convert edge extremities to v.identity
 		e.subnet.attr.table <- nm$convert.extremities.to.v.identity(e.subnet.attr.table,
-			v.subnet.attr.table, 'sogi_identity', g)
+			v.subnet.attr.table, 'tea_identity', g)
 
 		# Get attributes for edge identity
 		e.identity.list <- c('source', 'target')
@@ -135,16 +135,16 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 
 		# Add edge identity column
 		e.subnet.attr.table <- nm$add.collapsed.col(e.subnet.attr.table,
-			e.identity.list, 'sogi_identity', '~')
+			e.identity.list, 'tea_identity', '~')
 
 		# Sort edge attribute table
 		e.subnet.attr.table <- nm$sort.table.cols(e.subnet.attr.table)
 
 		# CONTAINS #
-		v.subnet.identity <- nm$get.col(v.subnet.attr.table, 'sogi_identity')
-		v.supernet.identity <- nm$get.col(v.supernet.attr.table, 'sogi_identity')
-		e.subnet.identity <- nm$get.col(e.subnet.attr.table, 'sogi_identity')
-		e.supernet.identity <- nm$get.col(e.supernet.attr.table, 'sogi_identity')
+		v.subnet.identity <- nm$get.col(v.subnet.attr.table, 'tea_identity')
+		v.supernet.identity <- nm$get.col(v.supernet.attr.table, 'tea_identity')
+		e.subnet.identity <- nm$get.col(e.subnet.attr.table, 'tea_identity')
+		e.supernet.identity <- nm$get.col(e.supernet.attr.table, 'tea_identity')
 
 		v.contains <- length(which(!v.subnet.identity %in% v.supernet.identity))
 		e.contains <- length(which(!e.subnet.identity %in% e.supernet.identity))
