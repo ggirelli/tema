@@ -447,7 +447,7 @@
                         if ( self.contains.n_attr_identity[nks[i]] ) n++;
                     }
 
-                    if ( n > 0 ) {
+                    if ( n > 0 || (0 == self.contains.group.nodes.length && 0 == self.contains.group.edges.length)) {
                         // Clear previous errors
                         self.contains.errMsg = undefined;
 

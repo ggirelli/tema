@@ -559,6 +559,7 @@
                             {{attr}}
                         </label>
                     </div>
+                    <i ng-show="0 == commander.subtract.group.nodes.length">No node attributes...</i>
                     <div>
                         <h5>Edges</h5>
                         <label class="alert alert-warning attr-select" for="attr-edge-{{attr}}" ng-repeat="attr in commander.subtract.group.edges">
@@ -566,6 +567,7 @@
                             {{attr}}
                         </label>
                     </div>
+                    <i ng-show="0 == commander.subtract.group.edges.length">No edge attributes...</i>
 
                     <br />
                     <button class="btn end-btn btn-success" ng-click='commander.subtract_set_page(4, m.session_id)'>subtract</button><button class="btn end-btn btn-warning" ng-click='commander.subtract.set_page(2)'>back</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
@@ -607,6 +609,7 @@
                             {{attr}}
                         </label>
                     </div>
+                    <i ng-show="0 == commander.contains.group.nodes.length">No node attributes...</i>
                     <div>
                         <h5>Edges</h5>
                         <label class="alert alert-warning attr-select" for="attr-edge-{{attr}}" ng-repeat="attr in commander.contains.group.edges">
@@ -614,6 +617,7 @@
                             {{attr}}
                         </label>
                     </div>
+                    <i ng-show="0 == commander.contains.group.edges.length">No edge attributes...</i>
 
                     <br />
                     <button class="btn end-btn btn-success" ng-click='commander.contains_set_page(2, m.session_id)'>contains</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
