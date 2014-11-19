@@ -478,11 +478,12 @@
 					</label>
 					<hr />
 
-					<h4>Select the minuend networks:</h4>
-					<label for="net-minuend-{{net.id}}" class="alert" ng-repeat='net in commander.subtract.group.net_list | filter:networks.isConverted' ng-show='networks.list != null' ng-class="{'alert-info' : networks.isConverted(net), 'alert-danger' : !networks.isConverted(net)}" style="width: 100%;">
-						<input id="net-minuend-{{net.id}}" name="net-minuend" type="radio" ng-model="commander.subtract.group.minuend" value="{{net.name}}" />
-						{{net.name}}
-					</label>
+					<h4>Select the minuend network:</h4>
+					<select name="" id="" class="form-control" ng-model="commander.subtract.group.minuend" ng-change="commander.subtract.get_attrs(commander.subtract.get_attrs_from_net(networks.get_network_from_name(commander.subtract.group.super), commander.subtract.get_attrs_from_net(networks.get_network_from_name(commander.subtract.group.sub), {nodes:[],edges:[]})));" ng-show='networks.list != null'>
+						<option value="">--</option>
+						<option value="{{net.name}}" ng-repeat="net in commander.subtract.group.net_list | filter:networks.isConverted">{{net.name}}</option>
+					</select>
+					<br />
 
 					<button class="btn end-btn btn-success" ng-click='commander.subtract_set_page(2, m.session_id)'>next</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
 				</div>
