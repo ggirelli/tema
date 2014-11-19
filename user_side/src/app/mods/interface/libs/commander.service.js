@@ -627,7 +627,6 @@
 
                 }).
                     success(function (data) {
-                        console.log(data)
                         if ( 0 == data.err ) {
                             alert('Done.');
                             if ( self.distances.out_table ) {
@@ -653,7 +652,7 @@
                         rootScope.$broadcast('reload_network_list', session_id);
                     });
 
-                //self.reset_ui();
+                self.reset_ui();
                 return qwait.promise;
             };
 

@@ -287,6 +287,7 @@ class TEAsession extends TEAdb {
 
 			// Make session directory
 			mkdir(SPATH . '/' . $id);
+			mkdir(SPATH . '/' . $id . '/output_directory');
 
 			// Insert session in the database
 			$sql = "INSERT INTO sessions (seed, folder_path, interface_uri, running) VALUES ( " .

@@ -15,6 +15,7 @@ source('NetworkManager.class.R')
 nm <- NetworkManager()
 
 source('GraphManager.class.R')
+
 gm <- GraphManager()
 
 # Start
@@ -25,7 +26,7 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 
 		s <- scan(paste0(args[2], '.json'), 'raw')
 		l <- fromJSON(s)
-
+		
 		net.list <- c()
 		v.attr.table.list <- list()
 		e.attr.table.list <- list()
@@ -200,7 +201,6 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 		
 		time_token <- as.numeric(Sys.time())
 		if ( l$out_table ) {
-			if ( !file.exists('output_directory') ) dir.create('output_directory')
 			write.table(distances, paste0('output_directory/', round(time_token), '_dist_table.dat'),
 				quote=F, row.names=F, sep='\t')
 		}

@@ -1,5 +1,4 @@
 library('igraph')
-source('./extendIgraph.R')
 
 # Class to manage graphml graphs and perform graph operations
 GraphManager <- function() {
@@ -588,63 +587,33 @@ GraphManager <- function() {
 
 		subtract = function(g.one, g.two) {
 			# Removes edges and nodes that are common to both graphs from the first graph
-<<<<<<< HEAD:server_side/Rscripts/GraphManager.class.R
-=======
-			common.vertices <- which(V(g.one)$name %in% V(g.two)$name)
->>>>>>> 158260701c30446bdb14855025a06c217fb4a029:include/Rscripts/GraphManager.class.R
 			
 			common.vertices <- which(V(g.one) %in% V(g.two))
 			if(length(common.vertices) != 0 ) g.one <- g.one - vertices(V(g.one)[common.vertices])
 
-<<<<<<< HEAD:server_side/Rscripts/GraphManager.class.R
 			common.edges <- which(E(g.one) %in% E(g.two))
 			if(length(common.edges) != 0) g.one <- delete.edges(g.one, E(g.one)[common.edges])
 
-=======
-			#if(ecount(g.one) == 0) return(graph.empty())
-
-			el.one <- get.edgelist(g.one)
-			el.two <- get.edgelist(g.two)
-			el.one <- paste0(el.one[,1], '->', el.one[,2])
-			el.two <- paste0(el.two[,1], '->', el.two[,2])
-			common.edges <- which(el.one %in% el.two)
-			if(length(common.edges) != 0) g.one <- delete.edges(g.one, E(g.one)[common.edges])
-
-			# Remove zero-degree
-			#g.one <- delete.vertices(g.one, which(degree(g.one, V(g.one)) == 0))
-
->>>>>>> 158260701c30446bdb14855025a06c217fb4a029:include/Rscripts/GraphManager.class.R
 			return(g.one)
 		},
 
 		intersect = function(g.one, g.two) {
 			# Intersects edges and nodes
 			
-			uncommon.vertices <- which(!(V(g.one)$name %in% V(g.two)$name))
+			uncommon.vertices <- which(!(V(g.one) %in% V(g.two)))
 			if(length(uncommon.vertices) != 0 ) g.one <- g.one - vertices(V(g.one)[uncommon.vertices])
 
-<<<<<<< HEAD:server_side/Rscripts/GraphManager.class.R
 			uncommon.edges <- which(!(E(g.one) %in% E(g.two)))
 			if(length(uncommon.edges) != 0) g.one <- delete.edges(g.one, E(g.one)[uncommon.edges])
 
-=======
-			#if(ecount(g.one) == 0) return(graph.empty())
-
-			uncommon.edges <- which(!(E(g.one)$name %in% E(g.two)$name))
-			if(length(uncommon.edges) != 0) g.one <- delete.edges(g.one, E(g.one)[uncommon.edges])
-
-			# Remove zero-degree
-			#g.one <- delete.vertices(g.one, which(degree(g.one, V(g.one)) == 0))
-
->>>>>>> 158260701c30446bdb14855025a06c217fb4a029:include/Rscripts/GraphManager.class.R
 			return(g.one)
 		},
 
 		contains = function(g.one, g.two) {
 			# Verifies if g.one contains g.two
 			
-			if(length(which(!(V(g.two)$name %in% V(g.one)$name))) != 0) return(FALSE)
-			if(length(which(!(E(g.two)$name %in% E(g.one)$name))) != 0) return(FALSE)
+			if(length(which(!(V(g.two) %in% V(g.one)))) != 0) return(FALSE)
+			if(length(which(!(E(g.two) %in% E(g.one)))) != 0) return(FALSE)
 
 			return(TRUE)
 		},
