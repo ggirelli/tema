@@ -22,14 +22,24 @@ if(file.exists(paste0('/home/gire/public_html/SOGIv020/server_side/session/', ar
 		g <- read.graph(paste0(args[2], '.graphml'), format='graphml')
 
 		cat('Preparing config file.\n')
-		l <- list(e_attributes=list.edge.attributes(g), e_count=ecount(g), v_attributes=list.vertex.attributes(g), v_count=vcount(g))
+		l <- list(
+			e_attributes=list.edge.attributes(g),
+			e_count=ecount(g),
+			v_attributes=list.vertex.attributes(g),
+			v_count=vcount(g)
+		)
 
 		cat('Writing DAT file.\n')		
 		write(toJSON(l), paste0(args[2], '.dat'))
 
 		cat('Writing JSON file.\n')
 		graph.list <- nm$graph.to.attr.table(g)
-		write(toJSON(nm$attr.tables.to.list(graph.list$nodes, graph.list$edges)), paste0(args[2], '.json'))
+		graph.list$nodes <- nm$update.row.ids(graph.list$nodes)
+		graph.list$nodes <- nm$add.prefix.to.col(graph.list$nodes, 'id', 'n')
+		graph.list$edges <- nm$convert.extremities.to.v.id.based.on.table(graph.list$edges,
+			graph.list$nodes, 'name')
+		write(toJSON(nm$attr.tables.to.list(graph.list$nodes, graph.list$edges)),
+			paste0(args[2], '.json'))
 
 		cat('Converted.\n')
 	}
