@@ -1124,7 +1124,7 @@ NetworkManager <- function() {
 				source.col.id <- which('source' == names(e.attr.table))
 				if ( !e.attr.table[source.col.id] %in% v.identity ) return(NULL)
 				target.col.id <- which('target' == names(e.attr.table))
-				if ( !e.attr.table[, target.col.id] %in% v.identity ) return(NULL)
+				if ( !e.attr.table[target.col.id] %in% v.identity ) return(NULL)
 
 			}
 

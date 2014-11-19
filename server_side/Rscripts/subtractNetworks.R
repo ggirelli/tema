@@ -187,19 +187,19 @@ if(file.exists(paste0('/home/gire/public_html/SOGIv020/server_side/session/', ar
 
 		# Merge table from table.list
 		e.attr.table.merged <- nm$merge.tables.from.table.list(e.attr.table.list)
-
+		
 		# Retrieve subtrahend edges identities
 		e.subtrahend.identity <- nm$get.col(e.attr.table.merged, 'sogi_identity')
 		e.subtrahend.identity.unique <- unique(e.subtrahend.identity)
-
+		
 		# Remove subtrahend edges identities from minuend
 		e.minuend.attr.table <- nm$rm.rows.based.on.identity(e.minuend.attr.table,
 			'sogi_identity', e.subtrahend.identity.unique)
-
+		
 		# Remove edges that lost one or both extremities
 		e.minuend.attr.table <- nm$check.extremities(e.minuend.attr.table,
 			v.minuend.attr.table, 'sogi_identity')
-
+		
 		# Convert extremities to id
 		e.minuend.attr.table <- nm$convert.extremities.to.v.id.based.on.table(e.minuend.attr.table,
 			v.minuend.attr.table, 'sogi_identity')
