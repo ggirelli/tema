@@ -9,7 +9,7 @@
 define('HOST', 'localhost');
 define('USER', 'root');
 define('PWD', '');
-define('DB_NAME', 'SOGIv020');
+define('DB_NAME', 'TEA14');
 
 // Address
 define('RPATH', dirname(__FILE__));
