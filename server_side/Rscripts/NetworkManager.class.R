@@ -1480,7 +1480,7 @@ NetworkManager <- function() {
 												which(colnames(subtable) == col)])))
 									} else if ( 'concat' == behaviors[col] ) {
 										single.row <- append(single.row,
-											concat(as.numeric(subtable[,
+											concat(as.character(subtable[,
 												which(colnames(subtable) == col)])))
 									} else if ( 'first' == behaviors[col] ) {
 										single.row <- append(single.row,
