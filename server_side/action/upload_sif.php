@@ -19,7 +19,7 @@ if ( $s->exists($data->id) ) {
 	$s->init($data->id);
 
 	$newname = $_FILES['file']['name']; 
-	$target = SPATH . '/' . $data->id . '/sif.dat';
+	$target = SPATH . '/' . $data->id . '/settings/sif.dat';
 
 	move_uploaded_file( $_FILES['file']['tmp_name'], $target);
 

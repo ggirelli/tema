@@ -11,7 +11,7 @@ library(rjson)
 source('extendIgraph.R')
 
 # Start
-wd <- paste0('../session/', args[1], '/')
+wd <- paste0('../session/', args[1], '/settings')
 if(file.exists(wd)) {
 	setwd(wd)
 
