@@ -984,10 +984,12 @@
 
 				<div ng-show="settings.is_sif_ready()">
 					SIF sample column:
-					<select name="" id="" ng-model="settings.info.sif_sample_col">
+					<select name="sif-sample-column" id="sif-sample-column" class="form-control" ng-model="settings.info.sif_sample_col">
 						<option value="">Select a column</option>
 						<option value="{{k}}" ng-repeat="k in settings.info.sif_keys" ng-selected="settings.is_sif_sample_col(k)">{{k}}</option>
 					</select>
+					<button class="btn btn-default change-sif-btn" ng-click="settings.upload_sif(m.session_id)">Change SIF</button>
+					<input type="file" id="sif-input" class='hidden-file-input' />
 				</div>
 
 				<hr />

@@ -278,6 +278,10 @@ html {
 	font-variant: small-caps;
 }
 
+#interface .left-panel.settings-panel .change-sif-btn {
+	margin-top: 4px;
+}
+
 /* BOTTOM BAR */
 
 #interface #bottom-bar {
