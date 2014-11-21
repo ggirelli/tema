@@ -9,6 +9,7 @@
         	scope.m = model;
             scope.m.session_id = routeParams.id;
 
+            scope.networks = networks;
         	scope.inspector = inspector;
         	scope.panels = panels;
         	scope.commander = commander;
@@ -19,7 +20,6 @@
             /* Initialize network list */
             /*-------------------------*/
 
-            scope.networks = networks;
             scope.networks.get_list(scope.m.session_id).then(function (data) {
                 console.log(data);
                 if (0 != data['err'] ) {
@@ -120,6 +120,15 @@
                 scope.networks.reset_ui();
                 scope.commander.reset_ui();
             });
+
+            /**
+             * [resetApp description]
+             * @return {[type]} [description]
+             */
+            scope.resetApp = function () {
+                document.location.hash = '';
+                window.location.reload();
+            };
 
         };
 
