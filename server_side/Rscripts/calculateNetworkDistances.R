@@ -277,19 +277,17 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 		if ( l$dist$jsim ) colnames <- append(colnames, 'dJsIM')
 		distances <- nm$add.col.names(distances, colnames)
 
-		time_token <- round(as.numeric(Sys.time()))
-		write.table(distances, paste0('output_directory/', time_token, '_dist_table.dat'), quote=F, row.names=F, sep='\t')
+		write.table(distances, paste0('output_directory/dist_table.dat'), quote=F, row.names=F, sep='\t')
 
 		if ( l$out_plot ) {
 			row.names(distances) <-NULL
-			if ( l$dist$im ) plot.heatmap(distances, 'dIM', paste0('output_directory/', time_token, '_im_heatmap.svg'), 'Ipsen Mikhailov')
-			if ( l$dist$h ) plot.heatmap(distances, 'dH', paste0('output_directory/', time_token, '_h_heatmap.svg'), 'Hamming')
-			if ( l$dist$him ) plot.heatmap(distances, 'dHIM', paste0('output_directory/', time_token, '_him_heatmap.svg'), 'HIM')
-			if ( l$dist$j ) plot.heatmap(distances, 'dJ', paste0('output_directory/', time_token, '_j_heatmap.svg'), 'Jaccard')
-			if ( l$dist$jim ) plot.heatmap(distances, 'dJIM', paste0('output_directory/', time_token, '_jim_heatmap.svg'), 'JIM')
-			if ( l$dist$js ) plot.heatmap(distances, 'dJs', paste0('output_directory/', time_token, '_js_heatmap.svg'), 'Jaccard subset')
-			if ( l$dist$jsim ) plot.heatmap(distances, 'dJsIM', paste0('output_directory/', time_token, '_jsim_heatmap.svg'), 'JsIM')
+			if ( l$dist$im ) plot.heatmap(distances, 'dIM', paste0('output_directory/im_heatmap.svg'), 'Ipsen Mikhailov')
+			if ( l$dist$h ) plot.heatmap(distances, 'dH', paste0('output_directory/h_heatmap.svg'), 'Hamming')
+			if ( l$dist$him ) plot.heatmap(distances, 'dHIM', paste0('output_directory/him_heatmap.svg'), 'HIM')
+			if ( l$dist$j ) plot.heatmap(distances, 'dJ', paste0('output_directory/j_heatmap.svg'), 'Jaccard')
+			if ( l$dist$jim ) plot.heatmap(distances, 'dJIM', paste0('output_directory/jim_heatmap.svg'), 'JIM')
+			if ( l$dist$js ) plot.heatmap(distances, 'dJs', paste0('output_directory/js_heatmap.svg'), 'Jaccard subset')
+			if ( l$dist$jsim ) plot.heatmap(distances, 'dJsIM', paste0('output_directory/jsim_heatmap.svg'), 'JsIM')
 		}
-		cat(time_token)
 	}
 }

@@ -634,43 +634,43 @@
                         if ( 0 == data.err ) {
                             alert('Done.');
                             if ( self.distances.out_table ) {
-                                window.open('o/' + session_id + '/' + data.token + '_dist_table.dat');
+                                window.open('o/' + session_id + '/dist_table.dat');
                             } else {
-                                console.log('o/' + session_id + '/' + data.token + '_dist_table.dat')
+                                console.log('o/' + session_id + '/dist_table.dat')
                             }
                             if ( self.distances.measures.im ) {
                                 if ( self.distances.out_plot ) {
-                                    window.open('o/' + session_id + '/' + data.token + '_im_heatmap.svg');
+                                    window.open('o/' + session_id + '/im_heatmap.svg');
                                 }
                             }
                             if ( self.distances.measures.h ) {
                                 if ( self.distances.out_plot ) {
-                                    window.open('o/' + session_id + '/' + data.token + '_h_heatmap.svg');
+                                    window.open('o/' + session_id + '/h_heatmap.svg');
                                 }
                             }
                             if ( self.distances.measures.him ) {
                                 if ( self.distances.out_plot ) {
-                                    window.open('o/' + session_id + '/' + data.token + '_him_heatmap.svg');
+                                    window.open('o/' + session_id + '/him_heatmap.svg');
                                 }
                             }
                             if ( self.distances.measures.j ) {
                                 if ( self.distances.out_plot ) {
-                                    window.open('o/' + session_id + '/' + data.token + '_j_heatmap.svg');
+                                    window.open('o/' + session_id + '/j_heatmap.svg');
                                 }
                             }
                             if ( self.distances.measures.jim ) {
                                 if ( self.distances.out_plot ) {
-                                    window.open('o/' + session_id + '/' + data.token + '_jim_heatmap.svg');
+                                    window.open('o/' + session_id + '/jim_heatmap.svg');
                                 }
                             }
                             if ( self.distances.measures.js ) {
                                 if ( self.distances.out_plot ) {
-                                    window.open('o/' + session_id + '/' + data.token + '_js_heatmap.svg');
+                                    window.open('o/' + session_id + '/js_heatmap.svg');
                                 }
                             }
                             if ( self.distances.measures.jsim ) {
                                 if ( self.distances.out_plot ) {
-                                    window.open('o/' + session_id + '/' + data.token + '_jsim_heatmap.svg');
+                                    window.open('o/' + session_id + '/jsim_heatmap.svg');
                                 }
                             }
                         }

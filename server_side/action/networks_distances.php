@@ -22,7 +22,7 @@ if ( $s->exists($data->id) ) {
 	$r = $s->exec_return('convert', $q);
 	
 	unlink($f);
-	die('{"err":0, "token":"' . $r[0] . '"}');
+	die('{"err":0}');
 
 } else {
 	die('{"err":3}');
