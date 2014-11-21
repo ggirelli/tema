@@ -13,21 +13,24 @@ $s = new TEAsession(HOST, USER, PWD, DB_NAME);
 
 // Convert $_POST to $data
 $data->id = $_POST['id'];
+$data->type = $_POST['type'];
 
 if ( $s->exists($data->id) ) {
 	// Load session
 	$s->init($data->id);
 
-	$newname = $_FILES['file']['name']; 
-	$target = SPATH . '/' . $data->id . '/settings/sif.dat';
+	if ( 'sif' == $data->type ) {
+		$newname = $_FILES['file']['name']; 
+		$target = SPATH . '/' . $data->id . '/settings/sif.dat';
 
-	move_uploaded_file( $_FILES['file']['tmp_name'], $target);
+		move_uploaded_file( $_FILES['file']['tmp_name'], $target);
 
-	$q = 'cd ' . SCRIPATH . '; ./parseSIF.R ' . $s->get('id');
-	$r = $s->exec_return('parseSIF', $q);
+		$q = 'cd ' . SCRIPATH . '; ./parseSIF.R ' . $s->get('id');
+		$r = $s->exec_return('parseSIF', $q);
 
-	// File uploaded correcty
-	die('{"err":0}');
+		// File uploaded correcty
+		die('{"err":0}');
+	}
 
 } else {
 	echo '{"err":3}';

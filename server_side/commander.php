@@ -30,7 +30,7 @@ if( isset($data->action) ) {
 			case 'add_go_attr': case 'add_attr_index':
 			case 'combine_attr': case 'convert_network':
 			case 'get_network': case 'get_network_list':
-			case 'get_settings': case 'get_sif':
+			case 'get_settings': case 'get_setting_file':
 			case 'network_contains': case 'networks_distances':
 			case 'networks_intersect':
 			case 'networks_merge': case 'networks_subtract':
@@ -39,7 +39,7 @@ if( isset($data->action) ) {
 			case 'save_network':
 			case 'session_new': case 'session_load':
 			case 'set_settings':
-			case 'upload_network': case 'upload_sif': {
+			case 'upload_network': case 'upload_setting_file': {
 				require_once('action/' . $data->action . '.php');
 				break;
 			}

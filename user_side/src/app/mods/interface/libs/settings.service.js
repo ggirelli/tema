@@ -31,8 +31,9 @@
                         method: 'POST',
                         data: {
                             id: session_id,
+                            type: 'sif',
                             file: fTmp,
-                            action: 'upload_sif'
+                            action: 'upload_setting_file'
                         },
                         url: 's/',
                         headers: {
@@ -50,7 +51,7 @@
 
                     }).
                         success(function (data) {
-
+                            console.log(data);
                             self.get_sif(session_id).then(function (data) {
                                 if ( 0 == data['err']) {
                                     self.info.sif = data.sif;
@@ -79,7 +80,8 @@
 
                     method: 'POST',
                     data: {
-                        action: 'get_sif',
+                        action: 'get_setting_file',
+                        type: 'sif',
                         id: session_id
                     },
                     url: 's/'
@@ -150,8 +152,9 @@
                         method: 'POST',
                         data: {
                             id: session_id,
+                            type: 'goa',
                             file: fTmp,
-                            action: 'upload_goa'
+                            action: 'upload_setting_file'
                         },
                         url: 's/',
                         headers: {
@@ -189,7 +192,8 @@
 
                     method: 'POST',
                     data: {
-                        action: 'get_goa',
+                        action: 'get_setting_file',
+                        type: 'goa',
                         id: session_id
                     },
                     url: 's/'
@@ -229,7 +233,7 @@
                         data: {
                             id: session_id,
                             file: fTmp,
-                            action: 'upload_goa'
+                            action: 'upload_setting_file'
                         },
                         url: 's/',
                         headers: {

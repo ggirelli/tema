@@ -12,12 +12,14 @@ require_once(dirname(dirname(__FILE__)) . '/include/tea.session.class.php');
 $s = new TEAsession(HOST, USER, PWD, DB_NAME);
 
 if ( $s->exists($data->id) ) {
-
-	$f = SPATH . '/' . $data->id . '/settings/sif.json';
-	if ( file_exists($f) ) {
-		die('{"err":0,"sif":' . file_get_contents($f) . '}');
-	} else {
-		die('{"err":4}');
+	
+	if ( 'sif' == $data->type ) {
+		$f = SPATH . '/' . $data->id . '/settings/sif.json';
+		if ( file_exists($f) ) {
+			die('{"err":0,"sif":' . file_get_contents($f) . '}');
+		} else {
+			die('{"err":4}');
+		}
 	}
 
 } else {
