@@ -19,14 +19,15 @@ if ( $s->exists($data->id) ) {
 	// Load session
 	$s->init($data->id);
 
-	if ( 'sif' == $data->type ) {
-		$newname = $_FILES['file']['name']; 
-		$target = SPATH . '/' . $data->id . '/settings/sif.dat';
+	if ( in_array($data->type, Array('sif', 'goa', 'gob')) ) {
+		$target = SPATH . '/' . $data->id . '/settings/' . $data->type .'.dat';
 
 		move_uploaded_file( $_FILES['file']['tmp_name'], $target);
 
-		$q = 'cd ' . SCRIPATH . '; ./parseSIF.R ' . $s->get('id');
-		$r = $s->exec_return('parseSIF', $q);
+		if ( 'sif' == $data->type ) {
+			$q = 'cd ' . SCRIPATH . '; ./parseSIF.R ' . $s->get('id');
+			$r = $s->exec_return('parseSIF', $q);
+		}
 
 		// File uploaded correcty
 		die('{"err":0}');

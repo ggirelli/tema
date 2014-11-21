@@ -66,8 +66,8 @@
             /*---------------------*/
 
             // Check SIF
-            scope.settings.is_sif(scope.m.session_id).then(function (data) {
-                if ( true === data ) {
+            scope.settings.is_file(scope.m.session_id, 'sif').then(function (data) {
+                if ( true === data.res ) {
                     scope.settings.get_sif(scope.m.session_id).then(function (data) {
                         if ( 0 == data['err']) {
                             scope.settings.info.sif = data.sif;
@@ -79,6 +79,23 @@
                     });
                 }
             });
+
+            // Check GOs
+            scope.settings.is_file(scope.m.session_id, 'goa').then(function (data) {
+                if ( true === data.res ) {
+                    if ( 0 == data.data.err ) {
+                        scope.settings.info.goa = true;
+                    }
+                }
+            });
+            scope.settings.is_file(scope.m.session_id, 'gob').then(function (data) {
+                if ( true === data.res ) {
+                    if ( 0 == data.data.err ) {
+                        scope.settings.info.gob = true;
+                    }
+                }
+            });
+            scope.settings.is_go_mapped(scope.m.session_id);
 
             // Read settings
             scope.settings._read(scope.m.session_id);

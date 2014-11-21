@@ -20,6 +20,20 @@ if ( $s->exists($data->id) ) {
 		} else {
 			die('{"err":4}');
 		}
+	} else if ( in_array($data->type, Array('goa', 'gob')) ) {
+		$f = SPATH . '/' . $data->id . '/settings/' . $data->type . '.dat';
+		if ( file_exists($f) ) {
+			die('{"err":0,"file":true}');
+		} else {
+			die('{"err":4}');
+		}
+	} else if ( 'go_mgmt' == $data->type ) {
+		$f = SPATH . '/' . $data->id . '/settings/' . $data->type . '.Rdata';
+		if ( file_exists($f) ) {
+			die('{"err":0,"file":true}');
+		} else {
+			die('{"err":4}');
+		}
 	}
 
 } else {

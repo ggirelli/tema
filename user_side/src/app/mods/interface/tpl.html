@@ -1009,9 +1009,9 @@
 				<!-- GO files -->
 				<div>
 					<label for="goa-input">GO basic: </label>
-					<button class="btn btn-default btn-block" ng-click="settings.upload_goa(m.session_id)" ng-show="!settings.is_goa_ready()">Upload GOA</button>
-					<div ng-show="settings.is_goa_ready()">
-						<span>{{settings.info.goa}}</span>
+					<button class="btn btn-default btn-block" ng-click="settings.upload_goa(m.session_id)" ng-if="!settings.is_go_ready('a')">Upload GOA</button>
+					<div ng-if="settings.is_go_ready('a')">
+						<span class="text-success">GOA loaded.</span>
 						<button class="btn btn-default btn-block" ng-click="settings.upload_goa(m.session_id)">Change GOA</button>
 					</div>
 					<input type="file" id="goa-input" name="goa-input" class='hidden-file-input' />
@@ -1021,20 +1021,26 @@
 
 				<div>
 					<label for="gob-input">GO annotations: </label>
-					<button class="btn btn-default btn-block" ng-click="settings.upload_gob(session_id)" ng-show="!settings.is_gob_ready()">Upload GOB</button>
-					<div ng-show="settings.is_gob_ready()">
-						<span>{{settings.info.gob}}</span>
-						<button class="btn btn-default btn-block" ng-click="settings.upload_gob(session_id)">Change GOB</button>
+					<button class="btn btn-default btn-block" ng-click="settings.upload_gob(m.session_id)" ng-if="!settings.is_go_ready('b')">Upload GOB</button>
+					<div ng-if="settings.is_go_ready('b')">
+						<span class="text-success">GOB loaded.</span>
+						<button class="btn btn-default btn-block" ng-click="settings.upload_gob(m.session_id)">Change GOB</button>
 					</div>
 					<input type="file" id="gob-input" name="gob-input" class='hidden-file-input' />
 				</div>
 
+				<div ng-if="settings.is_go_ready()">
+					<br />
+
+					<button class="btn btn-block btn-primary" ng-click="settings.apply_go_mapper(m.session_id)">map GOs</button>
+				</div>
+
 				<br />
 
-				<div>
+				<div ng-click="settings.is_go_mapped(m.settings)">
 					<label for="go_status">Status: </label>
 					<span class="text-success" ng-show="settings.info.go_status">ready</span>
-					<span class="text-danger" ng-show="!settings.info.go_status">wating</span>
+					<span class="text-danger" ng-show="!settings.info.go_status">waiting</span>
 				</div>
 
 				<hr />

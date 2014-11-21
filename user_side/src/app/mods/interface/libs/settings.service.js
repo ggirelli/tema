@@ -11,8 +11,8 @@
                 sif_keys: [],
                 sif_sample_col: null,
                 node_thr: 1000,
-                goa: undefined,
-                gob: undefined,
+                goa: false,
+                gob: false,
                 go_status: false
             };
 
@@ -51,7 +51,6 @@
 
                     }).
                         success(function (data) {
-                            console.log(data);
                             self.get_sif(session_id).then(function (data) {
                                 if ( 0 == data['err']) {
                                     self.info.sif = data.sif;
@@ -60,7 +59,6 @@
                                     }
                                 }
                             });
-
                         });
 
                 });
@@ -95,28 +93,30 @@
             };
 
             /**
-             * If the given session has a SIF
+             * If the given session has a setting file
              * @param  {String}  session_id
-             * @return {Boolean}            if a SIF is present in the given session
+             * @param {String} type one of the setting file labels
+             * @return {Boolean}            if a setting file is present in the given session
              */
-            self.is_sif = function (session_id) {
+            self.is_file = function (session_id, type) {
                 var qwait = q.defer();
 
                 http({
 
                     method: 'POST',
                     data: {
-                        action: 'get_sif',
+                        action: 'get_setting_file',
+                        type: type,
                         id: session_id
                     },
                     url: 's/'
 
                 }).
                     error(function (data) {
-                        qwait.resolve(false);
+                        qwait.resolve({res:false, data:data});
                     }).
                     success(function (data) {
-                        qwait.resolve(true);
+                        qwait.resolve({res:true, data:data});
                     });
 
                 return qwait.promise;
@@ -142,6 +142,7 @@
              * @param  {String} session_id
              */
             self.upload_goa = function (session_id) {
+                self.info.goa = false;
                 $('#goa-input').unbind('change');
                 $('#goa-input').on('change', function (e) {
                     e.preventDefault();
@@ -172,7 +173,7 @@
 
                     }).
                         success(function (data) {
-                            console.log(data)
+                            if ( 0 == data.err ) self.info.goa = true;
                         });
 
                 });
@@ -181,47 +182,11 @@
             };
 
             /**
-             * Retrieves the GOA file-name
-             * @param  {String} session_id
-             * @return {promise}            contains goa as data
-             */
-            self.get_goa = function (session_id) {
-                var qwait = q.defer();
-
-                http({
-
-                    method: 'POST',
-                    data: {
-                        action: 'get_setting_file',
-                        type: 'goa',
-                        id: session_id
-                    },
-                    url: 's/'
-
-                }).
-                    success(function (data) {
-                        qwait.resolve(data);
-                    });
-
-                return qwait.promise;
-            };
-
-            /**
-             * If the GOA file-name is available (user-side)
-             * @return {Boolean} if the GOA file-name is loaded in angularJS
-             */
-            self.is_goa_ready = function () {
-                if ( undefined != self.info.goa ) {
-                    return true;
-                }
-                return false;
-            };
-
-            /**
              * Uploads the GOB
              * @param  {String} session_id
              */
             self.upload_gob = function (session_id) {
+                self.info.gob = false;
                 $('#gob-input').unbind('change');
                 $('#gob-input').on('change', function (e) {
                     e.preventDefault();
@@ -232,6 +197,7 @@
                         method: 'POST',
                         data: {
                             id: session_id,
+                            type: 'gob',
                             file: fTmp,
                             action: 'upload_setting_file'
                         },
@@ -251,7 +217,7 @@
 
                     }).
                         success(function (data) {
-                            console.log(data)
+                            if ( 0 == data.err ) self.info.gob = true;
                         });
 
                 });
@@ -260,40 +226,68 @@
             };
 
             /**
-             * Retrieves the GOB file-name
-             * @param  {String} session_id
-             * @return {promise}            contains gob as data
+             * Checks for GO files
+             * @param  {type}  type 'a', 'b' or undefined
+             * @return {Boolean}      if the specified file, or both if undefined, is present
              */
-            self.get_gob = function (session_id) {
+            self.is_go_ready = function (type) {
+                if ( undefined == type ) return(self.info.goa && self.info.gob)
+                if ( 'a' == type ) return(self.info.goa);
+                if ( 'b' == type ) return(self.info.gob);
+                return false;
+            };
+
+            /**
+             * Triggers the GO mapper
+             * @param  {String} session_id
+             */
+            self.apply_go_mapper = function (session_id) {
                 var qwait = q.defer();
+                self.info.go_status = false;
 
                 http({
 
                     method: 'POST',
                     data: {
-                        action: 'get_gob',
-                        id: session_id
+                        id: session_id,
+                        action: 'map_gos'
                     },
                     url: 's/'
 
                 }).
                     success(function (data) {
+                        self.is_go_mapped(session_id);
                         qwait.resolve(data);
                     });
+
 
                 return qwait.promise;
             };
 
-            /**
-             * If the GOB file-name is available (user-side)
-             * @return {Boolean} if the GOB file-name is loaded in angularJS
-             */
-            self.is_gob_ready = function () {
-                if ( undefined != self.info.gob ) {
-                    return true;
-                }
-                return false;
-            };
+            self.is_go_mapped = function (session_id) {
+                var qwait = q.defer();
+                self.info.go_status = false;
+
+                http({
+
+                    method: 'POST',
+                    data: {
+                        action: 'get_setting_file',
+                        id: session_id,
+                        type: 'go_mgmt'
+                    },
+                    url: 's/'
+
+                }).
+                    success(function (data) {
+                        if ( 0 == data.err ) {
+                            self.info.go_status = true;
+                        }
+                        qwait.resolve(data);
+                    });
+
+                return qwait.promise;
+            }
 
             /**
              * Loads the settings in angularJS
@@ -350,11 +344,14 @@
                 return qwait.promise;
             };
 
+            /**
+             * Sends event trigger through the scopes.
+             */
             self.trigger_apply_sif = function () {
                 if ( self.is_sif_ready() ) {
                     rootScope.$broadcast('apply_sif', self.info);
                 }
-            }
+            };
 
         };
 
