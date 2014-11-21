@@ -282,6 +282,8 @@
                     success(function (data) {
                         if ( 0 == data.err ) {
                             self.info.go_status = true;
+                        } else {
+                            self.info.go_status = false;
                         }
                         qwait.resolve(data);
                     });

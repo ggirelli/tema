@@ -82,20 +82,20 @@
 							</tr>
 							<tr ng-repeat="filter in networks.conversion.filters">
 								<td class="text-align-left">
-									<select name="" id="" ng-show="!$first" ng-model="networks.conversion.filters[$index].combine" ng-change="networks.conversion.apply_filters()">
+									<select class="form-control" ng-show="!$first" ng-model="networks.conversion.filters[$index].combine" ng-change="networks.conversion.apply_filters()">
 										<option value="">--</option>
 										<option value="AND">AND</option>
 										<option value="OR">OR</option>
 									</select>
 								</td>
 								<td>
-									<select name="" id="" style="max-width: 100px;" ng-model="networks.conversion.filters[$index].attribute" ng-change="networks.conversion.apply_filters(); networks.conversion.filters[$index].value=''">
+									<select class="form-control" style="max-width: 100px;" ng-model="networks.conversion.filters[$index].attribute" ng-change="networks.conversion.apply_filters(); networks.conversion.filters[$index].value=''">
 										<option value="">--</option>
 										<option value="{{attr}}" ng-repeat="attr in networks.conversion.group.net_attributes">{{networks.conversion.extract_attr_name(attr)}}</option>
 									</select>
 								</td>
 								<td>
-									<select name="" id="" ng-model="networks.conversion.filters[$index].condition" ng-change="networks.conversion.apply_filters()">
+									<select class="form-control" ng-model="networks.conversion.filters[$index].condition" ng-change="networks.conversion.apply_filters()">
 										<option value="" ng-show="!networks.conversion.filters[$index].object">--</option>
 										<option value="e" ng-show="!networks.conversion.filters[$index].object">=</option>
 										<option value="ne" ng-show="!networks.conversion.filters[$index].object">&#8800;</option>
@@ -107,7 +107,7 @@
 									</select>
 								</td>
 								<td>
-									<select name="" id="" style="max-width: 100px;" ng-model="networks.conversion.filters[$index].value" ng-change="networks.conversion.apply_filters()">
+									<select class="form-control" style="max-width: 100px;" ng-model="networks.conversion.filters[$index].value" ng-change="networks.conversion.apply_filters()">
 										<option value="" ng-selected="-1 == networks.conversion.get_net_attr_values($index).indexOf(networks.conversion.filters[$index].value)">--</option>
 										<option value="{{v}}" ng-repeat="v in networks.conversion.get_net_attr_values($index)">{{v}}</option>
 									</select>
@@ -187,20 +187,20 @@
 								</tr>
 								<tr ng-repeat="filter in commander.merge.filters">
 									<td class="text-align-left">
-										<select name="" id="" ng-show="!$first" ng-model="commander.merge.filters[$index].combine" ng-change="commander.merge.apply_filters()">
+										<select class="form-control" ng-show="!$first" ng-model="commander.merge.filters[$index].combine" ng-change="commander.merge.apply_filters()">
 											<option value="">--</option>
 											<option value="AND">AND</option>
 											<option value="OR">OR</option>
 										</select>
 									</td>
 									<td>
-										<select name="" id="" style="max-width: 100px;" ng-model="commander.merge.filters[$index].attribute" ng-change="commander.merge.apply_filters(); commander.merge.filters[$index].value=''">
+										<select class="form-control" style="max-width: 100px;" ng-model="commander.merge.filters[$index].attribute" ng-change="commander.merge.apply_filters(); commander.merge.filters[$index].value=''">
 											<option value="">--</option>
 											<option value="{{attr}}" ng-repeat="attr in commander.merge.group.net_attributes">{{commander.merge.extract_attr_name(attr)}}</option>
 										</select>
 									</td>
 									<td>
-										<select name="" id="" ng-model="commander.merge.filters[$index].condition" ng-change="commander.merge.apply_filters()">
+										<select class="form-control" ng-model="commander.merge.filters[$index].condition" ng-change="commander.merge.apply_filters()">
 											<option value="" ng-show="!commander.merge.filters[$index].object">--</option>
 											<option value="e" ng-show="!commander.merge.filters[$index].object">=</option>
 											<option value="ne" ng-show="!commander.merge.filters[$index].object">&#8800;</option>
@@ -212,7 +212,7 @@
 										</select>
 									</td>
 									<td>
-										<select name="" id="" style="max-width: 100px;" ng-model="commander.merge.filters[$index].value" ng-change="commander.merge.apply_filters()">
+										<select class="form-control" style="max-width: 100px;" ng-model="commander.merge.filters[$index].value" ng-change="commander.merge.apply_filters()">
 											<option value="" ng-selected="-1 == commander.merge.get_net_attr_values($index).indexOf(commander.merge.filters[$index].value)">--</option>
 											<option value="{{v}}" ng-repeat="v in commander.merge.get_net_attr_values($index)">{{v}}</option>
 										</select>
@@ -348,20 +348,20 @@
 								</tr>
 								<tr ng-repeat="filter in commander.intersect.filters">
 									<td class="text-align-left">
-										<select name="" id="" ng-show="!$first" ng-model="commander.intersect.filters[$index].combine" ng-change="commander.intersect.apply_filters()">
+										<select class="form-control" ng-show="!$first" ng-model="commander.intersect.filters[$index].combine" ng-change="commander.intersect.apply_filters()">
 											<option value="">--</option>
 											<option value="AND">AND</option>
 											<option value="OR">OR</option>
 										</select>
 									</td>
 									<td>
-										<select name="" id="" style="max-width: 100px;" ng-model="commander.intersect.filters[$index].attribute" ng-change="commander.intersect.apply_filters(); commander.intersect.filters[$index].value=''">
+										<select class="form-control" style="max-width: 100px;" ng-model="commander.intersect.filters[$index].attribute" ng-change="commander.intersect.apply_filters(); commander.intersect.filters[$index].value=''">
 											<option value="">--</option>
 											<option value="{{attr}}" ng-repeat="attr in commander.intersect.group.net_attributes">{{commander.intersect.extract_attr_name(attr)}}</option>
 										</select>
 									</td>
 									<td>
-										<select name="" id="" ng-model="commander.intersect.filters[$index].condition" ng-change="commander.intersect.apply_filters()">
+										<select class="form-control" ng-model="commander.intersect.filters[$index].condition" ng-change="commander.intersect.apply_filters()">
 											<option value="" ng-show="!commander.intersect.filters[$index].object">--</option>
 											<option value="e" ng-show="!commander.intersect.filters[$index].object">=</option>
 											<option value="ne" ng-show="!commander.intersect.filters[$index].object">&#8800;</option>
@@ -373,7 +373,7 @@
 										</select>
 									</td>
 									<td>
-										<select name="" id="" style="max-width: 100px;" ng-model="commander.intersect.filters[$index].value" ng-change="commander.intersect.apply_filters()">
+										<select class="form-control" style="max-width: 100px;" ng-model="commander.intersect.filters[$index].value" ng-change="commander.intersect.apply_filters()">
 											<option value="" ng-selected="-1 == commander.intersect.get_net_attr_values($index).indexOf(commander.intersect.filters[$index].value)">--</option>
 											<option value="{{v}}" ng-repeat="v in commander.intersect.get_net_attr_values($index)">{{v}}</option>
 										</select>
@@ -507,20 +507,20 @@
                                 </tr>
                                 <tr ng-repeat="filter in commander.subtract.filters">
                                     <td class="text-align-left">
-                                        <select name="" id="" ng-show="!$first" ng-model="commander.subtract.filters[$index].combine" ng-change="commander.subtract.apply_filters()">
+                                        <select class="form-control" ng-show="!$first" ng-model="commander.subtract.filters[$index].combine" ng-change="commander.subtract.apply_filters()">
                                             <option value="">--</option>
                                             <option value="AND">AND</option>
                                             <option value="OR">OR</option>
                                         </select>
                                     </td>
                                     <td>
-                                        <select name="" id="" style="max-width: 100px;" ng-model="commander.subtract.filters[$index].attribute" ng-change="commander.subtract.apply_filters(); commander.subtract.filters[$index].value=''">
+                                        <select class="form-control" style="max-width: 100px;" ng-model="commander.subtract.filters[$index].attribute" ng-change="commander.subtract.apply_filters(); commander.subtract.filters[$index].value=''">
                                             <option value="">--</option>
                                             <option value="{{attr}}" ng-repeat="attr in commander.subtract.group.net_attributes">{{commander.subtract.extract_attr_name(attr)}}</option>
                                         </select>
                                     </td>
                                     <td>
-                                        <select name="" id="" ng-model="commander.subtract.filters[$index].condition" ng-change="commander.subtract.apply_filters()">
+                                        <select class="form-control" ng-model="commander.subtract.filters[$index].condition" ng-change="commander.subtract.apply_filters()">
                                             <option value="" ng-show="!commander.subtract.filters[$index].object">--</option>
                                             <option value="e" ng-show="!commander.subtract.filters[$index].object">=</option>
                                             <option value="ne" ng-show="!commander.subtract.filters[$index].object">&#8800;</option>
@@ -532,7 +532,7 @@
                                         </select>
                                     </td>
                                     <td>
-                                        <select name="" id="" style="max-width: 100px;" ng-model="commander.subtract.filters[$index].value" ng-change="commander.subtract.apply_filters()">
+                                        <select class="form-control" style="max-width: 100px;" ng-model="commander.subtract.filters[$index].value" ng-change="commander.subtract.apply_filters()">
                                             <option value="" ng-selected="-1 == commander.subtract.get_net_attr_values($index).indexOf(commander.subtract.filters[$index].value)">--</option>
                                             <option value="{{v}}" ng-repeat="v in commander.subtract.get_net_attr_values($index)">{{v}}</option>
                                         </select>
@@ -653,20 +653,20 @@
 								</tr>
 								<tr ng-repeat="filter in commander.distances.filters">
 									<td class="text-align-left">
-										<select name="" id="" ng-show="!$first" ng-model="commander.distances.filters[$index].combine" ng-change="commander.distances.apply_filters()">
+										<select class="form-control" ng-show="!$first" ng-model="commander.distances.filters[$index].combine" ng-change="commander.distances.apply_filters()">
 											<option value="">--</option>
 											<option value="AND">AND</option>
 											<option value="OR">OR</option>
 										</select>
 									</td>
 									<td>
-										<select name="" id="" style="max-width: 100px;" ng-model="commander.distances.filters[$index].attribute" ng-change="commander.distances.apply_filters(); commander.distances.filters[$index].value=''">
+										<select class="form-control" style="max-width: 100px;" ng-model="commander.distances.filters[$index].attribute" ng-change="commander.distances.apply_filters(); commander.distances.filters[$index].value=''">
 											<option value="">--</option>
 											<option value="{{attr}}" ng-repeat="attr in commander.distances.group.net_attributes">{{commander.distances.extract_attr_name(attr)}}</option>
 										</select>
 									</td>
 									<td>
-										<select name="" id="" ng-model="commander.distances.filters[$index].condition" ng-change="commander.distances.apply_filters()">
+										<select class="form-control" ng-model="commander.distances.filters[$index].condition" ng-change="commander.distances.apply_filters()">
 											<option value="" ng-show="!commander.distances.filters[$index].object">--</option>
 											<option value="e" ng-show="!commander.distances.filters[$index].object">=</option>
 											<option value="ne" ng-show="!commander.distances.filters[$index].object">&#8800;</option>
@@ -678,7 +678,7 @@
 										</select>
 									</td>
 									<td>
-										<select name="" id="" style="max-width: 100px;" ng-model="commander.distances.filters[$index].value" ng-change="commander.distances.apply_filters()">
+										<select class="form-control" style="max-width: 100px;" ng-model="commander.distances.filters[$index].value" ng-change="commander.distances.apply_filters()">
 											<option value="" ng-selected="-1 == commander.distances.get_net_attr_values($index).indexOf(commander.distances.filters[$index].value)">--</option>
 											<option value="{{v}}" ng-repeat="v in commander.distances.get_net_attr_values($index)">{{v}}</option>
 										</select>
@@ -842,6 +842,8 @@
 						<select name="index" id="index" ng-model="networks.attributes.list.options.index">
 							<option value="">--</option>
 							<option value="degree">degree</option>
+							<option value="indegree">indegree</option>
+							<option value="outdegree">outdegree</option>
 							<option value="betweenness">betweenness</option>
 							<option value="closeness">closeness</option>
 						</select>
@@ -1037,7 +1039,7 @@
 
 				<br />
 
-				<div ng-click="settings.is_go_mapped(m.settings)">
+				<div ng-click="settings.is_go_mapped(m.session_id)">
 					<label for="go_status">Status: </label>
 					<span class="text-success" ng-show="settings.info.go_status">ready</span>
 					<span class="text-danger" ng-show="!settings.info.go_status">waiting</span>

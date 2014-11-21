@@ -78,6 +78,10 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 	cat('> Add attribute\n')
 	if( 'degree' == args[4] ) {
 		ind <- degree(g, V(g))
+	} else if( 'indegree' == args[4] ) {
+		ind <- degree(g, V(g), mode='in')
+	} else if( 'outdegree' == args[4] ) {
+		ind <- degree(g, V(g), mode='out')
 	} else if ( 'betweenness' == args[4] ) {
 		ind <- betweenness(g, V(g))
 	} else if ( 'closeness' == args[4] ) {

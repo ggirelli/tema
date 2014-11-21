@@ -159,15 +159,18 @@ html {
 	margin-left: 8px;
 }
 
-#interface .left-panel.graph-list-panel .filter-selection {
+#interface .left-panel .filter-selection {
 	width: 100%;
 }
 
-#interface .left-panel.operations-panel .filter-selection th,
-#interface .left-panel.operations-panel .filter-selection td,
-#interface .left-panel.graph-list-panel .filter-selection th,
-#interface .left-panel.graph-list-panel .filter-selection td {
+#interface .left-panel .filter-selection th,
+#interface .left-panel .filter-selection td {
 	text-align: center;
+}
+
+#interface .left-panel .filter-selection .form-control {
+	width: 98%;
+	margin: 2px;
 }
 
 /* operations */
