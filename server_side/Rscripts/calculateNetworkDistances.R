@@ -15,8 +15,34 @@ source('NetworkManager.class.R')
 nm <- NetworkManager()
 
 source('GraphManager.class.R')
-
 gm <- GraphManager()
+
+plot.heatmap = function(ds.matrix, d.col, file.path, main) {
+	# Plots the heatmap
+	# 
+	# Args:
+	# 	ds.matrix: the distances matrix
+	# 	d.col: the label of the distance column
+	# 	file.path: for output in svg format
+	# 	main: the heatmap main title
+
+	d.matrix <- matrix(NA, ncol=length(net.list), nrow=length(net.list))
+	colnames(d.matrix) <- net.list
+	rownames(d.matrix) <- net.list
+	for (k in 1:nrow(ds.matrix)) {
+		i <- which(net.list == ds.matrix[k,1])
+		j <- which(net.list == ds.matrix[k,2])
+		d.matrix[i,j] <- as.numeric(ds.matrix[, which(colnames(ds.matrix) == d.col)][k])
+		d.matrix[i,i] <- 0
+		d.matrix[j,i] <- as.numeric(ds.matrix[, which(colnames(ds.matrix) == d.col)][k])
+		d.matrix[j,j] <- 0
+	}
+
+	svg(file.path)
+	rownames(d.matrix) <- colnames(d.matrix)
+	heatmap.plus::heatmap.plus(d.matrix, na.rm=F, symm=T, main=main, Rowv=NA, Colv=NA, margins=c(5,5))
+	dev.off()
+}
 
 # Start
 if(file.exists(paste0('../session/', args[1], '/'))) {
@@ -43,7 +69,7 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 			e.attr.table <- graph.list$edges
 
 			# VERTICES #
-
+			
 			# Get attributes for vertex identity
 			v.identity.list <- c()
 			for (attr in names(l$n_identity)) {
@@ -54,14 +80,14 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 			
 			# Expand with missing attributes
 			v.attr.table <- nm$expand.attr.table(v.attr.table, l$node_attr_list)
-
+			
 			# Add vertex identity column
 			v.attr.table <- nm$add.collapsed.col(v.attr.table,
 				v.identity.list, 'tea_identity', '~')
 			
 			# Sort v.attr.table columns
 			v.attr.table <- nm$sort.table.cols(v.attr.table)
-
+			
 			# EDGES #
 
 			# Add extremities
@@ -96,7 +122,7 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 				net.list <- append(net.list, network)
 			}
 		}
-		
+
 		distances <- c()
 		done.list <- c()
 		for (i in 1:length(v.attr.table.list)) {
@@ -137,42 +163,14 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 					
 					single.row <- c(net.list[i], net.list[j])
 
-					# JACCARD DISTANCE #
-					
 					e.common <- length(intersect(
 						nm$get.col(e.attr.table.one, 'tea_identity'),
 						nm$get.col(e.attr.table.two, 'tea_identity')
 					))
 
-					if ( l$dist$j ) {
-
-						e.total <- length(unique(union(
-							nm$get.col(e.attr.table.one, 'tea_identity'),
-							nm$get.col(e.attr.table.two, 'tea_identity')
-						)))
-
-						# Calc distance
-						dJ <- 1 - (e.common / e.total)
-						single.row <- append(single.row, dJ)
-
-					}
-
-					# JACCARD SUBSET DISTANCE #
-					
-					if ( l$dist$js ) {
-
-						e.total.sub <- min(nm$count.rows(e.attr.table.one),
-							nm$count.rows(e.attr.table.two))
-
-						# Calc distance
-						dJs <- 1 - (e.common / e.total.sub)
-						single.row <- append(single.row, dJs)
-
-					}
-
 					# IPSEN MIKHAILOV #
 					
-					if ( l$dist$im ) {
+					if ( l$dist$im || l$dist$him || l$dist$jim || l$dist$jsim ) {
 
 						# Build i-graph
 						g.one <- nm$attr.tables.to.graph(v.attr.table, e.attr.table.one)
@@ -182,9 +180,85 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 
 						# Calc distance
 						dIM <- gm$calcIpsenDist(g.one, g.two)
-						single.row <- append(single.row, dIM)
+						if ( l$dist$im ) single.row <- append(single.row, dIM)
 
 					}
+
+					# HAMMING DISTANCE #
+					
+					if ( l$dist$h || l$dist$him ) {
+
+						v.count <- nm$count.rows(v.attr.table)
+						e.total.h <- v.count * (v.count - 1)
+
+						# Calc distance
+						dH <- 1 - (e.common / e.total.h)
+						if ( l$dist$h ) single.row <- append(single.row, dH)
+
+					}
+
+					# HIM DISTANCE #
+					
+					if ( l$dist$him ) {
+
+						xi <- 1
+						dHIM <- (1/sqrt(1+xi)) * sqrt(dH**2 + xi * dIM**2)
+						single.row <- append(single.row, dHIM)
+
+					}
+
+					# JACCARD DISTANCE #
+
+					if ( l$dist$j || l$dist$jim ) {
+
+						e.total <- length(unique(union(
+							nm$get.col(e.attr.table.one, 'tea_identity'),
+							nm$get.col(e.attr.table.two, 'tea_identity')
+						)))
+
+						# Calc distance
+						dJ <- 1 - (e.common / e.total)
+						if ( l$dist$j ) single.row <- append(single.row, dJ)
+
+					}
+
+
+					# JIM DISTANCE #
+					
+					if ( l$dist$jim ) {
+
+						xi <- 1
+						dJIM <- (1/sqrt(1+xi)) * sqrt(dJ**2 + xi * dIM**2)
+						single.row <- append(single.row, dJIM)
+
+					}
+
+					# JACCARD SUBSET DISTANCE #
+					
+					if ( l$dist$js || l$dist$jsim ) {
+
+						e.total.sub <- min(nm$count.rows(e.attr.table.one),
+							nm$count.rows(e.attr.table.two))
+
+						# Calc distance
+						dJs <- 1 - (e.common / e.total.sub)
+						if ( l$dist$js ) single.row <- append(single.row, dJs)
+
+					}
+
+
+					# JSIM DISTANCE #
+					
+					if ( l$dist$jsim ) {
+
+						xi <- 1
+						dJsIM <- (1/sqrt(1+xi)) * sqrt(dJs**2 + xi * dIM**2)
+						single.row <- append(single.row, dJsIM)
+
+					}
+
+					# ASSEMBLE #
+
 					distances <- rbind(distances, single.row)
 
 					# END FOR network #
@@ -194,74 +268,27 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 		}
 
 		colnames <- c('g.one', 'g.two')
-		if ( l$dist$j ) colnames <- append(colnames, 'dJ')
-		if ( l$dist$js ) colnames <- append(colnames, 'dJs')
 		if ( l$dist$im ) colnames <- append(colnames, 'dIM')
+		if ( l$dist$h ) colnames <- append(colnames, 'dH')
+		if ( l$dist$him ) colnames <- append(colnames, 'dHIM')
+		if ( l$dist$j ) colnames <- append(colnames, 'dJ')
+		if ( l$dist$jim ) colnames <- append(colnames, 'dJIM')
+		if ( l$dist$js ) colnames <- append(colnames, 'dJs')
+		if ( l$dist$jsim ) colnames <- append(colnames, 'dJsIM')
 		distances <- nm$add.col.names(distances, colnames)
-		
-		time_token <- as.numeric(Sys.time())
-		if ( l$out_table ) {
-			write.table(distances, paste0('output_directory/', round(time_token), '_dist_table.dat'),
-				quote=F, row.names=F, sep='\t')
-		}
-		
+
+		time_token <- round(as.numeric(Sys.time()))
+		write.table(distances, paste0('output_directory/', time_token, '_dist_table.dat'), quote=F, row.names=F, sep='\t')
+
 		if ( l$out_plot ) {
 			row.names(distances) <-NULL
-			distances <- as.data.frame(distances, stringsAsFactors=F)
-			if ( l$dist$j ) {
-				dJ.matrix <- matrix(NA, ncol=length(net.list), nrow=length(net.list))
-				colnames(dJ.matrix) <- net.list
-				rownames(dJ.matrix) <- net.list
-				for (k in 1:nrow(distances)) {
-					i <- which(net.list == distances[k,1])
-					j <- which(net.list == distances[k,2])
-					dJ.matrix[i,j] <- as.numeric(distances$dJ[k])
-					dJ.matrix[i,i] <- 0
-					dJ.matrix[j,i] <- as.numeric(distances$dJ[k])
-					dJ.matrix[j,j] <- 0
-				}
-				
-				svg(paste0('output_directory/', round(time_token), '_j_heatmap.svg'))
-				rownames(dJ.matrix) <- colnames(dJ.matrix)
-				heatmap.plus::heatmap.plus(dJ.matrix, na.rm=F, symm=T, main='Jaccard', Rowv=NA, Colv=NA, margins=c(5,5))
-				dev.off()
-			}
-			if ( l$dist$js ) {
-				dJs.matrix <- matrix(NA, ncol=length(net.list), nrow=length(net.list))
-				colnames(dJs.matrix) <- net.list
-				rownames(dJs.matrix) <- net.list
-				for (k in 1:nrow(distances)) {
-					i <- which(net.list == distances[k,1])
-					j <- which(net.list == distances[k,2])
-					dJs.matrix[i,j] <- as.numeric(distances$dJs[k])
-					dJs.matrix[i,i] <- 0
-					dJs.matrix[j,i] <- as.numeric(distances$dJs[k])
-					dJs.matrix[j,j] <- 0
-				}
-				
-				svg(paste0('output_directory/', round(time_token), '_js_heatmap.svg'))
-				rownames(dJs.matrix) <- colnames(dJs.matrix)
-				heatmap.plus::heatmap.plus(dJs.matrix, na.rm=F, symm=T, main='Jaccard subset', Rowv=NA, Colv=NA, margins=c(5,5))
-				dev.off()
-			}
-			if ( l$dist$im ) {
-				dIM.matrix <- matrix(NA, ncol=length(net.list), nrow=length(net.list))
-				colnames(dIM.matrix) <- net.list
-				rownames(dIM.matrix) <- net.list
-				for (k in 1:nrow(distances)) {
-					i <- which(net.list == distances[k,1])
-					j <- which(net.list == distances[k,2])
-					dIM.matrix[i,j] <- as.numeric(distances$dIM[k])
-					dIM.matrix[i,i] <- 0
-					dIM.matrix[j,i] <- as.numeric(distances$dIM[k])
-					dIM.matrix[j,j] <- 0
-				}
-
-				svg(paste0('output_directory/', round(time_token), '_im_heatmap.svg'))
-				rownames(dIM.matrix) <- colnames(dIM.matrix)
-				heatmap.plus::heatmap.plus(dIM.matrix, na.rm=F, symm=T, main='Ipsen Mikhailov', Rowv=NA, Colv=NA, margins=c(5,5))
-				dev.off()
-			}
+			if ( l$dist$im ) plot.heatmap(distances, 'dIM', paste0('output_directory/', time_token, '_im_heatmap.svg'), 'Ipsen Mikhailov')
+			if ( l$dist$h ) plot.heatmap(distances, 'dH', paste0('output_directory/', time_token, '_h_heatmap.svg'), 'Hamming')
+			if ( l$dist$him ) plot.heatmap(distances, 'dHIM', paste0('output_directory/', time_token, '_him_heatmap.svg'), 'HIM')
+			if ( l$dist$j ) plot.heatmap(distances, 'dJ', paste0('output_directory/', time_token, '_j_heatmap.svg'), 'Jaccard')
+			if ( l$dist$jim ) plot.heatmap(distances, 'dJIM', paste0('output_directory/', time_token, '_jim_heatmap.svg'), 'JIM')
+			if ( l$dist$js ) plot.heatmap(distances, 'dJs', paste0('output_directory/', time_token, '_js_heatmap.svg'), 'Jaccard subset')
+			if ( l$dist$jsim ) plot.heatmap(distances, 'dJsIM', paste0('output_directory/', time_token, '_jsim_heatmap.svg'), 'JsIM')
 		}
 		cat(time_token)
 	}

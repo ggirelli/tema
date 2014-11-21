@@ -720,6 +720,14 @@
 				<div class="distances-page-3" ng-show="commander.distances.is_page(3)">
 					<h4>Select the distances:</h4>
 
+					<label for="dist-hamming" class="alert alert-info" style="width: 100%;">
+						<input id="dist-hamming" name="dist-hamming" type="checkbox" ng-model="commander.distances.measures['h']" />
+						Hamming
+					</label>
+					<label for="dist-hamming-im" class="alert alert-info" style="width: 100%;">
+						<input id="dist-hamming-im" name="dist-hamming-im" type="checkbox" ng-model="commander.distances.measures['him']" />
+						HIM
+					</label>
 					<label for="dist-IM" class="alert alert-info" style="width: 100%;">
 						<input id="dist-IM" name="dist-IM" type="checkbox" ng-model="commander.distances.measures['im']" />
 						Ipsen-Mikhailov
@@ -728,9 +736,17 @@
 						<input id="dist-jaccard" name="dist-jaccard" type="checkbox" ng-model="commander.distances.measures['j']" />
 						Jaccard
 					</label>
+					<label for="dist-jaccard-im" class="alert alert-info" style="width: 100%;">
+						<input id="dist-jaccard-im" name="dist-jaccard-im" type="checkbox" ng-model="commander.distances.measures['jim']" />
+						JIM
+					</label>
 					<label for="dist-jaccard-subset" class="alert alert-info" style="width: 100%;">
 						<input id="dist-jaccard-subset" name="dist-jaccard-subset" type="checkbox" ng-model="commander.distances.measures['js']" />
 						Jaccard subset
+					</label>
+					<label for="dist-jaccard-subset-im" class="alert alert-info" style="width: 100%;">
+						<input id="dist-jaccard-subset-im" name="dist-jaccard-subset-im" type="checkbox" ng-model="commander.distances.measures['jsim']" />
+						JsIM
 					</label>
 					
 					<br />

@@ -518,7 +518,6 @@ NetworkManager <- function() {
 
 			# END #
 			return(g)
-
 		},
 
 		get.vertex.attributes = function (v, graph) {
@@ -603,6 +602,7 @@ NetworkManager <- function() {
 				
 				# Non-empty table
 				for (attr in attr.list) {
+					if ( is.null(attr) ) next
 					if ( !attr %in% colnames(table) ) {
 						table <- cbind(table,NA)
 						colnames(table)[ncol(table)] <- attr
@@ -613,6 +613,7 @@ NetworkManager <- function() {
 				
 				# Single-row table
 				for (attr in attr.list) {
+					if ( is.null(attr) ) next
 					if ( !attr %in% names(table) ) {
 						table <- append(table,NA)
 						names(table)[length(table)] <- attr
