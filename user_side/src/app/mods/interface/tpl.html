@@ -1104,7 +1104,16 @@
 
 					<div ng-show="inspector.is_inspecting('edge')">
 						<div ng-repeat="(k,v) in inspector.inspecting.edge">
-							<b>{{k}}</b>: {{v}}
+							<div ng-if="networks.attributes.isObject(v)">
+								<b>{{k}}</b>:
+								<ul ng-if="!networks.attributes.isArray(v)">
+									<li ng-repeat="(a, b) in v"><b>{{a}}</b>: {{b}}</li>
+								</ul>
+								<ul ng-if="networks.attributes.isArray(v)">
+									<li ng-repeat="a in v">{{a}}</li>
+								</ul>
+							</div>
+							<span ng-if="!networks.attributes.isObject(v)"><b>{{k}}</b>: {{v}}</span>
 						</div>
 					</div>
 
