@@ -1088,7 +1088,7 @@
 					</div>
 
 					<div ng-show="inspector.is_inspecting('node')">
-						<div ng-repeat="(k,v) in inspector.inspecting.node">
+						<p><div ng-repeat="(k,v) in inspector.inspecting.node">
 							<div ng-if="networks.attributes.isObject(v)">
 								<b>{{k}}</b>:
 								<ul ng-if="!networks.attributes.isArray(v)">
@@ -1099,11 +1099,11 @@
 								</ul>
 							</div>
 							<span ng-if="!networks.attributes.isObject(v)"><b>{{k}}</b>: {{v}}</span>
-						</div>
+						</div></p>
 					</div>
 
 					<div ng-show="inspector.is_inspecting('edge')">
-						<div ng-repeat="(k,v) in inspector.inspecting.edge">
+						<p><div ng-repeat="(k,v) in inspector.inspecting.edge">
 							<div ng-if="networks.attributes.isObject(v)">
 								<b>{{k}}</b>:
 								<ul ng-if="!networks.attributes.isArray(v)">
@@ -1114,7 +1114,7 @@
 								</ul>
 							</div>
 							<span ng-if="!networks.attributes.isObject(v)"><b>{{k}}</b>: {{v}}</span>
-						</div>
+						</div></p>
 					</div>
 
 				</div>
