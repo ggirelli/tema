@@ -830,8 +830,6 @@
 						attribute.
 					</h4>
 					<p ng-show="-1 != ['manual', 'index', 'go'].indexOf(networks.attributes.list.options.input)">
-						<label for="attr_id_name">GO ID attribute name: </label>
-						<input class="form-control" type="text" id="attr_id_name" name="attr_id_name" ng-model="networks.attributes.list.options.id_name" />
 						<label for="attr_name">GO attribute name: </label>
 						<input class="form-control" type="text" id="attr_name" name="attr_name" ng-model="networks.attributes.list.options.name" />
 					</p>
@@ -1091,8 +1089,16 @@
 
 					<div ng-show="inspector.is_inspecting('node')">
 						<div ng-repeat="(k,v) in inspector.inspecting.node">
-							<ul ng-show="'object' == typeof(v)">a</ul>
-							<b>{{k}}</b>: {{v}}
+							<div ng-if="networks.attributes.isObject(v)">
+								<b>{{k}}</b>:
+								<ul ng-if="!networks.attributes.isArray(v)">
+									<li ng-repeat="(a, b) in v"><b>{{a}}</b>: {{b}}</li>
+								</ul>
+								<ul ng-if="networks.attributes.isArray(v)">
+									<li ng-repeat="a in v">{{a}}</li>
+								</ul>
+							</div>
+							<span ng-if="!networks.attributes.isObject(v)"><b>{{k}}</b>: {{v}}</span>
 						</div>
 					</div>
 

@@ -30,7 +30,7 @@ if ( $s->exists($data->id) ) {
 	} else {
 
 		// Default GO mgmt
-		$q = 'cd ' . SCRIPATH . '; ./addGOattributeToNetwork.R ' . $s->get('id') . ' ' . $data->name . ' default ' . $data->attr_name . ' ' . $data->attr_id_name . ' ' . $data->attr_hugo;
+		$q = 'cd ' . SCRIPATH . '; ./addGOattributeToNetwork.R ' . $s->get('id') . ' ' . $data->name . ' default ' . $data->attr_name . ' ' . $data->attr_hugo;
 		$r = $s->exec_return('convert', $q);
 
 	}

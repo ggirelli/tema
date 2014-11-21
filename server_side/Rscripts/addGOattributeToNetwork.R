@@ -4,7 +4,7 @@ options(echo=TRUE)
 args <- commandArgs(trailingOnly = TRUE)
 
 # Check parameters
-if(length(args) != 6) stop('./addGOattributueToNetwork.R session_id graph_name go_mgmt_type attr_name attr_id_name attr_hugo')
+if(length(args) != 5) stop('./addGOattributueToNetwork.R session_id graph_name go_mgmt_type attr_name attr_hugo')
 
 # Load requirements
 library(igraph)
@@ -33,8 +33,7 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 		g <- nm$attr.tables.to.graph(attr.tables$nodes, attr.tables$edges)
 		eval(parse(text=paste0('V(g)$', args[4], ' <- NA')))
 		for (i in 1:vcount(g)) {
-			eval(parse(text=paste0('V(g)[i]$', args[5], ' <- goa.list[V(g)[i]$', args[6], ']')))
-			eval(parse(text=paste0('V(g)[i]$', args[4], ' <- go.list[V(g)[i]$', args[6], ']')))
+			eval(parse(text=paste0('V(g)[i]$', args[4], ' <- go.list[V(g)[i]$', args[5], ']')))
 		}
 		graph.list <- nm$graph.to.list(g)
 		write(toJSON(graph.list), paste0(args[2], '.json'))
