@@ -6,7 +6,7 @@
         return function (q, http, rootScope, convertGroup, networkAttribute) {
             var self = this;
 
-            self.list = null;
+            self.list = [];
             self.attributes = networkAttribute;
 
             /**
@@ -39,11 +39,12 @@
              */
             self.reload_list = function (session_id) {
                 self.get_list(session_id).then(function (data) {
+                    console.log(data);
                     if (0 != data['err'] ) {
                         document.location.hash = '#/';
                     } else {
                         if ( 0 == data.list.length ) {
-                            self.list = null;
+                            self.list = [];
                         } else {
                             self.list = data.list;
                             rootScope.$broadcast('trigger_apply_sif');

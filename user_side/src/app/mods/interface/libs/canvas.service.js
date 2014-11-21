@@ -55,6 +55,8 @@
                             'text-outline-width': '1'
                         })
                         .selector('edge').css({
+                            'line-color': '#656565',
+                            'target-arrow-color': '#656565',
                             'target-arrow-shape': 'triangle'
                         })
                         .selector(':selected').css({

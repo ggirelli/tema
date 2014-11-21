@@ -117,6 +117,48 @@
                             }
                         }
 
+                    } else if ( 'go' == self.list.options.input ) {
+
+                        // Check attr_name
+                        var checked = true;
+                        var attr_list = Object.keys(cy.json().elements.nodes[0].data);
+                        for (var i = attr_list.length - 1; i >= 0; i--) {
+                            if ( self.list.options.name == attr_list[i] ) {
+                                checked = false;
+                            }
+                        }
+
+                        if ( !checked ) {
+                            self.list.options.errMsg.push('The provided GO attribute name is already in use.');
+                        }
+                        if ( null == self.list.options.name || '' == self.list.options.name ) {
+                            checked = false;
+                            self.list.options.errMsg.push('Please, provide a name for the GO attribute.');
+                        }
+
+                        // Check attr_id_name
+                        var checked = true;
+                        var attr_list = Object.keys(cy.json().elements.nodes[0].data);
+                        for (var i = attr_list.length - 1; i >= 0; i--) {
+                            if ( self.list.options.id_name == attr_list[i] ) {
+                                checked = false;
+                            }
+                        }
+
+                        if ( !checked ) {
+                            self.list.options.errMsg.push('The provided GO ID attribute name is already in use.');
+                        }
+                        if ( null == self.list.options.id_name || '' == self.list.options.id_name ) {
+                            checked = false;
+                            self.list.options.errMsg.push('Please, provide a name for the GO ID attribute.');
+                        }
+
+                        // Check selection of HUGO-containing attr
+                        if ( checked ) {
+                            if ( undefined == self.list.options.hugo ) {
+                                self.list.options.errMsg.push('Please, select the attribute containing the HUGO names.')
+                            }
+                        }
                     } else {
                         self.list.options.errMsg.push('Please, select an input manner.');
                     }
@@ -224,6 +266,30 @@
 
                             }).
                                 success(function (data) {
+                                    if ( 0 == data['err'] ) {
+                                        cy.load(data['net']);
+                                        self.do_attr(null);
+                                    }
+                                    qwait.resolve(data);
+                                });
+                        } else if ( 'go' == self.list.options.input ) {
+                            http({
+
+                                method: 'POST',
+                                data: {
+                                    action: 'add_go_attr',
+                                    id: session_id,
+                                    name: 'json_tmp_net',
+                                    network: JSON.stringify(cy.json().elements),
+                                    attr_name: self.list.options.name,
+                                    attr_id_name: self.list.options.id_name,
+                                    attr_hugo: self.list.options.hugo
+                                },
+                                url: 's/'
+
+                            }).
+                                success(function (data) {
+                                    //console.log(data);
                                     if ( 0 == data['err'] ) {
                                         cy.load(data['net']);
                                         self.do_attr(null);

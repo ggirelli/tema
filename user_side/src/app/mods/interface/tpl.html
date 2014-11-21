@@ -804,16 +804,19 @@
 							<option value="">--</option>
 							<option value="manual">manually</option>
 							<option value="index">index as</option>
+							<option value="go">GO as</option>
 						</select> new 
 						<select name="attr_type" id="attr_type" ng-model="networks.attributes.list.options.type">
 							<option value="" ng-show="'manual' == networks.attributes.list.options.input">--</option>
 							<option value="edges" ng-show="'manual' == networks.attributes.list.options.input">edge</option>
-							<option value="nodes" ng-show="-1 != ['manual', 'index'].indexOf(networks.attributes.list.options.input)" ng-selected="'index' == networks.attributes.list.options.input">node</option>
+							<option value="nodes" ng-show="-1 != ['manual', 'index', 'go'].indexOf(networks.attributes.list.options.input)" ng-selected="-1 != ['index', 'go'].indexOf(networks.attributes.list.options.input)">node</option>
 						</select>
 						attribute.
 					</h4>
-					<p ng-show="-1 != ['manual', 'index'].indexOf(networks.attributes.list.options.input)">
-						<label for="attr_name">Attribute name: </label>
+					<p ng-show="-1 != ['manual', 'index', 'go'].indexOf(networks.attributes.list.options.input)">
+						<label for="attr_id_name">GO ID attribute name: </label>
+						<input class="form-control" type="text" id="attr_id_name" name="attr_id_name" ng-model="networks.attributes.list.options.id_name" />
+						<label for="attr_name">GO attribute name: </label>
 						<input class="form-control" type="text" id="attr_name" name="attr_name" ng-model="networks.attributes.list.options.name" />
 					</p>
 					<p ng-show="'manual' == networks.attributes.list.options.input">
@@ -827,6 +830,13 @@
 							<option value="degree">degree</option>
 							<option value="betweenness">betweenness</option>
 							<option value="closeness">closeness</option>
+						</select>
+					</p>
+					<p ng-show="'go' == networks.attributes.list.options.input">
+						<label for="hugo-containing-attr">Select the attribute containing the HUGO names.</label>
+						<select name="hugo-containing-attr" class="form-control" id="hugo-containing-attr" ng-model="networks.attributes.list.options.hugo">
+							<option value="">--</option>
+							<option value="{{attr}}" ng-repeat="attr in canvas.get_attributes('nodes')">{{attr}}</option>
 						</select>
 					</p>
 
@@ -1065,6 +1075,7 @@
 
 					<div ng-show="inspector.is_inspecting('node')">
 						<div ng-repeat="(k,v) in inspector.inspecting.node">
+							<ul ng-show="'object' == typeof(v)">a</ul>
 							<b>{{k}}</b>: {{v}}
 						</div>
 					</div>

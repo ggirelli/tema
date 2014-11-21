@@ -19,14 +19,13 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 
 	cat('> Read JSON file\n')
 	s <- scan(paste0(args[2], '.json'), 'raw')
+	print(as.character(s))
 	l <- fromJSON(s)
 
-	# From list to attr.tables
-	attr.tables <- nm$graph.list.to.attr.tables(l)
-
 	cat('> Convert to GraphML\n')
-	g <- nm$attr.tables.to.graph(attr.tables$nodes, attr.tables$edges)
+	g <- nm$graph.list.to.graph(l)
 	write.graph(g, paste0(args[2], '.graphml'), format='graphml')
+	write.graph(g, paste0(args[2], '.gml'), format='gml')
 
 	cat('> Write DAT file\n')
 	l <- list(e_attributes=list.edge.attributes(g), e_count=ecount(g), v_attributes=list.vertex.attributes(g), v_count=vcount(g))

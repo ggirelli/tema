@@ -444,6 +444,83 @@ NetworkManager <- function() {
 			return(list(nodes=v.attr.table, edges=e.attr.table))
 		},
 
+		graph.list.to.graph = function (graph.list) {
+			# ***STILL WORKING ON THIS ONE***
+			# To be used when a graph.list contains list attributes
+			# 
+			# Args:
+			# 	graph.list
+			# 
+			# Returns:
+			# 	graph
+
+			g <- graph.empty()
+			
+			if ( !is.null(graph.list$nodes) ) {
+
+				for (node in graph.list$nodes) {
+					v <- vertex()
+					for (attr in names(node$data)) {
+						if ( 'list' == class(node$data[attr]) ) {
+							eval(parse(text=paste0('v$', attr, ' <- as.character(node$data[attr])')))
+						} else {
+							eval(parse(text=paste0('v$', attr, ' <- node$data[attr]')))
+						}
+					}
+					g <- g + v
+				}
+
+				for (edge in graph.list$edges) {
+					e <- edge(V(g)[id == edge$data$source], V(g)[id == edge$data$target])
+					for (attr in names(edge$data)[which(!names(edge$data) %in% c('source','target'))]) {
+						if ( 'list' == class(edge$data[attr]) ) {
+							eval(parse(text=paste0('e$', attr, ' <- as.character(edge$data[attr])')))
+						} else {
+							eval(parse(text=paste0('e$', attr, ' <- edge$data[attr]')))
+						}
+					}
+					g <- g + e
+				}
+
+			} else {
+
+				for (el in graph.list) {
+
+					if ( 'nodes' == el$group ) {
+						node <- el
+						v <- vertex()
+						for (attr in names(node$data)) {
+							if ( 'list' == class(node$data[attr]) ) {
+								eval(parse(text=paste0('v$', attr, ' <- as.character(node$data[attr])')))
+							} else {
+								eval(parse(text=paste0('v$', attr, ' <- node$data[attr]')))
+							}
+						}
+						g <- g + v
+					}
+
+					if ( 'edges' == el$group ) {
+						edge <- el
+						e <- edge(V(g)[id == edge$data$source], V(g)[id == edge$data$target])
+						for (attr in names(edge$data)[which(!names(edge$data) %in% c('source','target'))]) {
+							if ( 'list' == class(edge$data[attr]) ) {
+								eval(parse(text=paste0('e$', attr, ' <- as.character(edge$data[attr])')))
+							} else {
+								eval(parse(text=paste0('e$', attr, ' <- edge$data[attr]')))
+							}
+						}
+						g <- g + e
+					}
+
+				}
+
+			}
+
+			# END #
+			return(g)
+
+		},
+
 		get.vertex.attributes = function (v, graph) {
 			# Retrieves the (attribute,value) couples of a given vertex
 			# 
