@@ -18,8 +18,9 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 	setwd(paste0('../session/', args[1], '/'))
 
 	cat('> Read JSON file\n')
-	s <- scan(paste0(args[2], '.json'), 'raw')
+	s <- read.delim(paste0(args[2], '.json'))
 	print(as.character(s))
+	write(s, 'aaaaaa.txt')
 	l <- fromJSON(s)
 
 	cat('> Convert to GraphML\n')
