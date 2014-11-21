@@ -18,15 +18,12 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 	setwd(paste0('../session/', args[1], '/'))
 
 	cat('> Read JSON file\n')
-	s <- read.delim(paste0(args[2], '.json'))
-	print(as.character(s))
-	write(s, 'aaaaaa.txt')
+	s <- read.delim(paste0(args[2], '.json'), header = F, as.is=T, quote = "")[1,1]
 	l <- fromJSON(s)
 
 	cat('> Convert to GraphML\n')
 	g <- nm$graph.list.to.graph(l)
 	write.graph(g, paste0(args[2], '.graphml'), format='graphml')
-	write.graph(g, paste0(args[2], '.gml'), format='gml')
 
 	cat('> Write DAT file\n')
 	l <- list(e_attributes=list.edge.attributes(g), e_count=ecount(g), v_attributes=list.vertex.attributes(g), v_count=vcount(g))
