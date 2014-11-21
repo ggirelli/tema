@@ -15,7 +15,7 @@ wd <- paste0('../session/', args[1], '/settings')
 if(file.exists(wd)) {
 	setwd(wd)
 
-	sif <- read.table('sif.dat', header=T)
+	sif <- read.delim('sif.dat', as.is=T, header=T)
 	for (i in 1:ncol(sif)) {
 		colnames(sif)[i] <- gsub("[.]", "_", colnames(sif)[i])
 	}
