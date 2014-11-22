@@ -41,7 +41,12 @@
                 if ( 0 == network.status ) {
                     scope.networks.convert(network, scope.m.session_id);
                 } else {
-                    scope.canvas.load(network, scope.m.session_id)
+
+                    if ( network.data.v_count <= scope.settings.info.node_thr ) {
+                        scope.canvas.load(network, scope.m.session_id, scope.settings);
+                    } else {
+                        alert('need to choose!');
+                    }
                 }
             }
 

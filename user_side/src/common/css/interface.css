@@ -423,3 +423,18 @@ html {
 	left: 60px;
 	top: 0;
 }
+
+#interface #canvas #loaded-network-spy {
+	position: fixed;
+	top: 0;
+	right: 0;
+
+	margin: 0;
+	padding: 0.5em;
+
+	background-color: rgba(240,240,240,.8);
+	border-bottom-left-radius: 0.5em;
+	color: #000000;
+
+	z-index: 2;
+}

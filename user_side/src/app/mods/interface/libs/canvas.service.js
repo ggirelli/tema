@@ -112,7 +112,10 @@
              * @param  {Object} network    from networks.list
              * @param  {string} session_id
              */
-            self.load = function (network, session_id) {
+            self.load = function (network, session_id, settings) {
+
+                console.log(settings.info.node_thr)
+
                 var qwait = q.defer();
 
                 http({

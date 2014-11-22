@@ -6,6 +6,10 @@
         return function (q, http, rootScope) {
             var self = this;
 
+            /**
+             * Default settings values
+             * @type {Object}
+             */
             self.info = {
                 sif: undefined,
                 sif_keys: [],
