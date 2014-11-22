@@ -936,9 +936,63 @@
 		</div>
 
 		<div class='left-panel select-panel panel panel-success' ng-show='panels.show.select'>
-			<div class="panel-heading">Select</div>
+			<div class="panel-heading">Select node/edges</div>
 			<div class="panel-body">
-				...
+				Select <select name="" id="">
+					<option value="">--</option>
+					<option value="n">nodes</option>
+					<option value="e">edges</option>
+				</select> 
+
+				<div class="panel panel-success">
+					<div class="panel-success panel-heading">
+						Filter
+						<a href="#/interface/{{m.session_id}}" class="btn-panel float-right" ng-click="commander.merge.add_filter()" title="Add new"><span class="text-success glyphicon glyphicon-plus"></span></a>
+					</div>
+					<div class="panel-body">
+						<table class="filter-selection">
+							<tr>
+								<td></td>
+								<th>Attribute</th>
+								<th>Condition</th>
+								<th>Value</th>
+							</tr>
+							<tr ng-repeat="filter in commander.merge.filters">
+								<td class="text-align-left">
+									<select class="form-control" ng-show="!$first" ng-model="commander.merge.filters[$index].combine" ng-change="commander.merge.apply_filters()">
+										<option value="">--</option>
+										<option value="AND">AND</option>
+										<option value="OR">OR</option>
+									</select>
+								</td>
+								<td>
+									<select class="form-control" style="max-width: 100px;" ng-model="commander.merge.filters[$index].attribute" ng-change="commander.merge.apply_filters(); commander.merge.filters[$index].value=''">
+										<option value="">--</option>
+										<option value="{{attr}}" ng-repeat="attr in commander.merge.group.net_attributes">{{commander.merge.extract_attr_name(attr)}}</option>
+									</select>
+								</td>
+								<td>
+									<select class="form-control" ng-model="commander.merge.filters[$index].condition" ng-change="commander.merge.apply_filters()">
+										<option value="" ng-show="!commander.merge.filters[$index].object">--</option>
+										<option value="e" ng-show="!commander.merge.filters[$index].object">=</option>
+										<option value="ne" ng-show="!commander.merge.filters[$index].object">&#8800;</option>
+										<option value="lt" ng-show="!commander.merge.filters[$index].object">&lt;</option>
+										<option value="le" ng-show="!commander.merge.filters[$index].object">&le;</option>
+										<option value="gt" ng-show="!commander.merge.filters[$index].object">&gt;</option>
+										<option value="ge" ng-show="!commander.merge.filters[$index].object">&ge;</option>
+										<option value="c" ng-selected="commander.merge.filters[$index].object" ng-show="commander.merge.filters[$index].object">contains</option>
+									</select>
+								</td>
+								<td>
+									<select class="form-control" style="max-width: 100px;" ng-model="commander.merge.filters[$index].value" ng-change="commander.merge.apply_filters()">
+										<option value="" ng-selected="-1 == commander.merge.get_net_attr_values($index).indexOf(commander.merge.filters[$index].value)">--</option>
+										<option value="{{v}}" ng-repeat="v in commander.merge.get_net_attr_values($index)">{{v}}</option>
+									</select>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
 			</div>
 		</div>
 
@@ -1009,33 +1063,42 @@
 				<h4>Gene Ontologies</h4>
 
 				<!-- GO files -->
-				<div>
-					<label for="goa-input">GO basic: </label>
-					<button class="btn btn-default btn-block" ng-click="settings.upload_goa(m.session_id)" ng-if="!settings.is_go_ready('a')">Upload GOA</button>
-					<div ng-if="settings.is_go_ready('a')">
-						<span class="text-success">GOA loaded.</span>
-						<button class="btn btn-default btn-block" ng-click="settings.upload_goa(m.session_id)">Change GOA</button>
-					</div>
-					<input type="file" id="goa-input" name="goa-input" class='hidden-file-input' />
-				</div>
 
-				<br />
-
-				<div>
-					<label for="gob-input">GO annotations: </label>
-					<button class="btn btn-default btn-block" ng-click="settings.upload_gob(m.session_id)" ng-if="!settings.is_go_ready('b')">Upload GOB</button>
-					<div ng-if="settings.is_go_ready('b')">
-						<span class="text-success">GOB loaded.</span>
-						<button class="btn btn-default btn-block" ng-click="settings.upload_gob(m.session_id)">Change GOB</button>
-					</div>
-					<input type="file" id="gob-input" name="gob-input" class='hidden-file-input' />
-				</div>
-
-				<div ng-if="settings.is_go_ready()">
-					<br />
-
-					<button class="btn btn-block btn-primary" ng-click="settings.apply_go_mapper(m.session_id)">map GOs</button>
-				</div>
+				<table class="go-table">
+					<tr>
+						<th><label for="goa-input">GO annotations: </label></th>
+						<th><label for="gob-input">GO basic: </label></th>
+					</tr>
+					<tr>
+						<td>
+							<div ng-if="!settings.is_go_ready('a')">
+								<div class="alert alert-warning" style="margin-bottom: 2px;">default</div>
+								<button class="btn btn-primary btn-block" ng-click="settings.upload_goa(m.session_id)">Upload GOA</button>
+							</div>
+							<div ng-if="settings.is_go_ready('a')">
+								<div class="alert alert-success" style="margin-bottom: 2px;">GOA loaded.</div>
+								<button class="btn btn-warning btn-block" ng-click="settings.upload_goa(m.session_id)">Change GOA</button>
+							</div>
+							<input type="file" id="goa-input" name="goa-input" class='hidden-file-input' />
+						</td>
+						<td>
+							<div ng-if="!settings.is_go_ready('b')">
+								<div class="alert alert-warning" style="margin-bottom: 2px;">default</div>
+								<button class="btn btn-primary btn-block" ng-click="settings.upload_gob(m.session_id)">Upload GOB</button>
+							</div>
+							<div ng-if="settings.is_go_ready('b')">
+								<div class="alert alert-success" style="margin-bottom: 2px;">GOB loaded.</div>
+								<button class="btn btn-warning btn-block" ng-click="settings.upload_gob(m.session_id)">Change GOB</button>
+							</div>
+							<input type="file" id="gob-input" name="gob-input" class='hidden-file-input' />
+						</td>
+					</tr>
+					<tr ng-if="settings.is_go_ready()">
+						<td colspan="2">
+							<button class="btn btn-block btn-primary" ng-click="settings.apply_go_mapper(m.session_id)">map GOs</button>
+						</td>
+					</tr>
+				</table>
 
 				<br />
 

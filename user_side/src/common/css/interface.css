@@ -285,6 +285,23 @@ html {
 	margin-top: 4px;
 }
 
+#interface .left-panel.settings-panel .go-table {
+	width: 100%;
+}
+
+#interface .left-panel.settings-panel .go-table td,
+#interface .left-panel.settings-panel .go-table th {
+	text-align: center;
+}
+
+#interface .left-panel.settings-panel .go-table td {
+	padding: 3px;
+}
+
+#interface .left-panel.settings-panel .go-table .btn {
+	font-variant: small-caps;
+}
+
 /* BOTTOM BAR */
 
 #interface #bottom-bar {
