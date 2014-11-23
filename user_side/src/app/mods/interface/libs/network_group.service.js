@@ -179,6 +179,7 @@
 
                 if ( self.group.filter ) {
                     self.group.net_attr_values = self.get_net_attrs_values(self.list);
+                    console.log(self.group.net_attr_values);
                     self.group.net_attributes = Object.keys(self.group.net_attr_values);
                     self.filters.push({
                         combine: null,
@@ -222,7 +223,6 @@
                             } else {
                                 if ( -1 == o[k].indexOf(net[k]) ) {
                                     o[k].push(net[k]);
-                                } else {
                                 }
                             }
                         } else {

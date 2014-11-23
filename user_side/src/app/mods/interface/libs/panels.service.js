@@ -12,11 +12,12 @@
              */
             self.show = {
         		graph_list: false,
-        		operations: false,
                 attributes: false,
+        		operations: false,
+                filter: false,
+                navigate: false,
         		layout: false,
         		style: false,
-        		select: false,
         		settings: false
         	};
 

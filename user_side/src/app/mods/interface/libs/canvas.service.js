@@ -3,10 +3,8 @@
 
     define([], function () {
 
-        return function (q, http, rootScope) {
+        return function (q, http, rootScope, filters) {
             var self = this;
-
-            self.current_network = {};
 
             /**
              * Default network
@@ -25,6 +23,16 @@
                 ]
             };
 
+            self.current_data = {
+                name: 'default'
+            };
+            self.current = self.elements;
+            self.visualized = true;
+            self.visualization = self.elements;
+            self.filtered = undefined;
+
+            self.filters = filters;
+
             /**
              * Initialize cytoscape and load the default network
              */
@@ -33,9 +41,6 @@
                 window.cy = cytoscape({
                     container: document.getElementById('canvas'),
                     maxZoom: 5,
-                    hideEdgesOnViewport: true,
-                    hideLabelsOnViewport: true,
-                    textureOnViewport: true,
                     layout: {
                         name: 'grid',
                         fit: true,
@@ -112,9 +117,7 @@
              * @param  {Object} network    from networks.list
              * @param  {string} session_id
              */
-            self.load = function (network, session_id, settings) {
-
-                console.log(settings.info.node_thr)
+            self.load = function (network, session_id) {
 
                 var qwait = q.defer();
 
@@ -131,7 +134,11 @@
                 }).
                     success(function (data) {
                         if ( 0 == data['err'] ) {
-                            self.current_network = network;
+                            self.current_data = network;
+                            self.current = data.network;
+                            self.filtered = undefined;
+                            self.visualized = true;
+                            self.visualization = data.network;
                             cy.load(data.network);
                         } else {
                             console.log(data);
@@ -140,6 +147,51 @@
                     });
 
                 return qwait.promise;
+            };
+
+            /**
+             * Preloads a network in the service
+             * @param  {Object} network    from networks.list
+             * @param  {string} session_id
+             */
+            self.preload = function (network, session_id) {
+
+                var qwait = q.defer();
+
+                http({
+
+                    method: 'POST',
+                    data: {
+                        action: 'get_network',
+                        id: session_id,
+                        network_id: network.id
+                    },
+                    url: 's/'
+
+                }).
+                    success(function (data) {
+                        if ( 0 == data['err'] ) {
+                            self.current_data = network;
+                            self.current = data.network;
+                            self.filtered = undefined;
+                            self.visualized = false;
+                            self.visualization = data.network;
+                            cy.remove('*');
+                        } else {
+                            console.log(data);
+                        }
+                        qwait.resolve(data);
+                    });
+
+                return qwait.promise;
+            };
+
+            /**
+             * Loades preloaded network in the canvas
+             */
+            self.postload = function () {
+                cy.load(self.visualization);
+                self.visualize = true;
             };
 
             /**
@@ -162,7 +214,15 @@
              * @return {Boolean}      if the network is loaded
              */
             self.isLoaded = function (network_name) {
-                return self.current_network.name == network_name;
+                return self.current_data.name == network_name && self.visualized;
+            };
+
+            /**
+             * @param  {String}  network_name
+             * @return {Boolean}      if the network is preloaded
+             */
+            self.isPreloaded = function (network_name) {
+                return self.current_data.name == network_name && !self.visualized;
             };
 
             /**
@@ -222,12 +282,182 @@
              */
             self.get_attributes = function (what) {
                 if ( -1 != ['edges', 'nodes'].indexOf(what) ) {
-                    if ( -1 != Object.keys(cy.json().elements).indexOf(what) ) {
-                        return Object.keys(cy.json().elements[what][0].data);
+                    if ( -1 != Object.keys(self.current).indexOf(what) ) {
+                        if ( 0 != self.current[what].length ) {
+                            return Object.keys(self.current[what][0].data);
+                        }
                     }
                 }
                 return null;
-            }
+            };
+
+            self.mask = function () {
+                if ( undefined == self.filtered ) {
+                    self.filtered = {
+                        nodes: [],
+                        edges: []
+                    };
+                }
+                if ( self.visualized ) {
+                    for (var i = self.filters.selection.edges.length - 1; i >= 0; i--) {
+                        var edge_id = self.filters.selection.edges[i];
+
+                        if ( 1 == cy.elements('edge[id="' + edge_id + '"]').length ) {
+                            // Retrieve from canvas
+                            var edge = cy.elements('edge[id="' + edge_id + '"]')[0]._private.data;
+                            // Remove from canvas
+                            cy.remove('edge[id="' + edge_id + '"]');
+                            // Add to filtered
+                            self.filtered.edges.push(edge);
+                            // Update self.visualization
+                            self.visualization = cy.json().elements;
+                        }
+                    }
+
+                    for (var i = self.filters.selection.nodes.length - 1; i >= 0; i--) {
+                        var node_id = self.filters.selection.nodes[i];
+
+                        if ( 1 == cy.elements('node[id="' + node_id + '"]').length ) {
+                            // Retrieve from canvas
+                            var node = cy.elements('node[id="' + node_id + '"]')[0]._private.data;
+                            // Remove from canvas
+                            cy.remove('node[id="' + node_id + '"]');
+                            // Add to filtered
+                            self.filtered.nodes.push(node);
+                            // Update self.visualization
+                            self.visualization = cy.json().elements;
+                        }
+                    }
+                } else {
+                    for (var i = self.filters.selection.edges.length - 1; i >= 0; i--) {
+                        var edge_id = self.filters.selection.edges[i];
+
+                        for (var j = self.visualization.edges.length - 1; j >= 0; j--) {
+                            // Retrieve from self.visualization
+                            var edge = self.visualization.edges[j];
+
+                            if ( edge_id == edge.data.id ) {
+                                // Add to filtered
+                                self.filtered.edges.push(edge);
+                                // Remove from self.visualization
+                                self.visualization.edges.splice(j, 1);
+                            }
+                        }
+                    }
+
+                    for (var i = self.filters.selection.nodes.length - 1; i >= 0; i--) {
+                        var node_id = self.filters.selection.nodes[i];
+
+                        for (var j = self.visualization.nodes.length - 1; j >= 0; j--) {
+                            // Retrieve from self.visualization
+                            var node = self.visualization.nodes[j];
+
+                            if ( node_id == node.data.id ) {
+                                // Add to filtered
+                                self.filtered.nodes.push(node);
+                                // Remove from self.visualization
+                                self.visualization.nodes.splice(j, 1);
+                            }
+                        }
+                    }
+                }
+                if ( 0 == self.filtered.nodes.length && 0 == self.filtered.edges.length ) {
+                    self.filtered = undefined;
+                }
+                if ( undefined == self.visualization ) {
+                    self.filtered = {
+                        nodes: [],
+                        edges: []
+                    }
+                } else {
+                    if ( undefined == self.nodes ) self.nodes = [];
+                    if ( undefined == self.edges ) self.edges = [];
+                }
+            };
+
+            self.unmask = function () {
+                if ( undefined == self.filtered ) return;
+                if ( self.visualized ) {
+                    for (var i = self.filters.selection.nodes.length - 1; i >= 0; i--) {
+                        var node_id = self.filters.selection.nodes[i];
+
+                        for (var j = self.filtered.nodes.length - 1; j >= 0; j--) {
+                            var node = self.filtered.nodes[j];
+                            console.log(node);
+                            if ( node_id == node.id ) {
+                                // Remove from filtered
+                                self.filtered.nodes.splice(j, 1);
+                                // Add to visualization
+                                self.visualization.nodes.push(node);
+                                // Add to canvas
+                                cy.add({group:'nodes', data:node});
+                            }
+                        }
+                    }
+
+                    for (var i = self.filters.selection.edges.length - 1; i >= 0; i--) {
+                        var edge_id = self.filters.selection.edges[i];
+
+                        for (var j = self.filtered.edges.length - 1; j >= 0; j--) {
+                            var edge = self.filtered.edges[j];
+                            console.log(edge);
+                            if ( edge_id == edge.id ) {
+                                // Remove from filtered
+                                self.filtered.edges.splice(j, 1);
+                                // Add to visualization
+                                self.visualization.edges.push(edge);
+                                // Add to canvas
+                                cy.add({group:'edges', data:edge});
+                            }
+                        }
+                    }
+
+
+                    if ( 0 == self.filtered.nodes.length && 0 == self.filtered.edges.length ) {
+                        self.filtered = undefined;
+                    }
+                } else {
+                    for (var i = self.filters.selection.edges.length - 1; i >= 0; i--) {
+                        var edge_id = self.filters.selection.edges[i];
+
+                        for (var j = self.filtered.edges.length - 1; j >= 0; j--) {
+                            var edge = self.filtered.edges[j];
+
+                            if ( edge_id == edge.data.id ) {
+                                // Add to visualization
+                                self.visualization.edges.push(edge);
+                                // Remove from self.filtered
+                                self.filtered.edges.splice(j, 1);
+                            }
+                        }
+                    }
+
+                    for (var i = self.filters.selection.nodes.length - 1; i >= 0; i--) {
+                        var node_id = self.filters.selection.nodes[i];
+
+                        for (var j = self.filtered.nodes.length - 1; j >= 0; j--) {
+                            var node = self.filtered.nodes[j];
+
+                            if ( node_id == node.data.id ) {
+                                // Add to visualization
+                                self.visualization.nodes.push(node);
+                                // Remove from self.filtered
+                                self.filtered.nodes.splice(j, 1);
+                            }
+                        }
+                    }
+
+                    if ( 0 == self.filtered.nodes.length && 0 == self.filtered.edges.length ) {
+                        self.filtered = undefined;
+                    }
+                }
+            };
+
+            // GENERAL
+            
+            self.reset_ui = function () {
+                self.filters.reset_service();
+            };
 
         };
 

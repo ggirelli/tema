@@ -42,10 +42,14 @@
                     scope.networks.convert(network, scope.m.session_id);
                 } else {
 
-                    if ( network.data.v_count <= scope.settings.info.node_thr ) {
-                        scope.canvas.load(network, scope.m.session_id, scope.settings);
+                    if ( network.name == scope.canvas.current_data.name ) {
+                        scope.canvas.postload();
                     } else {
-                        alert('need to choose!');
+                        if ( network.data.v_count <= scope.settings.info.node_thr ) {
+                            scope.canvas.load(network, scope.m.session_id);
+                        } else {
+                            scope.canvas.preload(network, scope.m.session_id);
+                        }
                     }
                 }
             }
@@ -141,6 +145,7 @@
             scope.$on('reset-panels', function (e) {
                 scope.networks.reset_ui();
                 scope.commander.reset_ui();
+                scope.canvas.reset_ui();
             });
 
             /**

@@ -39,6 +39,8 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 		graph.list$nodes <- nm$add.prefix.to.col(graph.list$nodes, 'id', 'n')
 		graph.list$edges <- nm$convert.extremities.to.v.id.based.on.table(graph.list$edges,
 			graph.list$nodes, 'name')
+		graph.list$edges <- nm$update.row.ids(graph.list$edges)
+		graph.list$edges <- nm$add.prefix.to.col(graph.list$edges, 'id', 'e')
 		write(toJSON(nm$attr.tables.to.list(graph.list$nodes, graph.list$edges)),
 			paste0(args[2], '.json'))
 
