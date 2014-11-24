@@ -297,7 +297,7 @@ NetworkManager <- function() {
 					col.id <- which(col == names(v.attr.table))
 					l[col] <- v.attr.table[col.id]
 				}
-				graph.list$nodes <- list(data=l)
+				graph.list$nodes <- list(data=l, position=list(x=as.numeric(l['x']),y=as.numeric(l['y'])))
 
 			} else if ( 0 != v.count ) {
 
@@ -308,7 +308,8 @@ NetworkManager <- function() {
 						col.id <- which(col == colnames(v.attr.table))
 						l[col] <- v.attr.table[x, col.id]
 					}
-					return(list(data=l))
+					print(l)
+					return(list(data=l, position=list(x=as.numeric(l['x']),y=as.numeric(l['y']))))
 				}, v.attr.table=v.attr.table)
 
 			}

@@ -12,9 +12,9 @@
              */
             self.elements = {
                 nodes: [
-                    { data: { id: "n1", name: "Welcome" } },
-                    { data: { id: "n2", name: "to" } },
-                    { data: { id: "n3", name: "TEA" } }
+                    { data: { id: "n1", name: "Welcome" }, position: {x: -100, y: -50} },
+                    { data: { id: "n2", name: "to" }, position: {x: 100, y: 0} },
+                    { data: { id: "n3", name: "TEA" }, position: {x: -50, y: 100} }
                 ],
                 edges: [
                     { data: { id: "e1", source: "n1", target: "n2" } },
@@ -42,9 +42,7 @@
                     container: document.getElementById('canvas'),
                     maxZoom: 5,
                     layout: {
-                        name: 'grid',
-                        fit: true,
-                        padding: 5
+                        name: 'preset'
                     },
                     style: cytoscape.stylesheet()
                         .selector('node').css({
@@ -107,7 +105,7 @@
                             }
                         });
 
-                        cy.load(self.elements, undefined);
+                        cy.load(self.elements, undefined, undefined);
                     },
                 });
             };
@@ -230,7 +228,7 @@
              * @param  {string} session_id
              * @param  {Object} networks   network list
              */
-            self.save = function (session_id, networks) {
+            self.save = function (session_id, networks, layout) {
                 var new_name = prompt('Insert the name for the new network:');
                 var network;
 
@@ -263,6 +261,7 @@
                                 action: 'save_network',
                                 id: session_id,
                                 network: network,
+                                layout: layout,
                                 name: new_name
                             },
                             url: 's/'
@@ -291,6 +290,9 @@
                 return null;
             };
 
+            /**
+             * Masks nodes/edges selected by the filters
+             */
             self.mask = function () {
                 if ( undefined == self.filtered ) {
                     self.filtered = {
@@ -373,8 +375,19 @@
                     if ( undefined == self.nodes ) self.nodes = [];
                     if ( undefined == self.edges ) self.edges = [];
                 }
+
+                if ( 'v' == self.filters.token ) {
+                    self.filters.load(self.visualization);
+                } else if ( 'f' == self.filters.token ) {
+                    self.filters.load(self.filtered);
+                }
+                self.filters.get_attributes();
             };
 
+
+            /**
+             * Unmasks nodes/edges selected by the filters
+             */
             self.unmask = function () {
                 if ( undefined == self.filtered ) return;
                 if ( undefined == self.visualization.nodes ) self.visualization.nodes = [];
@@ -392,7 +405,7 @@
                                 // Add to visualization
                                 self.visualization.nodes.push(node);
                                 // Add to canvas
-                                cy.add({group:'nodes', data:node.data, position:{x:0, y:0}});
+                                cy.add({group:'nodes', data:node.data, position:node.position});
                             }
                         }
                     }
@@ -470,6 +483,13 @@
                         self.filtered = undefined;
                     }
                 }
+
+                if ( 'v' == self.filters.token ) {
+                    self.filters.load(self.visualization);
+                } else if ( 'f' == self.filters.token ) {
+                    self.filters.load(self.filtered);
+                }
+                self.filters.get_attributes();
             };
 
             // GENERAL

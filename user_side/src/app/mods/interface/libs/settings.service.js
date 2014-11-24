@@ -14,6 +14,7 @@
                 sif: undefined,
                 sif_keys: [],
                 sif_sample_col: null,
+                default_layout: 'grid',
                 node_thr: 1000,
                 goa: false,
                 gob: false,
@@ -315,6 +316,7 @@
                     success(function (data) {
                         self.info.sif_sample_col = data['sif_sample_col'];
                         self.info.node_thr = parseInt(data['node_thr']);
+                        self.info.default_layout = data['default_layout'];
 
                         qwait.resolve(data);
                     });

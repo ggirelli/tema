@@ -62,6 +62,12 @@ class TEAsession extends TEAdb {
 	private $node_thr;
 
 	/**
+	 * Default layout
+	 * @var String
+	 */
+	private $default_layout;
+
+	/**
 	 * List of networks with conversion status
 	 * @var stdClass
 	 */
@@ -73,7 +79,8 @@ class TEAsession extends TEAdb {
 	 */
 	private $settings_labels = array(
 		'sif_sample_col',
-		'node_thr'
+		'node_thr',
+		'default_layout'
 	);
 
 	/**
@@ -322,7 +329,6 @@ class TEAsession extends TEAdb {
 			$this->last_query = $q['last_query'];
 			$this->last_query_when = $q['last_query_when'];
 			$this->current_net = $q['current_net'];
-			$this->node_thr = $q['node_thr'];
 
 			$this->list_networks();
 			$this->read_settings();
@@ -340,8 +346,7 @@ class TEAsession extends TEAdb {
 			"running='" . $this->running . "', " .
 			"last_query='" . $this->last_query . "', " .
 			"last_query_when='" . $this->last_query_when . "', " .
-			"current_net='" . $this->current_net . "', " .
-			"node_thr='" . $this->node_thr . "' " .
+			"current_net='" . $this->current_net . "' " .
 			"WHERE seed='" . $this->id . "'";
 
 		parent::query($sql);
@@ -429,6 +434,11 @@ class TEAsession extends TEAdb {
 		// node_thr
 		$sql = "INSERT INTO sessions_settings (seed, setting_key, setting_value) " .
 				"VALUES ( '" . $id . "', 'node_thr', '1000' )";
+		$q = $this->query($sql);
+
+		// node_thr
+		$sql = "INSERT INTO sessions_settings (seed, setting_key, setting_value) " .
+				"VALUES ( '" . $id . "', 'default_layout', 'grid' )";
 		$q = $this->query($sql);
 	}
 

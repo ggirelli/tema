@@ -23,7 +23,7 @@ if ( $s->exists($data->id) ) {
 
 	if ( 0 == $network_status ) {
 		// Convert the network
-		$q = 'cd ' . SCRIPATH . '; ./convertToJSON.R ' . $s->get('id') . ' ' . $network_name;
+		$q = 'cd ' . SCRIPATH . '; ./convertToJSON.R ' . $s->get('id') . ' ' . $network_name . ' ' . $data->layout;
 		$r = $s->exec_return('convert', $q);
 		
 		// Update network status

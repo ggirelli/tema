@@ -24,7 +24,9 @@ if ( $s->exists($data->id) ) {
 	file_put_contents($f, $data->network);
 
 	// Convert the network
-	$q = 'cd ' . SCRIPATH . '; ./convertToGraphML.R ' . $s->get('id') . ' ' . $data->name;
+	$q = 'cd ' . SCRIPATH . '; ./convertToGraphML.R ' . $s->get('id') . ' ' . $data->name . ' ' . $data->layout;
+	$r = $s->exec_return('convert', $q);
+	$q = 'cd ' . SCRIPATH . '; ./convertToJSON.R ' . $s->get('id') . ' ' . $data->name . ' ' . $data->layout;
 	$r = $s->exec_return('convert', $q);
 
 	// Answer call

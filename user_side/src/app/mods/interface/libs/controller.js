@@ -39,7 +39,7 @@
              */
             scope.networks.init_file = function (network) {
                 if ( 0 == network.status ) {
-                    scope.networks.convert(network, scope.m.session_id);
+                    scope.networks.convert(network, scope.m.session_id, scope.settings.info.default_layout);
                 } else {
 
                     if ( network.name == scope.canvas.current_data.name ) {

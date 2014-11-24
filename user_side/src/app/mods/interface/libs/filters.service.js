@@ -43,6 +43,10 @@
              * @param  {Object} network {nodes:[...], edges:[...]}
              */
             self.load = function (network) {
+                if ( undefined == network ) {
+                    self.reset_service();
+                    return;
+                }
                 self.network = network;
                 self.reset_attributes();
             };
@@ -115,6 +119,7 @@
              */
             self.get_attributes = function () {
                 if ( undefined == self.network ) return;
+                console.log(1);
                 
                 // Get node attributes
                 for (var i = self.network.nodes.length - 1; i >= 0; i--) {
@@ -159,6 +164,8 @@
 
                     }
                 }
+
+                console.log(self.attributes);
             };
 
             //--------//

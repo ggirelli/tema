@@ -4,7 +4,7 @@ options(echo=TRUE)
 args <- commandArgs(trailingOnly = TRUE)
 
 # Check parameters
-if(length(args) != 2) stop('./convertToJSON.R session_id graph_name')
+if(length(args) != 3) stop('./convertToJSON.R session_id graph_name layout')
 
 # Load requirements
 library(igraph)
@@ -23,6 +23,13 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 
 	cat('> Convert to GraphML\n')
 	g <- nm$graph.list.to.graph(l)
+	if ( 'grid' == args[3]) {
+		coords <- layout.grid(g)*1000
+	} else if ( 'circle' == args[3] ) {
+		coords <- layout.circle(g)*1000
+	}
+	V(g)$x <- round(coords[,1], 0)
+	V(g)$y <- round(coords[,2], 0)
 	write.graph(g, paste0(args[2], '.graphml'), format='graphml')
 
 	cat('> Write DAT file\n')

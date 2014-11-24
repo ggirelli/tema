@@ -18,7 +18,7 @@ if ( $s->exists($data->id) ) {
 	$settings = $s->get('settings');
 
 	// Answer call
-	die('{"err":0, "sif_sample_col":"' . $settings['sif_sample_col'] . '", "node_thr":"' . $settings['node_thr'] . '"}');
+	die('{"err":0, "sif_sample_col":"' . $settings['sif_sample_col'] . '", "node_thr":"' . $settings['node_thr'] . '", "default_layout":"' . $settings['default_layout'] . '"}');
 
 } else {
 	die('{"err":3}');

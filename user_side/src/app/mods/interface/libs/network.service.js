@@ -58,7 +58,7 @@
              * @param {int} id network id
              * @param {String} session_id
              */
-            self.convert = function (network, session_id) {
+            self.convert = function (network, session_id, layout) {
                 if ( 0 == network.status ) {
                     var qwait = q.defer();
 
@@ -68,7 +68,8 @@
                         data: {
                             action: 'convert_network',
                             id: session_id,
-                            network_id: network.id
+                            network_id: network.id,
+                            layout: layout
                         },
                         url: 's/'
 
@@ -249,7 +250,7 @@
              * @param  {string} session_id
              * @param  {string} network_id
              */
-            self.overwrite = function (session_id, network_id) {
+            self.overwrite = function (session_id, network_id, layout) {
                 var qwait = q.defer();
                 var network;
 
@@ -268,6 +269,7 @@
                         action: 'save_network',
                         id: session_id,
                         network: network,
+                        layout: layout,
                         name: self.list[network_id].name
                     },
                     url: 's/'
@@ -313,7 +315,7 @@
             /**
              * Begins the conversion of multiple networks
              */
-            self.start_converting_group = function () {
+            self.start_converting_group = function (layout) {
                 var toConvert = [];
 
                 var ks = Object.keys(self.conversion.group.networks);
@@ -329,20 +331,20 @@
                     }
                 }
 
-                self.convert_group(toConvert);
+                self.convert_group(toConvert, layout);
             };
 
             /**
              * Iteratively converts a list of networks
              * @param  {array} networks array of networks to convert
              */
-            self.convert_group = function (networks) {
+            self.convert_group = function (networks, layout) {
                 var net = networks.pop();
-                self.convert(net, self.conversion.group.id).then(function (data) {
+                self.convert(net, self.conversion.group.id, layout).then(function (data) {
                     if ( 0 == networks.length ) {
                         self.conversion.toggle(networks);
                     } else {
-                        self.convert_group(networks);
+                        self.convert_group(networks, layout);
                     }
                 });
             };
