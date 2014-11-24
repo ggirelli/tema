@@ -338,13 +338,13 @@
                             } else if ( 'ne' == filter.condition ) {
                                 tmpRes = ( '' + k != '' + v );
                             } else if ( 'lt' == filter.condition ) {
-                                tmpRes = ( parseInt(k) < parseInt(v) );
+                                tmpRes = ( parseFloat(k) < parseFloat(v) );
                             } else if ( 'le' == filter.condition ) {
-                                tmpRes = ( parseInt(k) <= parseInt(v) );
+                                tmpRes = ( parseFloat(k) <= parseFloat(v) );
                             } else if ( 'gt' == filter.condition ) {
-                                tmpRes = ( parseInt(k) > parseInt(v) );
+                                tmpRes = ( parseFloat(k) > parseFloat(v) );
                             } else if ( 'ge' == filter.condition ) {
-                                tmpRes = ( parseInt(k) >= parseInt(v) );
+                                tmpRes = ( parseFloat(k) >= parseFloat(v) );
                             } else if ( 'c' == filter.condition ) {
                                 tmpRes = ( -1 != k.indexOf(v) );
                             }

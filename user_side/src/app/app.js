@@ -4,7 +4,7 @@
     var def_requirements = ['angular',
         './libs/model', './libs/controller', './libs/route_config',
         './mods/homepage/libs/controller', './mods/interface/libs/controller',
-        './mods/interface/libs/filters.service',
+        './mods/interface/libs/filters.service', './mods/interface/libs/navigate.service',
         './mods/interface/libs/network.service',
         './mods/interface/libs/network_attribute.service', './mods/interface/libs/network_group.service',
         './mods/interface/libs/inspector.service', './mods/interface/libs/panels.service',
@@ -17,7 +17,7 @@
     define(def_requirements,
         function (angular, model, controller, routeConfig,
             homepageController, interfaceController,
-            filterService,
+            filterService, navigateService,
             networkService,
             networkAttributeService, networkGroupService,
             inspectorService, panelsService,
@@ -42,8 +42,10 @@
             service('containsGroupService', [networkGroupService]).
             service('distancesGroupService', [networkGroupService]).
             service('filterService', [filterService]).
+            service('navigateFilterService', [filterService]).
+            service('navigateService', ['$q', '$http', 'navigateFilterService', navigateService]).
 
-            service('canvasService', ['$q', '$http', '$rootScope', 'filterService', canvasService]).
+            service('canvasService', ['$q', '$http', '$rootScope', 'filterService', 'navigateService', canvasService]).
             service('commanderService', ['$q', '$http', '$timeout', '$rootScope',
                 'mergeGroupService', 'intersectGroupService', 'subtractGroupService', 'containsGroupService', 'distancesGroupService', commanderService]).
             service('inspectorService', [inspectorService]).

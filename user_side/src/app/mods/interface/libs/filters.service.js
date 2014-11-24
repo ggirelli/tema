@@ -119,7 +119,6 @@
              */
             self.get_attributes = function () {
                 if ( undefined == self.network ) return;
-                console.log(1);
                 
                 // Get node attributes
                 for (var i = self.network.nodes.length - 1; i >= 0; i--) {
@@ -164,8 +163,6 @@
 
                     }
                 }
-
-                console.log(self.attributes);
             };
 
             //--------//
@@ -247,7 +244,7 @@
                         var node = self.network.nodes[i].data;
                         
                         var res = false;
-                        for (var j = self.list.nodes.length - 1; j >= 0; j--) {
+                        for (var j = 0; j < self.list.nodes.length; j++) {
                             var filter = self.list.nodes[j];
 
                             var k = node[filter.attribute];
@@ -259,13 +256,13 @@
                             } else if ( 'ne' == filter.condition ) {
                                 tmpRes = ( '' + k != '' + v );
                             } else if ( 'lt' == filter.condition ) {
-                                tmpRes = ( parseInt(k) < parseInt(v) );
+                                tmpRes = ( parseFloat(k) < parseFloat(v) );
                             } else if ( 'le' == filter.condition ) {
-                                tmpRes = ( parseInt(k) <= parseInt(v) );
+                                tmpRes = ( parseFloat(k) <= parseFloat(v) );
                             } else if ( 'gt' == filter.condition ) {
-                                tmpRes = ( parseInt(k) > parseInt(v) );
+                                tmpRes = ( parseFloat(k) > parseFloat(v) );
                             } else if ( 'ge' == filter.condition ) {
-                                tmpRes = ( parseInt(k) >= parseInt(v) );
+                                tmpRes = ( parseFloat(k) >= parseFloat(v) );
                             } else if ( 'c' == filter.condition ) {
                                 tmpRes = ( -1 != k.indexOf(v) );
                             }
@@ -289,7 +286,7 @@
                         var edge = self.network.edges[i].data;
 
                         var res = false;
-                        for (var j = self.list.edges.length - 1; j >= 0; j--) {
+                        for (var j = 0; j < self.list.edges.length; j++) {
                             var filter = self.list.edges[j];
 
                             var k = edge[filter.attribute];
@@ -301,13 +298,13 @@
                             } else if ( 'ne' == filter.condition ) {
                                 tmpRes = ( '' + k != '' + v );
                             } else if ( 'lt' == filter.condition ) {
-                                tmpRes = ( parseInt(k) < parseInt(v) );
+                                tmpRes = ( parseFloat(k) < parseFloat(v) );
                             } else if ( 'le' == filter.condition ) {
-                                tmpRes = ( parseInt(k) <= parseInt(v) );
+                                tmpRes = ( parseFloat(k) <= parseFloat(v) );
                             } else if ( 'gt' == filter.condition ) {
-                                tmpRes = ( parseInt(k) > parseInt(v) );
+                                tmpRes = ( parseFloat(k) > parseFloat(v) );
                             } else if ( 'ge' == filter.condition ) {
-                                tmpRes = ( parseInt(k) >= parseInt(v) );
+                                tmpRes = ( parseFloat(k) >= parseFloat(v) );
                             } else if ( 'c' == filter.condition ) {
                                 tmpRes = ( -1 != k.indexOf(v) );
                             }

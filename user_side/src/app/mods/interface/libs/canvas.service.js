@@ -3,7 +3,7 @@
 
     define([], function () {
 
-        return function (q, http, rootScope, filters) {
+        return function (q, http, rootScope, filters, navigate) {
             var self = this;
 
             /**
@@ -32,6 +32,7 @@
             self.filtered = undefined;
 
             self.filters = filters;
+            self.navi = navigate;
 
             /**
              * Initialize cytoscape and load the default network
@@ -136,7 +137,7 @@
                             self.current = data.network;
                             self.filtered = undefined;
                             self.visualized = true;
-                            self.visualization = data.network;
+                            self.visualization = $.extend(true, {}, data.network);
                             cy.load(data.network);
                         } else {
                             console.log(data);
@@ -173,7 +174,7 @@
                             self.current = data.network;
                             self.filtered = undefined;
                             self.visualized = false;
-                            self.visualization = data.network;
+                            self.visualization = $.extend(true, {}, data.network);
                             cy.remove('*');
                         } else {
                             console.log(data);
@@ -300,6 +301,7 @@
                         edges: []
                     };
                 }
+
                 if ( self.visualized ) {
                     for (var i = self.filters.selection.edges.length - 1; i >= 0; i--) {
                         var edge_id = self.filters.selection.edges[i];
@@ -405,7 +407,11 @@
                                 // Add to visualization
                                 self.visualization.nodes.push(node);
                                 // Add to canvas
-                                cy.add({group:'nodes', data:node.data, position:node.position});
+                                cy.add({
+                                    group: 'nodes',
+                                    data: node.data,
+                                    position: node.position
+                                });
                             }
                         }
                     }
@@ -424,7 +430,10 @@
                                     // Add to visualization
                                     self.visualization.edges.push(edge);
                                     // Add to canvas
-                                    cy.add({group:'edges', data:edge.data});
+                                    cy.add({
+                                        group: 'edges',
+                                        data: edge.data
+                                    });
                                 }
                             }
                         }
@@ -490,6 +499,13 @@
                     self.filters.load(self.filtered);
                 }
                 self.filters.get_attributes();
+            };
+
+            /**
+             * Navigates the network
+             * @return {[type]} [description]
+             */
+            self.navigate = function (node_id) {
             };
 
             // GENERAL
