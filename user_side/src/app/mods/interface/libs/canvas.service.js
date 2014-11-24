@@ -377,6 +377,8 @@
 
             self.unmask = function () {
                 if ( undefined == self.filtered ) return;
+                if ( undefined == self.visualization.nodes ) self.visualization.nodes = [];
+                if ( undefined == self.visualization.edges ) self.visualization.edges = [];
                 if ( self.visualized ) {
                     for (var i = self.filters.selection.nodes.length - 1; i >= 0; i--) {
                         var node_id = self.filters.selection.nodes[i];
@@ -390,7 +392,7 @@
                                 // Add to visualization
                                 self.visualization.nodes.push(node);
                                 // Add to canvas
-                                cy.add({group:'nodes', data:node});
+                                cy.add({group:'nodes', data:node, position:{x:0, y:0}});
                             }
                         }
                     }
@@ -402,12 +404,15 @@
                             var edge = self.filtered.edges[j];
                             console.log(edge);
                             if ( edge_id == edge.id ) {
-                                // Remove from filtered
-                                self.filtered.edges.splice(j, 1);
-                                // Add to visualization
-                                self.visualization.edges.push(edge);
-                                // Add to canvas
-                                cy.add({group:'edges', data:edge});
+                                // Check source/target
+                                if ( 1 == cy.elements('node[id="' + edge.source + '"]').length && 1 == cy.elements('node[id="' + edge.target + '"]').length ) {
+                                    // Remove from filtered
+                                    self.filtered.edges.splice(j, 1);
+                                    // Add to visualization
+                                    self.visualization.edges.push(edge);
+                                    // Add to canvas
+                                    cy.add({group:'edges', data:edge});
+                                }
                             }
                         }
                     }
@@ -417,21 +422,6 @@
                         self.filtered = undefined;
                     }
                 } else {
-                    for (var i = self.filters.selection.edges.length - 1; i >= 0; i--) {
-                        var edge_id = self.filters.selection.edges[i];
-
-                        for (var j = self.filtered.edges.length - 1; j >= 0; j--) {
-                            var edge = self.filtered.edges[j];
-
-                            if ( edge_id == edge.data.id ) {
-                                // Add to visualization
-                                self.visualization.edges.push(edge);
-                                // Remove from self.filtered
-                                self.filtered.edges.splice(j, 1);
-                            }
-                        }
-                    }
-
                     for (var i = self.filters.selection.nodes.length - 1; i >= 0; i--) {
                         var node_id = self.filters.selection.nodes[i];
 
@@ -443,6 +433,35 @@
                                 self.visualization.nodes.push(node);
                                 // Remove from self.filtered
                                 self.filtered.nodes.splice(j, 1);
+                            }
+                        }
+                    }
+
+                    for (var i = self.filters.selection.edges.length - 1; i >= 0; i--) {
+                        var edge_id = self.filters.selection.edges[i];
+
+                        for (var j = self.filtered.edges.length - 1; j >= 0; j--) {
+                            var edge = self.filtered.edges[j];
+
+                            if ( edge_id == edge.data.id ) {
+                                // Check source/target
+                                var source_checked = false;
+                                var target_checked = false;
+                                for (var k = self.visualization.nodes.length - 1; k >= 0; k--) {
+                                    var node = self.visualization.nodes[k];
+                                    if ( edge.data.target == node.data.id ) {
+                                        target_checked = true;
+                                    }
+                                    if ( edge.data.source == node.data.id ) {
+                                        source_checked = true;
+                                    }
+                                };
+                                if ( source_checked && target_checked ) {
+                                    // Add to visualization
+                                    self.visualization.edges.push(edge);
+                                    // Remove from self.filtered
+                                    self.filtered.edges.splice(j, 1);
+                                }
                             }
                         }
                     }

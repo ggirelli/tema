@@ -243,6 +243,12 @@ html {
 	font-size: 0.8em;
 }
 
+/* filters */
+
+#interface .left-panel.filter-panel .btn-filter {
+	margin-left: 1em;
+}
+
 /* layout */
 
 #interface .left-panel.layout-panel {

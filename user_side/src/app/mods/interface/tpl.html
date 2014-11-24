@@ -992,7 +992,8 @@
 				<div class="panel panel-success" ng-if="canvas.filters.isLoaded()">
 					<div class="panel-heading">
 						Node Filters
-						<a href="#/interface/{{m.session_id}}" class="btn-panel float-right" ng-click="canvas.filters.add('nodes')" title="Add new"><span class="text-success glyphicon glyphicon-plus"></span></a>
+						<a href="#/interface/{{m.session_id}}" class="btn-panel btn-filter float-right" ng-click="canvas.filters.remove('nodes')" title="Remove last"><span class="text-success glyphicon glyphicon-minus"></span></a>
+						<a href="#/interface/{{m.session_id}}" class="btn-panel btn-filter float-right" ng-click="canvas.filters.add('nodes')" title="Add new"><span class="text-success glyphicon glyphicon-plus"></span></a>
 					</div>
 					<div class="panel-body">
 						<table class="filter-selection">
@@ -1047,7 +1048,8 @@
 				<div class="panel panel-success" ng-if="canvas.filters.isLoaded()">
 					<div class="panel-heading">
 						Edge Filters
-						<a href="#/interface/{{m.session_id}}" class="btn-panel float-right" ng-click="canvas.filters.add('edges')" title="Add new"><span class="text-success glyphicon glyphicon-plus"></span></a>
+						<a href="#/interface/{{m.session_id}}" class="btn-panel btn-filters float-right" ng-click="canvas.filters.remove('edges')" title="Remove last"><span class="text-success glyphicon glyphicon-minus"></span></a>
+						<a href="#/interface/{{m.session_id}}" class="btn-panel btn-filters float-right" ng-click="canvas.filters.add('edges')" title="Add new"><span class="text-success glyphicon glyphicon-plus"></span></a>
 					</div>
 					<div class="panel-body">
 						<table class="filter-selection">
@@ -1117,7 +1119,6 @@
 				</div>
 
 			</div>
-
 		</div>
 
 		<div class='left-panel navigate-panel panel panel-success' ng-show='panels.show.navigate'>

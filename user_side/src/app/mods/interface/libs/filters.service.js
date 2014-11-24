@@ -211,6 +211,19 @@
             };
 
             /**
+             * Removes the index-th filter
+             * @param {String} what 'nodes' or 'edges'
+             * @param  {integer} index filter index, if no index is provided removes the last filter
+             */
+            self.remove = function (what, index) {
+                if ( -1 == ['nodes', 'edges'].indexOf(what) ) return;
+                if ( undefined == index || index > self.list[what].length || index < 0) {
+                    index = self.list[what].length - 1;
+                }
+                self.list[what].splice(index, 1);
+            };
+
+            /**
              * Selects based on the filters
              */
             self.apply = function () {
