@@ -58,7 +58,7 @@ class TEAdb extends C2MySQL {
 				"running INT NOT NULL DEFAULT 0, " .
 				"last_query VARCHAR(100), " .
 				"last_query_when INTEGER, " .
-				"current_net VARCHAR(100), " .
+				"current_net VARCHAR(100) " .
 				")";
 			
 			// Create table
