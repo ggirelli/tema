@@ -304,7 +304,7 @@
 
                         if ( 1 == cy.elements('edge[id="' + edge_id + '"]').length ) {
                             // Retrieve from canvas
-                            var edge = cy.elements('edge[id="' + edge_id + '"]')[0]._private.data;
+                            var edge = cy.elements('edge[id="' + edge_id + '"]')[0]._private;
                             // Remove from canvas
                             cy.remove('edge[id="' + edge_id + '"]');
                             // Add to filtered
@@ -319,7 +319,7 @@
 
                         if ( 1 == cy.elements('node[id="' + node_id + '"]').length ) {
                             // Retrieve from canvas
-                            var node = cy.elements('node[id="' + node_id + '"]')[0]._private.data;
+                            var node = cy.elements('node[id="' + node_id + '"]')[0]._private;
                             // Remove from canvas
                             cy.remove('node[id="' + node_id + '"]');
                             // Add to filtered
@@ -385,14 +385,14 @@
 
                         for (var j = self.filtered.nodes.length - 1; j >= 0; j--) {
                             var node = self.filtered.nodes[j];
-                            console.log(node);
-                            if ( node_id == node.id ) {
+
+                            if ( node_id == node.data.id ) {
                                 // Remove from filtered
                                 self.filtered.nodes.splice(j, 1);
                                 // Add to visualization
                                 self.visualization.nodes.push(node);
                                 // Add to canvas
-                                cy.add({group:'nodes', data:node, position:{x:0, y:0}});
+                                cy.add({group:'nodes', data:node.data, position:{x:0, y:0}});
                             }
                         }
                     }
@@ -402,16 +402,16 @@
 
                         for (var j = self.filtered.edges.length - 1; j >= 0; j--) {
                             var edge = self.filtered.edges[j];
-                            console.log(edge);
-                            if ( edge_id == edge.id ) {
+                            
+                            if ( edge_id == edge.data.id ) {
                                 // Check source/target
-                                if ( 1 == cy.elements('node[id="' + edge.source + '"]').length && 1 == cy.elements('node[id="' + edge.target + '"]').length ) {
+                                if ( 1 == cy.elements('node[id="' + edge.data.source + '"]').length && 1 == cy.elements('node[id="' + edge.data.target + '"]').length ) {
                                     // Remove from filtered
                                     self.filtered.edges.splice(j, 1);
                                     // Add to visualization
                                     self.visualization.edges.push(edge);
                                     // Add to canvas
-                                    cy.add({group:'edges', data:edge});
+                                    cy.add({group:'edges', data:edge.data});
                                 }
                             }
                         }

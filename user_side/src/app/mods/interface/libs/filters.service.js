@@ -30,6 +30,9 @@
              */
             self.init = function (network, token) {
                 if ( undefined == network ) return;
+                self.reset_selection();
+                self.reset_list();
+
                 self.set_token(token);
                 self.load(network);
                 self.get_attributes();
@@ -111,6 +114,8 @@
              * for the loaded network
              */
             self.get_attributes = function () {
+                if ( undefined == self.network ) return;
+                
                 // Get node attributes
                 for (var i = self.network.nodes.length - 1; i >= 0; i--) {
                     var node = self.network.nodes[i].data;
