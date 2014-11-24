@@ -32,7 +32,7 @@ if ( $s->exists($data->id) ) {
 		$network_data = array_values($network_list)[$data->network_id]->data;
 		$network_status = array_values($network_list)[$data->network_id]->status;
 	}
-
+	
 	// Answer call
 	echo '{"err":0, "name":"' . $network_name . '", "status": "' . $network_status . '", "data":' . $network_data . '}';
 

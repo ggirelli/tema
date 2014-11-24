@@ -21,15 +21,13 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 	if(file.exists(paste0(args[2], '.graphml'))) {
 		cat('Reading GRAPHML file.\n')
 		g <- read.graph(paste0(args[2], '.graphml'), format='graphml')
-		if ( !'x' %in% list.vertex.attributes(g) || !'y' %in% list.vertex.attributes(g) ) {
-			if ( 'grid' == args[3]) {
-				coords <- layout.grid(g)*1000
-			} else if ( 'circle' == args[3] ) {
-				coords <- layout.circle(g)*1000
-			}
-			V(g)$x <- round(coords[,1], 0)
-			V(g)$y <- round(coords[,2], 0)
+		if ( 'grid' == args[3]) {
+			coords <- layout.grid(g)*1000
+		} else if ( 'circle' == args[3] ) {
+			coords <- layout.circle(g)*1000
 		}
+		V(g)$x <- round(coords[,1], 0)
+		V(g)$y <- round(coords[,2], 0)
 		write.graph(g, paste0(args[2], '.graphml'), format='graphml')
 
 		cat('Preparing config file.\n')
