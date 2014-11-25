@@ -30,6 +30,55 @@
                     } else {
                         scope.networks.list = data.list;
                     }
+
+                    /*-------------------*/
+                    /* Initialize canvas */
+                    /*-------------------*/
+
+                    scope.canvas.init();
+
+                    /*---------------------*/
+                    /* Initialize settings */
+                    /*---------------------*/
+
+                    // Read settings
+                    scope.settings._read(scope.m.session_id);
+
+                    // Check SIF
+                    scope.settings.is_file(scope.m.session_id, 'sif').then(function (data) {
+                        if ( true === data.res ) {
+                            console.log(1);
+                            scope.settings.get_sif(scope.m.session_id).then(function (data) {
+                                if ( 0 == data['err']) {
+                                    console.log(2);
+                                    scope.settings.info.sif = data.sif;
+                                    if ( scope.settings.is_sif_ready() ) {
+                                        console.log(3);
+                                        console.log(scope.settings.info);
+                                        scope.settings.info.sif_keys = Object.keys(scope.settings.info.sif);
+                                        scope.$broadcast('apply_sif', scope.settings.info);
+                                    }
+                                }
+                            });
+                        }
+                    });
+
+                    // Check GOs
+                    scope.settings.is_file(scope.m.session_id, 'goa').then(function (data) {
+                        if ( true === data.res ) {
+                            if ( 0 == data.data.err ) {
+                                scope.settings.info.goa = true;
+                            }
+                        }
+                    });
+                    scope.settings.is_file(scope.m.session_id, 'gob').then(function (data) {
+                        if ( true === data.res ) {
+                            if ( 0 == data.data.err ) {
+                                scope.settings.info.gob = true;
+                            }
+                        }
+                    });
+                    scope.settings.is_go_mapped(scope.m.session_id);
                 }
             });
 
@@ -64,11 +113,9 @@
                 scope.networks.reload_list(session_id);
             });
 
-            /*-------------------*/
-            /* Initialize canvas */
-            /*-------------------*/
-
-            scope.canvas.init();
+            /*--------*/
+            /* Canvas */
+            /*--------*/
 
             scope.$on('load_in_canvas', function (event, network) {
                 scope.canvas.current = network;
@@ -78,53 +125,15 @@
                 cy.load(network);
             });
 
-            /*---------------------*/
-            /* Initialize settings */
-            /*---------------------*/
 
-            // Read settings
-            scope.settings._read(scope.m.session_id);
+            /*----------*/
+            /* Settings */
+            /*----------*/
 
             // React to apply_sif event
             scope.$on('apply_sif', function (e, info) {
                 scope.networks.apply_sif(info);
             });
-
-            // Check SIF
-            scope.settings.is_file(scope.m.session_id, 'sif').then(function (data) {
-                if ( true === data.res ) {
-                    console.log(1);
-                    scope.settings.get_sif(scope.m.session_id).then(function (data) {
-                        if ( 0 == data['err']) {
-                            console.log(2);
-                            scope.settings.info.sif = data.sif;
-                            if ( scope.settings.is_sif_ready() ) {
-                                console.log(3);
-                                console.log(scope.settings.info);
-                                scope.settings.info.sif_keys = Object.keys(scope.settings.info.sif);
-                                scope.$broadcast('apply_sif', scope.settings.info);
-                            }
-                        }
-                    });
-                }
-            });
-
-            // Check GOs
-            scope.settings.is_file(scope.m.session_id, 'goa').then(function (data) {
-                if ( true === data.res ) {
-                    if ( 0 == data.data.err ) {
-                        scope.settings.info.goa = true;
-                    }
-                }
-            });
-            scope.settings.is_file(scope.m.session_id, 'gob').then(function (data) {
-                if ( true === data.res ) {
-                    if ( 0 == data.data.err ) {
-                        scope.settings.info.gob = true;
-                    }
-                }
-            });
-            scope.settings.is_go_mapped(scope.m.session_id);
 
             /*-----------*/
             /* Inspector */
