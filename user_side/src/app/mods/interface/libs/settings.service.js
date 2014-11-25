@@ -56,6 +56,7 @@
 
                     }).
                         success(function (data) {
+                            console.log(data);
                             self.get_sif(session_id).then(function (data) {
                                 if ( 0 == data['err']) {
                                     self.info.sif = data.sif;

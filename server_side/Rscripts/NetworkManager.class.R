@@ -804,6 +804,16 @@ NetworkManager <- function() {
 			return(table)
 		},
 
+		rename.col = function (table, old.name, new.name) {
+
+			if ( !is.null(nrow(table)) ) {
+
+				# Non-empty table
+
+			}
+
+		},
+
 		rm.cols = function (table, col.list) {
 			# Removes columns from table if present
 			# 

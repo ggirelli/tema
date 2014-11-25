@@ -12,7 +12,7 @@ library(rjson)
 
 source('./NetworkManager.class.R')
 nm <- NetworkManager()
-print(args)
+
 # Start
 if(file.exists(paste0('../session/', args[1], '/'))) {
 	setwd(paste0('../session/', args[1], '/'))
@@ -35,8 +35,6 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 		col.id <- which(nm$get.col.names(e.attr.table) == args[4])
 		e.attr.table[, col.id] <- unlist(strsplit(args[5], ",", fixed=T))
 	}
-	print(v.attr.table)
-	print(e.attr.table)
 
 	graph.list <- nm$attr.tables.to.list(v.attr.table, e.attr.table)
 	write(toJSON(graph.list), paste0(args[2], '.json'))

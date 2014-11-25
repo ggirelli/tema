@@ -153,9 +153,9 @@
 						<!-- overwrite -->
 						<a href="#/interface/{{m.session_id}}" class="attr-action float-right" title='Overwrite' ng-click="networks.attributes.do_attr('overwrite'); networks.attributes.list.options.type='nodes'; networks.attributes.list.options.name=attr;"><span class="glyphicon glyphicon-import"></span></a>
 						<!-- remove -->
-						<a href="#/interface/{{m.session_id}}" class="attr-action float-right" title='Remove' ng-click="networks.attributes.attr_remove(m.session_id, attr, 'nodes')"><span class="glyphicon glyphicon-trash"></span></a>
+						<a href="#/interface/{{m.session_id}}" class="attr-action float-right" title='Remove' ng-click="networks.attributes.attr_remove(canvas.current, m.session_id, attr, 'nodes')"><span class="glyphicon glyphicon-trash"></span></a>
 						<!-- rename -->
-						<a href="#/interface/{{m.session_id}}" class="attr-action float-right" title='Rename' ng-click="networks.attributes.attr_rename(m.session_id, attr, 'nodes')"><span class="glyphicon glyphicon-pencil"></span></a>
+						<a href="#/interface/{{m.session_id}}" class="attr-action float-right" title='Rename' ng-click="networks.attributes.attr_rename(canvas.current, m.session_id, attr, 'nodes')"><span class="glyphicon glyphicon-pencil"></span></a>
 					</div>
 					<hr style="margin-bottom: 2em;" />
 					<h4>Edge attributes:</h4>
@@ -164,9 +164,9 @@
 						<!-- overwrite -->
 						<a href="#/interface/{{m.session_id}}" class="attr-action float-right" title='Overwrite' ng-click="networks.attributes.do_attr('overwrite'); networks.attributes.list.options.type='edges'; networks.attributes.list.options.name=attr;"><span class="glyphicon glyphicon-import"></span></a>
 						<!-- remove -->
-						<a href="#/interface/{{m.session_id}}" class="attr-action float-right" title='Remove' ng-click="networks.attributes.attr_remove(m.session_id, attr, 'edges')"><span class="glyphicon glyphicon-trash"></span></a>
+						<a href="#/interface/{{m.session_id}}" class="attr-action float-right" title='Remove' ng-click="networks.attributes.attr_remove(canvas.current, m.session_id, attr, 'edges')"><span class="glyphicon glyphicon-trash"></span></a>
 						<!-- rename -->
-						<a href="#/interface/{{m.session_id}}" class="attr-action float-right" title='Rename' ng-click="networks.attributes.attr_rename(m.session_id, attr, 'edges')"><span class="glyphicon glyphicon-pencil"></span></a>
+						<a href="#/interface/{{m.session_id}}" class="attr-action float-right" title='Rename' ng-click="networks.attributes.attr_rename(canvas.current, m.session_id, attr, 'edges')"><span class="glyphicon glyphicon-pencil"></span></a>
 					</div>
 					<hr />
 				</div>
@@ -263,7 +263,7 @@
 
 					<p class="alert alert-danger" ng-repeat="msg in networks.attributes.list.options.errMsg">{{msg}}</p>
 
-					<button class="btn abort-btn btn-success" ng-click="networks.attributes.attr_apply(m.session_id, 'combine')">apply</button> <button class="btn abort-btn btn-danger" ng-click="networks.attributes.do_attr(null)">abort</button>
+					<button class="btn abort-btn btn-success" ng-click="networks.attributes.attr_apply(canvas.current, m.session_id, 'combine')">apply</button> <button class="btn abort-btn btn-danger" ng-click="networks.attributes.do_attr(null)">abort</button>
 				</div>
 				<!-- overwrite -->
 				<div ng-show="networks.attributes.is_attr_doing('overwrite')">
@@ -291,7 +291,7 @@
 
 					<p class="alert alert-danger" ng-repeat="msg in networks.attributes.list.options.errMsg">{{msg}}</p>
 
-					<button class="btn abort-btn btn-success" ng-click="networks.attributes.attr_apply(m.session_id, 'add_new')">apply</button> <button class="btn abort-btn btn-danger" ng-click="networks.attributes.do_attr(null)">abort</button>
+					<button class="btn abort-btn btn-success" ng-click="networks.attributes.attr_apply(canvas.current, m.session_id, 'add_new')">apply</button> <button class="btn abort-btn btn-danger" ng-click="networks.attributes.do_attr(null)">abort</button>
 				</div>
 
 				<p class="footnote">

@@ -283,6 +283,7 @@
 
                         }).
                             success(function (data) {
+                                console.log(data);
                                 if ( 0 == data['err'] ) {
                                     if ( undefined != data.net[self.list.options.type][0].data[self.list.options.name] ) {
                                         rootScope.$broadcast('load_in_canvas', data.net);
@@ -344,7 +345,7 @@
              * @param  {String} group      'nodes'/'edges'
              * @return {promise}
              */
-            self.attr_rename = function (session_id, old_name, group) {
+            self.attr_rename = function (network, session_id, old_name, group) {
                 var new_name = prompt('Insert the new name:');
                 var checked = true;
                 var attr_list = Object.keys(cy.json().elements[group][0].data);
@@ -368,7 +369,7 @@
                             action: 'rename_attr',
                             id: session_id,
                             name: 'json_tmp_net',
-                            network: JSON.stringify(cy.json().elements),
+                            network: JSON.stringify(network),
                             attr_type: group,
                             attr_name: old_name,
                             attr_new_name: new_name
@@ -377,8 +378,9 @@
 
                     }).
                         success(function (data) {
+                            console.log(data);
                             if ( 0 == data.err ) {
-                                cy.load(data.net);
+                                rootScope.$broadcast('load_in_canvas', data.net);
                                 self.do_attr(null);
                             }
                             qwait.resolve(data);
@@ -395,7 +397,7 @@
              * @param  {String} group      'nodes'/'edges'
              * @return {promise}
              */
-            self.attr_remove = function (session_id, old_name, group) {
+            self.attr_remove = function (network, session_id, old_name, group) {
                 var ans = prompt('Do you really want to remove the ' + group + ' attribute "' + old_name + '"? (y/n)');
 
                 if ( null == ans || '' == ans || -1 == ['y', 'n'].indexOf(ans) ) {
@@ -410,7 +412,7 @@
                             action: 'remove_attr',
                             id: session_id,
                             name: 'json_tmp_net',
-                            network: JSON.stringify(cy.json().elements),
+                            network: JSON.stringify(network),
                             attr_type: group,
                             attr_name: old_name,
                         },
@@ -419,7 +421,7 @@
                     }).
                         success(function (data) {
                             if ( 0 == data.err ) {
-                                cy.load(data.net);
+                                rootScope.$broadcast('load_in_canvas', data.net);
                                 self.do_attr(null);
                             }
                             qwait.resolve(data);

@@ -33,7 +33,6 @@ if ( $s->exists($data->id) ) {
 
 	$q = 'cd ' . SCRIPATH . '; ./addGinfoAttributesToNetwork.R ' . $s->get('id') . ' ' . $data->name . ' ' . $data->go_type . ' ' . $data->attr_hugo;
 	$r = $s->exec_return('convert', $q);
-	//print_r($r);
 
 	// Answer call
 	echo '{"err":0, "net": ' . file_get_contents($f) . '}';

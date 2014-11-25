@@ -4,93 +4,58 @@ options(echo=TRUE)
 args <- commandArgs(trailingOnly = TRUE)
 
 # Check parameters
-if(length(args) != 6) stop('./addAttributeToNetwork.R session_id graph_name attr_type attr_name attr_list attr_function')
+if(length(args) != 6) stop('./combinenNetworkAttributes.R session_id graph_name attr_type attr_name attr_list attr_function')
 
 # Load requirements
 library(igraph)
 library(rjson)
 
+source('./NetworkManager.class.R')
+nm <- NetworkManager()
+
 # Start
-if(file.exists(paste0('../session/', args[1], '/'))) {
+if (file.exists(paste0('../session/', args[1], '/'))) {
 	setwd(paste0('../session/', args[1], '/'))
 
 	cat('> Read JSON file\n')
 	s <- read.delim(paste0(args[2], '.json'), header = F, as.is=T, quote = "")[1,1]
 	l <- fromJSON(s)
+	print(l)
+	g <- nm$graph.list.to.graph(l)
+	print(E(g))
+	print(g)
 
-	# NODES
-	
-	nodes <- unlist(l$nodes)
-	nodes.attrs <- unique(names(nodes))
-	nodes.attrs.clean <- unlist(lapply(nodes.attrs, FUN=function (x) { return( paste(unlist(strsplit(x, '.', fixed=T))[-1], collapse='.') ); }))
-	nodes.table <- c()
-	for (i in 1:length(nodes.attrs)) {
-		attr <- nodes.attrs[i]
-		if ( "" != nodes.attrs.clean[i] ) nodes.table <- cbind(nodes.table, nodes[which(names(nodes) == attr)])
-	}
-	colnames(nodes.table) <- nodes.attrs.clean[nodes.attrs.clean != ""]
-	row.names(nodes.table) <- NULL
-	nodes.table <- data.frame(nodes.table)
-
-	edges <- unlist(l$edges)
-	edges.attrs <- unique(names(edges))
-	edges.attrs.clean <- unlist(lapply(edges.attrs, FUN=function (x) { return( paste(unlist(strsplit(x, '.', fixed=T))[-1], collapse='.') ); }))
-	edges.table <- c()
-	for (i in 1:length(edges.attrs)) {
-		attr <- edges.attrs[i]
-		if ( "" != edges.attrs.clean[i] ) edges.table <- cbind(edges.table, edges[which(names(edges) == attr)])
-	}
-	colnames(edges.table) <- edges.attrs.clean[edges.attrs.clean != ""]
-	row.names(edges.table) <- NULL
-	edges.table <- data.frame(edges.table)
-
-	cat('> Convert to GraphML\n')
-	options(warn=-1)
-
-	g <- graph.empty()
-	g <- g + vertices(1:nrow(nodes.table))
-	for (attr in colnames(nodes.table)) {
-		if ( !attr %in% c('x', 'y') ) {
-			n <- eval(parse(text=paste0('as.numeric(as.character(nodes.table$', attr, '))')))
-			if ( NA %in% n ) {
-				eval(parse(text=paste0('V(g)$', attr, ' <- as.character(nodes.table$', attr, ')')))
-			} else {
-				eval(parse(text=paste0('V(g)$', attr, ' <- as.numeric(nodes.table$', attr, ')')))
-			}
-		}
-	}
-	
-	tmp <- V(g)$name
-	V(g)$name <- V(g)$id
-	g <- g + edges(c(rbind(as.character(edges.table$source), as.character(edges.table$target))))
-	V(g)$name <- tmp
-	for (attr in colnames(edges.table)) {
-			n <- eval(parse(text=paste0('as.numeric(as.character(edges.table$', attr, '))')))
-			if ( NA %in% n ) {
-				eval(parse(text=paste0('E(g)$', attr, ' <- as.character(edges.table$', attr, ')')))
-			} else {
-				eval(parse(text=paste0('E(g)$', attr, ' <- as.numeric(edges.table$', attr, ')')))
-			}
-	}
-
+	a_list <- list()
 	cat('> Add attribute\n')
 	if ( 'edges' == args[3] ) {
 		fun <- args[6]
 		attr_list <- unlist(strsplit(args[5], ',', fixed=T))
 		for (i in 1:length(attr_list)) {
-			fun <- gsub(paste0('_', i-1, '_'), paste0('E(g)$', attr_list[i]), fun)
+			if ( 0 == length(which(is.na(as.numeric(eval(parse(text=paste0('E(g)$', attr_list[i]))))))) ) {
+				eval(parse(text=paste0('a_list[', i, '] <- as.numeric(as.character(E(g)$', attr_list[i], '))')))
+			}
+			fun <- gsub(paste0('_', i-1, '_'), paste0('a_list[[', i, ']]'), fun)
 		}
 		eval(parse(text=paste0('E(g)$', args[4], ' <- ', fun)))
 	} else if ( 'nodes' == args[3] ) {
 		fun <- args[6]
 		attr_list <- unlist(strsplit(args[5], ',', fixed=T))
 		for (i in 1:length(attr_list)) {
-			fun <- gsub(paste0('_', i-1, '_'), paste0('V(g)$', attr_list[i]), fun)
+			if ( 0 == length(which(is.na(as.numeric(eval(parse(text=paste0('V(g)$', attr_list[i]))))))) ) {
+				eval(parse(text=paste0('a_list[', i, '] <- as.numeric(as.character(V(g)$', attr_list[i], '))')))
+			}
+			fun <- gsub(paste0('_', i-1, '_'), paste0('a_list[[', i, ']]'), fun)
 		}
 		eval(parse(text=paste0('V(g)$', args[4], ' <- ', fun)))
 	}
-
-	cat('> Convert back to JSON\n')
-	source('../../Rscripts/extendIgraph.R')
-	write.graph(g, paste0(args[2], '.json'), format='json')
+	
+	graph.list <- nm$graph.to.attr.table(g)
+	graph.list$nodes <- nm$update.row.ids(graph.list$nodes)
+	graph.list$nodes <- nm$add.prefix.to.col(graph.list$nodes, 'id', 'n')
+	graph.list$edges <- nm$convert.extremities.to.v.id.based.on.table(graph.list$edges,
+		graph.list$nodes, 'name')
+	graph.list$edges <- nm$update.row.ids(graph.list$edges)
+	graph.list$edges <- nm$add.prefix.to.col(graph.list$edges, 'id', 'e')
+	write(toJSON(nm$attr.tables.to.list(graph.list$nodes, graph.list$edges)),
+		paste0(args[2], '.json'))
 }
