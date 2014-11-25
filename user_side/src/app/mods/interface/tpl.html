@@ -178,16 +178,16 @@
 							<option value="">--</option>
 							<option value="manual">manually</option>
 							<option value="index">index as</option>
-							<option value="go">GO as</option>
+							<option value="ginfo">gene info as</option>
 						</select> new 
 						<select name="attr_type" id="attr_type" ng-model="networks.attributes.list.options.type">
 							<option value="" ng-show="'manual' == networks.attributes.list.options.input">--</option>
 							<option value="edges" ng-show="'manual' == networks.attributes.list.options.input">edge</option>
-							<option value="nodes" ng-show="-1 != ['manual', 'index', 'go'].indexOf(networks.attributes.list.options.input)" ng-selected="-1 != ['index', 'go'].indexOf(networks.attributes.list.options.input)">node</option>
+							<option value="nodes" ng-show="-1 != ['manual', 'index', 'ginfo'].indexOf(networks.attributes.list.options.input)" ng-selected="-1 != ['index', 'ginfo'].indexOf(networks.attributes.list.options.input)">node</option>
 						</select>
 						attribute.
 					</h4>
-					<p ng-show="-1 != ['manual', 'index', 'go'].indexOf(networks.attributes.list.options.input)">
+					<p ng-show="-1 != ['manual', 'index'].indexOf(networks.attributes.list.options.input)">
 						<label for="attr_name">GO attribute name: </label>
 						<input class="form-control" type="text" id="attr_name" name="attr_name" ng-model="networks.attributes.list.options.name" />
 					</p>
@@ -206,7 +206,17 @@
 							<option value="closeness">closeness</option>
 						</select>
 					</p>
-					<p ng-show="'go' == networks.attributes.list.options.input">
+					<p ng-show="'ginfo' == networks.attributes.list.options.input">
+						The following attributes will be added:
+						<ul ng-show="'ginfo' == networks.attributes.list.options.input">
+							<li>go</li>
+							<li>chromosome_name</li>
+							<li>start_position</li>
+							<li>end_position</li>
+							<li>band</li>
+						</ul>
+					</p>
+					<p ng-show="'ginfo' == networks.attributes.list.options.input">
 						<label for="hugo-containing-attr">Select the attribute containing the HUGO names.</label>
 						<select name="hugo-containing-attr" class="form-control" id="hugo-containing-attr" ng-model="networks.attributes.list.options.hugo">
 							<option value="">--</option>
@@ -216,7 +226,7 @@
 
 					<p class="alert alert-danger" ng-repeat="msg in networks.attributes.list.options.errMsg">{{msg}}</p>
 
-					<button class="btn abort-btn btn-success" ng-click="networks.attributes.attr_apply(m.session_id, 'add_new')">apply</button> <button class="btn abort-btn btn-danger" ng-click="networks.attributes.do_attr(null)">abort</button>
+					<button class="btn abort-btn btn-success" ng-click="networks.attributes.attr_apply(canvas.current, m.session_id, 'add_new')">apply</button> <button class="btn abort-btn btn-danger" ng-click="networks.attributes.do_attr(null)">abort</button>
 				</div>
 				<!-- combine -->
 				<div ng-show="networks.attributes.is_attr_doing('combine')">
@@ -289,7 +299,6 @@
 					to the current visualization and are not saved on the server.
 					To do so, please use the <u><i>overwrite</i></u> or the <u><i>save</i></u> functions.
 				</p>
-
 			</div>
 		</div>
 

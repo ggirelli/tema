@@ -27,7 +27,7 @@ if( isset($data->action) ) {
 		switch($data->action) {
 
 			case 'add_attr':
-			case 'add_go_attr': case 'add_attr_index':
+			case 'add_ginfo_attrs': case 'add_attr_index':
 			case 'combine_attr': case 'convert_network':
 			case 'get_network': case 'get_network_list':
 			case 'get_settings': case 'get_setting_file':

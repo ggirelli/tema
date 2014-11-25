@@ -34,7 +34,7 @@
 
             controller('homepageController', ['$scope', 'appModel', '$http', '$timeout', homepageController]).
             
-            service('networkAttributeService', ['$q', '$http', networkAttributeService]).
+            service('networkAttributeService', ['$q', '$http', '$rootScope', networkAttributeService]).
             service('convertGroupService', [networkGroupService]).
             service('mergeGroupService', [networkGroupService]).
             service('intersectGroupService', [networkGroupService]).

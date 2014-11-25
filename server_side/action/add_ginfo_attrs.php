@@ -24,16 +24,16 @@ if ( $s->exists($data->id) ) {
 	file_put_contents($f, $data->network);
 
 	if ( file_exists( SPATH . '/' . $data->id . '/settings/go_mgmt.Rdata' ) ) {
-
 		// Custom GO mgmt
-		
+		$data->go_type = 'custom';
 	} else {
-
 		// Default GO mgmt
-		$q = 'cd ' . SCRIPATH . '; ./addGOattributeToNetwork.R ' . $s->get('id') . ' ' . $data->name . ' default ' . $data->attr_name . ' ' . $data->attr_hugo;
-		$r = $s->exec_return('convert', $q);
-
+		$data->go_type = 'default';
 	}
+
+	$q = 'cd ' . SCRIPATH . '; ./addGinfoAttributesToNetwork.R ' . $s->get('id') . ' ' . $data->name . ' ' . $data->go_type . ' ' . $data->attr_hugo;
+	$r = $s->exec_return('convert', $q);
+	//print_r($r);
 
 	// Answer call
 	echo '{"err":0, "net": ' . file_get_contents($f) . '}';

@@ -70,6 +70,14 @@
 
             scope.canvas.init();
 
+            scope.$on('load_in_canvas', function (event, network) {
+                scope.canvas.current = network;
+                scope.canvas.filtered = undefined;
+                scope.canvas.visualized = true;
+                scope.canvas.visualization = $.extend(true, {}, network);
+                cy.load(network);
+            });
+
             /*---------------------*/
             /* Initialize settings */
             /*---------------------*/

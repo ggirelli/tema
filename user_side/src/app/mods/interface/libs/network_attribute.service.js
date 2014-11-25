@@ -3,7 +3,7 @@
 
     define([], function () {
 
-        return function (q, http) {
+        return function (q, http, rootScope) {
             var self = this;
             
             self.list = {
@@ -117,25 +117,7 @@
                             }
                         }
 
-                    } else if ( 'go' == self.list.options.input ) {
-
-                        // Check attr_name
-                        var checked = true;
-                        var attr_list = Object.keys(cy.json().elements.nodes[0].data);
-                        for (var i = attr_list.length - 1; i >= 0; i--) {
-                            if ( self.list.options.name == attr_list[i] ) {
-                                checked = false;
-                            }
-                        }
-
-                        if ( !checked ) {
-                            self.list.options.errMsg.push('The provided GO attribute name is already in use.');
-                        }
-                        if ( null == self.list.options.name || '' == self.list.options.name ) {
-                            checked = false;
-                            self.list.options.errMsg.push('Please, provide a name for the GO attribute.');
-                        }
-
+                    } else if ( 'ginfo' == self.list.options.input ) {
                         // Check selection of HUGO-containing attr
                         if ( checked ) {
                             if ( undefined == self.list.options.hugo ) {
@@ -205,7 +187,8 @@
              * @param  {String} label      attribute operation name
              * @return {promise}
              */
-            self.attr_apply = function (session_id, label) {
+            self.attr_apply = function (network, session_id, label) {
+                console.log(network);
                 if ( self.check_attr() ) {
                     if ( 'add_new' == label ) {
                         var qwait = q.defer();
@@ -218,7 +201,7 @@
                                     action: 'add_attr',
                                     id: session_id,
                                     name: 'json_tmp_net',
-                                    network: JSON.stringify(cy.json().elements),
+                                    network: JSON.stringify(network),
                                     attr_type: self.list.options.type,
                                     attr_name: self.list.options.name,
                                     attr_val: self.list.options.values
@@ -228,7 +211,7 @@
                             }).
                                 success(function (data) {
                                     if ( 0 == data['err'] ) {
-                                        cy.load(data['net']);
+                                        rootScope.$broadcast('load_in_canvas', data.net);
                                         self.do_attr(null);
                                     }
                                     qwait.resolve(data);
@@ -241,7 +224,7 @@
                                     action: 'add_attr_index',
                                     id: session_id,
                                     name: 'json_tmp_net',
-                                    network: JSON.stringify(cy.json().elements),
+                                    network: JSON.stringify(network),
                                     attr_name: self.list.options.name,
                                     attr_index: self.list.options.index
                                 },
@@ -250,30 +233,29 @@
                             }).
                                 success(function (data) {
                                     if ( 0 == data['err'] ) {
-                                        cy.load(data['net']);
+                                        rootScope.$broadcast('load_in_canvas', data.net);
                                         self.do_attr(null);
                                     }
                                     qwait.resolve(data);
                                 });
-                        } else if ( 'go' == self.list.options.input ) {
+                        } else if ( 'ginfo' == self.list.options.input ) {
                             http({
 
                                 method: 'POST',
                                 data: {
-                                    action: 'add_go_attr',
+                                    action: 'add_ginfo_attrs',
                                     id: session_id,
                                     name: 'json_tmp_net',
-                                    network: JSON.stringify(cy.json().elements),
-                                    attr_name: self.list.options.name,
+                                    network: JSON.stringify(network),
                                     attr_hugo: self.list.options.hugo
                                 },
                                 url: 's/'
 
                             }).
                                 success(function (data) {
-                                    //console.log(data);
+                                    console.log(data);
                                     if ( 0 == data['err'] ) {
-                                        cy.load(data['net']);
+                                        rootScope.$broadcast('load_in_canvas', data.net);
                                         self.do_attr(null);
                                     }
                                     qwait.resolve(data);
@@ -282,7 +264,7 @@
 
                         return qwait.promise;
                     } else if ( 'combine' == label ) {
-                        var qwait = q.defer();
+                        var qwait = q.defer(); 
 
                         http({
 
@@ -291,7 +273,7 @@
                                 action: 'combine_attr',
                                 id: session_id,
                                 name: 'json_tmp_net',
-                                network: JSON.stringify(cy.json().elements),
+                                network: JSON.stringify(network),
                                 attr_type: self.list.options.type,
                                 attr_name: self.list.options.name,
                                 attr_list: self.attr_get_selected().toString(),
@@ -303,7 +285,7 @@
                             success(function (data) {
                                 if ( 0 == data['err'] ) {
                                     if ( undefined != data.net[self.list.options.type][0].data[self.list.options.name] ) {
-                                        cy.load(data.net);
+                                        rootScope.$broadcast('load_in_canvas', data.net);
                                         self.do_attr(null);
                                     } else {
                                         self.list.options.errMsg = ['Something went wrong with the provided function.'];
@@ -395,7 +377,6 @@
 
                     }).
                         success(function (data) {
-                            console.log(data);
                             if ( 0 == data.err ) {
                                 cy.load(data.net);
                                 self.do_attr(null);
