@@ -156,8 +156,8 @@ class TEAsession extends TEAdb {
 				return $this->current_net;
 				break;
 			}
-			case 'node_thr': {
-				return $this->node_thr;
+			case 'settings': {
+				return $this->settings;
 				break;
 			}
 			case 'network_list': {

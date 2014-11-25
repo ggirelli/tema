@@ -32,8 +32,8 @@ if( isset($data->action) ) {
 			case 'get_network': case 'get_network_list':
 			case 'get_settings': case 'get_setting_file':
 			case 'map_gos':
-			case 'network_contains': case 'networks_distances':
-			case 'networks_intersect':
+			case 'network_contains': case 'network_navigate':
+			case 'networks_distances': case 'networks_intersect':
 			case 'networks_merge': case 'networks_subtract':
 			case 'remove_attr': case 'remove_network':
 			case 'rename_attr': case 'rename_network':

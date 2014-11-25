@@ -69,7 +69,7 @@
 
                 for (var i = ids.length - 1; i >= 0; i--) {
                     var id = ids[i];
-                    if ( -1 != rm_ids.indexOf(id) ) {
+                    if ( -1 == rm_ids.indexOf(id) ) {
                         filtered.push(id);
                     }
                 }

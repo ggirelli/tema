@@ -1112,16 +1112,16 @@
 				</div>
 
 				<div class="col-md-6" ng-if="canvas.filters.has()">
-					<button class="btn btn-block btn-danger small-caps" ng-click="canvas.unmask()">unmask</button>
+					<button class="btn btn-block btn-danger small-caps" ng-click="canvas.unmask()" ng-disabled="canvas.filters.is_token('v')">unmask</button>
 				</div>
 				<div class="col-md-6" ng-if="canvas.filters.has()">
-					<button class="btn btn-block btn-warning small-caps" ng-click="canvas.mask()">mask</button>
+					<button class="btn btn-block btn-warning small-caps" ng-click="canvas.mask()" ng-disabled="canvas.filters.is_token('f')">mask</button>
 				</div>
 				<div class="col-md-6" ng-if="canvas.filters.has()" style="margin-top: 4px;">
-					<button class="btn btn-block btn-primary small-caps" ng-click="">select</button>
+					<button class="btn btn-block btn-primary small-caps" ng-click="alert('@todo')" ng-disabled="!canvas.filters.is_token('v')">select</button>
 				</div>
 				<div class="col-md-6" ng-if="canvas.filters.has()" style="margin-top: 4px;">
-					<button class="btn btn-block btn-success small-caps" ng-click="networks.init_file(canvas.current_data)">load</button>
+					<button class="btn btn-block btn-success small-caps" ng-click="networks.init_file(canvas.current_data)" ng-disabled="canvas.visualized">load</button>
 				</div>
 
 			</div>
@@ -1179,12 +1179,17 @@
 
 				<div ng-if="canvas.navi.filters.isLoaded()">
 					<p>
-						Select a node to visualize its neighborhood<br />
+						Select a node to visualize its <select name="" id="" ng-model="canvas.navi.mode">
+							<option value="">--</option>
+							<option value="all">(all)</option>
+							<option value="in">in</option>
+							<option value="out">out</option>
+						</select> neighborhood<br />
 						up to {{settings.info.node_thr}} nodes.
 					</p>
 
 					<p>
-						<select name="" id="" class="form-control">
+						<select name="" id="" class="form-control" ng-model="canvas.navi.start_node">
 							<option value="">--</option>
 							<option value="{{node_id}}" ng-repeat="node_id in canvas.navi.filter_node_ids(canvas.navi.get_node_ids(), canvas.navi.filters.selection.nodes)">{{node_id}}</option>
 						</select>
@@ -1253,7 +1258,7 @@
 
 					<hr />
 
-					<button class="btn btn-success float-right small-caps" ng-if="canvas.navi.filters.isLoaded()">apply</button>
+					<button class="btn btn-success float-right small-caps" ng-if="canvas.navi.filters.isLoaded()" ng-click="canvas.navigate(m.session_id, canvas.navi.start_node)">apply</button>
 				</div>
 			</div>
 		</div>

@@ -976,7 +976,7 @@ NetworkManager <- function() {
 
 				# Non-empty table
 				table <- NetworkManager()$expand.attr.table(table, c('id'))
-				table[, which('id' == colnames(table))] <- 1:nrow(table)
+				table[, which('id' == colnames(table))] <- 0:(nrow(table) - 1)
 
 			} else if ( 0 != length(table) ) {
 

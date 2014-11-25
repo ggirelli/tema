@@ -33,7 +33,12 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 	write.graph(g, paste0(args[2], '.graphml'), format='graphml')
 
 	cat('> Write DAT file\n')
-	l <- list(e_attributes=list.edge.attributes(g), e_count=ecount(g), v_attributes=list.vertex.attributes(g), v_count=vcount(g))
+	l <- list(
+		e_attributes=list.edge.attributes(g),
+		e_count=ecount(g),
+		v_attributes=list.vertex.attributes(g),
+		v_count=vcount(g)
+	)
 	write(toJSON(l), paste0(args[2], '.dat'))
 
 }

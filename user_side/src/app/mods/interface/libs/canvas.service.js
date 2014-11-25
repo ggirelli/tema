@@ -12,14 +12,14 @@
              */
             self.elements = {
                 nodes: [
-                    { data: { id: "n1", name: "Welcome" }, position: {x: -100, y: -50} },
-                    { data: { id: "n2", name: "to" }, position: {x: 100, y: 0} },
-                    { data: { id: "n3", name: "TEA" }, position: {x: -50, y: 100} }
+                    { data: { id: "n0", name: "Welcome" }, position: {x: -100, y: -50} },
+                    { data: { id: "n1", name: "to" }, position: {x: 100, y: 0} },
+                    { data: { id: "n2", name: "TEA" }, position: {x: -50, y: 100} }
                 ],
                 edges: [
+                    { data: { id: "e0", source: "n0", target: "n1" } },
                     { data: { id: "e1", source: "n1", target: "n2" } },
-                    { data: { id: "e2", source: "n2", target: "n3" } },
-                    { data: { id: "e3", source: "n3", target: "n2" } }
+                    { data: { id: "e2", source: "n2", target: "n1" } }
                 ]
             };
 
@@ -190,7 +190,7 @@
              */
             self.postload = function () {
                 cy.load(self.visualization);
-                self.visualize = true;
+                self.visualized = true;
             };
 
             /**
@@ -386,7 +386,6 @@
                 self.filters.get_attributes();
             };
 
-
             /**
              * Unmasks nodes/edges selected by the filters
              */
@@ -503,9 +502,154 @@
 
             /**
              * Navigates the network
-             * @return {[type]} [description]
              */
-            self.navigate = function (node_id) {
+            self.navigate = function (session_id, node_id) {
+                if ( undefined == self.current ) return;
+                if ( undefined == node_id ) {
+                    alert('Select a node!');
+                    return;
+                }
+                if ( undefined == self.navi.mode ) {
+                    alert('Select a mode!');
+                    return;
+                }
+
+                var qwait = q.defer();
+
+                http({
+
+                    method: 'POST',
+                    data: {
+                        action: 'network_navigate',
+                        id: session_id,
+                        node: node_id,
+                        name: self.current_data.name,
+                        mode: self.navi.mode
+                    },
+                    url: 's/'
+
+                }).
+                    success(function (data) {
+                        console.log(data);
+                        self.update(data.neigh);
+                        qwait.resolve(data);
+                    });
+
+                return qwait.promise;
+            };
+
+            self.update = function (toVis) {
+                console.log(toVis);
+                console.log(self.visualization);
+                console.log(self.filtered);
+                if ( undefined == self.filtered ) {
+                    self.filtered = {
+                        nodes: [],
+                        edges: []
+                    };
+                }
+                if ( undefined == self.visualization ) {
+                    self.visualization = {
+                        nodes: [],
+                        edges: []
+                    };
+                }
+                if ( undefined == self.visualization.nodes ) {
+                    self.visualization.nodes = [];
+                }
+                if ( undefined == self.visualization.edges ) {
+                    self.visualization.edges = [];
+                }
+                console.log(3);
+                // Unmask nodes
+                var toRM = [];
+                for (var i = self.filtered.nodes.length - 1; i >= 0; i--) {
+                    var node = self.filtered.nodes[i];
+
+                    if ( -1 != toVis.nodes.indexOf(node.data.id) ) {
+                        toRM.push(i);
+                        self.visualization.nodes.push(node);
+                        if ( self.visualized ) {
+                            cy.add({
+                                group: 'nodes',
+                                data: node.data,
+                                position: node.position
+                            });
+                        }
+                    }
+                }
+                for (var i = toRM.length - 1; i >= 0; i--) {
+                    self.filtered.nodes.splice(toRM[i], 1);
+                }
+
+                // Mask edges
+                var toRM = [];
+                for (var i = self.visualization.edges.length - 1; i >= 0; i--) {
+                    var edge = self.visualization.edges[i];
+
+                    if ( -1 == toVis.edges.indexOf(edge.data.id)) {
+                        toRM.push(i)
+                        self.filtered.edges.push(edge);
+                        if ( self.visualized ) {
+                            cy.remove('edge[id="' + edge.data.id + '"]')
+                        }
+                    }
+                }
+                console.log(1);
+                console.log(toRM);
+                console.log(self.visualization.nodes);
+                console.log(1.1);
+                for (var i = toRM.length - 1; i >= 0; i--) {
+                    //console.log(self.visualization.edges[toRM[i]]);
+                    self.visualization.edges.splice(toRM[i], 1);
+                }
+
+                // Mask nodes
+                var toRM = [];
+                for (var i = self.visualization.nodes.length - 1; i >= 0; i--) {
+                    var node = self.visualization.nodes[i];
+
+                    if ( -1 == toVis.nodes.indexOf(node.data.id) ) {
+                        toRM.push(i);
+                        self.filtered.nodes.push(node);
+                        if ( self.visualized ) {
+                            cy.remove('node[id="' + node.data.id + '"]');
+                        }
+                    }
+                }
+                console.log(2);
+                console.log(toRM);
+                console.log(self.visualization.nodes);
+                console.log(2.1);
+                for (var i = toRM.length - 1; i >= 0; i--) {
+                    //console.log(self.visualization.nodes[toRM[i]]);
+                    self.visualization.nodes.splice(toRM[i], 1);
+                }
+
+                // Unmask edges
+                var toRM = [];
+                for (var i = self.filtered.edges.length - 1; i >= 0; i--) {
+                    var edge = self.filtered.edges[i];
+
+                    if ( -1 != toVis.edges.indexOf(edge.data.id) ) {
+                        toRM.push(i);
+                        self.visualization.edges.push(edge);
+                        if ( self.visualized ) {
+                            cy.add({
+                                group: 'edges',
+                                data: edge.data
+                            });
+                        }
+                    }
+                }
+                for (var i = toRM.length - 1; i >= 0; i--) {
+                    self.filtered.edges.splice(toRM[i], 1);
+                }
+
+                if ( !self.visualized ) {
+                    console.log(self.visualization);
+                    //self.postload();
+                }
             };
 
             // GENERAL

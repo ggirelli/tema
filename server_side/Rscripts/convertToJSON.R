@@ -30,17 +30,6 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 		V(g)$y <- round(coords[,2], 0)
 		write.graph(g, paste0(args[2], '.graphml'), format='graphml')
 
-		cat('Preparing config file.\n')
-		l <- list(
-			e_attributes=list.edge.attributes(g),
-			e_count=ecount(g),
-			v_attributes=list.vertex.attributes(g),
-			v_count=vcount(g)
-		)
-
-		cat('Writing DAT file.\n')		
-		write(toJSON(l), paste0(args[2], '.dat'))
-
 		cat('Writing JSON file.\n')
 		graph.list <- nm$graph.to.attr.table(g)
 		print(graph.list)
@@ -52,6 +41,19 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 		graph.list$edges <- nm$add.prefix.to.col(graph.list$edges, 'id', 'e')
 		write(toJSON(nm$attr.tables.to.list(graph.list$nodes, graph.list$edges)),
 			paste0(args[2], '.json'))
+
+		if (file.exists(paste0(args[2], '.json'))) {
+			cat('Preparing config file.\n')
+			l <- list(
+				e_attributes=list.edge.attributes(g),
+				e_count=ecount(g),
+				v_attributes=list.vertex.attributes(g),
+				v_count=vcount(g)
+			)
+
+			cat('Writing DAT file.\n')		
+			write(toJSON(l), paste0(args[2], '.dat'))
+		}
 
 		cat('Converted.\n')
 	}
