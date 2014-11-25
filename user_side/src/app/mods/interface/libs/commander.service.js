@@ -260,7 +260,7 @@
              * Runs the intersect operation
              * @param  {string} session_id
              */
-            self.apply_intersect = function (session_id) {
+            self.apply_intersect = function (session_id, layout) {
                 var qwait = q.defer();
 
                 http({
@@ -275,6 +275,7 @@
                         e_identity: self.intersect.e_attr_identity,
                         n_behavior: self.intersect.n_attr_behavior,
                         e_behavior: self.intersect.e_attr_behavior,
+                        default_layout: layout
                     },
                     url: 's/'
 
@@ -297,7 +298,7 @@
              * Changes page of merge UI after checking the form
              * @param  {integer} index page
              */
-            self.subtract_set_page = function (index, session_id) {
+            self.subtract_set_page = function (index, session_id, layout) {
                 if ( 2 == index ) {
                     // Check new name
                     if ( undefined == self.subtract.group.new_name || null == self.subtract.group.new_name || '' == self.subtract.group.new_name ) {
@@ -368,7 +369,7 @@
                         };
 
                         // Act
-                        self.apply_subtract(session_id);
+                        self.apply_subtract(session_id, layout);
                     } else {
                         self.subtract.errMsg = 'Select at least ONE attribute for the nodes identity function.';
                     }                    
@@ -389,7 +390,7 @@
              * Runs the subtract operation
              * @param  {string} session_id
              */
-            self.apply_subtract = function (session_id) {
+            self.apply_subtract = function (session_id, layout) {
                 var qwait = q.defer();
 
                 http({
@@ -402,7 +403,8 @@
                         minuend: self.subtract.group.minuend,
                         networks: self.subtract.get_selected_list(),
                         n_identity: self.subtract.n_attr_identity,
-                        e_identity: self.subtract.e_attr_identity
+                        e_identity: self.subtract.e_attr_identity,
+                        default_layout: layout
                     },
                     url: 's/'
 

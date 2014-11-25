@@ -34,5 +34,6 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 
 	cat('> Convert back to JSON\n')
 	graph.list <- nm$attr.tables.to.list(v.attr.table, e.attr.table)
+	
 	write(toJSON(graph.list), paste0(args[2], '.json'))
 }

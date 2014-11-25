@@ -134,9 +134,9 @@ NetworkManager <- function() {
 				target.col.id <- which(colnames(e.attr.table) == 'target')
 				edge.pairwise.list <- c(rbind(
 					unlist(lapply(e.attr.table[, source.col.id],
-						FUN=function(x,g) {return(V(g)[id==x]) },g=g)),
+						FUN=function(x,vt) { return(which(vt[, 'id'] == x)) },vt=v.attr.table)),
 					unlist(lapply(e.attr.table[, target.col.id],
-						FUN=function(x,g) { return(V(g)[id==x]) },g=g))
+						FUN=function(x,vt) { return(which(vt[, 'id'] == x)) },vt=v.attr.table))
 				))
 				g <- add.edges(g, edge.pairwise.list)
 				for (attr in colnames(e.attr.table)) {
