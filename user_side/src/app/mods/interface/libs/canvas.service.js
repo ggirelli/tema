@@ -641,6 +641,7 @@
             
             self.reset_ui = function () {
                 self.filters.reset_service();
+                self.navi.reset_service();
             };
 
         };

@@ -9,6 +9,9 @@
             self.filters = filters;
 
             self.network = undefined;
+            self.start_node = undefined;
+            self.mode = undefined;
+            self.token = undefined;
 
             /**
              * Loads network in the navigator (and its filter manager)
@@ -75,6 +78,14 @@
                 }
                 
                 return filtered;
+            };
+
+            self.reset_service = function () {
+                self.start_node = undefined;
+                self.mode = undefined;
+                self.token = undefined;
+                self.network = undefined;
+                self.filters.reset_service();
             };
 
         };
