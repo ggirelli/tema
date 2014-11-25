@@ -25,6 +25,7 @@ if ( $s->exists($data->id) ) {
 
 	// Convert the network
 	$q = 'cd ' . SCRIPATH . '; ./renameAttribute.R ' . $s->get('id') . ' ' . $data->name . ' ' . $data->attr_type . ' ' . $data->attr_name . ' ' . $data->attr_new_name;
+	echo $q . "\n";
 	$r = $s->exec_return('convert', $q);
 	print_r($r);
 
