@@ -31,7 +31,7 @@ if ( $s->exists($data->id) ) {
 
 	// Answer call
 	echo '{"err":0, "net": ' . file_get_contents($f) . '}';
-	unlink($f);
+	//unlink($f);
 
 } else {
 	echo '{"err":3}';
