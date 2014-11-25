@@ -79,7 +79,7 @@
                                 self.list[network.id].status = parseInt(data['status']);
                                 self.list[network.id].data = data['data'];
                             } else {
-                                console.log('Something went terribly wrong.');
+                                console.log('GraphML.to.JSON conversion aborted for network "' + network.name + '"');
                             }
                             qwait.resolve(data);
                         });

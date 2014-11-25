@@ -13,7 +13,6 @@ library(rjson)
 source('NetworkManager.class.R')
 nm <- NetworkManager()
 
-print(getwd())
 # Start
 if(file.exists(paste0('../session/', args[1], '/'))) {
 	setwd(paste0('../session/', args[1], '/'))
@@ -32,7 +31,6 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 
 		cat('Writing JSON file.\n')
 		graph.list <- nm$graph.to.attr.table(g)
-		print(graph.list)
 		graph.list$nodes <- nm$update.row.ids(graph.list$nodes)
 		graph.list$nodes <- nm$add.prefix.to.col(graph.list$nodes, 'id', 'n')
 		graph.list$edges <- nm$convert.extremities.to.v.id.based.on.table(graph.list$edges,
