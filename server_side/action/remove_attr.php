@@ -26,6 +26,7 @@ if ( $s->exists($data->id) ) {
 	// Convert the network
 	$q = 'cd ' . SCRIPATH . '; ./removeAttribute.R ' . $s->get('id') . ' ' . $data->name . ' ' . $data->attr_type . ' ' . $data->attr_name;
 	$r = $s->exec_return('convert', $q);
+	print_r($r);
 
 	// Answer call
 	echo '{"err":0, "net": ' . file_get_contents($f) . '}';
