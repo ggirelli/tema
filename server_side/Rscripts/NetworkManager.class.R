@@ -308,7 +308,7 @@ NetworkManager <- function() {
 						col.id <- which(col == colnames(v.attr.table))
 						l[col] <- v.attr.table[x, col.id]
 					}
-					print(l)
+					
 					return(list(data=l, position=list(x=as.numeric(l['x']),y=as.numeric(l['y']))))
 				}, v.attr.table=v.attr.table)
 
@@ -1161,37 +1161,32 @@ NetworkManager <- function() {
 			} else if ( is.null(nrow(v.attr.table)) ) {
 				if ( 0 == length(v.attr.table) ) return(NULL)
 			}
-			print(2.1)
+			
 			if ( !is.null(nrow(e.attr.table)) ) {
-				print(2.2)
+				
 				# Non-empty table
 				e.attr.table <- NetworkManager()$expand.attr.table(e.attr.table,
 					c('source', 'target'))
 				source.col.id <- which('source' == colnames(e.attr.table))
 				target.col.id <- which('target' == colnames(e.attr.table))
-				print(2.3)
+				
 				if ( !is.null(nrow(v.attr.table)) ) {
-					print(2.4)
+					
 					# Non-empty table
 					v.identity.col.id <- which(v.identity.col == colnames(v.attr.table))
 					v.id.col.id <- which('id' == colnames(v.attr.table))
-					print(2.41)
-					print(v.attr.table[, v.identity.col.id])
-					print(duplicated(v.attr.table[, v.identity.col.id]))
-					print(length(e.attr.table[, source.col.id]))
-					print(length(unlist(lapply(e.attr.table[, source.col.id], FUN=function(x, v.id.col.id) { return(v.attr.table[which( v.attr.table[, v.identity.col.id] == x), v.id.col.id]) }, v.id.col.id=v.id.col.id))))
+					
 					e.attr.table[, source.col.id] <- unlist(lapply(e.attr.table[, source.col.id],
 						FUN=function(x, v.id.col.id) {
 							return(v.attr.table[which(
 								v.attr.table[, v.identity.col.id] == x), v.id.col.id])
 						}, v.id.col.id=v.id.col.id))
-					print(2.42)
 					e.attr.table[, target.col.id] <- unlist(lapply(e.attr.table[, target.col.id],
 						FUN=function(x, v.id.col.id) {
 							return(v.attr.table[which(
 								v.attr.table[, v.identity.col.id] == x), v.id.col.id])
 						}, v.id.col.id=v.id.col.id))
-					print(2.5)
+
 				} else if ( 0 != length(v.attr.table) ) {
 
 					# Single.row table

@@ -50,7 +50,7 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 	
 	if(file.exists(paste0(args[2], '.json'))) {
 
-		s <- scan(paste0(args[2], '.json'), 'raw')
+		s <- read.delim(paste0(args[2], '.json'), header = F, as.is=T, quote = "")[1,1]
 		l <- fromJSON(s)
 		
 		net.list <- c()
