@@ -530,7 +530,6 @@
 
                 }).
                     success(function (data) {
-                        console.log(data);
                         self.update(data.neigh);
                         qwait.resolve(data);
                     });
@@ -539,9 +538,6 @@
             };
 
             self.update = function (toVis) {
-                console.log(toVis);
-                console.log(self.visualization);
-                console.log(self.filtered);
                 if ( undefined == self.filtered ) {
                     self.filtered = {
                         nodes: [],
@@ -560,7 +556,7 @@
                 if ( undefined == self.visualization.edges ) {
                     self.visualization.edges = [];
                 }
-                console.log(3);
+                
                 // Unmask nodes
                 var toRM = [];
                 for (var i = self.filtered.nodes.length - 1; i >= 0; i--) {
@@ -578,7 +574,7 @@
                         }
                     }
                 }
-                for (var i = toRM.length - 1; i >= 0; i--) {
+                for (var i = 0; i < toRM.length; i++) {
                     self.filtered.nodes.splice(toRM[i], 1);
                 }
 
@@ -595,12 +591,7 @@
                         }
                     }
                 }
-                console.log(1);
-                console.log(toRM);
-                console.log(self.visualization.nodes);
-                console.log(1.1);
-                for (var i = toRM.length - 1; i >= 0; i--) {
-                    //console.log(self.visualization.edges[toRM[i]]);
+                for (var i = 0; i < toRM.length; i++) {
                     self.visualization.edges.splice(toRM[i], 1);
                 }
 
@@ -617,12 +608,7 @@
                         }
                     }
                 }
-                console.log(2);
-                console.log(toRM);
-                console.log(self.visualization.nodes);
-                console.log(2.1);
-                for (var i = toRM.length - 1; i >= 0; i--) {
-                    //console.log(self.visualization.nodes[toRM[i]]);
+                for (var i = 0; i < toRM.length; i++) {
                     self.visualization.nodes.splice(toRM[i], 1);
                 }
 
@@ -642,13 +628,12 @@
                         }
                     }
                 }
-                for (var i = toRM.length - 1; i >= 0; i--) {
+                for (var i = 0; i < toRM.length; i++) {
                     self.filtered.edges.splice(toRM[i], 1);
                 }
 
                 if ( !self.visualized ) {
-                    console.log(self.visualization);
-                    //self.postload();
+                    self.postload();
                 }
             };
 
