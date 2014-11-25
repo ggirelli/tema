@@ -375,6 +375,7 @@
 
                     }).
                         success(function (data) {
+                            console.log(data);
                             if ( 0 == data.err ) {
                                 rootScope.$broadcast('load_in_canvas', data.net);
                                 self.do_attr(null);
@@ -416,6 +417,7 @@
 
                     }).
                         success(function (data) {
+                            console.log(data);
                             if ( 0 == data.err ) {
                                 rootScope.$broadcast('load_in_canvas', data.net);
                                 self.do_attr(null);
