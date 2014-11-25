@@ -276,7 +276,7 @@
             };
 
             /**
-             * @param  {string} what 'edges' or 'nodes'
+             * @param  {String} what 'edges' or 'nodes'
              * @return {list} attribute list
              * @return {null} if what is wrong
              */
@@ -290,6 +290,48 @@
                 }
                 return null;
             };
+
+            /**
+             * @param  {String} what 'edges' or 'nodes'
+             * @return {list} attribute list
+             * @return {null}      if what is wrong
+             */
+            self.clean_attr_list = function (what) {
+                var list = self.get_attributes(what);
+                if ( null == list ) return;
+                if ( 'nodes' == what ) {
+                    for (var i = list.length - 1; i >= 0; i--) {
+                        if ( -1 != ['id', 'name', 'x', 'y'].indexOf(list[i]) ) {
+                            list.splice(i, 1)
+                        }
+                    }
+                } else if ( 'edges' == what ) {
+                    for (var i = list.length - 1; i >= 0; i--) {
+                        if ( -1 != ['id', 'source', 'target'].indexOf(list[i]) ) {
+                            list.splice(i, 1)
+                        }
+                    }
+                }
+                return list;
+            }
+
+            self.blocked_nodes_attrs = ['id', 'name', 'x', 'y'];
+            self.blocked_edges_attrs = ['id', 'source', 'target'];
+
+            /**
+             * @param  {String}  what  'edges' or 'nodes'
+             * @param  {String}  label attr name
+             * @return {Boolean}       if what.attr is blocked
+             */
+            self.is_attr_blocked = function (what, label) {
+                if ( 'nodes' == what ) {
+                    return -1 != self.blocked_nodes_attrs.indexOf(label);
+                } else if ( 'edges' == what ) {
+                    return -1 != self.blocked_edges_attrs.indexOf(label);
+                } else {
+                    return true;
+                }
+            }
 
             /**
              * Masks nodes/edges selected by the filters

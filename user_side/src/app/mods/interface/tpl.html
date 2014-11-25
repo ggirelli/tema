@@ -151,22 +151,22 @@
 					<div class="alert alert-info" ng-repeat="attr in canvas.get_attributes('nodes')">
 						{{attr}}
 						<!-- overwrite -->
-						<a href="#/interface/{{m.session_id}}" class="attr-action float-right" title='Overwrite' ng-click="networks.attributes.do_attr('overwrite'); networks.attributes.list.options.type='nodes'; networks.attributes.list.options.name=attr;"><span class="glyphicon glyphicon-import"></span></a>
+						<a href="#/interface/{{m.session_id}}" class="attr-action float-right" title='Overwrite' ng-if="!canvas.is_attr_blocked('nodes', attr)" ng-click="networks.attributes.do_attr('overwrite'); networks.attributes.list.options.type='nodes'; networks.attributes.list.options.name=attr;"><span class="glyphicon glyphicon-import"></span></a>
 						<!-- remove -->
-						<a href="#/interface/{{m.session_id}}" class="attr-action float-right" title='Remove' ng-click="networks.attributes.attr_remove(canvas.current, m.session_id, attr, 'nodes')"><span class="glyphicon glyphicon-trash"></span></a>
+						<a href="#/interface/{{m.session_id}}" class="attr-action float-right" title='Remove' ng-if="!canvas.is_attr_blocked('nodes', attr)" ng-click="networks.attributes.attr_remove(canvas.current, m.session_id, attr, 'nodes')"><span class="glyphicon glyphicon-trash"></span></a>
 						<!-- rename -->
-						<a href="#/interface/{{m.session_id}}" class="attr-action float-right" title='Rename' ng-click="networks.attributes.attr_rename(canvas.current, m.session_id, attr, 'nodes')"><span class="glyphicon glyphicon-pencil"></span></a>
+						<a href="#/interface/{{m.session_id}}" class="attr-action float-right" title='Rename' ng-if="!canvas.is_attr_blocked('nodes', attr)" ng-click="networks.attributes.attr_rename(canvas.current, m.session_id, attr, 'nodes')"><span class="glyphicon glyphicon-pencil"></span></a>
 					</div>
 					<hr style="margin-bottom: 2em;" />
 					<h4>Edge attributes:</h4>
 					<div class="alert alert-info" ng-repeat="attr in canvas.get_attributes('edges')">
 						{{attr}}
 						<!-- overwrite -->
-						<a href="#/interface/{{m.session_id}}" class="attr-action float-right" title='Overwrite' ng-click="networks.attributes.do_attr('overwrite'); networks.attributes.list.options.type='edges'; networks.attributes.list.options.name=attr;"><span class="glyphicon glyphicon-import"></span></a>
+						<a href="#/interface/{{m.session_id}}" class="attr-action float-right" title='Overwrite' ng-if="!canvas.is_attr_blocked('edges', attr)" ng-click="networks.attributes.do_attr('overwrite'); networks.attributes.list.options.type='edges'; networks.attributes.list.options.name=attr;"><span class="glyphicon glyphicon-import"></span></a>
 						<!-- remove -->
-						<a href="#/interface/{{m.session_id}}" class="attr-action float-right" title='Remove' ng-click="networks.attributes.attr_remove(canvas.current, m.session_id, attr, 'edges')"><span class="glyphicon glyphicon-trash"></span></a>
+						<a href="#/interface/{{m.session_id}}" class="attr-action float-right" title='Remove' ng-if="!canvas.is_attr_blocked('edges', attr)" ng-click="networks.attributes.attr_remove(canvas.current, m.session_id, attr, 'edges')"><span class="glyphicon glyphicon-trash"></span></a>
 						<!-- rename -->
-						<a href="#/interface/{{m.session_id}}" class="attr-action float-right" title='Rename' ng-click="networks.attributes.attr_rename(canvas.current, m.session_id, attr, 'edges')"><span class="glyphicon glyphicon-pencil"></span></a>
+						<a href="#/interface/{{m.session_id}}" class="attr-action float-right" title='Rename' ng-if="!canvas.is_attr_blocked('edges', attr)" ng-click="networks.attributes.attr_rename(canvas.current, m.session_id, attr, 'edges')"><span class="glyphicon glyphicon-pencil"></span></a>
 					</div>
 					<hr />
 				</div>

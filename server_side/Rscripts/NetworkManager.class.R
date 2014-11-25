@@ -287,6 +287,7 @@ NetworkManager <- function() {
 
 
 			graph.list <- list(nodes=list(), edges=list())
+			v.attr.table <- NetworkManager()$expand.attr.table(v.attr.table, c('x','y'))
 
 			# VERTICES #
 			if ( 1 == v.count ) {
@@ -308,7 +309,7 @@ NetworkManager <- function() {
 						col.id <- which(col == colnames(v.attr.table))
 						l[col] <- v.attr.table[x, col.id]
 					}
-					
+
 					return(list(data=l, position=list(x=as.numeric(l['x']),y=as.numeric(l['y']))))
 				}, v.attr.table=v.attr.table)
 
@@ -809,9 +810,25 @@ NetworkManager <- function() {
 			if ( !is.null(nrow(table)) ) {
 
 				# Non-empty table
+				colnames <- colnames(table)
+				if ( old.name %in% colnames && !new.name %in% colnames ) {
+					col.id <- which(old.name == colnames)
+					colnames(table)[col.id] <- new.name
+				}
+
+			} else if ( 0 != length(table) ) {
+
+				# Single-row table
+				colnames <- names(table)
+				if ( old.name %in% colnames && !new.name %in% colnames ) {
+					col.id <- which(old.name == colnames)
+					names(table)[col.id] <- new.name
+				}
 
 			}
 
+			# END #
+			return(table)
 		},
 
 		rm.cols = function (table, col.list) {

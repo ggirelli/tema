@@ -82,6 +82,9 @@
             /* Initialize settings */
             /*---------------------*/
 
+            // Read settings
+            scope.settings._read(scope.m.session_id);
+
             // Check SIF
             scope.settings.is_file(scope.m.session_id, 'sif').then(function (data) {
                 if ( true === data.res ) {
@@ -113,9 +116,6 @@
                 }
             });
             scope.settings.is_go_mapped(scope.m.session_id);
-
-            // Read settings
-            scope.settings._read(scope.m.session_id);
 
             // React to apply_sif event
             scope.$on('apply_sif', function (e, info) {
