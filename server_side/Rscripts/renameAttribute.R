@@ -10,6 +10,9 @@ if(length(args) != 5) stop('./addAttributeToNetwork.R session_id graph_name attr
 library(igraph)
 library(rjson)
 
+source('./NetworkManager.class.R')
+nm <- NetworkManager()
+
 # Start
 if(file.exists(paste0('../session/', args[1], '/'))) {
 	setwd(paste0('../session/', args[1], '/'))
@@ -24,14 +27,12 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 
 	cat('> Rename attribute\n')
 	if ( 'edges' == args[3] ) {
-		eval(parse(text=paste0('E(g)$', args[5], ' <- E(g)$', args[4])))
-		g <- remove.edge.attribute(g, args[4])
+		e.attr.table <- nm$rename.col(e.attr.table, args[4], args[5])
 	} else if ( 'nodes' == args[3] ) {
-		eval(parse(text=paste0('V(g)$', args[5], ' <- V(g)$', args[4])))
-		g <- remove.vertex.attribute(g, args[4])
+		v.attr.table <- nm$rename.col(v.attr.table, args[4], args[5])
 	}
 
 	cat('> Convert back to JSON\n')
-	source('../../Rscripts/extendIgraph.R')
-	write.graph(g, paste0(args[2], '.json'), format='json')
+	graph.list <- nm$attr.tables.to.list(v.attr.table, e.attr.table)
+	write(toJSON(graph.list), paste0(args[2], '.json'))
 }

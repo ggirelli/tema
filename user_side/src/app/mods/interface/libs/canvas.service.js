@@ -288,7 +288,49 @@
                         }
                     }
                 }
-                return null;
+                return;
+            };
+
+            // Node reserved attributes
+            self.node_attr_reserved = ['id', 'name', 'x', 'y'];
+            // Edge reserved attributes
+            self.edge_attr_reserved = ['id','source','target'];
+
+            /**
+             * @param  {String}  what 'edges' or 'nodes'
+             * @param  {String}  attr label
+             * @return {Boolean}      if it is a reserved attributed
+             */
+            self.is_attr_reserved = function (what, attr) {
+                if ( -1 != ['edges', 'nodes'].indexOf(what) ) {
+                    if ( 'nodes' == what ) {
+                        return -1 != self.node_attr_reserved.indexOf(attr);
+                    } else if ( 'edges' == what) {
+                        return -1 != self.edge_attr_reserved.indexOf(attr);
+                    }
+                }
+                return true;
+            };
+
+            /**
+             * Retrieves attr list without reserved attributes
+             * @param  {String} what 'edges' or 'nodes'
+             * @return {Array}      attributes list
+             */
+            self.clean_attr_list = function (what) {
+                if ( -1 != ['edges', 'nodes'].indexOf(what) ) {
+                    var attr_list = self.get_attributes(what);
+
+                    if ( null == attr_list ) return;
+
+                    for (var i = attr_list.length - 1; i >= 0; i--) {
+                        if ( self.is_attr_reserved(what, attr_list[i]) ) {
+                            attr_list = attr_list.splice(i, 1);
+                        }
+                    }
+
+                }
+                return;
             };
 
             /**
