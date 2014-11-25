@@ -188,7 +188,6 @@
              * @return {promise}
              */
             self.attr_apply = function (network, session_id, label) {
-                console.log(network);
                 if ( self.check_attr() ) {
                     if ( 'add_new' == label ) {
                         var qwait = q.defer();
@@ -253,7 +252,6 @@
 
                             }).
                                 success(function (data) {
-                                    console.log(data);
                                     if ( 0 == data['err'] ) {
                                         rootScope.$broadcast('load_in_canvas', data.net);
                                         self.do_attr(null);
@@ -283,7 +281,6 @@
 
                         }).
                             success(function (data) {
-                                console.log(data);
                                 if ( 0 == data['err'] ) {
                                     if ( undefined != data.net[self.list.options.type][0].data[self.list.options.name] ) {
                                         rootScope.$broadcast('load_in_canvas', data.net);
@@ -378,7 +375,6 @@
 
                     }).
                         success(function (data) {
-                            console.log(data);
                             if ( 0 == data.err ) {
                                 rootScope.$broadcast('load_in_canvas', data.net);
                                 self.do_attr(null);
