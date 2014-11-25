@@ -27,9 +27,9 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 
 	cat('> Rename attribute\n')
 	if ( 'nodes' == args[3] ) {
-		v.attr.table <- nm$rm.cols(v.attr.table, args[4], args[5])
+		v.attr.table <- nm$rm.cols(v.attr.table, c(args[4]))
 	} else if ( 'edges' == args[3] ) {
-		e.attr.table <- nm$rm.cols(e.attr.table, args[4], args[5])
+		e.attr.table <- nm$rm.cols(e.attr.table, c(args[4]))
 	}
 
 	cat('> Convert back to JSON\n')

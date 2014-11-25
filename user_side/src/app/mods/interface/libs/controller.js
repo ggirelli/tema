@@ -93,10 +93,14 @@
             // Check SIF
             scope.settings.is_file(scope.m.session_id, 'sif').then(function (data) {
                 if ( true === data.res ) {
+                    console.log(1);
                     scope.settings.get_sif(scope.m.session_id).then(function (data) {
                         if ( 0 == data['err']) {
+                            console.log(2);
                             scope.settings.info.sif = data.sif;
                             if ( scope.settings.is_sif_ready() ) {
+                                console.log(3);
+                                console.log(scope.settings.info);
                                 scope.settings.info.sif_keys = Object.keys(scope.settings.info.sif);
                                 scope.$broadcast('apply_sif', scope.settings.info);
                             }

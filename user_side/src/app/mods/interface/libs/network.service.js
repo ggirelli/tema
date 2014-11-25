@@ -112,7 +112,7 @@
             self.apply_sif = function (info) {
                 // Retrieve SIF
                 var sif = info['sif'];
-
+                console.log(info['sif']);
                 if ( undefined != sif) {
 
                     // SIF columns
