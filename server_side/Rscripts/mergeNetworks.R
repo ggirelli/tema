@@ -140,20 +140,40 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 		e.attr.table <- nm$rm.cols(e.attr.table, 'tea_identity')
 		
 		# Write GraphML
-		g.out <- nm$attr.tables.to.graph(v.attr.table, e.attr.table)
-		write.graph(g.out, paste0(l$new_name, '.graphml'), format='graphml')
-		
-		# Write graph DAT
-		d <- list(
-			e_attributes=list.edge.attributes(g.out),
-			e_count=ecount(g.out), 
-			v_attributes=list.vertex.attributes(g.out),
-			v_count=vcount(g.out)
-		)
-		write(toJSON(d), paste0(l$new_name, '.dat'))
+		g <- nm$attr.tables.to.graph(v.attr.table, e.attr.table)
+		if ( 'grid' == l$default_layout) {
+			coords <- layout.grid(g)*1000
+		} else if ( 'circle' == l$default_layout ) {
+			coords <- layout.circle(g)*1000
+		}
+		V(g)$x <- round(coords[,1], 0)
+		V(g)$y <- round(coords[,2], 0)
+		write.graph(g, paste0(l$new_name, '.graphml'), format='graphml')
 
-		# Write JSON
+		cat('Writing JSON file.\n')
+		attr.tables <- nm$graph.to.attr.table(g)
+		v.attr.table <- attr.tables$nodes
+		e.attr.table <- attr.tables$edges
+		v.attr.table <- nm$update.row.ids(v.attr.table)
+		v.attr.table <- nm$add.prefix.to.col(v.attr.table, 'id', 'n')
+		e.attr.table <- nm$convert.extremities.to.v.id.based.on.table(e.attr.table, v.attr.table, 'name')
+		e.attr.table <- nm$update.row.ids(e.attr.table)
+		e.attr.table <- nm$add.prefix.to.col(e.attr.table, 'id', 'e')
 		graph.list <- nm$attr.tables.to.list(v.attr.table, e.attr.table)
 		write(toJSON(graph.list), paste0(l$new_name, '.json'))
+
+		if (file.exists(paste0(l$new_name, '.json'))) {
+			cat('Preparing config file.\n')
+			dat <- list(
+				e_attributes=list.edge.attributes(g),
+				e_count=ecount(g),
+				v_attributes=list.vertex.attributes(g),
+				v_count=vcount(g)
+			)
+
+			cat('Writing DAT file.\n')		
+			write(toJSON(dat), paste0(l$new_name, '.dat'))
+		}
+		cat('~ END ~')
 	}
 }

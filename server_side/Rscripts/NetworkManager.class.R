@@ -30,7 +30,7 @@ NetworkManager <- function() {
 				v.attr.table <- c()
 
 			} else if ( 1 == v.count ) {
-
+				
 				# Single vertex network
 				v.attr.table <- c()
 				for (attr in v.attr.list) {
@@ -40,7 +40,7 @@ NetworkManager <- function() {
 				names(v.attr.table) <- v.attr.list
 
 			} else {
-
+				
 				# 'normal' network
 				v.attr.table <- c()
 				for (attr in v.attr.list) {
@@ -55,21 +55,21 @@ NetworkManager <- function() {
 			
 			e.attr.list <- list.edge.attributes(graph)
 			e.count <- ecount(graph)
-
+			
 			if ( 0 == e.count ) {
 
 				# Empty network
 				e.attr.table <- c()
 
 			} else if ( 1 == e.count ) {
-
+				
 				# Single edge network
 				e.attr.table <- c()
 				for (attr in e.attr.list) {
 					e.attr.table <- append(e.attr.table,
 						eval(parse(text=paste0('E(g)[1]$', attr))))
 				}
-				names(e.attr.table) <- e.attr.list
+				if ( !is.null(e.attr.table) ) names(e.attr.table) <- e.attr.list
 
 				# Add source/target columns
 				e.attr.table <- NetworkManager()$add.edges.extremities(e.attr.table, graph, T)
@@ -82,7 +82,7 @@ NetworkManager <- function() {
 					e.attr.table <- cbind(e.attr.table,
 						eval(parse(text=paste0('E(g)$', attr))))
 				}
-				colnames(e.attr.table) <- e.attr.list
+				if ( !is.null(e.attr.table) ) colnames(e.attr.table) <- e.attr.list
 
 				# Add source/target columns
 				e.attr.table <- NetworkManager()$add.edges.extremities(e.attr.table, graph, T)
@@ -960,11 +960,15 @@ NetworkManager <- function() {
 				if ( add.col.name) {
 					if ( 0 != length(col.name) ) names(e.attr.table)[1] <- col.name
 				}
-				names(e.attr.table)[length(e.attr.table)-1] <- 'source'
-				names(e.attr.table)[length(e.attr.table)] <- 'target'
+				if ( is.null(names(e.attr.table)) ) {
+					names(e.attr.table) <- c('source', 'target')
+				} else {
+					names(e.attr.table)[length(e.attr.table)-1] <- 'source'
+					names(e.attr.table)[length(e.attr.table)] <- 'target'
+				}
 
 			} else {
-
+				
 				# 'normal' network
 				e.attr.table.tmp <- NetworkManager()$rm.cols(e.attr.table, c('source', 'target'))
 
@@ -973,14 +977,17 @@ NetworkManager <- function() {
 					add.col.name <- TRUE
 					col.name <- colnames(e.attr.table)[1]
 				}
-
 				e.attr.table <- cbind(e.attr.table.tmp, get.edgelist(graph, names=names))
-
+				
 				if ( add.col.name) {
 					if ( 0 != length(col.name) ) colnames(e.attr.table)[1] <- col.name
 				}
-				colnames(e.attr.table)[ncol(e.attr.table)-1] <- 'source'
-				colnames(e.attr.table)[ncol(e.attr.table)] <- 'target'
+				if ( is.null(colnames(e.attr.table)) ) {
+					colnames <- c('source', 'target')
+				} else {
+					colnames(e.attr.table)[ncol(e.attr.table)-1] <- 'source'
+					colnames(e.attr.table)[ncol(e.attr.table)] <- 'target'
+				}
 
 			}
 

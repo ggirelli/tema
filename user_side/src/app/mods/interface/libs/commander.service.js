@@ -148,7 +148,7 @@
              * Runs the merge operation
              * @param  {string} session_id
              */
-            self.apply_merge = function (session_id) {
+            self.apply_merge = function (session_id, layout) {
                 var qwait = q.defer();
 
                 http({
@@ -164,12 +164,14 @@
                         n_behavior: self.merge.n_attr_behavior,
                         e_behavior: self.merge.e_attr_behavior,
                         n_count_attr: self.merge.add_node_count_attr,
-                        e_count_attr: self.merge.add_edge_count_attr
+                        e_count_attr: self.merge.add_edge_count_attr,
+                        default_layout: layout
                     },
                     url: 's/'
 
                 }).
                     success(function (data) {
+                        console.log(data);
                         if ( 0 == data.err ) {
                             alert('Merged networks.');
                         }

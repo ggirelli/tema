@@ -19,9 +19,11 @@ if ( $s->exists($data->id) ) {
 	file_put_contents($f, json_encode($data));
 	
 	$q = 'cd ' . SCRIPATH . '; ./mergeNetworks.R ' . $s->get('id') . ' tmp_r_config';
+	echo $q . "\n";
 	$r = $s->exec_return('convert', $q);
+	print_r($r);
 	
-	unlink($f);
+	//unlink($f);
 	die('{"err":0}');
 
 } else {
