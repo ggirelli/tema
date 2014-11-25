@@ -119,7 +119,7 @@
                     var cols = info['sif_keys'];
                     // SIF sample column
                     var sample_col = info['sif_sample_col'];
-
+                    console.log(self.list);
                     if ( null != self.list) {
                         // Apply to each network in self.list
                         for (var i = self.list.length - 1; i >= 0; i--) {
