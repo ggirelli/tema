@@ -14,9 +14,6 @@ library(heatmap.plus)
 source('NetworkManager.class.R')
 nm <- NetworkManager()
 
-source('GraphManager.class.R')
-gm <- GraphManager()
-
 plot.heatmap = function(ds.matrix, d.col, file.path, main) {
 	# Plots the heatmap
 	# 
@@ -179,7 +176,7 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 						g.two <- nm$attr.tables.to.graph(v.attr.table, e.attr.table.two)
 
 						# Calc distance
-						dIM <- gm$calcIpsenDist(g.one, g.two)
+						dIM <- nm$calcIpsenDist(g.one, g.two)
 						if ( l$dist$im ) single.row <- append(single.row, dIM)
 
 					}
