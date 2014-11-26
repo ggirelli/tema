@@ -138,7 +138,12 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 		cat('> Output\n')
 
 		# Remove identity columns
-		v.attr.table <- nm$rm.cols(v.attr.table, 'tea_identity')
+		if ( 'name' %in% nm$get.col.names(v.attr.table) ) {
+			v.attr.table <- nm$rename.col(v.attr.table, 'name', 'name.bak')
+			v.attr.table <- nm$rename.col(v.attr.table, 'tea_identity', 'name')
+		} else {
+			v.attr.table <- nm$rename.col(v.attr.table, 'tea_identity', 'name')
+		}
 		e.attr.table <- nm$rm.cols(e.attr.table, 'tea_identity')
 		
 		# Write GraphML
