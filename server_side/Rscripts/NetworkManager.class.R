@@ -10,7 +10,7 @@ NetworkManager <- function() {
 		# ATTRIBUTES #
 		# ---------- #
 
-		version = 0.1,
+		version = 2.2,
 
 		# --------- #
 		# FUNCTIONS #
