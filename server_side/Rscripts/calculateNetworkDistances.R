@@ -11,8 +11,8 @@ library(igraph)
 library(rjson)
 library(heatmap.plus)
 
-source('NetworkManager.class.R')
-nm <- NetworkManager()
+source('./Graph_Manager.class.R')
+nm <- GraphManager()
 
 plot.heatmap = function(ds.matrix, d.col, file.path, main) {
 	# Plots the heatmap

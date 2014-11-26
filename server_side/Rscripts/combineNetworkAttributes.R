@@ -10,8 +10,8 @@ if(length(args) != 6) stop('./combinenNetworkAttributes.R session_id graph_name 
 library(igraph)
 library(rjson)
 
-source('./NetworkManager.class.R')
-nm <- NetworkManager()
+source('./Graph_Manager.class.R')
+nm <- GraphManager()
 
 # Start
 if (file.exists(paste0('../session/', args[1], '/'))) {

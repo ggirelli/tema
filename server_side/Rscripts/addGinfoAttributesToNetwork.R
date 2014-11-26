@@ -20,8 +20,8 @@ ensembl <- useMart(
 )
 normal.chroms <- c(1:22, "X", "Y")
 
-source('NetworkManager.class.R')
-nm <- NetworkManager()
+source('./Graph_Manager.class.R')
+nm <- GraphManager()
 
 # Start
 if(file.exists(paste0('../session/', args[1], '/'))) {
