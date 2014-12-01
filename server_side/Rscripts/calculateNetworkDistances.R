@@ -4,12 +4,12 @@
 args <- commandArgs(trailingOnly = TRUE)
 
 # Check parameters
-if(length(args) != 2) stop('./convertToJSON.R session_id config_file')
+if(length(args) != 2) stop('./calculateNetworkDistances.R session_id config_file')
 
 # Load requirements
 library(igraph)
 library(rjson)
-library(heatmap.plus)
+library(NMF)
 
 source('./Graph_Manager.class.R')
 nm <- GraphManager()
@@ -34,10 +34,11 @@ plot.heatmap = function(ds.matrix, d.col, file.path, main) {
 		d.matrix[j,i] <- as.numeric(ds.matrix[, which(colnames(ds.matrix) == d.col)][k])
 		d.matrix[j,j] <- 0
 	}
-
+	
+	par(mar=c(0,2,20,0))
 	svg(file.path)
 	rownames(d.matrix) <- colnames(d.matrix)
-	heatmap.plus::heatmap.plus(d.matrix, na.rm=F, symm=T, main=main, Rowv=NA, Colv=NA, margins=c(5,5))
+	aheatmap(d.matrix,  Rowv=NA)
 	dev.off()
 }
 
