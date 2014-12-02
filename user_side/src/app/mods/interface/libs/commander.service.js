@@ -629,7 +629,7 @@
                         edge_attr_list: self.distances.group.edges,
                         dist: self.distances.measures,
                         out_plot: self.distances.out_plot,
-                        out_table: self.distances.out_table,
+                        out_table: self.distances.out_table
                     },
                     url: 's/'
 
