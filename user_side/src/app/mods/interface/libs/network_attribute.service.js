@@ -246,12 +246,14 @@
                                     id: session_id,
                                     name: 'json_tmp_net',
                                     network: JSON.stringify(network),
+                                    go_type: 'default',
                                     attr_hugo: self.list.options.hugo
                                 },
                                 url: 's/'
 
                             }).
                                 success(function (data) {
+                                    //console.log(data)
                                     if ( 0 == data['err'] ) {
                                         rootScope.$broadcast('load_in_canvas', data.net);
                                         self.do_attr(null);
