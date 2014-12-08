@@ -86,7 +86,7 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 	#		}
 	#	}
 	#}
-
+	cat('> Write JSON file\n')
 	graph.list <- nm$graph.to.list(g)
 	write(toJSON(graph.list), paste0(args[2], '.json'))
 }

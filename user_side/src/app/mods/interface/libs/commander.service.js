@@ -635,6 +635,7 @@
 
                 }).
                     success(function (data) {
+                        //console.log(data);
                         if ( 0 == data.err ) {
                             alert('Done.');
                             if ( self.distances.out_table ) {

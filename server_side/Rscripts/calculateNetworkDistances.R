@@ -30,15 +30,15 @@ plot.heatmap = function(ds.matrix, d.col, file.path, main) {
 		i <- which(net.list == ds.matrix[k,1])
 		j <- which(net.list == ds.matrix[k,2])
 		d.matrix[i,j] <- as.numeric(ds.matrix[, which(colnames(ds.matrix) == d.col)][k])
-		d.matrix[i,i] <- 0
+		d.matrix[i,i] <- NaN
 		d.matrix[j,i] <- as.numeric(ds.matrix[, which(colnames(ds.matrix) == d.col)][k])
-		d.matrix[j,j] <- 0
+		d.matrix[j,j] <- NaN
 	}
 	
 	par(mar=c(0,2,20,0))
 	svg(file.path)
 	rownames(d.matrix) <- colnames(d.matrix)
-	aheatmap(d.matrix,  Rowv=NA)
+	aheatmap(d.matrix,  distfun=as.dist(d.matrix))
 	dev.off()
 }
 
@@ -279,6 +279,15 @@ if(file.exists(paste0('../session/', args[1], '/'))) {
 
 		if ( l$out_plot ) {
 			row.names(distances) <-NULL
+
+			if ( file.exists(paste0('output_directory/im_heatmap.svg')) ) file.remove(paste0('output_directory/im_heatmap.svg'))
+			if ( file.exists(paste0('output_directory/h_heatmap.svg')) ) file.remove(paste0('output_directory/h_heatmap.svg'))
+			if ( file.exists(paste0('output_directory/him_heatmap.svg')) ) file.remove(paste0('output_directory/him_heatmap.svg'))
+			if ( file.exists(paste0('output_directory/j_heatmap.svg')) ) file.remove(paste0('output_directory/j_heatmap.svg'))
+			if ( file.exists(paste0('output_directory/jim_heatmap.svg')) ) file.remove(paste0('output_directory/jim_heatmap.svg'))
+			if ( file.exists(paste0('output_directory/js_heatmap.svg')) ) file.remove(paste0('output_directory/js_heatmap.svg'))
+			if ( file.exists(paste0('output_directory/jsim_heatmap.svg')) ) file.remove(paste0('output_directory/jsim_heatmap.svg'))
+
 			if ( l$dist$im ) plot.heatmap(distances, 'dIM', paste0('output_directory/im_heatmap.svg'), 'Ipsen Mikhailov')
 			if ( l$dist$h ) plot.heatmap(distances, 'dH', paste0('output_directory/h_heatmap.svg'), 'Hamming')
 			if ( l$dist$him ) plot.heatmap(distances, 'dHIM', paste0('output_directory/him_heatmap.svg'), 'HIM')

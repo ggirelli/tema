@@ -76,7 +76,7 @@ GraphManager <- function() {
 				e.attr.table <- c()
 				for (attr in e.attr.list) {
 					e.attr.table <- append(e.attr.table,
-						eval(parse(text=paste0('E(g)[1]$', attr))))
+						eval(parse(text=paste0('E(graph)[1]$', attr))))
 				}
 				if ( !is.null(e.attr.table) ) names(e.attr.table) <- e.attr.list
 
@@ -89,7 +89,7 @@ GraphManager <- function() {
 				e.attr.table <- c()
 				for (attr in e.attr.list) {
 					e.attr.table <- cbind(e.attr.table,
-						eval(parse(text=paste0('E(g)$', attr))))
+						eval(parse(text=paste0('E(graph)$', attr))))
 				}
 				if ( !is.null(e.attr.table) ) colnames(e.attr.table) <- e.attr.list
 
@@ -192,14 +192,20 @@ GraphManager <- function() {
 			if ( 1 == v.count ) {
 
 				# Single-node graph
-				graph.list$nodes <- list(data=
-					GraphManager()$get.vertex.attributes(V(graph)[1], graph))
+				l <- GraphManager()$get.vertex.attributes(V(graph)[1], graph)
+				graph.list$nodes <- list(data=l)
+				if ( 2 == length(which(c('x', 'y') %in% list.vertex.attributes(graph))) ) {
+					graph.list$nodes$position <- list(x=V(graph)[1]$x, y=V(graph)[1]$y)
+				}
 
 			} else {
 
 				# 'normal' graph
 				graph.list$nodes <- lapply(V(graph), FUN=function(v) {
 					l <- GraphManager()$get.vertex.attributes(v, graph)
+					if ( 2 == length(which(c('x', 'y') %in% list.vertex.attributes(graph))) ) {
+						return(list(data=l, position=list(x=l$x, y=l$y)))
+					}
 					return(list(data=l))
 				})
 
@@ -1017,6 +1023,7 @@ GraphManager <- function() {
 					add.col.name <- TRUE
 					col.name <- colnames(e.attr.table)[1]
 				}
+				
 				e.attr.table <- cbind(e.attr.table.tmp, get.edgelist(graph, names=names))
 				
 				if ( add.col.name) {

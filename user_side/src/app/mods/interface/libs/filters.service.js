@@ -230,6 +230,7 @@
                     index = self.list[what].length - 1;
                 }
                 self.list[what].splice(index, 1);
+                self.apply();
             };
 
             /**
