@@ -14,7 +14,7 @@
                 nodes: [
                     { data: { id: "n0", name: "Welcome", x: -100, y: -50 }, position: {x: -100, y: -50} },
                     { data: { id: "n1", name: "to", x: 100, y: 0 }, position: {x: 100, y: 0} },
-                    { data: { id: "n2", name: "TEA", x: -50, y: 100 }, position: {x: -50, y: 100} }
+                    { data: { id: "n2", name: "TEMA", x: -50, y: 100 }, position: {x: -50, y: 100} }
                 ],
                 edges: [
                     { data: { id: "e0", source: "n0", target: "n1" } },
