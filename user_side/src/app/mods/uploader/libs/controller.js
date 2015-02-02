@@ -7,6 +7,7 @@
 
         	scope.m = model;
         	scope.m.session_id = routeParams.id;
+        	scope.m.uploader_type = "0";
 
         	scope.uploader = uploader;
 

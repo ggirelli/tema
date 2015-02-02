@@ -20,6 +20,21 @@
             self.dropzone = [];
 			
             /**
+             * Checks whether the selected uploader type is the basic one.
+             * @param  {String}  type Uploader type identifier
+             * @return {Boolean}
+             */
+            self.is_basic = function (type) {
+                if ( parseInt(type) == 1) {
+                    return true;
+                } else {
+                    return false;
+                }
+            };
+
+            /** BASIC UPLOADER **/
+
+            /**
              * Add a file to the queue
              */
         	self.addFile = function () {
@@ -248,22 +263,17 @@
                 self.myDropzone = new Dropzone("div#dropzone", {
                     url: "s/",
                     method: 'post',
-                    uploadMultiple: true,
-                    parallelUploads: 5,
+                    uploadMultiple: false,
+                    parallelUploads: 1,
                     paramName: 'files',
                     acceptedFiles: '.graphml',
                     maxFilesize: 500,
                     clickable: true,
                     init: function() {
                         // Here goes any event listener
-                        this.on('sendingmultiple', function(file, xhr, formData) {
+                        this.on('sending', function(file, xhr, formData) {
                             formData.append('id', session_id)
                             formData.append('action', 'upload_drag_network');
-                        });
-                        this.on('successmultiple', function(file, data) {
-                            console.log(file);
-                            console.log(data);
-                            console.log(JSON.parse(data));
                         });
                     },
                     dictDefaultMessage: "Drop your <code>.graphml</code> files here to upload them.",

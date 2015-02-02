@@ -14,11 +14,18 @@
 
 	<div class="uploader-panel panel panel-primary col-md-12">
 
-		<div class="panel-heading">Uploader</div>
-		<div class="panel-body">
+		<div class="panel-heading">
+			<select ng-model="m.uploader_type" class="form-control">
+				<option value="0" selected="selected">Drag'n'drop uploader</option>
+				<option value="1">Basic uploader</option>
+			</select>
+		</div>
 
-			<p>Please, upload your <code>.graphml</code> files to start a new session!</p>
-			<p>If your files are particularly <span class='big'>BIG</span> please, use an <code>sshfs</code> or <code>scp</code> connection instead of this uploader.<sup>1</sup></p>
+		<div class="panel-body dropzone" id="dropzone" ng-show="!uploader.is_basic(m.uploader_type)"></div>
+
+		<div class="panel-body" ng-show="uploader.is_basic(m.uploader_type)">
+			<p></p>
+			<p style="text-align: center;">Please, use the buttons below to select and upload your <code>.graphml</code> files.</p>
 
 			<div class="uploader-wrap col-md-12">
 
@@ -61,17 +68,12 @@
 		</div>
 	</div>
 
-	<p>
+	<a ng-show="!uploader.is_basic(m.uploader_type)" href='#/interface/{{m.session_id}}' class="btn btn-danger float-right" ng-click='uploader.abort()' ng-class="{'disabled' : uploader.uploading}">Abort</a>
+
+	<p ng-show="uploader.is_basic(m.uploader_type)" >
 		<small><sup>1</sup> you can upload your files manually at the address <span style='font-family: Monospace;'>/server_side/session/{{m.session_id}}/</span></small>
 	</p>
 
 	<small>If you leave this page the upload will be interrupted.</small>
-
-	<p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
-
-	<div class="uploader-panel panel panel-primary col-md-12" ng-if='false'>
-		<div class="panel-heading">Uploader w/Dropzone</div>
-		<div class="panel-body dropzone" id="dropzone"></div>
-	</div>
 
 </div>
