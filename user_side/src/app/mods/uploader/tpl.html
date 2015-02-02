@@ -1,8 +1,11 @@
 <!-- import url-specific style -->
-<style type="text/css">@import "user_side/src/common/css/uploader.css";</style>
+<style type="text/css">
+	@import "user_side/vendor/css/dropzone.css";
+	@import "user_side/src/common/css/uploader.css";
+</style>
 
 <!-- url-specific template -->
-<div id='uploader' class='col-md-8 col-md-offset-2' ng-app='tea' ng-controller='uploaderController as uCtrl' ng-model='uCtrl'>
+<div id='uploader' class='col-md-8 col-md-offset-2' ng-app='tea' ng-controller='uploaderController as uCtrl' ng-model='uCtrl' ng-init="uploader.init_dropzone(m.session_id)">
 
 	<div class="title col-md-12">
 		<p>TEMA</p>
@@ -63,5 +66,12 @@
 	</p>
 
 	<small>If you leave this page the upload will be interrupted.</small>
+
+	<p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
+
+	<div class="uploader-panel panel panel-primary col-md-12" ng-if='false'>
+		<div class="panel-heading">Uploader w/Dropzone</div>
+		<div class="panel-body dropzone" id="dropzone"></div>
+	</div>
 
 </div>

@@ -43,7 +43,7 @@ if ( $s->exists($data->id) ) {
 	}
 
 } else {
-	echo '{"err":3}';
+	die('{"err":3}');
 }
 
 ?>

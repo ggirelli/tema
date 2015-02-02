@@ -16,7 +16,8 @@
             'angular-route': 'vendor/js/angular-route.min',
             'bootstrap': 'vendor/js/bootstrap.min',
             'cytoscape': 'vendor/js/cytoscape.min',
-            'jquery': 'vendor/js/jquery.min'
+            'jquery': 'vendor/js/jquery.min',
+            'dropzone': 'vendor/js/dropzone'
         },
         shim: {
             // Vendor libraries.
@@ -36,11 +37,14 @@
             },
             'cytoscape': {
                 'exports': 'cytoscape'
+            },
+            'dropzone': {
+                'exports': 'dropzone'
             }
         }
     });
 
-    requirejs(['angular', 'angular-animate', 'angular-route', 'cytoscape', 'jquery', 'app/app'], function (angular) {
+    requirejs(['angular', 'angular-animate', 'angular-route', 'jquery', 'cytoscape', 'dropzone', 'app/app'], function (angular) {
 
         // Angular bootstrapping
         angular.element(document).ready(function () {

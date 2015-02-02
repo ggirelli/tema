@@ -40,7 +40,8 @@ if( isset($data->action) ) {
 			case 'save_network':
 			case 'session_new': case 'session_load':
 			case 'set_settings':
-			case 'upload_network': case 'upload_setting_file': {
+			case 'upload_network': case 'upload_drag_network':
+			case 'upload_setting_file': {
 				require_once('action/' . $data->action . '.php');
 				break;
 			}

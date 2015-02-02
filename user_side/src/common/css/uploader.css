@@ -69,3 +69,23 @@
 #hidden-form {
 	display: none;
 }
+
+/** DROPZONE **/
+
+.dropzone .dz-preview.dz-file-preview .dz-image {
+	background: linear-gradient(to bottom, #CCC, #AAA)
+}
+
+.dropzone .dz-preview.dz-file-preview .dz-error-mark svg g g {
+  fill: #D9534F;
+  stroke: #D43F3A;
+  fill-opacity: 0.95;
+  stroke-opacity: 1;
+}
+
+.dropzone .dz-preview.dz-success .dz-success-mark svg g path {
+  fill: #5CB85C;
+  stroke: #4CAE4C;
+  fill-opacity: 0.95;
+  stroke-opacity: 1;
+}

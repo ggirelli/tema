@@ -16,6 +16,8 @@
         	self.files = [];
             self.files_rm = [];
             self.files_up = []
+
+            self.dropzone = [];
 			
             /**
              * Add a file to the queue
@@ -65,28 +67,45 @@
 
             /**
              * Checks files in the queue and removes error
+             * @param  {Integer} time ms after which wrong files are removed
              */
         	self.check_list = function (time) {
                 if ( 0 == self.files.length ) {
                     alert('No files to check.');
                     stop();
                 }
-
+                
                 var i = 0;
         		while ( i < self.files.length ) {
-                    var ext = self.files[i].data[0].name.split('.');
-                    ext = ext[ext.length - 1];
-                    if ( 'graphml' != ext ) {
+                    if ( !self.check_single_file(self.files[i].data[0].name) ) {
                         self.files_rm.push(self.files[i]);
                         self.rmFile(i);
                     } else {
                         i++;
                     }
                 };
+
                 timeout(function() {
                     self.files_rm = [];
                 }, time);
         	};
+
+            /**
+             * Checks a single file extension
+             * @param  {String} fname file name
+             * @return {Boolean}       False if any error occurred
+             */
+            self.check_single_file = function (fname) {
+                var ext = fname.split('.');
+                ext = ext[ext.length - 1];
+                if ( 'graphml' != ext ) {
+                    console.log(3);
+                    return false;
+                } else {
+                    console.log(4);
+                    return true;
+                }
+            }
 
             /**
              * Begins upload
@@ -109,6 +128,11 @@
                 }                    
         	};
 
+            /**
+             * Uploads a single file
+             * @param  {String} session_id
+             * @param  {Integer} id         file id
+             */
             self.single_upload = function (session_id, id) {
                 // defer the main process
                 var qwait = q.defer();
@@ -216,7 +240,44 @@
 
                 // Redirect to the interface
                 document.location.hash = '#/interface/' + session_id
-            }
+            };
+
+            /** DROPZONE FUNCTIONS */
+
+            self.init_dropzone = function (session_id) {
+                self.myDropzone = new Dropzone("div#dropzone", {
+                    url: "s/",
+                    method: 'post',
+                    uploadMultiple: true,
+                    parallelUploads: 5,
+                    paramName: 'files',
+                    acceptedFiles: '.graphml',
+                    maxFilesize: 500,
+                    clickable: true,
+                    init: function() {
+                        // Here goes any event listener
+                        this.on('sendingmultiple', function(file, xhr, formData) {
+                            formData.append('id', session_id)
+                            formData.append('action', 'upload_drag_network');
+                        });
+                        this.on('successmultiple', function(file, data) {
+                            console.log(file);
+                            console.log(data);
+                            console.log(JSON.parse(data));
+                        });
+                    },
+                    dictDefaultMessage: "Drop your <code>.graphml</code> files here to upload them.",
+                    dictFallbackMessage: "Your browser does not support drag&drop upload. Please use the <a href=''>basic uploader</a> to upload your <code>.graphml</code> files.",
+                    dictFallbackText: "Please use the fallback form below to upload your files like in the olden days.",
+                    dictInvalidFileType: "You can't upload files of this type.",
+                    //dictFileTooBig: "",
+                    //dictResponseError: "",
+                    //dictCancelUpload: "",
+                    //dictCancelUploadConfirmation: "",
+                    //dictRemoveFile: "",
+                    //dictMaxFilesExceeded: ""
+                });
+            };
 
         };
 

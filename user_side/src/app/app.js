@@ -12,7 +12,7 @@
         './mods/interface/libs/settings.service',
         './mods/uploader/libs/controller', './mods/uploader/libs/service', 
         './mods/uploader/libs/directive', './mods/uploader/libs/submit_form.directive',
-        'angular-route', 'angular-animate', 'jquery'];
+        'angular-route', 'angular-animate', 'jquery', 'dropzone'];
 
     define(def_requirements,
         function (angular, model, controller, routeConfig,
