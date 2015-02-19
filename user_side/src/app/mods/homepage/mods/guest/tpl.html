@@ -1,0 +1,104 @@
+<!-- import url-specific style -->
+<style type="text/css">@import "user_side/src/common/css/homepage.css";</style>
+
+<!-- url-specific template -->
+<div id='homepage' class='col-md-8 col-md-offset-2' ng-app='tea' ng-controller='homepageController as hCtrl' ng-model='hCtrl'>
+
+	<div class="title col-md-12">
+		<p>TEMA</p>
+		<small>Tumor Evolution Manager and Analyzer</small>
+	</div>
+
+	<!-- choice-menu -->
+	<div class="session-choice panel panel-default col-md-12" ng-if="!up.isSigning() && !in.isSigning() && !load.isLoading()">
+		<div class="panel-heading">Welcome to TEMA!</div>
+		<div class="panel-body">
+
+			<div class="col-md-6">
+				<button class="cell btn btn-aqua small-caps mbot05" ng-click='in.setSigning(true)'>sign in</button>
+			</div>
+
+			<div class="col-md-6">
+				<button class="cell btn btn-light-aqua small-caps mbot05" ng-click='up.setSigning(true)'>sign up</button>
+			</div>
+
+			<div class="col-md-12">
+				<button class="cell btn btn-reddish small-caps" ng-click='load.setLoading(true)'>enter a <u>public</u> session</button>
+			</div>
+
+		</div>
+	
+	</div>
+
+	<!-- sign-up-form -->
+	<div class="selected-form panel panel-default col-md-12" ng-if="up.isSigning()">
+		<div class="panel-heading">Sign up for a new user</div>
+		<div class="panel-body">
+
+			<form action="" role="form">
+				<div class="mbot05 col-md-12 input-group">
+					<span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+					<input class="form-control" type="text" placeholder="Pick a username" name="username" id="username" />
+				</div>
+				
+				<div class="mbot05 col-md-12 input-group">
+				<span class="input-group-addon">@</span>
+					<input class="form-control" type="email" placeholder="Your email" name="email" id="email" />
+				</div>
+
+				<div class="col-md-12 input-group">
+					<span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+					<input class="form-control" type="password" placeholder="Make up a password" />
+				</div>
+				<div class="mbot05 col-md-12 text-align-right"><small class='note'>
+					Use at least one lowercase letter, one lowercase letter, one digit, and eight characters.
+				</small></div>
+
+				<a href="#" ng-click="up.setSigning(false)" class="float-right mrig07 btn btn-reddish small-caps">back</a>
+				<input type="submit" class="float-right mrig07 btn btn-aqua small-caps" value="sign up">
+			</form>		
+
+		</div>
+	</div>
+
+	<!-- sign-in-form -->
+	<div class="selected-form panel panel-default col-md-12" ng-if="in.isSigning()">
+		<div class="panel-heading">Sign in with your username and password</div>
+		<div class="panel-body">
+
+			<form action="" role="form">
+				<div class="mbot05 col-md-12 input-group">
+					<span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+					<input class="form-control" type="text" placeholder="Your username or email" name="username" id="username" />
+				</div>
+				<div class="mbot05 col-md-12 input-group">
+					<span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+					<input class="form-control" type="password" placeholder="Make up a password" />
+				</div>
+
+				<a href="#" ng-click="in.setSigning(false)" class="float-right mrig07 btn btn-reddish small-caps">back</a>
+				<input type="submit" class="float-right mrig07 btn btn-aqua small-caps" value="sign in">
+			</form>		
+
+		</div>
+	</div>
+
+	<!-- load-public-session -->
+	<div class="selected-form panel panel-default col-md-12" ng-if="load.isLoading()">
+		<div class="panel-heading">Load a public session!</div>
+		<div class="panel-body">
+
+			<form action="" role="form">
+				<div class="mbot05 col-md-12 input-group">
+					<span class="input-group-addon"><span class="glyphicon glyphicon-barcode"></span></span>
+					<input class="form-control" type="text" placeholder="Insert the public session token (e.g.: 1423645674753cae649e)" name="token" id="token" />
+				</div>
+
+				<a href="#" ng-click="load.setLoading(false)" class="float-right mrig07 btn btn-reddish small-caps">back</a>
+				<input type="submit" class="float-right mrig07 btn btn-aqua small-caps" value="load">
+			</form>		
+
+		</div>
+	</div>
+
+</div>

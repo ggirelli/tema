@@ -6,7 +6,7 @@
         return function () {
             var self = this;
             
-            self.homepage = {
+            self.guestpage = {
                 in: false,
                 load: false,
                 up:  false

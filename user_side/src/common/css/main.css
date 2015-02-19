@@ -7,7 +7,9 @@
   font-family: 'Karla';
   font-style: normal;
   font-weight: 400;
-  src: local('Karla'), local('Karla-Regular'), url(https://fonts.gstatic.com/s/karla/v5/Zi_e6rBgGqv33BWF8WTq8g.woff2) format('woff2'), url(https://fonts.gstatic.com/s/karla/v5/azR40LUJrT4HaWK28zHmVA.woff) format('woff');
+  src: local('Karla'), local('Karla-Regular'),
+  	url('../fonts/karla.woff2') format('woff2'),
+  	url('../fonts/karla.woff') format('woff');
 }
 
 html,

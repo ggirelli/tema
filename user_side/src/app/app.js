@@ -3,7 +3,7 @@
 
     var def_requirements = ['angular',
         './libs/model', './libs/controller', './libs/route_config',
-        './mods/homepage/libs/controller', './mods/interface/libs/controller',
+        './mods/homepage/mods/guest/libs/controller', './mods/interface/libs/controller',
         './mods/interface/libs/filters.service', './mods/interface/libs/navigate.service',
         './mods/interface/libs/network.service',
         './mods/interface/libs/network_attribute.service',
@@ -17,7 +17,7 @@
 
     define(def_requirements,
         function (angular, model, controller, routeConfig,
-            homepageController, interfaceController,
+            guestpageController, interfaceController,
             filterService, navigateService,
             networkService,
             networkAttributeService, networkGroupService,
@@ -33,9 +33,9 @@
         	service('appModel', [model]).
         	controller('appController', ['$scope', 'appModel', controller]).
 
-            controller('homepageController', [
+            controller('guestpageController', [
                 '$scope', 'appModel', '$http', '$timeout',
-                homepageController
+                guestpageController
             ]).
             
             service('networkAttributeService', [
