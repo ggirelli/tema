@@ -24,15 +24,30 @@
 	font-size: 0.3em;
 }
 
-#homepage .session-choice {
+#homepage .session-choice,
+#homepage .selected-form {
 	padding: 0;
 }
 
-#homepage .session-choice .panel-heading {
+#homepage .session-choice .panel-heading,
+#homepage .selected-form .panel-heading {
 	text-align: center;
 }
 
 #homepage .session-choice .cell {
 	height: 4em;
 	width: 100%;
+}
+
+#homepage .selected-form .btn {
+	height: 2em;
+}
+
+#homepage .form-control {
+	height: 2em !important;
+	font-size: 1em !important;
+}
+
+#homepage .selected-form .note {
+	color: #989898;
 }

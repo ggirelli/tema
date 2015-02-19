@@ -7,7 +7,7 @@
   font-family: 'Karla';
   font-style: normal;
   font-weight: 400;
-  src: local('Karla'), local('Karla-Regular'), url(http://fonts.gstatic.com/s/karla/v5/Zi_e6rBgGqv33BWF8WTq8g.woff2) format('woff2'), url(http://fonts.gstatic.com/s/karla/v5/azR40LUJrT4HaWK28zHmVA.woff) format('woff');
+  src: local('Karla'), local('Karla-Regular'), url(https://fonts.gstatic.com/s/karla/v5/Zi_e6rBgGqv33BWF8WTq8g.woff2) format('woff2'), url(https://fonts.gstatic.com/s/karla/v5/azR40LUJrT4HaWK28zHmVA.woff) format('woff');
 }
 
 html,
@@ -26,6 +26,7 @@ body {
 
 .float-right {
 	float: right;
+	margin-right: 3px;
 }
 
 .hidden-file-input {
@@ -52,15 +53,19 @@ body {
 	text-align: right !important;
 }
 
+.mbot05 {
+	margin-bottom: 0.5em;
+}
+
+.mrig07 {
+	margin-right: 0.7em;
+}
+
 /** buttons **/
 
 .btn {
 	border-radius: 6px;
 	font-size: 24px;
-}
-
-.btn-mbot {
-	margin-bottom: 0.5em;
 }
 
 .btn-aqua {

@@ -7,9 +7,53 @@
 
         	scope.m = model;
         	
-        	scope.homepage = {
+        	scope.up = {
 
-        	};
+    			setSigning: function(val) {
+    				scope.m.homepage.up = val;
+    			},
+
+    			isSigning: function() {
+    				return(scope.m.homepage.up);
+    			},
+
+    			sign: function() {
+
+    			}
+
+    		};
+
+        	scope.in = {
+
+    			setSigning: function(val) {
+    				scope.m.homepage.in = val;
+    			},
+
+    			isSigning: function() {
+    				return(scope.m.homepage.in);
+    			},
+
+    			sign: function() {
+
+    			}
+
+    		};
+
+    		scope.load = {
+
+    			setLoading: function(val) {
+    				scope.m.homepage.load = val;
+    			},
+
+    			isLoading: function() {
+    				return(scope.m.homepage.load);
+    			},
+
+    			load: function() {
+
+    			}
+
+    		};
 
         	scope.homepage_bak = {
 
