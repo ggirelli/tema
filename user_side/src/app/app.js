@@ -3,6 +3,7 @@
 
     var def_requirements = ['angular',
         './libs/model', './libs/controller', './libs/route_config',
+        './libs/form_check.service',
         './mods/homepage/mods/guest/libs/controller', './mods/interface/libs/controller',
         './mods/interface/libs/filters.service', './mods/interface/libs/navigate.service',
         './mods/interface/libs/network.service',
@@ -17,6 +18,7 @@
 
     define(def_requirements,
         function (angular, model, controller, routeConfig,
+            formCheckService,
             guestpageController, interfaceController,
             filterService, navigateService,
             networkService,
@@ -30,11 +32,14 @@
         angular.module('tea', ['ngRoute']).
         	config(['$routeProvider', routeConfig]).
 
+            service('formCheckService', [formCheckService]).
+
         	service('appModel', [model]).
         	controller('appController', ['$scope', 'appModel', controller]).
 
             controller('guestpageController', [
                 '$scope', 'appModel', '$http', '$timeout',
+                'formCheckService',
                 guestpageController
             ]).
             

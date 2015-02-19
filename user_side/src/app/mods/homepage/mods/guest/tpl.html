@@ -2,7 +2,7 @@
 <style type="text/css">@import "user_side/src/common/css/homepage.css";</style>
 
 <!-- url-specific template -->
-<div id='homepage' class='col-md-8 col-md-offset-2' ng-app='tea' ng-controller='homepageController as hCtrl' ng-model='hCtrl'>
+<div id='homepage' class='col-md-8 col-md-offset-2' ng-app='tea' ng-controller='guestpageController as hCtrl' ng-model='hCtrl'>
 
 	<div class="title col-md-12">
 		<p>TEMA</p>
@@ -38,24 +38,26 @@
 			<form action="" role="form">
 				<div class="mbot05 col-md-12 input-group">
 					<span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
-					<input class="form-control" type="text" placeholder="Pick a username" name="username" id="username" />
+					<input class="form-control" type="text" placeholder="Pick a username" name="username" id="username" ng-model="m.guestpage.up.usr" />
 				</div>
 				
 				<div class="mbot05 col-md-12 input-group">
 				<span class="input-group-addon">@</span>
-					<input class="form-control" type="email" placeholder="Your email" name="email" id="email" />
+					<input class="form-control" type="text" placeholder="Your email" name="email" id="email" ng-model="m.guestpage.up.email" />
 				</div>
 
 				<div class="col-md-12 input-group">
 					<span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
-					<input class="form-control" type="password" placeholder="Make up a password" />
+					<input class="form-control" type="password" placeholder="Provide a password" ng-model="m.guestpage.up.pwd" />
 				</div>
 				<div class="mbot05 col-md-12 text-align-right"><small class='note'>
 					Use at least one lowercase letter, one lowercase letter, one digit, and eight characters.
 				</small></div>
 
-				<a href="#" ng-click="up.setSigning(false)" class="float-right mrig07 btn btn-reddish small-caps">back</a>
-				<input type="submit" class="float-right mrig07 btn btn-aqua small-caps" value="sign up">
+				<div><input class="mbot05 form-control hidden-file-input" type="email" id="hatch" name="hatch" ng-model="m.guestpage.up.hatch"></div>
+
+				<a ng-click="up.setSigning(false)" class="float-right mrig07 btn btn-reddish small-caps">back</a>
+				<a ng-click="up.sign()" class="float-right mrig07 btn btn-aqua small-caps">sign up</a>
 			</form>		
 
 		</div>
@@ -69,12 +71,14 @@
 			<form action="" role="form">
 				<div class="mbot05 col-md-12 input-group">
 					<span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
-					<input class="form-control" type="text" placeholder="Your username or email" name="username" id="username" />
+					<input class="form-control" type="text" placeholder="Your username or email" name="username" id="username" ng-model="m.guestpage.in.usr" />
 				</div>
 				<div class="mbot05 col-md-12 input-group">
 					<span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
-					<input class="form-control" type="password" placeholder="Make up a password" />
+					<input class="form-control" type="password" placeholder="Make up a password" ng-model="m.guestpage.in.pwd" />
 				</div>
+
+				<div><input class="mbot05 form-control hidden-file-input" type="email" id="hatch" name="hatch" ng-model="m.guestpage.in.hatch"></div>
 
 				<a href="#" ng-click="in.setSigning(false)" class="float-right mrig07 btn btn-reddish small-caps">back</a>
 				<input type="submit" class="float-right mrig07 btn btn-aqua small-caps" value="sign in">
@@ -91,8 +95,10 @@
 			<form action="" role="form">
 				<div class="mbot05 col-md-12 input-group">
 					<span class="input-group-addon"><span class="glyphicon glyphicon-barcode"></span></span>
-					<input class="form-control" type="text" placeholder="Insert the public session token (e.g.: 1423645674753cae649e)" name="token" id="token" />
+					<input class="form-control" type="text" placeholder="Insert the public session token (e.g.: 1423645674753cae649e)" name="token" id="token" ng-model="m.guestpage.load.token" />
 				</div>
+
+				<div><input class="mbot05 form-control hidden-file-input" type="email" id="hatch" name="hatch" ng-model="m.guestpage.load.hatch"></div>
 
 				<a href="#" ng-click="load.setLoading(false)" class="float-right mrig07 btn btn-reddish small-caps">back</a>
 				<input type="submit" class="float-right mrig07 btn btn-aqua small-caps" value="load">

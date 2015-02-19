@@ -7,9 +7,24 @@
             var self = this;
             
             self.guestpage = {
-                in: false,
-                load: false,
-                up:  false
+                in: {
+                    doing: false,
+                    usr: null,
+                    pwd: null,
+                    hatch: null
+                },
+                up: {
+                    doing: false,
+                    usr: null,
+                    pwd: null,
+                    email: null,
+                    hatch: null
+                },
+                load: {
+                    doing: false,
+                    token: null,
+                    hatch: null
+                }
             };
 
             self.session_id = null;
