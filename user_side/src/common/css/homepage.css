@@ -35,48 +35,4 @@
 #homepage .session-choice .cell {
 	height: 4em;
 	width: 100%;
-
-	font-size: 1.5em;
-	font-family: tahoma;
-	font-variant: small-caps;
-}
-
-#homepage .session-choice .cell-input {
-	display: inline-block;
-
-	padding: 6px 12px;
-	margin: 0;
-
-	background-color: #F0AD4E;
-	background-image: none;
-	border: 1px solid #EEA236;
-	border-radius: 4px;
-	color: #fff;
-	
-	font-size: 1.5em;
-	font-weight: normal;
-	text-align: center;
-}
-
-#homepage .session-choice .cell-input input {
-	margin-top: 0.7em;
-
-	color: #545454;
-
-	font-family: Monospace;
-	font-variant: normal;
-	text-align: center;
-}
-
-#homepage .session-choice .cell-response .btn {
-	float: right;
-
-	margin-left: 4px;
-	margin-top: 4px;
-
-	font-variant: small-caps;
-}
-
-#homepage .load-error {
-	text-align: center;
 }

@@ -12,30 +12,21 @@
 	<div class="session-choice panel panel-default col-md-12">
 
 		<div class="panel-heading">
-			<span ng-show='homepage.isWaiting()'>Make your choice:</span>
-			<span ng-show='homepage.isPreLoading()'>Enter the session ID:</span>
+			Welcome to TEMA!
 		</div>
+
 		<div class="panel-body">
 
 			<div class="col-md-6">
-				<button class="cell btn btn-success" ng-click='homepage.new()' ng-class="{'disabled':homepage.isPreLoading()}">create a new session</button>
+				<button class="cell btn btn-aqua small-caps btn-mbot" ng-click=''>sign in</button>
 			</div>
 
-			<div class="col-md-6" ng-show='homepage.isWaiting()'>
-				<button class="cell btn btn-warning" ng-click='homepage.loading()'>load an old session</button>
+			<div class="col-md-6">
+				<button class="cell btn btn-light-aqua small-caps btn-mbot" ng-click=''>sign up</button>
 			</div>
 
-			<div class="col-md-6" ng-show='homepage.isPreLoading() || homepage.isLoading()'>
-
-				<div class="cell cell-input">
-					<input type="text" placeholder='session id' ng-model='m.tmpID' />
-				</div>
-
-				<div class='cell-response'>
-					<button class='btn btn-primary' ng-click='homepage.load(m.tmpID)'>load</button>
-					<button class='btn btn-danger' ng-click='homepage.waiting()'>back</button>
-				</div>
-				
+			<div class="col-md-12">
+				<button class="cell btn btn-reddish small-caps" ng-click=''>enter a <u>public</u> session</button>
 			</div>
 
 		</div>

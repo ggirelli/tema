@@ -9,6 +9,10 @@
         	
         	scope.homepage = {
 
+        	};
+
+        	scope.homepage_bak = {
+
 	        	waiting: function () {
 	        		scope.m.homeChoice = 0;
 	        	},
@@ -79,7 +83,7 @@
 	        		return(scope.m.homeChoice == 2);
 	        	}
 
-	        }
+	        };
 
         };
 
