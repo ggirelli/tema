@@ -6,7 +6,8 @@
         './mods/homepage/libs/controller', './mods/interface/libs/controller',
         './mods/interface/libs/filters.service', './mods/interface/libs/navigate.service',
         './mods/interface/libs/network.service',
-        './mods/interface/libs/network_attribute.service', './mods/interface/libs/network_group.service',
+        './mods/interface/libs/network_attribute.service',
+        './mods/interface/libs/network_group.service',
         './mods/interface/libs/inspector.service', './mods/interface/libs/panels.service',
         './mods/interface/libs/commander.service', './mods/interface/libs/canvas.service',
         './mods/interface/libs/settings.service',
@@ -32,9 +33,15 @@
         	service('appModel', [model]).
         	controller('appController', ['$scope', 'appModel', controller]).
 
-            controller('homepageController', ['$scope', 'appModel', '$http', '$timeout', homepageController]).
+            controller('homepageController', [
+                '$scope', 'appModel', '$http', '$timeout',
+                homepageController
+            ]).
             
-            service('networkAttributeService', ['$q', '$http', '$rootScope', networkAttributeService]).
+            service('networkAttributeService', [
+                '$q', '$http', '$rootScope',
+                networkAttributeService
+            ]).
             service('convertGroupService', [networkGroupService]).
             service('mergeGroupService', [networkGroupService]).
             service('intersectGroupService', [networkGroupService]).
@@ -43,23 +50,50 @@
             service('distancesGroupService', [networkGroupService]).
             service('filterService', [filterService]).
             service('navigateFilterService', [filterService]).
-            service('navigateService', ['$q', '$http', 'navigateFilterService', navigateService]).
+            service('navigateService', [
+                '$q', '$http', 'navigateFilterService',
+                navigateService
+            ]).
 
-            service('canvasService', ['$q', '$http', '$rootScope', 'filterService', 'navigateService', canvasService]).
-            service('commanderService', ['$q', '$http', '$timeout', '$rootScope',
-                'mergeGroupService', 'intersectGroupService', 'subtractGroupService', 'containsGroupService', 'distancesGroupService', commanderService]).
+            service('canvasService', [
+                '$q', '$http', '$rootScope', 'filterService', 'navigateService',
+                canvasService
+            ]).
+            service('commanderService', [
+                '$q', '$http', '$timeout', '$rootScope',
+                'mergeGroupService', 'intersectGroupService', 'subtractGroupService',
+                'containsGroupService', 'distancesGroupService',
+                commanderService
+            ]).
             service('inspectorService', [inspectorService]).
-            service('networkService', ['$q', '$http', '$rootScope', 'convertGroupService', 'networkAttributeService', networkService]).
+            service('networkService', [
+                '$q', '$http', '$rootScope',
+                'convertGroupService', 'networkAttributeService',
+                networkService
+            ]).
             service('panelsService', ['$rootScope', panelsService]).
             service('settingsService', ['$q', '$http', '$rootScope', settingsService]).
-            controller('interfaceController', ['$scope', 'appModel', '$routeParams', 'networkService',
-                'panelsService', 'inspectorService', 'commanderService', 'canvasService', 'settingsService', interfaceController]).
+            controller('interfaceController', [
+                '$scope', 'appModel', '$routeParams',
+                'networkService', 'panelsService', 'inspectorService',
+                'commanderService', 'canvasService', 'settingsService',
+                interfaceController
+            ]).
 
             service('uploaderService', ['$http', '$q', '$timeout', uploaderService]).
-            controller('uploaderController', ['$scope', 'appModel', '$routeParams', 'uploaderService', uploaderController]).
+            controller('uploaderController', [
+                '$scope', 'appModel', '$routeParams',
+                'uploaderService',
+                uploaderController
+            ]).
 
-            directive('uploaderAutoclick', ['$parse', function ($parse) { return { restrict: 'A', link: autoclickDirective }; }]).
-            directive('submitForm', [function () { return { restrict: 'A', link: submitformDirective }; }])
+            directive('uploaderAutoclick', [
+                '$parse',
+                function ($parse) { return { restrict: 'A', link: autoclickDirective }; }
+            ]).
+            directive('submitForm', [
+                function () { return { restrict: 'A', link: submitformDirective }; }
+            ])
 
     });
 
