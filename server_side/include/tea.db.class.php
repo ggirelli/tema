@@ -35,7 +35,7 @@ class TEAdb extends C2MySQL {
 	 * @return Boolean
 	 */
 	private function check_database() {
-		if( !parent::table_exists('sessions') or !parent::table_exists('sessions_settings') ) {
+		if( !parent::table_exists('sessions') or !parent::table_exists('sessions_settings') or !parent::table_exists('sessions_users') ) {
 			return false;
 		}
 		
@@ -75,6 +75,25 @@ class TEAdb extends C2MySQL {
 				"seed VARCHAR(100) NOT NULL, " .
 				"setting_key VARCHAR(200) NOT NULL, " .
 				"setting_value TEXT NOT NULL " .
+				")";
+			
+			// Create table
+			parent::query($sql);
+			if( parent::isError() ) {
+				die('An error occurred while initializing the MySQL database.');
+			}
+		}
+
+		if ( !parent::table_exists('sessions_users') ) {
+			// Session_settings table definition
+			$sql = "CREATE TABLE sessions_users (" .
+				"id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY, " .
+				"nickname VARCHAR(100) NOT NULL UNIQUE, " .
+				"email VARCHAR(100) NOT NULL UNIQUE, " .
+				"password VARCHAR(200) NOT NULL, " .
+				"confirm_token VARCHAR(100) NOT NULL UNIQUE, " .
+				"token_when INTEGER, " .
+				"confirmed INTEGER NOT NULL " .
 				")";
 			
 			// Create table
