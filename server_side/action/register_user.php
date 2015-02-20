@@ -6,6 +6,12 @@
  */
 
 // Requirements
+require_once(RPATH . '/include/tema.user.class.php');
 
+$user = new TEMAuser(
+	HOST, USER, PWD, DB_NAME,
+	$data->user, $data->email, $data->password,
+	TUModes::SIGNIN
+)
 
 ?>

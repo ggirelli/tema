@@ -64,11 +64,27 @@ class C2MySQL {
 		$this->user = $user;
 		$this->pwd = $pwd;
 		$this->db_name = $db_name;
-		
+
 		// Connect to MySQL server
 		$this->connect2MySQL();
 		// If no errors occurred, connect to database
 		if( !$this->isError() ) { $this->connect2MySQL_db(); }
+	}
+
+	/**
+	 * Identifies errors that occurred during the connection.
+	 * @return boolean	true = an error has occured
+	 */
+	public function isError() {
+		// Evaluates errors based on the signal variable.
+		if( $this->connect_error ) { return true; }
+		
+		// Evaluate MySQL errors
+        $error = $this->mysqli->error;
+        if ( empty($error) )
+            return false;
+        else
+            return true;
 	}
 	
 	// protected FUNCTIONS
@@ -131,22 +147,6 @@ class C2MySQL {
 	}
 
 	/**
-	 * Identifies errors that occurred during the connection.
-	 * @return boolean	true = an error has occured
-	 */
-	protected function isError() {
-		// Evaluates errors based on the signal variable.
-		if( $this->connect_error ) { return true; }
-		
-		// Evaluate MySQL errors
-        $error = $this->mysqli->error;
-        if ( empty($error) )
-            return false;
-        else
-            return true;
-	}
-
-	/**
 	 * Escapes a string based on current connection's charset
 	 * @param  String $s to be escaped
 	 * @return String    escaped
@@ -162,7 +162,7 @@ class C2MySQL {
 	 * @return null (sets $this->connect_error)
 	 */
 	private function connect2MySQL() {
-		if( !$this->mysqli = @mysqli::__construct($this->host, $this->user, $this->pwd) ) {
+		if( !$this->mysqli = @mysqli_connect($this->host, $this->user, $this->pwd) ) {
             trigger_error('Impossible to contact the MySQL server.');
             $this->connectError = true;
 		} else {

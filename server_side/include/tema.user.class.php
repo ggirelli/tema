@@ -80,10 +80,6 @@ class TEMAuser extends TEAdb {
 	 */
 	private $msg;
 
-	// static CONSTANTS
-
-	public $modes = TUModes();
-
 	// public FUNCTIONS
 
 	/**
@@ -99,19 +95,26 @@ class TEMAuser extends TEAdb {
 	 */
 	public function __construct(
 		$host, $user, $pwd, $db_name,
-		$tema_username, $tema_email, $tema_password,
+		$tema_username=NULL, $tema_email=NULL, $tema_password,
 		$mode
 	) {
+		// Username AND/OR  Email must be provided
+		if( is_null($tema_username) && is_null($tema_email) ) return NULL;
+		// If SIGNUP mode, BOTH username AND email must be provided
+		if( $mode == TUModes::SIGNUP ) {
+			if( is_null($tema_username) || is_null($tema_email) ) return NULL;
+		}
+
 		parent::__construct($host, $user, $pwd, $db_name);
 		$this->init($tema_username, $tema_email, $tema_password);
 
 		switch($mode) {
-			case $modes::SIGNIN: {
-				// Signing in
+			case TUModes::SIGNIN: {
+				// Signing in $this->signIn()
 				break;
 			}
-			case $modes::SIGNUP: {
-				// Signing up
+			case TUModes::SIGNUP: {
+				// Signing up $this->signUp()
 				break;
 			}
 			default: {
@@ -127,9 +130,9 @@ class TEMAuser extends TEAdb {
 	 */
 	public function username_exists($user) {
 		$user = $this->escape_string($user);
-		$sql = "SELECT id FROM sessions_user WHERE nickname = '" . $user . "'";
+		$sql = "SELECT id FROM sessions_users WHERE nickname = '" . $user . "'";
 		$r = $this->query($sql);
-		if( 1 >= $r->size() ) {
+		if( 1 <= $r->size() ) {
 			return true;
 		} else {
 			return false;
@@ -143,9 +146,9 @@ class TEMAuser extends TEAdb {
 	 */
 	public function email_exists($email) {
 		$email = $this->escape_string($email);
-		$sql = "SELECT id FROM sessions_user WHERE email = '" . $email . "'";
+		$sql = "SELECT id FROM sessions_users WHERE email = '" . $email . "'";
 		$r = $this->query($sql);
-		if( 1 >= $r->size() ) {
+		if( 1 <= $r->size() ) {
 			return true;
 		} else {
 			return false;
@@ -207,16 +210,20 @@ class TEMAuser extends TEAdb {
 		$this->checked = TRUE;
 		$this->exists = FALSE;
 		$this->logged = FALSE;
-		$this->msg = new Array();
+		$this->msg = array();
 
 		// Test provided credentials for correct format
-		if( $this->username_check($this->username) ) {
-			$this->checked = FALSE;
-			$this->msg[] = 1;
+		if( !is_null($this->username) ) {
+			if( $this->username_check($this->username) ) {
+				$this->checked = FALSE;
+				$this->msg[] = 1;
+			}
 		}
-		if( $this->email_check($this->email) ) {
-			$this->checked = FALSE;
-			$this->msg[] = 2;
+		if( !is_null($this->email) ) {
+			if( $this->email_check($this->email) ) {
+				$this->checked = FALSE;
+				$this->msg[] = 2;
+			}
 		}
 		if( $this->password_check($this->password) ) {
 			$this->checked = FALSE;
@@ -226,13 +233,17 @@ class TEMAuser extends TEAdb {
 		// If the provide credentials are correctly formatted
 		if( $this->checked ) {
 			// Test provided credential for match in database
-			if( $this->username_exists($this->username) ) {
-				$this->exists = 'username';
-				$this->msg[] = 4;
+			if( !is_null($this->username) ) {
+				if( $this->username_exists($this->username) ) {
+					$this->exists = 'username';
+					$this->msg[] = 4;
+				}
 			}
-			if( $this->email_exists($this->email) ) {
-				$this->exists = 'email';
-				$this->msg[] = 5;
+			if( !is_null($this->email) ) {
+				if( $this->email_exists($this->email) ) {
+					$this->exists = 'email';
+					$this->msg[] = 5;
+				}
 			}
 
 			// Verify if a match was found
@@ -253,7 +264,7 @@ class TEMAuser extends TEAdb {
 
 			// If a match was found and loaded, test the password
 			if( $this->exists ) {
-				if ( $this->isPassword() ) {
+				if ( $this->isPassword('nickname', $this->username) ) {
 					$this->msg[] = 6;
 					$this->logged = TRUE;
 				} else {
@@ -278,6 +289,7 @@ class TEMAuser extends TEAdb {
 		if( $r->isError() ) return FALSE;
 		
 		$row = $r->fetch();
+		print_r($row);
 
 		$this->username = $row['nickname'];
 		$this->password = NULL;
@@ -298,7 +310,6 @@ class TEMAuser extends TEAdb {
 	private function isPassword($field, $value) {
 		$field = $this->escape_string($field);
 		$value = $this->escape_string($value);
-		$password = $this->escape_string($password);
 
 		$sql = "SELECT password FROM sessions_users WHERE $field = '$value'";
 		$r = $this->query($sql);
@@ -317,6 +328,14 @@ class TEMAuser extends TEAdb {
 	private function encrypt($s) {
 		return(md5('TEMA' . sha1($s . md5('TEMA')) . sha1('TEMA')));
 	}
+
+	private function signIn() {
+
+	}
+
+	private function signUp() {
+
+	}
 }
 
 /**
@@ -325,10 +344,8 @@ class TEMAuser extends TEAdb {
 * @since 0.3.0
  */
 class TUModes {
-	public CONST SIGNIN = 'tema_sign_in_action';
-	public CONST SIGNUP = 'tema_sign_up_action';
-
-	public function __construct() {}
+	CONST SIGNIN = 'tema_sign_in_action';
+	CONST SIGNUP = 'tema_sign_up_action';
 }
 
 ?>
