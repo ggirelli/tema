@@ -15,7 +15,7 @@ define('DB_NAME', 'TEA14');
 define('RPATH', dirname(__FILE__));
 define('SPATH', dirname(__FILE__) . '/session');
 define('SCRIPATH', dirname(__FILE__) . '/Rscripts');
-define('RURI', 'http://localhost/public_html/TEA');
+define('RURI', 'https://localhost/public_html/TEA');
 
 // Uploader
 $GLOBALS['FILENAME_BAN'] = array('.', '..', 'config', 'sif.dat', 'sif.json');

@@ -146,6 +146,15 @@ class C2MySQL {
             return true;
 	}
 
+	/**
+	 * Escapes a string based on current connection's charset
+	 * @param  String $s to be escaped
+	 * @return String    escaped
+	 */
+	protected function escape_string($s) {
+		return $this->mysqli->escape_string($s);
+	}
+
 	// private FUNCTIONS
 	
 	/**
@@ -156,6 +165,8 @@ class C2MySQL {
 		if( !$this->mysqli = @mysqli::__construct($this->host, $this->user, $this->pwd) ) {
             trigger_error('Impossible to contact the MySQL server.');
             $this->connectError = true;
+		} else {
+			$this->mysqli->set_charset("utf8");
 		}
 	}
 	
