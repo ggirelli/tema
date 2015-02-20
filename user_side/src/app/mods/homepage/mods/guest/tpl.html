@@ -36,21 +36,24 @@
 		<div class="panel-body">
 
 			<form action="" role="form">
-				<div class="mbot05 col-md-12 input-group">
+				<div class="col-md-12 text-align-right note"><small ng-class="{'text-danger':m.guestpage.up.err.usr}">
+					Use at least four characters.
+				</small></div><br />
+				<div class="mbot05 col-md-12 input-group" ng-class="{'has-error':m.guestpage.up.err.usr}">
 					<span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
 					<input class="form-control" type="text" placeholder="Pick a username" name="username" id="username" ng-model="m.guestpage.up.usr" />
 				</div>
 				
-				<div class="mbot05 col-md-12 input-group">
+				<div class="mbot05 col-md-12 input-group" ng-class="{'has-error':m.guestpage.up.err.email}">
 				<span class="input-group-addon">@</span>
 					<input class="form-control" type="text" placeholder="Your email" name="email" id="email" ng-model="m.guestpage.up.email" />
 				</div>
 
-				<div class="col-md-12 input-group">
+				<div class="col-md-12 input-group" ng-class="{'has-error':m.guestpage.up.err.pwd}">
 					<span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
 					<input class="form-control" type="password" placeholder="Provide a password" ng-model="m.guestpage.up.pwd" />
 				</div>
-				<div class="mbot05 col-md-12 text-align-right"><small class='note'>
+				<div class="mbot05 col-md-12 text-align-right note"><small ng-class="{'text-danger':m.guestpage.up.err.pwd}">
 					Use at least one lowercase letter, one lowercase letter, one digit, and eight characters.
 				</small></div>
 

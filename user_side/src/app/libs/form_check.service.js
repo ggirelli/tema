@@ -7,7 +7,7 @@
             var self = this;
 
             /**
-             * Check if the provided string is an actual password
+             * Check if the provided string is a possible password
              *     - at least one lowercase letter
              *     - at least one uppercase letter
              *     - at least one digit
@@ -40,7 +40,7 @@
             };
 
             /**
-             * Check if the provided string is an actual email
+             * Check if the provided string is a possible email
              * @param  {String} email email candidate
              * @return {Boolean}
              */
@@ -51,6 +51,20 @@
                 
                 return(true);
             };
+
+
+            /**
+             * Check if the provided string is a possible username
+             * @param  {String} usr user candidate
+             * @return {Boolean}
+             */
+            self.user = function(usr) {
+                if (null === usr) return(false);
+
+                if (4 > usr.length) return(false);
+
+                return(true);
+            }
 
         };
 

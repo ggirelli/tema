@@ -18,7 +18,12 @@
                     usr: null,
                     pwd: null,
                     email: null,
-                    hatch: null
+                    hatch: null,
+                    err: {
+                        pwd: false,
+                        usr: false,
+                        email: false
+                    }
                 },
                 load: {
                     doing: false,

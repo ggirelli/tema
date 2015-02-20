@@ -10,7 +10,7 @@
         	
         	scope.up = {
 
-    			setSigning: function(val) {
+    			setSigning: function (val) {
     				scope.m.guestpage.up = {
                         doing: val,
                         usr: null,
@@ -20,27 +20,42 @@
                     };
     			},
 
-    			isSigning: function() {
+    			isSigning: function () {
     				return(scope.m.guestpage.up.doing);
     			},
 
-    			sign: function() {
+    			sign: function () {
                     // Check for bot in the honeypot
                     if(scope.m.guestpage.up.hatch != null) {
                         return(false)
                     } else {
-                        var check = {
-                            pwd: scope.m.formChecker.password(scope.m.guestpage.up.pwd),
-                            email: scope.m.formChecker.email(scope.m.guestpage.up.email)
+                        scope.m.guestpage.up.err = {
+                            pwd: !scope.m.formChecker.password(scope.m.guestpage.up.pwd),
+                            email: !scope.m.formChecker.email(scope.m.guestpage.up.email),
+                            usr: !scope.m.formChecker.user(scope.m.guestpage.up.usr)
                         }
-                        if (!check.pwd) {
-                            // Warn that pwd is not correct
-                        }
-                        if (!check.email) {
-                            // Warn that email is not correct
-                        }
-                        if (check.pwd && check.email) {
+
+                        if(
+                            !scope.m.guestpage.up.err.pwd &&
+                            !scope.m.guestpage.up.err.email &&
+                            !scope.m.guestpage.up.err.usr
+                        ) {
                             // Send form to the back-end
+                            http({
+
+                                method: 'POST',
+                                data: {
+                                    action: 'register_user',
+                                    user: scope.m.guestpage.up.usr,
+                                    password: scope.m.guestpage.up.pwd,
+                                    email: scope.m.guestpage.up.email
+                                },
+                                url: 's/'
+
+                            })
+                                .success(function (data) {
+                                    console.log(data);
+                                });
                         }
                     }
     			}
@@ -49,15 +64,15 @@
 
         	scope.in = {
 
-    			setSigning: function(val) {
+    			setSigning: function (val) {
     				scope.m.guestpage.in.doing = val;
     			},
 
-    			isSigning: function() {
+    			isSigning: function () {
     				return(scope.m.guestpage.in.doing);
     			},
 
-    			sign: function() {
+    			sign: function () {
 
     			}
 
@@ -65,15 +80,15 @@
 
     		scope.load = {
 
-    			setLoading: function(val) {
+    			setLoading: function (val) {
     				scope.m.guestpage.load.doing = val;
     			},
 
-    			isLoading: function() {
+    			isLoading: function () {
     				return(scope.m.guestpage.load.doing);
     			},
 
-    			load: function() {
+    			load: function () {
 
     			}
 
