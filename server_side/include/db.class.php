@@ -92,11 +92,13 @@ class C2MySQL {
     /**
      * Returns a MySQLresult instance for data fetching
      * @param String $sql 	query to be executed
+     * @param Boolean $verbose whether to print an error message
      * @return MySQLresult instance
      */
-    protected function & query($sql) {
+    protected function & query($sql, $verbose=TRUE) {
         if ( !$mysqliResult = $this->mysqli->query($sql) )
-            trigger_error ('Query fallita: ' . $this->mysqli->error . ' SQL: ' . $sql);
+            if ( $verbose ) 
+            	trigger_error ('Query fallita: ' . $this->mysqli->error . ' SQL: ' . $sql);
         $result = new MySQLResult($this,$mysqliResult);
 		return $result;
     }

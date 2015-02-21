@@ -76,6 +76,7 @@ class TEMAuser extends TEAdb {
 	 * 5:	email already in use
 	 * 6:	provided credentials match existing user
 	 * 7:	wrong password provided
+	 * 8:	user not confirmed
 	 * @var Array
 	 */
 	private $msg;
@@ -109,12 +110,12 @@ class TEMAuser extends TEAdb {
 		$this->init($tema_username, $tema_email, $tema_password);
 
 		switch($mode) {
-			case TUModes::SIGNIN: {
-				// Signing in $this->signIn()
+			case TUModes::SIGNUP: {
+				$this->signUp();
 				break;
 			}
-			case TUModes::SIGNUP: {
-				// Signing up $this->signUp()
+			case TUModes::CONFRM: {
+				$this->confirm();
 				break;
 			}
 			default: {
@@ -191,6 +192,13 @@ class TEMAuser extends TEAdb {
 		return true;
 	}
 
+	/**
+	 * @return Array with the code of the messages
+	 */
+	public function get_msg() {
+		return $this->msg;
+	}
+
 	// private FUNCTIONS
 	
 	/**
@@ -264,11 +272,15 @@ class TEMAuser extends TEAdb {
 
 			// If a match was found and loaded, test the password
 			if( $this->exists ) {
-				if ( $this->isPassword('nickname', $this->username) ) {
-					$this->msg[] = 6;
-					$this->logged = TRUE;
+				if ( $this->confirmed ) {
+					if ( $this->isPassword('nickname', $this->username) ) {
+						$this->msg[] = 6;
+						$this->logged = TRUE;
+					} else {
+						$this->msg[] = 7;
+					}
 				} else {
-					$this->msg[] = 7;
+					$this->msg[] = 8;
 				}
 			}
 		}
@@ -289,14 +301,17 @@ class TEMAuser extends TEAdb {
 		if( $r->isError() ) return FALSE;
 		
 		$row = $r->fetch();
-		print_r($row);
 
 		$this->username = $row['nickname'];
 		$this->password = NULL;
 		$this->email = $row['email'];
 		$this->confirm_token = $row['confirm_token'];
 		$this->token_when = $row['token_when'];
-		$this->confirmed = $row['confirmed'];
+		if( 1 == $row['confirmed'] ) {
+			$this->confirmed = TRUE;
+		} else {
+			$this->confirmed = FALSE;
+		}
 
 		return TRUE;
 	}
@@ -329,12 +344,43 @@ class TEMAuser extends TEAdb {
 		return(md5('TEMA' . sha1($s . md5('TEMA')) . sha1('TEMA')));
 	}
 
-	private function signIn() {
-
+	/**
+	 * Determines whether a certain token is already in use
+	 * @param  String $token token
+	 * @return Boolean
+	 */
+	private function token_exists($token) {
+		$token = $this->escape_string($token);
+		$sql = "SELECT id FROM sessions_users WHERE confirm_token = '$token'";
+		$r = $this->query($sql);
+		if( 1 <= $r->size() ) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
+	/**
+	 * Register the user in the database
+	 * @return NULL
+	 */
 	private function signUp() {
+		$nickname = $this->escape_string($this->username);
+		$email = $this->escape_string($this->email);
+		$password = $this->password;
+		$confirm_token = random_string(10) . sha1(time());
+		while($this->token_exists($confirm_token)) {
+			$confirm_token = random_string(10) . sha1(time());
+		}
 
+		$sql = "INSERT INTO sessions_users " .
+			"(nickname, email, password, confirm_token, token_when, confirmed)" .
+			" VALUES ('$nickname', '$email', '$password', '$confirm_token', 0, 0)";
+		$r = $this->query($sql, $verbose=FALSE);
+	}
+
+	private function confirm() {
+		echo 1;
 	}
 }
 
@@ -346,6 +392,7 @@ class TEMAuser extends TEAdb {
 class TUModes {
 	CONST SIGNIN = 'tema_sign_in_action';
 	CONST SIGNUP = 'tema_sign_up_action';
+	CONST CONFRM = 'tema_confirm_action';
 }
 
 ?>
