@@ -24,7 +24,7 @@ if( in_array(1, $r) || in_array(2, $r) || in_array(3, $r))
 if( in_array(4, $r) )
 	die('{"err":4}');
 // Email already in use
-if( in_array(5, $r) )
+if( in_array(5, $r) )!
 	die('{"err":5}');
 
 if($user->isError()) {

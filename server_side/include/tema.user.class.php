@@ -3,6 +3,7 @@
 // Requirements
 require_once('functions.lib.php');
 require_once('tea.db.class.php');
+require_once(dirname(__FILE__) . '/PHPMailer/class.phpmailer.php');
 
 /**
 * Class that manages TEMA users
@@ -373,10 +374,35 @@ class TEMAuser extends TEAdb {
 			$confirm_token = random_string(10) . sha1(time());
 		}
 
+		// Insert user into DB
 		$sql = "INSERT INTO sessions_users " .
 			"(nickname, email, password, confirm_token, token_when, confirmed)" .
 			" VALUES ('$nickname', '$email', '$password', '$confirm_token', 0, 0)";
 		$r = $this->query($sql, $verbose=FALSE);
+
+		if( !$this->isError() ) {
+			// Send email for confirmation
+			$mail = new PHPMailer;
+			$mail->setFrom('info.tema@cibio.unitn.it', 'TEMA Bot');
+			$mail->addAddress($this->email, $this->username);
+			$mail->Subject = 'Welcome to TEMA!';
+
+			$msgHTML = file_get_contents('static/email.confirmation.html');
+			$msgHTML = str_replace('##USERNAME_TEMA##', $this->username, $msgHTML);
+			$msgHTML = str_replace('##TEMA_URI##', RURI, $msgHTML);
+			$msgHTML = str_replace('##TOKEN##', $confirm_token, $msgHTML);
+			$mail->msgHTML($msgHTML);
+
+			$mail->AltBody = "Hello $this->username and welcome to TEMA!\n" .
+				"To use the tools available in TEMA interface, " .
+				"first you need to confirm your brand new account by clicking " .
+				"on the following link: " . RURI . "/#/activation/$confirm_token\n" .
+				"Cheers!\nTEMA staff";
+
+			#if (!$mail->send()) { echo "Mailer Error: " . $mail->ErrorInfo; }
+			#else { echo "Message sent!"; }
+			$mail->send();
+		}
 	}
 
 	private function confirm() {
