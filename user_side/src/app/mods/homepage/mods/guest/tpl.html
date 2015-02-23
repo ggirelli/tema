@@ -7,7 +7,7 @@
 	</div>
 
 	<!-- choice-menu -->
-	<div class="session-choice panel panel-default col-md-12" ng-if="!up.isSigning() && !in.isSigning() && !load.isLoading()">
+	<div class="session-choice panel panel-default col-md-12" ng-if="!up.isSigning() && !in.isSigning() && !load.isDoing()">
 		<div class="panel-heading">Welcome to TEMA!</div>
 		<div class="panel-body">
 
@@ -20,7 +20,7 @@
 			</div>
 
 			<div class="col-md-12">
-				<button class="cell btn btn-reddish small-caps" ng-click='load.setLoading(true)'>enter a <u>public</u> session</button>
+				<button class="cell btn btn-reddish small-caps" ng-click='load.setDoing(true)'>enter a <u>public</u> session</button>
 			</div>
 
 		</div>
@@ -50,7 +50,7 @@
 					<input class="form-control" type="password" placeholder="Provide a password" ng-model="m.logsys.up.pwd" ng-disable="up.isRunning()" />
 				</div>
 				<div class="mbot05 col-md-12 text-align-right note"><small ng-class="{'text-danger':m.logsys.up.err.pwd}">
-					Use at least one lowercase letter, one lowercase letter, one digit, and eight characters.
+					Use at least one lowercase letter, one uppercase letter, one digit, and eight characters.
 				</small></div>
 
 				<div><input class="mbot05 form-control hidden-file-input" type="email" id="hatch" name="hatch" ng-model="m.logsys.up.hatch"></div>
@@ -117,7 +117,7 @@
 	</div>
 
 	<!-- load-public-session -->
-	<div class="selected-form panel panel-default col-md-12" ng-if="load.isLoading()">
+	<div class="selected-form panel panel-default col-md-12" ng-if="load.isDoing()">
 		<div class="panel-heading">Load a public session!</div>
 		<div class="panel-body">
 
@@ -129,8 +129,8 @@
 
 				<div><input class="mbot05 form-control hidden-file-input" type="email" id="hatch" name="hatch" ng-model="m.logsys.load.hatch"></div>
 
-				<a href="#" ng-click="load.setLoading(false)" class="float-right mrig07 btn btn-reddish small-caps">back</a>
-				<a ng-click="" onclick="javascript:alert('TODO')" class="float-right mrig07 btn btn-aqua small-caps">load</a>
+				<a href="#" ng-click="load.setDoing(false)" class="float-right mrig07 btn btn-reddish small-caps">back</a>
+				<a ng-click="load.do()" class="float-right mrig07 btn btn-aqua small-caps">load</a>
 			</form>		
 
 		</div>

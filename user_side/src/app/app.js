@@ -52,6 +52,7 @@
             ]).
             controller('userpageController', [
                 '$scope', 'appModel', '$http', '$timeout', '$rootScope',
+                'formCheckService',
                 userpageController
             ]).
             controller('activateController', [

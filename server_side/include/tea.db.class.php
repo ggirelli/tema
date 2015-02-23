@@ -55,6 +55,7 @@ class TEAdb extends C2MySQL {
 				"seed VARCHAR(100) NOT NULL UNIQUE, " .
 				"folder_path VARCHAR(200) NOT NULL UNIQUE, " .
 				"interface_uri VARCHAR(200) NOT NULL UNIQUE, " .
+				"privacy VARCHAR(100) NOT NULL, " .
 				"running INT NOT NULL DEFAULT 0, " .
 				"last_query VARCHAR(100), " .
 				"last_query_when TIMESTAMP, " .

@@ -53,6 +53,17 @@
                 }
             };
 
+            self.session_sys = {
+                create: {
+                    doing: false,
+                    title: null,
+                    token: null,
+                    public: null,
+                    protected: null,
+                    password: null
+                }
+            };
+
             self.session_id = null;
            	self.currentSession = null;
 

@@ -8,6 +8,10 @@
         	scope.m = model;
             scope.m.formChecker = formChecker;
         	
+            /**
+             * Sign-up functions
+             * @type {Object}
+             */
         	scope.up = {
 
     			setSigning: function (val) {
@@ -86,6 +90,10 @@
 
     		};
 
+            /**
+             * Sign-in functions
+             * @type {Object}
+             */
         	scope.in = {
 
     			setSigning: function (val) {
@@ -125,10 +133,11 @@
                             .success(function (data) {
                                 scope.m.logsys.in.err.code = data.err;
                                 if ( 0 === data.err ) {
+                                    scope.m.logsys.in.usr = data.usr;
                                     timeout(function() {
                                         scope.m.logsys.logged = {
                                             status: true,
-                                            usr: scope.m.logsys.in.usr
+                                            usr: data.usr
                                         };
                                         rootScope.TEMAlogged = scope.m.logsys.logged;
                                         scope.in.setSigning(false);
@@ -145,18 +154,22 @@
 
     		};
 
+            /**
+             * Functions to load a public session
+             * @type {Object}
+             */
     		scope.load = {
 
-    			setLoading: function (val) {
+    			setDoing: function (val) {
     				scope.m.logsys.load.doing = val;
     			},
 
-    			isLoading: function () {
+    			isDoing: function () {
     				return(scope.m.logsys.load.doing);
     			},
 
-    			load: function () {
-
+    			do: function () {
+                    alert('TODO');
     			}
 
     		};

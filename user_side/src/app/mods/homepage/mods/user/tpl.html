@@ -6,15 +6,15 @@
 		<small>Tumor Evolution Manager and Analyzer</small>
 	</div>
 
-	<div class="session-choice panel panel-light col-md-12" ng-if="!out.isSigning()">
+	<div class="session-choice panel panel-light col-md-12" ng-if="!out.isSigning()&&!create.isDoing()">
 		<div class="panel-heading">You are logged in as <u>{{m.logsys.logged.usr}}</u></div>
 		<div class="panel-body">
 
 			<div class="col-md-6 col-md-push-6 pori0 mbot0 plef05">
 				<div class="col-md-6 plef0 prig05"><button class="all-width mbot02 h2-5em btn btn-aqua small-caps" ng-click="out.sign()">logout</button></div>
-				<div class="col-md-6 prig0 plef05"><button class="all-width mbot02 h2-5em btn btn-light-aqua small-caps" ng-click=''>edit profile</button></div>
-				<div class="col-md-12 pori0"><button class="all-width mbot02 h2-5em btn btn-reddish small-caps" ng-click=''>createa <u>new</u> session</button></div>
-				<div class="col-md-12 pori0"><button class="all-width mbot0 h2-5em btn btn-sky small-caps" ng-click=''>enter a <u>public</u> session</button></div>
+				<div class="col-md-6 prig0 plef05"><button class="all-width mbot02 h2-5em btn btn-light-aqua small-caps" ng-click='' onclick="javascript:alert('TODO')">edit profile</button></div>
+				<div class="col-md-12 pori0"><button class="all-width mbot02 h2-5em btn btn-reddish small-caps" ng-click='create.setDoing(true)'>createa <u>new</u> session</button></div>
+				<div class="col-md-12 pori0"><button class="all-width mbot0 h2-5em btn btn-sky small-caps" ng-click='' onclick="javascript:alert('TODO')">enter a <u>public</u> session</button></div>
 			</div>
 
 			<div class="col-md-6 col-md-pull-6 plef0 prig05 mbot05">
@@ -44,6 +44,43 @@
 				</div>
 			</div>
 
+		</div>
+	</div>
+
+	<div class="col-md-12 session-choice panel panel-reddish" ng-if="create.isDoing()">
+		<div class="panel-heading">Create a new session</div>
+		<div class="panel-body">
+			<form role="form">
+				<div class="col-md-12 text-align-right note"><small ng-class="{'text-danger':m.logsys.up.err.usr}">
+					Use at least four characters.
+				</small></div><br />
+				<div class="input-group mbot05">
+					<span class="input-group-addon"><span class="glyphicon glyphicon-header"></span></span>
+					<input class="form-control" type="text" placeholder="Session title (e.g.: New Session #)" name="new-session-title" id="new-session-title" />
+				</div>
+				<div class="input-group mbot05">
+					<span class="input-group-addon"><span class="glyphicon glyphicon-eye-close"></span></span>
+					<select class="form-control" name="session-privacy-status" id="session-privacy-status">
+						<option value="" selected disabled>Select a privacy status</option>
+						<option value="public">Public</option>
+						<option value="private">Private</option>
+					</select>
+				</div>
+				<p>
+					<input type="checkbox" name="protect-the-session" id="protect-the-session" ng-model="m.session_sys.create.protected" />
+					<label for="protect-the-session">Password protected</label>
+				</p>
+				<div class="input-group mbot0" ng-show="m.session_sys.create.protected">
+					<span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+					<input class="form-control" type="password" placeholder="Provide a password" name="" id="" />
+				</div>
+				<div class="mbot05 col-md-12 text-align-right note" ng-show="m.session_sys.create.protected"><small ng-class="{'text-danger':m.logsys.up.err.pwd}">
+					Use at least one lowercase letter, one uppercase letter, one digit, and eight characters.
+				</small></div>
+			</form>
+
+			<a ng-click="create.setDoing(false)" class="btn btn-reddish float-right small-caps h2-5em">back</a>
+			<a ng-click="create.do()" class="btn btn-aqua float-right small-caps h2-5em">create</a>
 		</div>
 	</div>
 

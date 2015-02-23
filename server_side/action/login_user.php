@@ -19,7 +19,7 @@ if ( is_null($r) )
 	die('{"err":4}');
 
 if ( in_array(6, $r) )
-	die('{"err":0}');
+	die('{"err":0,"usr":"' . $user->get_username() . '"}');
 
 die('{"err":3}');
 

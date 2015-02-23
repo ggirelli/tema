@@ -210,9 +210,12 @@ class TEMAuser extends TEAdb {
 	/**
 	 * @return Array with the code of the messages
 	 */
-	public function get_msg() {
-		return $this->msg;
-	}
+	public function get_msg() { return $this->msg; }
+
+	/**
+	 * @return String The username
+	 */
+	public function get_username() { return $this->username; }
 
 	// private FUNCTIONS
 	
@@ -226,9 +229,11 @@ class TEMAuser extends TEAdb {
 	 */
 	private function init($username, $email, $password, $token) {
 		// Default attributes
-		$this->username = strtoupper($username);
+		$this->username = $username;
+		if ( !is_null($this->username) ) $this->username = strtoupper($this->username);
 		$this->password = $password;
 		$this->email = $email;
+		if ( !is_null($this->email) ) $this->email = strtoupper($this->email);
 		$this->confirm_token = $token;
 		$this->confirmed = FALSE;
 		$this->checked = TRUE;
@@ -255,7 +260,7 @@ class TEMAuser extends TEAdb {
 		} else {
 			$this->password = $this->encrypt($password);
 		}
-
+		
 		// If the provide credentials are correctly formatted
 		if( $this->checked ) {
 			// Test provided credential for match in database
