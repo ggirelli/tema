@@ -5,6 +5,7 @@
         './libs/model', './libs/controller', './libs/route_config',
         './libs/form_check.service',
         './mods/homepage/mods/guest/libs/controller', './mods/interface/libs/controller',
+        './mods/user_activate/libs/controller',
         './mods/interface/libs/filters.service', './mods/interface/libs/navigate.service',
         './mods/interface/libs/network.service',
         './mods/interface/libs/network_attribute.service',
@@ -20,6 +21,7 @@
         function (angular, model, controller, routeConfig,
             formCheckService,
             guestpageController, interfaceController,
+            activateController,
             filterService, navigateService,
             networkService,
             networkAttributeService, networkGroupService,
@@ -41,6 +43,12 @@
                 '$scope', 'appModel', '$http', '$timeout',
                 'formCheckService',
                 guestpageController
+            ]).
+
+            controller('activateController', [
+                '$scope', 'appModel', '$http', '$timeout',
+                '$routeParams',
+                activateController
             ]).
             
             service('networkAttributeService', [

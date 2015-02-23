@@ -78,6 +78,10 @@ class TEMAuser extends TEAdb {
 	 * 6:	provided credentials match existing user
 	 * 7:	wrong password provided
 	 * 8:	user not confirmed
+	 * 9:	non-existent confirmation token
+	 * 10:	confirmation token already used
+	 * 11:	an error occurred during confirmation
+	 * 12:	user confirmed
 	 * @var Array
 	 */
 	private $msg;
@@ -96,9 +100,9 @@ class TEMAuser extends TEAdb {
 	 * @param   [varname] [description]
 	 */
 	public function __construct(
-		$host, $user, $pwd, $db_name,
-		$tema_username=NULL, $tema_email=NULL, $tema_password,
-		$mode
+		$host, $user, $pwd, $db_name, $mode,
+		$tema_username=NULL, $tema_email=NULL, $tema_password=NULL,
+		$tema_token=NULL
 	) {
 		// Username AND/OR  Email must be provided
 		if( is_null($tema_username) && is_null($tema_email) ) return NULL;
@@ -108,7 +112,7 @@ class TEMAuser extends TEAdb {
 		}
 
 		parent::__construct($host, $user, $pwd, $db_name);
-		$this->init($tema_username, $tema_email, $tema_password);
+		$this->init($tema_username, $tema_email, $tema_password, $tema_token);
 
 		switch($mode) {
 			case TUModes::SIGNUP: {
@@ -209,12 +213,12 @@ class TEMAuser extends TEAdb {
 	 * @param  String $password
 	 * @return NULL           Initializes the class
 	 */
-	private function init($username, $email, $password) {
+	private function init($username, $email, $password, $token) {
 		// Default attributes
 		$this->username = $username;
 		$this->password = $this->encrypt($password);
 		$this->email = $email;
-		$this->confirm_token = NULL;
+		$this->confirm_token = $token;
 		$this->confirmed = FALSE;
 		$this->checked = TRUE;
 		$this->exists = FALSE;
@@ -223,18 +227,18 @@ class TEMAuser extends TEAdb {
 
 		// Test provided credentials for correct format
 		if( !is_null($this->username) ) {
-			if( $this->username_check($this->username) ) {
+			if( !$this->username_check($this->username) ) {
 				$this->checked = FALSE;
 				$this->msg[] = 1;
 			}
 		}
 		if( !is_null($this->email) ) {
-			if( $this->email_check($this->email) ) {
+			if( !$this->email_check($this->email) ) {
 				$this->checked = FALSE;
 				$this->msg[] = 2;
 			}
 		}
-		if( $this->password_check($this->password) ) {
+		if( !$this->password_check($this->password) ) {
 			$this->checked = FALSE;
 			$this->msg[] = 3;
 		}
@@ -362,7 +366,7 @@ class TEMAuser extends TEAdb {
 	}
 
 	/**
-	 * Register the user in the database
+	 * Registers the user in the database
 	 * @return NULL
 	 */
 	private function signUp() {
@@ -377,7 +381,7 @@ class TEMAuser extends TEAdb {
 		// Insert user into DB
 		$sql = "INSERT INTO sessions_users " .
 			"(nickname, email, password, confirm_token, token_when, confirmed)" .
-			" VALUES ('$nickname', '$email', '$password', '$confirm_token', 0, 0)";
+			" VALUES ('$nickname', '$email', '$password', '$confirm_token', NOW(), 0)";
 		$r = $this->query($sql, $verbose=FALSE);
 
 		if( !$this->isError() ) {
@@ -393,20 +397,59 @@ class TEMAuser extends TEAdb {
 			$msgHTML = str_replace('##TOKEN##', $confirm_token, $msgHTML);
 			$mail->msgHTML($msgHTML);
 
-			$mail->AltBody = "Hello $this->username and welcome to TEMA!\n" .
+			$mail->AltBody = "(this is an automatic email, do not write to this address)\n\n" .
+				"Hello $this->username and welcome to TEMA!\n" .
 				"To use the tools available in TEMA interface, " .
 				"first you need to confirm your brand new account by clicking " .
 				"on the following link: " . RURI . "/#/activation/$confirm_token\n" .
 				"Cheers!\nTEMA staff";
 
-			#if (!$mail->send()) { echo "Mailer Error: " . $mail->ErrorInfo; }
-			#else { echo "Message sent!"; }
-			$mail->send();
+			if (!$mail->send()) { echo "Mailer Error: " . $mail->ErrorInfo; }
+			else { echo "Message sent!"; }
+			#$mail->send();
 		}
 	}
 
+	/**
+	 * Confirms a user in the database
+	 * @return NULL
+	 */
 	private function confirm() {
-		echo 1;
+		$confirm_token = $this->escape_string($this->confirm_token);
+
+		// VERIFICATION OF TIME LIMIT IS NOT YET IMPLEMENTED
+		
+		// Look for the token
+		$sql = "SELECT id FROM sessions_users WHERE confirm_token = '" . $confirm_token . "'";
+		$r = $this->query($sql);
+
+		if ( 1 <= $r->size() ) {
+			$id = $r->fetch()['id'];
+			// Confirm
+			$sql = "SELECT confirmed FROM sessions_users WHERE id=$id";
+			$r = $this->query($sql);
+			$confirmed = $r->fetch()['confirmed'];
+
+			if ( 0 == $confirmed ) {
+				// Confirm user
+				$sql = "UPDATE sessions_users SET confirmed=1 WHERE id=$id";
+				$r = $this->query($sql);
+
+				if ( $this->isError() )  {
+					$this->msg[] = 11;
+				} else {
+					$confirmed = TRUE;
+					$this->msg[] = 12;
+				}
+			} else {
+				// Token already used
+				$this->msg[] = 10;
+			}
+		} else {
+			// Non-existent confirmation token
+			$this->msg[] = 9;
+		}
+
 	}
 }
 

@@ -1,0 +1,29 @@
+<!-- import url-specific style -->
+<style type="text/css">@import "user_side/src/common/css/homepage.css";</style>
+
+<!-- url-specific template -->
+<div id='homepage' class='col-md-8 col-md-offset-2' ng-app='tea' ng-controller='activateController as aCtrl' ng-model='aCtrl'>
+
+	<div class="title col-md-12">
+		<p>TEMA</p>
+		<small>Tumor Evolution Manager and Analyzer</small>
+	</div>
+
+	<div class="session-choice panel panel-default col-md-12" ng-if="!up.isSigning() && !in.isSigning() && !load.isLoading()">
+		<div class="panel-heading">User activation</div>
+		<div class="panel-body">
+
+			<small>We are verifying the provided confirmation token...</small>
+			<center>
+				<h2 ng-if="isError(0)">Your user has been activated!</h2>
+				<h2 ng-if="isError(3)">An error occurred during the activation of your user.</h2>
+				<h2 ng-if="isError(4)">User already activated.</h2>
+				<h2 ng-if="isError(5)">An error occurred during the activation of your user.</h2>
+				<h2 ng-if="isError(null)">...</h2>
+			</center>
+
+		</div>
+	
+	</div>
+
+</div>

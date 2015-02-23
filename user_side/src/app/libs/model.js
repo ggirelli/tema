@@ -32,6 +32,11 @@
                 }
             };
 
+            self.confrm = {
+                token: null,
+                err: null
+            };
+
             self.session_id = null;
            	self.currentSession = null;
 

@@ -9,9 +9,10 @@
 require_once(RPATH . '/include/tema.user.class.php');
 
 $user = new TEMAuser(
-	HOST, USER, PWD, DB_NAME,
-	$data->user, $data->email, $data->password,
-	TUModes::SIGNUP
+	HOST, USER, PWD, DB_NAME, TUModes::SIGNUP,
+	$tema_user = $data->user,
+	$tema_email = $data->email,
+	$tema_password = $data->password
 );
 
 $r = $user->get_msg();

@@ -57,7 +57,7 @@ class TEAdb extends C2MySQL {
 				"interface_uri VARCHAR(200) NOT NULL UNIQUE, " .
 				"running INT NOT NULL DEFAULT 0, " .
 				"last_query VARCHAR(100), " .
-				"last_query_when INTEGER, " .
+				"last_query_when TIMESTAMP, " .
 				"current_net VARCHAR(100) " .
 				")";
 			
@@ -92,7 +92,7 @@ class TEAdb extends C2MySQL {
 				"email VARCHAR(100) NOT NULL UNIQUE, " .
 				"password VARCHAR(200) NOT NULL, " .
 				"confirm_token VARCHAR(100) NOT NULL UNIQUE, " .
-				"token_when INTEGER, " .
+				"token_when TIMESTAMP, " .
 				"confirmed INTEGER NOT NULL " .
 				")";
 			
