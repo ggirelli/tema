@@ -123,7 +123,6 @@
 
                         })
                             .success(function (data) {
-                                console.log(data);
                                 scope.m.logsys.in.err.code = data.err;
                                 if ( 0 === data.err ) {
                                     timeout(function() {
