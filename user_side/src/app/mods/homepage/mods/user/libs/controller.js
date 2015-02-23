@@ -58,7 +58,7 @@
                 },
 
                 do: function () {
-                    console.log(1);
+                    alert('TODO');
                 }
 
             };
