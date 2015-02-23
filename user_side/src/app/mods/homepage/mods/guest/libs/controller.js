@@ -114,6 +114,7 @@
                                     timeout(function() {
                                         rootScope.temaLogged = true;
                                         scope.m.logged = true;
+                                        scope.in.setSigning(false);
                                     }, 1500)
                                 }
                             });

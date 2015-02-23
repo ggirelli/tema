@@ -24,7 +24,6 @@
 			</div>
 
 		</div>
-	
 	</div>
 
 	<!-- sign-up-form -->
@@ -83,7 +82,8 @@
 
 	<!-- sign-in-form -->
 	<div class="selected-form panel panel-default col-md-12" ng-if="in.isSigning()" ng-class="{'panel-success':in.isError(0)}">
-		<div class="panel-heading">Sign in with your username and password</div>
+		<div class="panel-heading" ng-if="!in.isError(0)">Sign in with your username and password</div>
+		<div class="panel-heading" ng-if="in.isError(0)">Signing in</div>
 		<div class="panel-body" ng-if="!in.isError(0)">
 
 			<form action="" role="form">

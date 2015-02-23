@@ -41,6 +41,10 @@
                 err: null
             };
 
+            self.out = {
+                doing: false
+            };
+
             self.logged = false;
 
             self.session_id = null;
