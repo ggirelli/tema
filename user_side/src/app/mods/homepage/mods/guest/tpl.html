@@ -1,8 +1,5 @@
-<!-- import url-specific style -->
-<style type="text/css">@import "user_side/src/common/css/homepage.css";</style>
-
 <!-- url-specific template -->
-<div id='homepage' class='col-md-8 col-md-offset-2' ng-app='tea' ng-controller='guestpageController as hCtrl' ng-model='hCtrl'>
+<div id='guestpage' class='col-md-8 col-md-offset-2' ng-app='tea' ng-controller='guestpageController as gpCtrl' ng-model='gpCtrl'>
 
 	<div class="title col-md-12">
 		<p>TEMA</p>
@@ -31,20 +28,20 @@
 	</div>
 
 	<!-- sign-up-form -->
-	<div class="selected-form panel panel-default col-md-12" ng-if="up.isSigning()">
+	<div class="selected-form panel panel-default col-md-12" ng-if="up.isSigning()" ng-class="{'panel-success':up.isError(0)}">
 		<div class="panel-heading">Sign up for a new user</div>
-		<div class="panel-body">
+		<div class="panel-body" ng-if="!up.isError(0)">
 
 			<form action="" role="form">
 				<div class="col-md-12 text-align-right note"><small ng-class="{'text-danger':m.guestpage.up.err.usr}">
 					Use at least four characters.
 				</small></div><br />
-				<div class="mbot05 col-md-12 input-group" ng-class="{'has-error':m.guestpage.up.err.usr}">
+				<div class="mbot05 col-md-12 input-group" ng-class="{'has-error':m.guestpage.up.err.usr||up.isError(4)}">
 					<span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
 					<input class="form-control" type="text" placeholder="Pick a username" name="username" id="username" ng-model="m.guestpage.up.usr" />
 				</div>
 				
-				<div class="mbot05 col-md-12 input-group" ng-class="{'has-error':m.guestpage.up.err.email}">
+				<div class="mbot05 col-md-12 input-group" ng-class="{'has-error':m.guestpage.up.err.email||up.isError(5)}">
 				<span class="input-group-addon">@</span>
 					<input class="form-control" type="text" placeholder="Your email" name="email" id="email" ng-model="m.guestpage.up.email" />
 				</div>
@@ -59,34 +56,63 @@
 
 				<div><input class="mbot05 form-control hidden-file-input" type="email" id="hatch" name="hatch" ng-model="m.guestpage.up.hatch"></div>
 
+				<p class="text-danger">
+					<span ng-if="up.isError(3)">Something is wrong with the provided credentials.</span>
+					<span ng-if="up.isError(4)">Username already in use, pick another one!</span>
+					<span ng-if="up.isError(5)">Email already in use, have you already signed up?</span>
+					<span ng-if="up.isError(6)">Something went wrong, try again later.</span>
+				</p>
+
 				<a ng-click="up.setSigning(false)" class="float-right mrig07 btn btn-reddish small-caps">back</a>
 				<a ng-click="up.sign()" class="float-right mrig07 btn btn-aqua small-caps">sign up</a>
 			</form>		
 
 		</div>
+
+		<div class="panel-body" ng-if="up.isError(0)">
+			<span class="text-success">
+				<p>
+					User "{{m.guestpage.up.usr}}" has been created.<br />
+					We just sent you an <b>email</b> with further instructions<br />
+					on how to <b>activate</b> your brand new account!
+				</p>
+				<a ng-click="up.setSigning(false)" class="float-right mrig07 btn btn-light-aqua small-caps">back</a>
+			</span>
+		</div>
 	</div>
 
 	<!-- sign-in-form -->
-	<div class="selected-form panel panel-default col-md-12" ng-if="in.isSigning()">
+	<div class="selected-form panel panel-default col-md-12" ng-if="in.isSigning()" ng-class="{'panel-success':in.isError(0)}">
 		<div class="panel-heading">Sign in with your username and password</div>
-		<div class="panel-body">
+		<div class="panel-body" ng-if="!in.isError(0)">
 
 			<form action="" role="form">
-				<div class="mbot05 col-md-12 input-group">
+				<div class="mbot05 col-md-12 input-group" ng-class="{'has-error':in.isError(3)}">
 					<span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
 					<input class="form-control" type="text" placeholder="Your username or email" name="username" id="username" ng-model="m.guestpage.in.usr" />
 				</div>
-				<div class="mbot05 col-md-12 input-group">
+				<div class="mbot05 col-md-12 input-group" ng-class="{'has-error':in.isError(3)}">
 					<span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
-					<input class="form-control" type="password" placeholder="Make up a password" ng-model="m.guestpage.in.pwd" />
+					<input class="form-control" type="password" placeholder="Your password" ng-model="m.guestpage.in.pwd" />
 				</div>
 
 				<div><input class="mbot05 form-control hidden-file-input" type="email" id="hatch" name="hatch" ng-model="m.guestpage.in.hatch"></div>
 
+				<p class="text-danger">
+					<span ng-if="in.isError(3)||in.isError(4)">Something is wrong with the provided credentials.</span>
+				</p>
+
 				<a href="#" ng-click="in.setSigning(false)" class="float-right mrig07 btn btn-reddish small-caps">back</a>
-				<input type="submit" class="float-right mrig07 btn btn-aqua small-caps" value="sign in">
+				<a ng-click="" onclick="javascript:alert('TODO')" class="float-right mrig07 btn btn-light-aqua small-caps">recover</a><!-- show forgot-password form -->
+				<a ng-click="in.sign()" class="float-right mrig07 btn btn-aqua small-caps">sign in</a><!-- trigger user login -->
 			</form>		
 
+		</div>
+
+		<div class="panel-body" ng-if="in.isError(0)">
+			<center>
+				<h2 class="text-success">Hey {{m.guestpage.in.usr}}, welcome back!</h2>
+			</center>
 		</div>
 	</div>
 
@@ -104,7 +130,7 @@
 				<div><input class="mbot05 form-control hidden-file-input" type="email" id="hatch" name="hatch" ng-model="m.guestpage.load.hatch"></div>
 
 				<a href="#" ng-click="load.setLoading(false)" class="float-right mrig07 btn btn-reddish small-caps">back</a>
-				<input type="submit" class="float-right mrig07 btn btn-aqua small-caps" value="load">
+				<a ng-click="" onclick="javascript:alert('TODO')" class="float-right mrig07 btn btn-aqua small-caps">load</a>
 			</form>		
 
 		</div>

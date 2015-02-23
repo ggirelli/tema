@@ -1,6 +1,6 @@
 <?php
 /**
- * Attempts to create a new TEMA user.
+ * Attempts to confirm a TEMA user.
  * @author Gabriele Girelli <gabriele@filopoe.it>
  * @since  0.3.0
  */
@@ -16,23 +16,19 @@ $user = new TEMAuser(
 $r = $user->get_msg();
 
 // Non-existent token
-if ( in_array(9, $r) ) {
+if ( in_array(9, $r) )
 	die('{"err":3}');
-}
 
 // Token already used
-if ( in_array(10, $r) ) {
+if ( in_array(10, $r) )
 	die('{"err":4}');
-}
 
 // An error occurred
-if ( in_array(11, $r) ) {
+if ( in_array(11, $r) )
 	die('{"err":5}');
-}
 
 // User confirmed
-if ( in_array(12, $r) ) {
+if ( in_array(12, $r) )
 	die('{"err":0}');
-}
 
 ?>

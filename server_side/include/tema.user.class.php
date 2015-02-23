@@ -82,6 +82,8 @@ class TEMAuser extends TEAdb {
 	 * 10:	confirmation token already used
 	 * 11:	an error occurred during confirmation
 	 * 12:	user confirmed
+	 * 13:	an error occur while sending the confirmation email
+	 * 14:	confirmation email sent
 	 * @var Array
 	 */
 	private $msg;
@@ -104,6 +106,8 @@ class TEMAuser extends TEAdb {
 		$tema_username=NULL, $tema_email=NULL, $tema_password=NULL,
 		$tema_token=NULL
 	) {
+		if ( -1 === $tema_email ) $tema_email = NULL;
+
 		// Username AND/OR  Email must be provided
 		if( is_null($tema_username) && is_null($tema_email) ) return NULL;
 		// If SIGNUP mode, BOTH username AND email must be provided
@@ -117,6 +121,12 @@ class TEMAuser extends TEAdb {
 		switch($mode) {
 			case TUModes::SIGNUP: {
 				$this->signUp();
+				break;
+			}
+			case TUModes::SIGNIN: {
+				if ( !$this->logged ) {
+					$this->init($tema_email, $tema_username, $tema_password, $tema_token);
+				}
 				break;
 			}
 			case TUModes::CONFRM: {
@@ -167,7 +177,7 @@ class TEMAuser extends TEAdb {
 	 * @return Boolean
 	 */
 	public function username_check($user) {
-		if( count($user) < 4 ) return false;
+		if( strlen($user) < 4 ) return false;
 		return true;
 	}
 
@@ -177,7 +187,7 @@ class TEMAuser extends TEAdb {
 	 * @return Boolean
 	 */
 	public function email_check($email) {
-		if( 1 == preg_match('/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/', $email) ) {
+		if( 1 == preg_match('/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/', strtoupper($email)) ) {
 			return true;
 		} else {
 			return false;
@@ -190,10 +200,10 @@ class TEMAuser extends TEAdb {
 	 * @return Boolean
 	 */
 	public function password_check($password) {
-		if( count($password) < 8 ) return false;
-		if( 1 != preg_match($password, "/^.*[a-z].*$/") ) return false;
-		if( 1 != preg_match($password, "/^.*[A-Z].*$/") ) return false;
-		if( 1 != preg_match($password, "/^.*[0-9].*$/") ) return false;
+		if( strlen($password) < 8 ) return false;
+		if( 1 != preg_match('/^.*[a-z]+.*$/', $password) ) return false;
+		if( 1 != preg_match('/^.*[A-Z]+.*$/', $password) ) return false;
+		if( 1 != preg_match('/^.*[0-9]+.*$/', $password) ) return false;
 		return true;
 	}
 
@@ -216,7 +226,7 @@ class TEMAuser extends TEAdb {
 	private function init($username, $email, $password, $token) {
 		// Default attributes
 		$this->username = $username;
-		$this->password = $this->encrypt($password);
+		$this->password = $password;
 		$this->email = $email;
 		$this->confirm_token = $token;
 		$this->confirmed = FALSE;
@@ -241,6 +251,8 @@ class TEMAuser extends TEAdb {
 		if( !$this->password_check($this->password) ) {
 			$this->checked = FALSE;
 			$this->msg[] = 3;
+		} else {
+			$this->password = $this->encrypt($password);
 		}
 
 		// If the provide credentials are correctly formatted
@@ -308,7 +320,6 @@ class TEMAuser extends TEAdb {
 		$row = $r->fetch();
 
 		$this->username = $row['nickname'];
-		$this->password = NULL;
 		$this->email = $row['email'];
 		$this->confirm_token = $row['confirm_token'];
 		$this->token_when = $row['token_when'];
@@ -404,9 +415,11 @@ class TEMAuser extends TEAdb {
 				"on the following link: " . RURI . "/#/activation/$confirm_token\n" .
 				"Cheers!\nTEMA staff";
 
-			if (!$mail->send()) { echo "Mailer Error: " . $mail->ErrorInfo; }
-			else { echo "Message sent!"; }
-			#$mail->send();
+			if (!$mail->send()) {
+				$msg[] = 13;
+			} else {
+				$msg[] = 14;
+			}
 		}
 	}
 
@@ -449,7 +462,6 @@ class TEMAuser extends TEAdb {
 			// Non-existent confirmation token
 			$this->msg[] = 9;
 		}
-
 	}
 }
 

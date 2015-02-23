@@ -11,7 +11,10 @@
                     doing: false,
                     usr: null,
                     pwd: null,
-                    hatch: null
+                    hatch: null,
+                    err: {
+                        code: null
+                    }
                 },
                 up: {
                     doing: false,
@@ -22,7 +25,8 @@
                     err: {
                         pwd: false,
                         usr: false,
-                        email: false
+                        email: false,
+                        code: null
                     }
                 },
                 load: {
@@ -36,6 +40,8 @@
                 token: null,
                 err: null
             };
+
+            self.logged = false;
 
             self.session_id = null;
            	self.currentSession = null;

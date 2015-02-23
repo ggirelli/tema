@@ -4,8 +4,9 @@
     var def_requirements = ['angular',
         './libs/model', './libs/controller', './libs/route_config',
         './libs/form_check.service',
-        './mods/homepage/mods/guest/libs/controller', './mods/interface/libs/controller',
-        './mods/user_activate/libs/controller',
+        './mods/homepage/libs/controller', './mods/homepage/mods/guest/libs/controller',
+        './mods/homepage/mods/user/libs/controller', './mods/user_activate/libs/controller',
+        './mods/interface/libs/controller',
         './mods/interface/libs/filters.service', './mods/interface/libs/navigate.service',
         './mods/interface/libs/network.service',
         './mods/interface/libs/network_attribute.service',
@@ -20,8 +21,9 @@
     define(def_requirements,
         function (angular, model, controller, routeConfig,
             formCheckService,
-            guestpageController, interfaceController,
-            activateController,
+            homepageController, guestpageController,
+            userpageController, activateController,
+            interfaceController,
             filterService, navigateService,
             networkService,
             networkAttributeService, networkGroupService,
@@ -39,12 +41,19 @@
         	service('appModel', [model]).
         	controller('appController', ['$scope', 'appModel', controller]).
 
+            controller('homepageController', [
+                '$scope', 'appModel', '$http', '$timeout', '$rootScope',
+                homepageController
+            ]).
             controller('guestpageController', [
-                '$scope', 'appModel', '$http', '$timeout',
+                '$scope', 'appModel', '$http', '$timeout', '$rootScope',
                 'formCheckService',
                 guestpageController
             ]).
-
+            controller('userpageController', [
+                '$scope', 'appModel', '$http', '$timeout', '$rootScope',
+                userpageController
+            ]).
             controller('activateController', [
                 '$scope', 'appModel', '$http', '$timeout',
                 '$routeParams',

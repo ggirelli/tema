@@ -43,7 +43,10 @@ if( isset($data->action) ) {
 			case 'upload_network': case 'upload_drag_network':
 			case 'upload_setting_file':
 
-			case 'register_user': case 'confirm_user': {
+			case 'register_user': case 'confirm_user':
+			case 'login_user':
+
+			{
 				require_once('action/' . $data->action . '.php');
 				break;
 			}

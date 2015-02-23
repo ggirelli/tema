@@ -51,3 +51,7 @@
 #homepage .selected-form .note {
 	color: #989898;
 }
+
+#userpage .panel-left {
+	height: 190px;
+}

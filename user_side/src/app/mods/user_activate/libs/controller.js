@@ -20,10 +20,9 @@
             })
                 .success(function(data) {
                     scope.m.confrm.err = data.err;
-                    console.log(data);
                 });
 
-            scope.isError = function(v) {
+            scope.isError = function (v) {
                 return( v === scope.m.confrm.err );
             };
 

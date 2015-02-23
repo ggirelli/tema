@@ -55,12 +55,26 @@ body {
 	text-align: right !important;
 }
 
-.mbot05 {
-	margin-bottom: 0.5em;
+.mbot02 { margin-bottom: 0.2em; }
+.mbot05 { margin-bottom: 0.5em; }
+.mrig07 { margin-right: 0.7em; }
+
+.prig0 { padding-right: 0; }
+.plef0 { padding-left: 0; }
+.pori0 {
+	padding-left: 0;
+	padding-right: 0;
 }
 
-.mrig07 {
-	margin-right: 0.7em;
+.h2-5em { height: 2.5em; }
+
+.all-width {
+	width: 100%;
+}
+
+.all-dimensions {
+	height: 100%;
+	width: 100%;
 }
 
 /** buttons **/
@@ -91,7 +105,64 @@ body {
 	border-bottom-width: 4px;
 }
 
+.btn-sky {
+	background-color: rgb(115, 195, 240);
+	color: white;
+	border: 1px solid rgb(88, 176, 235);
+	border-bottom-width: 4px;
+}
+
 .btn:hover {
 	color: white;
 	border-bottom-width: 1px;
 }
+
+/** panels **/
+
+.panel-success { border-color: rgb(16, 156, 126); }
+
+.panel-success .panel-heading {
+	background-color: rgb(16, 156, 126);
+	color: white;
+}
+
+.panel-success .panel-body,
+.panel-success .panel-body p,
+.panel-success .panel-body h2 {
+	color: rgb(87, 181, 138);
+}
+
+.panel-sky { border-color: rgb(98, 181, 227); }
+.panel-sky .panel-heading {
+	background-color: rgb(115, 195, 240);
+	color: white;
+}
+.panel-sky .panel-body,
+.panel-sky .panel-body p,
+.panel-sky .panel-body h2 {
+	color: rgb(88, 176, 235);
+}
+
+.panel-light-aqua { border-color: rgb(87, 181, 138); }
+.panel-light-aqua .panel-heading {
+	background-color: rgb(100, 201, 155);
+	color: white;
+}
+.panel-light-aqua,
+.panel-light-aqua p,
+.panel-light-aqua h2 {
+	color: rgb(87, 181, 138);
+}
+
+
+.panel-reddish { border-color: rgb(212, 71, 44); }
+.panel-reddish .panel-heading {
+	background-color: rgb(232, 78, 48);
+	color: white;
+}
+.panel-reddish,
+.panel-reddish p,
+.panel-reddish h2 {
+	color: rgb(232, 78, 48);
+}
+

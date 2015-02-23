@@ -10,9 +10,7 @@ require_once(RPATH . '/include/tema.user.class.php');
 
 $user = new TEMAuser(
 	HOST, USER, PWD, DB_NAME, TUModes::SIGNUP,
-	$tema_user = $data->user,
-	$tema_email = $data->email,
-	$tema_password = $data->password
+	$data->user, $data->email, $data->password
 );
 
 $r = $user->get_msg();
@@ -28,9 +26,10 @@ if( in_array(4, $r) )
 if( in_array(5, $r) )!
 	die('{"err":5}');
 
-if($user->isError()) {
-	// An error occurred while writing user into the DB
+// An error occurred while writing user into the DB
+if($user->isError())
 	die('{"err":6}');
-}
+
+die('{"err":0}');
 
 ?>

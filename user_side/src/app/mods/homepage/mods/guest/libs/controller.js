@@ -3,7 +3,7 @@
 
     define([], function () {
 
-        return function (scope, model, http, timeout, formChecker) {
+        return function (scope, model, http, timeout, rootScope, formChecker) {
 
         	scope.m = model;
             scope.m.formChecker = formChecker;
@@ -16,7 +16,13 @@
                         usr: null,
                         pwd: null,
                         email: null,
-                        hatch: null
+                        hatch: null,
+                        err: {
+                            pwd: false,
+                            usr: false,
+                            email: false,
+                            code: null
+                        }
                     };
     			},
 
@@ -54,27 +60,70 @@
 
                             })
                                 .success(function (data) {
-                                    console.log(data);
+                                    scope.m.guestpage.up.err.code = data.err;
                                 });
                         }
                     }
-    			}
+    			},
+
+                isError: function (val) {
+                    return(val === scope.m.guestpage.up.err.code);
+                }
 
     		};
 
         	scope.in = {
 
     			setSigning: function (val) {
-    				scope.m.guestpage.in.doing = val;
+                    scope.m.guestpage.in = {
+                        doing: val,
+                        usr: null,
+                        pwd: null,
+                        hatch: null,
+                        err: {
+                            code: null
+                        }
+                    };
     			},
 
     			isSigning: function () {
     				return(scope.m.guestpage.in.doing);
     			},
 
-    			sign: function () {
+                sign: function () {
+                    // Check for bot in the honeypot
+                    if(scope.m.guestpage.in.hatch != null) {
+                        return(false)
+                    } else {
 
-    			}
+                        // Send form to the back-end
+                        http({
+
+                            method: 'POST',
+                            data: {
+                                action: 'login_user',
+                                user: scope.m.guestpage.in.usr,
+                                password: scope.m.guestpage.in.pwd
+                            },
+                            url: 's/'
+
+                        })
+                            .success(function (data) {
+                                scope.m.guestpage.in.err.code = data.err;
+                                if ( 0 === data.err ) {
+                                    timeout(function() {
+                                        rootScope.temaLogged = true;
+                                        scope.m.logged = true;
+                                    }, 1500)
+                                }
+                            });
+
+                    }
+                },
+
+                isError: function (val) {
+                    return( val === scope.m.guestpage.in.err.code )
+                }
 
     		};
 
