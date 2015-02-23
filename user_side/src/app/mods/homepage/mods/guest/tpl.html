@@ -37,17 +37,17 @@
 				</small></div><br />
 				<div class="mbot05 col-md-12 input-group" ng-class="{'has-error':m.guestpage.up.err.usr||up.isError(4)}">
 					<span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
-					<input class="form-control" type="text" placeholder="Pick a username" name="username" id="username" ng-model="m.guestpage.up.usr" />
+					<input class="form-control" type="text" placeholder="Pick a username" name="username" id="username" ng-model="m.guestpage.up.usr" ng-disable="up.isRunning()" />
 				</div>
 				
 				<div class="mbot05 col-md-12 input-group" ng-class="{'has-error':m.guestpage.up.err.email||up.isError(5)}">
 				<span class="input-group-addon">@</span>
-					<input class="form-control" type="text" placeholder="Your email" name="email" id="email" ng-model="m.guestpage.up.email" />
+					<input class="form-control" type="text" placeholder="Your email" name="email" id="email" ng-model="m.guestpage.up.email" ng-disable="up.isRunning()" />
 				</div>
 
 				<div class="col-md-12 input-group" ng-class="{'has-error':m.guestpage.up.err.pwd}">
 					<span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
-					<input class="form-control" type="password" placeholder="Provide a password" ng-model="m.guestpage.up.pwd" />
+					<input class="form-control" type="password" placeholder="Provide a password" ng-model="m.guestpage.up.pwd" ng-disable="up.isRunning()" />
 				</div>
 				<div class="mbot05 col-md-12 text-align-right note"><small ng-class="{'text-danger':m.guestpage.up.err.pwd}">
 					Use at least one lowercase letter, one lowercase letter, one digit, and eight characters.
@@ -62,19 +62,19 @@
 					<span ng-if="up.isError(6)">Something went wrong, try again later.</span>
 				</p>
 
-				<a ng-click="up.setSigning(false)" class="float-right mrig07 btn btn-reddish small-caps">back</a>
-				<a ng-click="up.sign()" class="float-right mrig07 btn btn-aqua small-caps">sign up</a>
+				<a ng-click="up.setSigning(false)" class="float-right mrig07 btn btn-reddish small-caps" ng-disable="up.isRunning()">back</a>
+				<a ng-click="up.sign()" class="float-right mrig07 btn btn-aqua small-caps" ng-disable="up.isRunning()">sign up</a>
 			</form>		
 
 		</div>
 
 		<div class="panel-body" ng-if="up.isError(0)">
 			<span class="text-success">
-				<p>
+				<h2>
 					User "{{m.guestpage.up.usr}}" has been created.<br />
 					We just sent you an <b>email</b> with further instructions<br />
 					on how to <b>activate</b> your brand new account!
-				</p>
+				</h2>
 				<a ng-click="up.setSigning(false)" class="float-right mrig07 btn btn-light-aqua small-caps">back</a>
 			</span>
 		</div>

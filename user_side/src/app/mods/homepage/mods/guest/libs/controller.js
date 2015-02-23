@@ -13,6 +13,7 @@
     			setSigning: function (val) {
     				scope.m.guestpage.up = {
                         doing: val,
+                        run: false,
                         usr: null,
                         pwd: null,
                         email: null,
@@ -27,14 +28,24 @@
     			},
 
     			isSigning: function () {
-    				return(scope.m.guestpage.up.doing);
+    				return( true === scope.m.guestpage.up.doing );
     			},
+
+                setRunning: function (val) {
+                    scope.m.guestpage.up.run = val;
+                },
+
+                isRunning: function () {
+                    return( true === scope.m.guestpage.up.run );
+                },
 
     			sign: function () {
                     // Check for bot in the honeypot
                     if(scope.m.guestpage.up.hatch != null) {
                         return(false)
                     } else {
+                        scope.up.setRunning(true);
+
                         scope.m.guestpage.up.err = {
                             pwd: !scope.m.formChecker.password(scope.m.guestpage.up.pwd),
                             email: !scope.m.formChecker.email(scope.m.guestpage.up.email),
@@ -60,8 +71,11 @@
 
                             })
                                 .success(function (data) {
+                                    scope.up.setRunning(false);
                                     scope.m.guestpage.up.err.code = data.err;
                                 });
+                        } else {
+                            scope.up.setRunning(false);
                         }
                     }
     			},

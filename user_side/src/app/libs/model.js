@@ -18,6 +18,7 @@
                 },
                 up: {
                     doing: false,
+                    run: false,
                     usr: null,
                     pwd: null,
                     email: null,
