@@ -6,46 +6,53 @@
 		<small>Tumor Evolution Manager and Analyzer</small>
 	</div>
 
-	<div ng-if="!out.isSigning()">
-		<div class="col-md-6 col-md-push-6 pori0 mbot0">
-			<div class="col-md-6 prig0"><button class="all-width mbot02 h2-5em btn btn-aqua small-caps" ng-click="out.sign()">logout</button></div>
-			<div class="col-md-6 prig0"><button class="all-width mbot02 h2-5em btn btn-light-aqua small-caps" ng-click=''>edit profile</button></div>
-			<div class="col-md-12 prig0"><button class="all-width mbot02 h2-5em btn btn-reddish small-caps" ng-click=''>createa <u>new</u> session</button></div>
-			<div class="col-md-12 prig0"><button class="all-width mbot02 h2-5em btn btn-sky small-caps" ng-click=''>enter a <u>public</u> session</button></div>
-		</div>
-
-		<div class="session-choice panel panel-reddish panel-left col-md-6 col-md-pull-6 mrig0 mbot05">
-			<div class="panel-heading">Your sessions</div>
-			<div class="panel-body">
-				here a list of user's sessions
-			</div>
-		</div>
-
-		<div class="col-md-6 session-choice">
-			<div class="session-choice panel panel-light-aqua">
-				<div class="panel-heading">Shared sessions</div>
-				<div class="panel-body">
-					here a list of shared sessions
-				</div>
-			</div>
-		</div>
-
-		<div class="col-md-6 prig0">
-			<div class="session-choice panel panel-sky">
-				<div class="panel-heading">Your history</div>
-				<div class="panel-body">
-					here a list of last visited sessions
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<div class="col-md-12 session-choice panel panel-reddish" ng-if="out.isSigning()">
-		<div class="panel-heading">Signing out</div>
+	<div class="session-choice panel panel-light col-md-12">
+		<div class="panel-heading">TEMA user panel</div>
 		<div class="panel-body">
-			<center>
-				<h2 class="text-danger">See you soon!</h2>
-			</center>
+
+			<div ng-if="!out.isSigning()">
+				<div class="col-md-6 col-md-push-6 pori0 mbot0">
+					<div class="col-md-6 prig0"><button class="all-width mbot02 h2-5em btn btn-aqua small-caps" ng-click="out.sign()">logout</button></div>
+					<div class="col-md-6 prig0"><button class="all-width mbot02 h2-5em btn btn-light-aqua small-caps" ng-click=''>edit profile</button></div>
+					<div class="col-md-12 prig0"><button class="all-width mbot02 h2-5em btn btn-reddish small-caps" ng-click=''>createa <u>new</u> session</button></div>
+					<div class="col-md-12 prig0"><button class="all-width mbot02 h2-5em btn btn-sky small-caps" ng-click=''>enter a <u>public</u> session</button></div>
+				</div>
+
+				<div class="session-choice panel panel-reddish panel-left col-md-6 col-md-pull-6 mrig0 mbot05">
+					<div class="panel-heading">Your sessions</div>
+					<div class="panel-body">
+						here a list of user's sessions
+					</div>
+				</div>
+
+				<div class="col-md-6 session-choice">
+					<div class="session-choice panel panel-light-aqua">
+						<div class="panel-heading">Shared sessions</div>
+						<div class="panel-body">
+							here a list of shared sessions
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-6 prig0">
+					<div class="session-choice panel panel-sky">
+						<div class="panel-heading">Your history</div>
+						<div class="panel-body">
+							here a list of last visited sessions
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-12 session-choice panel panel-reddish" ng-if="out.isSigning()">
+				<div class="panel-heading">Signing out</div>
+				<div class="panel-body">
+					<center>
+						<h2 class="text-danger">See you soon!</h2>
+					</center>
+				</div>
+			</div>
+
 		</div>
 	</div>
 

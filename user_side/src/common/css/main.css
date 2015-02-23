@@ -166,3 +166,8 @@ body {
 	color: rgb(232, 78, 48);
 }
 
+
+.panel-light { border-color: #dadada; }
+.panel-light > .panel-heading { color: #989898; }
+
+
