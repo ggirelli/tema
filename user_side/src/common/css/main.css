@@ -55,12 +55,24 @@ body {
 	text-align: right !important;
 }
 
-.mbot02 { margin-bottom: 0.2em; }
-.mbot05 { margin-bottom: 0.5em; }
-.mrig07 { margin-right: 0.7em; }
+.mbot0 { margin-bottom: 0em !important; }
+.mbot02 { margin-bottom: 0.2em !important; }
+.mbot05 { margin-bottom: 0.5em !important; }
+.mrig0 { margin-right: 0em !important; }
+.mrig02 { margin-right: 0.2em !important; }
+.mrig05 { margin-right: 0.5em !important; }
+.mrig07 { margin-right: 0.7em !important; }
+.mlef0 { margin-left: 0em !important; }
+.mlef02 { margin-left: 0.2em !important; }
+.mlef05 { margin-left: 0.5em !important; }
+.mlef07 { margin-left: 0.7em !important; }
 
-.prig0 { padding-right: 0; }
-.plef0 { padding-left: 0; }
+.prig0 { padding-right: 0 !important; }
+.prig02 { padding-right: 0.2em !important; }
+.prig05 { padding-right: 0.5em !important; }
+.plef0 { padding-left: 0 !important; }
+.plef02 { padding-left: 0.2em !important; }
+.plef05 { padding-left: 0.5em !important; }
 .pori0 {
 	padding-left: 0;
 	padding-right: 0;

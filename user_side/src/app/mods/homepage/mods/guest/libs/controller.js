@@ -11,7 +11,7 @@
         	scope.up = {
 
     			setSigning: function (val) {
-    				scope.m.guestpage.up = {
+    				scope.m.logsys.up = {
                         doing: val,
                         run: false,
                         usr: null,
@@ -28,34 +28,34 @@
     			},
 
     			isSigning: function () {
-    				return( true === scope.m.guestpage.up.doing );
+    				return( true === scope.m.logsys.up.doing );
     			},
 
                 setRunning: function (val) {
-                    scope.m.guestpage.up.run = val;
+                    scope.m.logsys.up.run = val;
                 },
 
                 isRunning: function () {
-                    return( true === scope.m.guestpage.up.run );
+                    return( true === scope.m.logsys.up.run );
                 },
 
     			sign: function () {
                     // Check for bot in the honeypot
-                    if(scope.m.guestpage.up.hatch != null) {
+                    if(scope.m.logsys.up.hatch != null) {
                         return(false)
                     } else {
                         scope.up.setRunning(true);
 
-                        scope.m.guestpage.up.err = {
-                            pwd: !scope.m.formChecker.password(scope.m.guestpage.up.pwd),
-                            email: !scope.m.formChecker.email(scope.m.guestpage.up.email),
-                            usr: !scope.m.formChecker.user(scope.m.guestpage.up.usr)
+                        scope.m.logsys.up.err = {
+                            pwd: !scope.m.formChecker.password(scope.m.logsys.up.pwd),
+                            email: !scope.m.formChecker.email(scope.m.logsys.up.email),
+                            usr: !scope.m.formChecker.user(scope.m.logsys.up.usr)
                         }
 
                         if(
-                            !scope.m.guestpage.up.err.pwd &&
-                            !scope.m.guestpage.up.err.email &&
-                            !scope.m.guestpage.up.err.usr
+                            !scope.m.logsys.up.err.pwd &&
+                            !scope.m.logsys.up.err.email &&
+                            !scope.m.logsys.up.err.usr
                         ) {
                             // Send form to the back-end
                             http({
@@ -63,16 +63,16 @@
                                 method: 'POST',
                                 data: {
                                     action: 'register_user',
-                                    user: scope.m.guestpage.up.usr,
-                                    password: scope.m.guestpage.up.pwd,
-                                    email: scope.m.guestpage.up.email
+                                    user: scope.m.logsys.up.usr,
+                                    password: scope.m.logsys.up.pwd,
+                                    email: scope.m.logsys.up.email
                                 },
                                 url: 's/'
 
                             })
                                 .success(function (data) {
                                     scope.up.setRunning(false);
-                                    scope.m.guestpage.up.err.code = data.err;
+                                    scope.m.logsys.up.err.code = data.err;
                                 });
                         } else {
                             scope.up.setRunning(false);
@@ -81,7 +81,7 @@
     			},
 
                 isError: function (val) {
-                    return(val === scope.m.guestpage.up.err.code);
+                    return(val === scope.m.logsys.up.err.code);
                 }
 
     		};
@@ -89,7 +89,7 @@
         	scope.in = {
 
     			setSigning: function (val) {
-                    scope.m.guestpage.in = {
+                    scope.m.logsys.in = {
                         doing: val,
                         usr: null,
                         pwd: null,
@@ -101,12 +101,12 @@
     			},
 
     			isSigning: function () {
-    				return(scope.m.guestpage.in.doing);
+    				return(scope.m.logsys.in.doing);
     			},
 
                 sign: function () {
                     // Check for bot in the honeypot
-                    if(scope.m.guestpage.in.hatch != null) {
+                    if(scope.m.logsys.in.hatch != null) {
                         return(false)
                     } else {
 
@@ -116,18 +116,22 @@
                             method: 'POST',
                             data: {
                                 action: 'login_user',
-                                user: scope.m.guestpage.in.usr,
-                                password: scope.m.guestpage.in.pwd
+                                user: scope.m.logsys.in.usr,
+                                password: scope.m.logsys.in.pwd
                             },
                             url: 's/'
 
                         })
                             .success(function (data) {
-                                scope.m.guestpage.in.err.code = data.err;
+                                console.log(data);
+                                scope.m.logsys.in.err.code = data.err;
                                 if ( 0 === data.err ) {
                                     timeout(function() {
-                                        rootScope.temaLogged = true;
-                                        scope.m.logged = true;
+                                        scope.m.logsys.logged = {
+                                            status: true,
+                                            usr: scope.m.logsys.in.usr
+                                        };
+                                        rootScope.TEMAlogged = scope.m.logsys.logged;
                                         scope.in.setSigning(false);
                                     }, 1500)
                                 }
@@ -137,7 +141,7 @@
                 },
 
                 isError: function (val) {
-                    return( val === scope.m.guestpage.in.err.code )
+                    return( val === scope.m.logsys.in.err.code )
                 }
 
     		};
@@ -145,11 +149,11 @@
     		scope.load = {
 
     			setLoading: function (val) {
-    				scope.m.guestpage.load.doing = val;
+    				scope.m.logsys.load.doing = val;
     			},
 
     			isLoading: function () {
-    				return(scope.m.guestpage.load.doing);
+    				return(scope.m.logsys.load.doing);
     			},
 
     			load: function () {

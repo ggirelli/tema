@@ -4,8 +4,8 @@
 <!-- url-specific template -->
 <div id='homepage' ng-app='tea' ng-controller='homepageController as hCtrl' ng-model='hCtrl'>
 
-	<div ng-if="!m.logged" ng-include="'user_side/src/app/mods/homepage/mods/guest/tpl.html'"></div>
+	<div ng-if="!m.logsys.logged.status" ng-include="'user_side/src/app/mods/homepage/mods/guest/tpl.html'"></div>
 	
-	<div ng-if="m.logged" ng-include="'user_side/src/app/mods/homepage/mods/user/tpl.html'"></div>
+	<div ng-if="m.logsys.logged.status" ng-include="'user_side/src/app/mods/homepage/mods/user/tpl.html'"></div>
 
 </div>

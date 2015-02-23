@@ -32,28 +32,28 @@
 		<div class="panel-body" ng-if="!up.isError(0)">
 
 			<form action="" role="form">
-				<div class="col-md-12 text-align-right note"><small ng-class="{'text-danger':m.guestpage.up.err.usr}">
+				<div class="col-md-12 text-align-right note"><small ng-class="{'text-danger':m.logsys.up.err.usr}">
 					Use at least four characters.
 				</small></div><br />
-				<div class="mbot05 col-md-12 input-group" ng-class="{'has-error':m.guestpage.up.err.usr||up.isError(4)}">
+				<div class="mbot05 col-md-12 input-group" ng-class="{'has-error':m.logsys.up.err.usr||up.isError(4)}">
 					<span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
-					<input class="form-control" type="text" placeholder="Pick a username" name="username" id="username" ng-model="m.guestpage.up.usr" ng-disable="up.isRunning()" />
+					<input class="form-control" type="text" placeholder="Pick a username" name="username" id="username" ng-model="m.logsys.up.usr" ng-disable="up.isRunning()" />
 				</div>
 				
-				<div class="mbot05 col-md-12 input-group" ng-class="{'has-error':m.guestpage.up.err.email||up.isError(5)}">
+				<div class="mbot05 col-md-12 input-group" ng-class="{'has-error':m.logsys.up.err.email||up.isError(5)}">
 				<span class="input-group-addon">@</span>
-					<input class="form-control" type="text" placeholder="Your email" name="email" id="email" ng-model="m.guestpage.up.email" ng-disable="up.isRunning()" />
+					<input class="form-control" type="text" placeholder="Your email" name="email" id="email" ng-model="m.logsys.up.email" ng-disable="up.isRunning()" />
 				</div>
 
-				<div class="col-md-12 input-group" ng-class="{'has-error':m.guestpage.up.err.pwd}">
+				<div class="col-md-12 input-group" ng-class="{'has-error':m.logsys.up.err.pwd}">
 					<span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
-					<input class="form-control" type="password" placeholder="Provide a password" ng-model="m.guestpage.up.pwd" ng-disable="up.isRunning()" />
+					<input class="form-control" type="password" placeholder="Provide a password" ng-model="m.logsys.up.pwd" ng-disable="up.isRunning()" />
 				</div>
-				<div class="mbot05 col-md-12 text-align-right note"><small ng-class="{'text-danger':m.guestpage.up.err.pwd}">
+				<div class="mbot05 col-md-12 text-align-right note"><small ng-class="{'text-danger':m.logsys.up.err.pwd}">
 					Use at least one lowercase letter, one lowercase letter, one digit, and eight characters.
 				</small></div>
 
-				<div><input class="mbot05 form-control hidden-file-input" type="email" id="hatch" name="hatch" ng-model="m.guestpage.up.hatch"></div>
+				<div><input class="mbot05 form-control hidden-file-input" type="email" id="hatch" name="hatch" ng-model="m.logsys.up.hatch"></div>
 
 				<p class="text-danger">
 					<span ng-if="up.isError(3)">Something is wrong with the provided credentials.</span>
@@ -71,7 +71,7 @@
 		<div class="panel-body" ng-if="up.isError(0)">
 			<span class="text-success">
 				<h2>
-					User "{{m.guestpage.up.usr}}" has been created.<br />
+					User "{{m.logsys.up.usr}}" has been created.<br />
 					We just sent you an <b>email</b> with further instructions<br />
 					on how to <b>activate</b> your brand new account!
 				</h2>
@@ -87,16 +87,16 @@
 		<div class="panel-body" ng-if="!in.isError(0)">
 
 			<form action="" role="form">
-				<div class="mbot05 col-md-12 input-group" ng-class="{'has-error':in.isError(3)}">
+				<div class="mbot05 col-md-12 input-group" ng-class="{'has-error':in.isError(3)||in.isError(4)}">
 					<span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
-					<input class="form-control" type="text" placeholder="Your username or email" name="username" id="username" ng-model="m.guestpage.in.usr" />
+					<input class="form-control" type="text" placeholder="Your username or email" name="username" id="username" ng-model="m.logsys.in.usr" />
 				</div>
-				<div class="mbot05 col-md-12 input-group" ng-class="{'has-error':in.isError(3)}">
+				<div class="mbot05 col-md-12 input-group" ng-class="{'has-error':in.isError(3)||in.isError(4)}">
 					<span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
-					<input class="form-control" type="password" placeholder="Your password" ng-model="m.guestpage.in.pwd" />
+					<input class="form-control" type="password" placeholder="Your password" ng-model="m.logsys.in.pwd" />
 				</div>
 
-				<div><input class="mbot05 form-control hidden-file-input" type="email" id="hatch" name="hatch" ng-model="m.guestpage.in.hatch"></div>
+				<div><input class="mbot05 form-control hidden-file-input" type="email" id="hatch" name="hatch" ng-model="m.logsys.in.hatch"></div>
 
 				<p class="text-danger">
 					<span ng-if="in.isError(3)||in.isError(4)">Something is wrong with the provided credentials.</span>
@@ -111,7 +111,7 @@
 
 		<div class="panel-body" ng-if="in.isError(0)">
 			<center>
-				<h2 class="text-success">Hey {{m.guestpage.in.usr}}, welcome back!</h2>
+				<h2 class="text-success">Hey {{m.logsys.in.usr}}, welcome back!</h2>
 			</center>
 		</div>
 	</div>
@@ -124,10 +124,10 @@
 			<form action="" role="form">
 				<div class="mbot05 col-md-12 input-group">
 					<span class="input-group-addon"><span class="glyphicon glyphicon-barcode"></span></span>
-					<input class="form-control" type="text" placeholder="Insert the public session token (e.g.: 1423645674753cae649e)" name="token" id="token" ng-model="m.guestpage.load.token" />
+					<input class="form-control" type="text" placeholder="Insert the public session token (e.g.: 1423645674753cae649e)" name="token" id="token" ng-model="m.logsys.load.token" />
 				</div>
 
-				<div><input class="mbot05 form-control hidden-file-input" type="email" id="hatch" name="hatch" ng-model="m.guestpage.load.hatch"></div>
+				<div><input class="mbot05 form-control hidden-file-input" type="email" id="hatch" name="hatch" ng-model="m.logsys.load.hatch"></div>
 
 				<a href="#" ng-click="load.setLoading(false)" class="float-right mrig07 btn btn-reddish small-caps">back</a>
 				<a ng-click="" onclick="javascript:alert('TODO')" class="float-right mrig07 btn btn-aqua small-caps">load</a>

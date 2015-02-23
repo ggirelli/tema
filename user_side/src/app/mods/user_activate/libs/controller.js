@@ -6,24 +6,24 @@
         return function (scope, model, http, timeout, routeParams) {
 
         	scope.m = model;
-            scope.m.confrm.token = routeParams.id;
+            scope.m.logsys.confrm.token = routeParams.id;
 
             http({
 
                 method: 'POST',
                 data: {
                     action: 'confirm_user',
-                    token: scope.m.confrm.token
+                    token: scope.m.logsys.confrm.token
                 },
                 url: 's/'
 
             })
                 .success(function(data) {
-                    scope.m.confrm.err = data.err;
+                    scope.m.logsys.confrm.err = data.err;
                 });
 
             scope.isError = function (v) {
-                return( v === scope.m.confrm.err );
+                return( v === scope.m.logsys.confrm.err );
             };
 
         };

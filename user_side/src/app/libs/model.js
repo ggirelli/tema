@@ -6,7 +6,7 @@
         return function () {
             var self = this;
             
-            self.guestpage = {
+            self.logsys = {
                 in: {
                     doing: false,
                     usr: null,
@@ -16,6 +16,7 @@
                         code: null
                     }
                 },
+                
                 up: {
                     doing: false,
                     run: false,
@@ -30,23 +31,27 @@
                         code: null
                     }
                 },
+
                 load: {
                     doing: false,
                     token: null,
                     hatch: null
+                },
+
+                confrm: {
+                    token: null,
+                    err: null
+                },
+
+                out: {
+                    doing: false
+                },
+
+                logged: {
+                    status: false,
+                    usr: null
                 }
             };
-
-            self.confrm = {
-                token: null,
-                err: null
-            };
-
-            self.out = {
-                doing: false
-            };
-
-            self.logged = false;
 
             self.session_id = null;
            	self.currentSession = null;

@@ -10,11 +10,11 @@
         	scope.out = {
 
         		setSigning: function (val) {
-        			scope.m.out.doing = val;
+        			scope.m.logsys.out.doing = val;
         		},
 
         		isSigning: function () {
-        			return(true === scope.m.out.doing);
+        			return(true === scope.m.logsys.out.doing);
         		},
 
         		sign: function () {
@@ -22,8 +22,11 @@
 
 	        		timeout(function () {
 	        			scope.out.setSigning(false);
-	        			scope.m.logged = false;
-	        			rootScope.TEMAlogged = false;
+	        			scope.m.logsys.logged = {
+                            status: false,
+                            usr: null
+                        };
+	        			rootScope.TEMAlogged = scope.m.logsys.logged;
 	        		}, 1500);
 	        	}
 	        }

@@ -218,14 +218,15 @@ class TEMAuser extends TEAdb {
 	
 	/**
 	 * Initializes the user inside the class
-	 * @param  String $username
+	 * @param  String $username (toupper)
 	 * @param  String $email
 	 * @param  String $password
+	 * @param  String $token
 	 * @return NULL           Initializes the class
 	 */
 	private function init($username, $email, $password, $token) {
 		// Default attributes
-		$this->username = $username;
+		$this->username = strtoupper($username);
 		$this->password = $password;
 		$this->email = $email;
 		$this->confirm_token = $token;
