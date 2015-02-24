@@ -45,6 +45,7 @@ if( isset($data->action) ) {
 			case 'upload_network': case 'upload_drag_network':
 
 			case 'create_session':
+			case 'list_sessions':
 			case 'session_load':
 
 			case 'register_user': case 'confirm_user':

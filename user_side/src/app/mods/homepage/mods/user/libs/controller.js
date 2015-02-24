@@ -7,7 +7,7 @@
 
         	scope.m = model;
             scope.m.formChecker = formChecker;
-
+            console.log(scope.m.logsys.logged);
             /**
              * Functions to log out
              * @type {Object}
@@ -125,6 +125,42 @@
                         default:
                             return(false);
                     }
+                }
+            };
+
+            /**
+             * Functions that manage the user-page panels
+             * @type {Object}
+             */
+            scope.panels = {
+
+                loadOwned: function () {
+                    http({
+
+                        method: 'POST',
+                        data: {
+                            action: 'list_sessions',
+                            type: 'owned',
+                            usr: scope.m.logsys.logged.usr
+                        },
+                        url: 's/'
+
+                    })
+                        .success(function (data) {
+                            console.log(data);
+                        });
+                },
+
+                loadShared: function () {
+
+                },
+
+                loadHistory: function () {
+
+                },
+
+                reload: function () {
+                    alert('TODO');
                 }
 
             };

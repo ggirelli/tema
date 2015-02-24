@@ -70,6 +70,12 @@
                 }
             };
 
+            self.userpage = {
+                owned_list: [],
+                shared_list: [],
+                history_list: []
+            }
+
             self.session_id = null;
            	self.currentSession = null;
 

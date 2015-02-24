@@ -8,7 +8,10 @@
 
 	<!-- user-panel -->
 	<div class="session-choice panel panel-light col-md-12" ng-if="!out.isSigning()&&!create.isDoing()">
-		<div class="panel-heading">You are logged in as <u>{{m.logsys.logged.usr}}</u></div>
+		<div class="panel-heading">
+			You are logged in as <u>{{m.logsys.logged.usr}}</u>
+			<a href="" class="float-right mrigh02" ng-click="panels.reload()"><span class="glyphicon glyphicon-refresh"></span></a>
+		</div>
 		<div class="panel-body">
 
 			<div class="col-md-6 col-md-push-6 pori0 mbot0 plef05">
