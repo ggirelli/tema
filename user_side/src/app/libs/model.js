@@ -57,10 +57,15 @@
                 create: {
                     doing: false,
                     title: null,
-                    token: null,
-                    public: null,
+                    privacy: '',
                     protected: null,
-                    password: null
+                    pwd: null,
+                    hatch: null,
+                    err: {
+                        title: false,
+                        privacy: false,
+                        pwd: false
+                    }
                 }
             };
 

@@ -107,7 +107,10 @@ class TEAsession extends TEAdb {
 	 * @param  String $id session id
 	 * @return null
 	 */
-	public function init($id) {
+	public function init($id,
+		$title = NULL, $owner = NULL,
+		$privacy = NULL, $password = NULL
+	) {
 		if( $this->exists($id) ) {
 
 			// Load old session in current class instance
@@ -116,7 +119,7 @@ class TEAsession extends TEAdb {
 		} else {
 
 			// Create new session and load it in the current class instance
-			$this->_new($id);
+			$this->_new($id, $title, $owner, $privacy, $password);
 
 		}
 	}
@@ -289,8 +292,16 @@ class TEAsession extends TEAdb {
 	 * @param  String $id
 	 * @return null
 	 */
-	private function _new($id) {
+	private function _new($id, $title, $owner, $privacy, $password) {
 		if ( !$this->exists($id) ) {
+			$title = $this->escape_string($title);
+			$privacy = $this->escape_string($privacy);
+			$password = $this->encrypt($password);
+
+			$owner = $this->escape_string($owner);
+			$sql = "SELECT id FROM sessions_users WHERE nickname='$owner'";
+			$r = $this->query($sql);
+			$owner = $r->fetch()['id'];
 
 			// Make session directory
 			mkdir(SPATH . '/' . $id);
@@ -298,10 +309,14 @@ class TEAsession extends TEAdb {
 			mkdir(SPATH . '/' . $id . '/settings');
 
 			// Insert session in the database
-			$sql = "INSERT INTO sessions (seed, folder_path, interface_uri, running) VALUES ( " .
+			$sql = "INSERT INTO sessions (seed, folder_path, interface_uri, owner, title, privacy, password, running) VALUES ( " .
 				"'" . $id . "', " .
 				"'" . SPATH . "/" . $id . "', " .
 				"'" . RURI . "/s/" . $id . "', " .
+				"'$owner', " .
+				"'$title', " .
+				"'$privacy', " .
+				"'$password', " .
 				"0)";
 			$this->query($sql);
 			$this->set_default_settings($id);

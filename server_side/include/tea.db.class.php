@@ -55,8 +55,11 @@ class TEAdb extends C2MySQL {
 				"seed VARCHAR(100) NOT NULL UNIQUE, " .
 				"folder_path VARCHAR(200) NOT NULL UNIQUE, " .
 				"interface_uri VARCHAR(200) NOT NULL UNIQUE, " .
+				"owner INTEGER NOT NULL, " .
+				"title VARCHAR(200) NOT NULL, " .
 				"privacy VARCHAR(100) NOT NULL, " .
-				"running INT NOT NULL DEFAULT 0, " .
+				"password VARCHAR(100), " .
+				"running INTEGER NOT NULL DEFAULT 0, " .
 				"last_query VARCHAR(100), " .
 				"last_query_when TIMESTAMP, " .
 				"current_net VARCHAR(100) " .
@@ -103,6 +106,15 @@ class TEAdb extends C2MySQL {
 				die('An error occurred while initializing the MySQL database.');
 			}
 		}
+	}
+
+	/**
+	 * Perform a one-way hashing of provided string
+	 * @param  String $s
+	 * @return String    Hashed version of $s
+	 */
+	protected function encrypt($s) {
+		return(md5('TEMA' . sha1($s . md5('TEMA')) . sha1('TEMA')));
 	}
 }
 

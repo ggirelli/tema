@@ -26,22 +26,26 @@ if( isset($data->action) ) {
 
 		switch($data->action) {
 
-			case 'add_attr':
-			case 'add_ginfo_attrs': case 'add_attr_index':
-			case 'combine_attr': case 'convert_network':
-			case 'get_network': case 'get_network_list':
-			case 'get_settings': case 'get_setting_file':
-			case 'map_gos':
-			case 'network_contains': case 'network_navigate':
+			case 'add_attr': case 'add_attr_index': case 'combine_attr':
+			case 'map_gos': case 'add_ginfo_attrs':
+			case 'remove_attr': case 'rename_attr':
+
 			case 'networks_distances': case 'networks_intersect':
 			case 'networks_merge': case 'networks_subtract':
-			case 'remove_attr': case 'remove_network':
-			case 'rename_attr': case 'rename_network':
-			case 'save_network':
-			case 'session_new': case 'session_load':
-			case 'set_settings':
+			case 'network_contains':
+
+			case 'get_settings': case 'get_setting_file':
+			case 'set_settings': case 'upload_setting_file':
+
+			case 'network_navigate':
+			
+			case 'get_network': case 'get_network_list':
+			case 'convert_network': case 'save_network':
+			case 'remove_network': case 'rename_network':
 			case 'upload_network': case 'upload_drag_network':
-			case 'upload_setting_file':
+
+			case 'create_session':
+			case 'session_load':
 
 			case 'register_user': case 'confirm_user':
 			case 'login_user':

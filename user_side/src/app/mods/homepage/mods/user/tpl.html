@@ -6,6 +6,7 @@
 		<small>Tumor Evolution Manager and Analyzer</small>
 	</div>
 
+	<!-- user-panel -->
 	<div class="session-choice panel panel-light col-md-12" ng-if="!out.isSigning()&&!create.isDoing()">
 		<div class="panel-heading">You are logged in as <u>{{m.logsys.logged.usr}}</u></div>
 		<div class="panel-body">
@@ -47,20 +48,21 @@
 		</div>
 	</div>
 
+	<!-- create-session-form -->
 	<div class="col-md-12 session-choice panel panel-reddish" ng-if="create.isDoing()">
 		<div class="panel-heading">Create a new session</div>
 		<div class="panel-body">
 			<form role="form">
-				<div class="col-md-12 text-align-right note"><small ng-class="{'text-danger':m.logsys.up.err.usr}">
+				<div class="col-md-12 text-align-right note"><small class="text-muted" ng-class="{'text-danger':m.session_sys.create.err.title}">
 					Use at least four characters.
 				</small></div><br />
-				<div class="input-group mbot05">
+				<div class="input-group mbot05" ng-class="{'has-error':m.session_sys.create.err.title}">
 					<span class="input-group-addon"><span class="glyphicon glyphicon-header"></span></span>
-					<input class="form-control" type="text" placeholder="Session title (e.g.: New Session #)" name="new-session-title" id="new-session-title" />
+					<input class="form-control" type="text" placeholder="Session title (e.g.: New Session #)" name="new-session-title" id="new-session-title" ng-model="m.session_sys.create.title" />
 				</div>
-				<div class="input-group mbot05">
+				<div class="input-group mbot05" ng-class="{'has-error':m.session_sys.create.err.privacy}">
 					<span class="input-group-addon"><span class="glyphicon glyphicon-eye-close"></span></span>
-					<select class="form-control" name="session-privacy-status" id="session-privacy-status">
+					<select class="form-control" name="session-privacy-status" id="session-privacy-status" ng-model="m.session_sys.create.privacy">
 						<option value="" selected disabled>Select a privacy status</option>
 						<option value="public">Public</option>
 						<option value="private">Private</option>
@@ -70,13 +72,14 @@
 					<input type="checkbox" name="protect-the-session" id="protect-the-session" ng-model="m.session_sys.create.protected" />
 					<label for="protect-the-session">Password protected</label>
 				</p>
-				<div class="input-group mbot0" ng-show="m.session_sys.create.protected">
+				<div class="input-group mbot0" ng-show="m.session_sys.create.protected" ng-class="{'has-error':m.session_sys.create.err.pwd}">
 					<span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
-					<input class="form-control" type="password" placeholder="Provide a password" name="" id="" />
+					<input class="form-control" type="password" placeholder="Provide a password" name="password-protection" id="password-protection" ng-model="m.session_sys.create.pwd" />
 				</div>
-				<div class="mbot05 col-md-12 text-align-right note" ng-show="m.session_sys.create.protected"><small ng-class="{'text-danger':m.logsys.up.err.pwd}">
+				<div class="mbot05 col-md-12 text-align-right note" ng-show="m.session_sys.create.protected"><small class="text-muted" ng-class="{'text-danger':m.session_sys.create.err.pwd}">
 					Use at least one lowercase letter, one uppercase letter, one digit, and eight characters.
 				</small></div>
+				<div><input class="mbot05 form-control hidden-file-input" type="email" id="hatch" name="hatch" ng-model="m.session_sys.create.hatch"></div>
 			</form>
 
 			<a ng-click="create.setDoing(false)" class="btn btn-reddish float-right small-caps h2-5em">back</a>
@@ -84,6 +87,7 @@
 		</div>
 	</div>
 
+	<!-- bye-bye -->
 	<div class="col-md-12 session-choice panel panel-reddish" ng-if="out.isSigning()">
 		<div class="panel-heading">Signing out</div>
 		<div class="panel-body">

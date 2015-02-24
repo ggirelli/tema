@@ -358,15 +358,6 @@ class TEMAuser extends TEAdb {
 	}
 
 	/**
-	 * Perform a one-way hashing of provided string
-	 * @param  String $s
-	 * @return String    Hashed version of $s
-	 */
-	private function encrypt($s) {
-		return(md5('TEMA' . sha1($s . md5('TEMA')) . sha1('TEMA')));
-	}
-
-	/**
 	 * Determines whether a certain token is already in use
 	 * @param  String $token token
 	 * @return Boolean
