@@ -103,7 +103,8 @@
                             })
                                 .success(function (data) {
                                     scope.m.session_sys.create.err.code = data.err;
-                                    if( 0 == scope.create.isError(0) ) {
+                                    if( scope.create.isError(0) ) {
+                                        scope.create.setDoing(false);
                                         document.location.hash = data.hash;
                                     }
                                 });

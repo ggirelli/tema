@@ -173,8 +173,7 @@
              * @return {[type]} [description]
              */
             scope.resetApp = function () {
-                document.location.hash = '';
-                window.location.reload();
+                document.location.hash = '#/';
             };
 
         };
