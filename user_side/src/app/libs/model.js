@@ -64,7 +64,8 @@
                     err: {
                         title: false,
                         privacy: false,
-                        pwd: false
+                        pwd: false,
+                        code: null
                     }
                 }
             };

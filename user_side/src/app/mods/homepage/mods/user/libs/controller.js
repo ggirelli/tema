@@ -53,7 +53,8 @@
                         err: {
                             title: false,
                             privacy: false,
-                            pwd: false
+                            pwd: false,
+                            unknown: false
                         }
                     }
                 },
@@ -101,10 +102,17 @@
 
                             })
                                 .success(function (data) {
-                                    console.log(data);
+                                    scope.m.session_sys.create.err.code = data.err;
+                                    if( 0 == scope.create.isError(0) ) {
+                                        document.location.hash = data.hash;
+                                    }
                                 });
                         }
                     }
+                },
+
+                isError: function (val) {
+                    return( val === scope.m.session_sys.create.err.code );
                 },
 
                 checkPrivacy: function (val) {

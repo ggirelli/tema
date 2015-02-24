@@ -82,6 +82,10 @@
 				<div><input class="mbot05 form-control hidden-file-input" type="email" id="hatch" name="hatch" ng-model="m.session_sys.create.hatch"></div>
 			</form>
 
+			<p class="text-danger">
+				<span ng-if="!create.isError(0)">Could not create the session.</span>
+			</p>
+
 			<a ng-click="create.setDoing(false)" class="btn btn-reddish float-right small-caps h2-5em">back</a>
 			<a ng-click="create.do()" class="btn btn-aqua float-right small-caps h2-5em">create</a>
 		</div>
