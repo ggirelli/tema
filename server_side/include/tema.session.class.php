@@ -296,7 +296,7 @@ class TEMAsession extends TEMAdb {
 		if ( !$this->exists($id) ) {
 			$title = $this->escape_string($title);
 			$privacy = $this->escape_string($privacy);
-			$password = $this->encrypt($password);
+			if(!is_null($password))	$password = $this->encrypt($password);
 
 			$owner = $this->escape_string($owner);
 			$sql = "SELECT id FROM sessions_users WHERE nickname='$owner'";

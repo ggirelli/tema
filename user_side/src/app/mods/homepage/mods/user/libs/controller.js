@@ -7,7 +7,7 @@
 
         	scope.m = model;
             scope.m.formChecker = formChecker;
-            console.log(scope.m.logsys.logged);
+            
             /**
              * Functions to log out
              * @type {Object}
@@ -54,7 +54,7 @@
                             title: false,
                             privacy: false,
                             pwd: false,
-                            unknown: false
+                            code: 0
                         }
                     }
                 },
@@ -147,23 +147,71 @@
 
                     })
                         .success(function (data) {
-                            console.log(data);
+                            if ( 0 == data.err ) {
+                                scope.m.userpage.owned_list = data.list;
+                            } else {
+                                console.log('ERROR: Could not retrieve list of owned sessions.');
+                            }
                         });
                 },
 
                 loadShared: function () {
+                    http({
 
+                        method: 'POST',
+                        data: {
+                            action: 'list_sessions',
+                            type: 'shared',
+                            usr: scope.m.logsys.logged.usr
+                        },
+                        url: 's/'
+
+                    })
+                        .success(function (data) {
+                            console.log(data);
+                            if ( 0 == data.err ) {
+                                scope.m.userpage.shared_list = data.list;
+                            } else {
+                                console.log('ERROR: Could not retrieve list of shared sessions.');
+                            }
+                        });
                 },
 
                 loadHistory: function () {
+                    http({
 
+                        method: 'POST',
+                        data: {
+                            action: 'list_sessions',
+                            type: 'history',
+                            usr: scope.m.logsys.logged.usr
+                        },
+                        url: 's/'
+
+                    })
+                        .success(function (data) {
+                            console.log(data);
+                            if ( 0 == data.err ) {
+                                scope.m.userpage.shared_list = data.list;
+                            } else {
+                                console.log('ERROR: Could not retrieve session history.');
+                            }
+                        });
+                },
+
+                loadAll: function () {
+                    scope.panels.loadOwned();
+                    scope.panels.loadShared();
+                    scope.panels.loadHistory();
                 },
 
                 reload: function () {
-                    alert('TODO');
+                    scope.panels.loadAll();
                 }
 
             };
+
+            scope.panels.loadAll();
 
         };
 

@@ -25,7 +25,9 @@
 				<div class="session-choice panel panel-reddish panel-left mbot0">
 					<div class="panel-heading">Your sessions</div>
 					<div class="panel-body">
-						here a list of user's sessions
+						<div ng-repeat="s in m.userpage.owned_list">
+							<a href="#/interface/{{s.seed}}" title="{{s.seed}}">{{s.title}}</a>
+						</div>
 					</div>
 				</div>
 			</div>

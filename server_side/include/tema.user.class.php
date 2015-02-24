@@ -217,6 +217,33 @@ class TEMAuser extends TEMAdb {
 	 */
 	public function get_username() { return $this->username; }
 
+	/**
+	 * @return Array A list of sessions owned by the user
+	 */
+	public function list_owned_sessions() {
+		// Retrieve user ID
+		$sql = "SELECT id FROM sessions_users WHERE nickname='$this->username'";
+		$r = $this->query($sql);
+		$user_id = $r->fetch()['id'];
+
+		// Retrieve owned sessions
+		$sql = "SELECT seed, title, privacy, password FROM sessions WHERE owner='$user_id'";
+		$r = $this->query($sql);
+
+		// Hide password and prepare multi-array
+		$l = array();
+		while($row = $r->fetch()) {
+			if ( '' === $row['password'] ) {
+				$row['password'] = 0;
+			} else {
+				$row['password'] = 1;
+			}
+			$l[] = $row;
+		}
+
+		return($l);
+	}
+
 	// private FUNCTIONS
 	
 	/**
@@ -471,6 +498,7 @@ class TUModes {
 	CONST SIGNIN = 'tema_sign_in_action';
 	CONST SIGNUP = 'tema_sign_up_action';
 	CONST CONFRM = 'tema_confirm_action';
+	CONST SIMPLE = 'tema_simple_action';
 }
 
 ?>

@@ -55,3 +55,12 @@
 #userpage .panel-left {
 	height: 190px;
 }
+
+#userpage .panel-left .panel-body {
+	margin-top: 5px;
+	padding-top: 0;
+
+	height: 130px;
+
+	overflow: auto;
+}

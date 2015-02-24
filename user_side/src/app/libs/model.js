@@ -65,7 +65,7 @@
                         title: false,
                         privacy: false,
                         pwd: false,
-                        code: null
+                        code: 0
                     }
                 }
             };
