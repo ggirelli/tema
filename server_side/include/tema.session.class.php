@@ -2,14 +2,14 @@
 
 // Requirements
 require_once('functions.lib.php');
-require_once('tea.db.class.php');
+require_once('tema.db.class.php');
 
 /**
-* Class that manages TEA sessions
+* Class that manages TEMA sessions
 * @author Gabriele Girelli <gabriele@filopoe.it>
 * @since 0.2.0
 */
-class TEAsession extends TEAdb {
+class TEMAsession extends TEMAdb {
 	
 	// ATTRIBUTES
 	
@@ -191,7 +191,7 @@ class TEAsession extends TEAdb {
  	}
 
 	/**
-	 * Determines whether a certain TEAsession exists
+	 * Determines whether a certain TEMAsession exists
 	 * @param  String $id
 	 * @return boolean
 	 */

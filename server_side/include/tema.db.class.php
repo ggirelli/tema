@@ -4,11 +4,11 @@
 require_once('db.class.php');
 
 /**
-* Manages TEA database
+* Manages TEMA database
 * @author Gabriele Girelli <gabriele@filopoe.it>
 * @since 0.2.0
 */
-class TEAdb extends C2MySQL {
+class TEMAdb extends C2MySQL {
 	
 	// public FUNCTIONS
 

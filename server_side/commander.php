@@ -5,7 +5,7 @@
 
 // Requirements
 require_once('settings.php');
-require_once('include/tea.session.class.php');
+require_once('include/tema.session.class.php');
 
 if( isset($_POST['action']) ) {
 

@@ -2,7 +2,7 @@
 
 // Requirements
 require_once('functions.lib.php');
-require_once('tea.db.class.php');
+require_once('tema.db.class.php');
 require_once(dirname(__FILE__) . '/PHPMailer/class.phpmailer.php');
 
 /**
@@ -10,7 +10,7 @@ require_once(dirname(__FILE__) . '/PHPMailer/class.phpmailer.php');
 * @author Gabriele Girelli <gabriele@filopoe.it>
 * @since 0.3.0
 */
-class TEMAuser extends TEAdb {
+class TEMAuser extends TEMAdb {
 
 	// ATTRIBUTES
 	
