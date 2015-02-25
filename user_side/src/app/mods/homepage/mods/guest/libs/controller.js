@@ -169,7 +169,13 @@
     			},
 
     			do: function () {
-                    alert('TODO');
+                    // Check for bot in the honeypot
+                    if(scope.m.logsys.load.hatch != null || scope.m.logsys.load.token == null) {
+                        return(false)
+                    } else {
+                        console.log(1);
+                        document.location.hash = '#/interface/' + scope.m.logsys.load.token;
+                    }
     			}
 
     		};
