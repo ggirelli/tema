@@ -55,6 +55,10 @@ body {
 	text-align: right !important;
 }
 
+.font-size-24px {
+	font-size: 24px !important;
+}
+
 .mbot0 { margin-bottom: 0em !important; }
 .mbot02 { margin-bottom: 0.2em !important; }
 .mbot05 { margin-bottom: 0.5em !important; }

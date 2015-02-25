@@ -13,7 +13,7 @@
         './mods/interface/libs/network_group.service',
         './mods/interface/libs/inspector.service', './mods/interface/libs/panels.service',
         './mods/interface/libs/commander.service', './mods/interface/libs/canvas.service',
-        './mods/interface/libs/settings.service',
+        './mods/interface/libs/settings.service', './mods/interface/libs/sessions.service',
         './mods/uploader/libs/controller', './mods/uploader/libs/service', 
         './mods/uploader/libs/directive', './mods/uploader/libs/submit_form.directive',
         'angular-route', 'angular-animate', 'jquery', 'dropzone'];
@@ -29,7 +29,7 @@
             networkAttributeService, networkGroupService,
             inspectorService, panelsService,
             commanderService, canvasService,
-            settingsService,
+            settingsService, sessionsService,
             uploaderController, uploaderService,
             autoclickDirective, submitformDirective) {
         
@@ -96,10 +96,12 @@
             ]).
             service('panelsService', ['$rootScope', panelsService]).
             service('settingsService', ['$q', '$http', '$rootScope', settingsService]).
+            service('sessionsService', ['$q', '$http', '$rootScope', sessionsService]).
             controller('interfaceController', [
-                '$scope', 'appModel', '$routeParams',
+                '$q', '$scope', 'appModel', '$routeParams',
                 'networkService', 'panelsService', 'inspectorService',
                 'commanderService', 'canvasService', 'settingsService',
+                'sessionsService',
                 interfaceController
             ]).
 

@@ -56,6 +56,30 @@ class TEMAsession extends TEMAdb {
 	private $current_net;
 
 	/**
+	 * Privacy status
+	 * @var String
+	 */
+	private $privacy;
+
+	/**
+	 * Owner user ID
+	 * @var Integer
+	 */
+	private $owner;
+
+	/**
+	 * Protection status
+	 * @var Boolean
+	 */
+	private $protected;
+
+	/**
+	 * Session password
+	 * @var String
+	 */
+	private $password;
+
+	/**
 	 * Max number of nodes visualized in the canvas
 	 * @var integer
 	 */
@@ -157,6 +181,18 @@ class TEMAsession extends TEMAdb {
 			}
 			case 'current_net': {
 				return $this->current_net;
+				break;
+			}
+			case 'privacy': {
+				return $this->privacy;
+				break;
+			}
+			case 'owner': {
+				return $this->owner;
+				break;
+			}
+			case 'protected': {
+				return $this->protected;
 				break;
 			}
 			case 'settings': {
@@ -270,7 +306,6 @@ class TEMAsession extends TEMAdb {
 		}
 	}
 
-
 	public function apply_settings($settings) {
 		$updated = false;
 		foreach ($this->settings_labels as $label) {
@@ -283,6 +318,10 @@ class TEMAsession extends TEMAdb {
 		if ( $updated ) {
 			$this->write_settings();
 		}
+	}
+
+	public function is_password($pwd) {
+		return($this->encrypt($pwd) == $this->password);
 	}
 
 	// private FUNCTIONS
@@ -344,6 +383,14 @@ class TEMAsession extends TEMAdb {
 			$this->last_query = $q['last_query'];
 			$this->last_query_when = $q['last_query_when'];
 			$this->current_net = $q['current_net'];
+			$this->privacy = $q['privacy'];
+			$this->owner = $q['owner'];
+			$this->password = $q['password'];
+			if ( '' === $q['password'] ) {
+				$this->protected = FALSE;
+			} else {
+				$this->protected = TRUE;
+			}
 
 			$this->list_networks();
 			$this->read_settings();

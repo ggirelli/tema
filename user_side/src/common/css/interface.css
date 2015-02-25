@@ -456,3 +456,13 @@ html {
 
 	z-index: 2;
 }
+
+/* PASSWORD PROTECTION */
+
+.password-protection input {
+	width: 50%;
+	height: 50px;
+
+	font-size: 24px;
+	text-align: center;
+}
