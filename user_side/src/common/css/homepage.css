@@ -24,74 +24,59 @@
 	font-size: 0.3em;
 }
 
-#homepage .session-choice,
-#homepage .selected-form {
+#homepage .session-choice {
 	padding: 0;
 }
 
-#homepage .session-choice .panel-heading,
-#homepage .selected-form .panel-heading {
+#homepage .session-choice .panel-heading {
 	text-align: center;
 }
 
 #homepage .session-choice .cell {
 	height: 4em;
 	width: 100%;
+
+	font-size: 1.5em;
+	font-family: tahoma;
+	font-variant: small-caps;
 }
 
-#homepage .selected-form .btn {
-	height: 2em;
-}
-
-#homepage .form-control {
-	height: 2em !important;
-	font-size: 1em !important;
-}
-
-#homepage .selected-form .note {
-	color: #989898;
-}
-
-#userpage .panel-left {
-	height: 255px;
-}
-
-#userpage .panel-left .panel-body {
-	margin-top: 5px;
-	padding: 0;
-
-	height: 195px;
-
-	overflow: auto;
-}
-
-#userpage .panel-left .list-group {
-	margin: 0;
-}
-
-#userpage .panel-left .list-group-item:first-child {
-	border-top: none;
-}
-
-#userpage .panel-left .list-group-item {
-	border-bottom: none;
-	border-right: none;
-	border-left: none;
-}
-
-#userpage .panel-left .list-group-item a {
+#homepage .session-choice .cell-input {
 	display: inline-block;
-	width: 100%;
-	color: rgb(100,100,100);
+
+	padding: 6px 12px;
+	margin: 0;
+
+	background-color: #F0AD4E;
+	background-image: none;
+	border: 1px solid #EEA236;
+	border-radius: 4px;
+	color: #fff;
+	
+	font-size: 1.5em;
+	font-weight: normal;
+	text-align: center;
 }
 
-#userpage .panel-left .list-group-item a:hover {
-	color: rgb(212,71,44);
-	text-decoration: none;
+#homepage .session-choice .cell-input input {
+	margin-top: 0.7em;
+
+	color: #545454;
+
+	font-family: Monospace;
+	font-variant: normal;
+	text-align: center;
 }
 
-#userpage .panel-left .list-group-item a .glyphicon {
-	margin-right: 5px;
-	font-size: 16px;
+#homepage .session-choice .cell-response .btn {
+	float: right;
+
+	margin-left: 4px;
+	margin-top: 4px;
+
+	font-variant: small-caps;
 }
 
+#homepage .load-error {
+	text-align: center;
+}

@@ -32,10 +32,6 @@
                 'exports': 'ngRoute',
                 'deps': ['angular']
             },
-            'bootstrap': {
-                'exports': 'bootstrap',
-                'deps': ['jquery']
-            },
             'jquery': {
                 'exports': 'jquery'
             },
@@ -48,7 +44,7 @@
         }
     });
 
-    requirejs(['angular', 'angular-animate', 'angular-route', 'jquery', 'bootstrap', 'cytoscape', 'dropzone', 'app/app'], function (angular) {
+    requirejs(['angular', 'angular-animate', 'angular-route', 'jquery', 'cytoscape', 'dropzone', 'app/app'], function (angular) {
 
         // Angular bootstrapping
         angular.element(document).ready(function () {

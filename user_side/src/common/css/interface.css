@@ -2,18 +2,6 @@
 body,
 html {
 	background-color: #f0f0f0;
-	font-size: 14px;
-}
-
-/* FIX BUTTON FROM v0.2.0 */
-
-.btn {
-	font-size: 14px;
-	border-radius: 4px;
-}
-
-.btn.oldSkin {
-	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
 /* LEFT BAR */
@@ -455,14 +443,4 @@ html {
 	color: #000000;
 
 	z-index: 2;
-}
-
-/* PASSWORD PROTECTION */
-
-.password-protection input {
-	width: 50%;
-	height: 50px;
-
-	font-size: 24px;
-	text-align: center;
 }

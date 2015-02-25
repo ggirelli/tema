@@ -4,11 +4,11 @@
 require_once('db.class.php');
 
 /**
-* Manages TEMA database
+* Manages TEA database
 * @author Gabriele Girelli <gabriele@filopoe.it>
 * @since 0.2.0
 */
-class TEMAdb extends C2MySQL {
+class TEAdb extends C2MySQL {
 	
 	// public FUNCTIONS
 
@@ -35,7 +35,7 @@ class TEMAdb extends C2MySQL {
 	 * @return Boolean
 	 */
 	private function check_database() {
-		if( !parent::table_exists('sessions') or !parent::table_exists('sessions_settings') or !parent::table_exists('sessions_users') ) {
+		if( !parent::table_exists('sessions') or !parent::table_exists('sessions_settings') ) {
 			return false;
 		}
 		
@@ -55,13 +55,9 @@ class TEMAdb extends C2MySQL {
 				"seed VARCHAR(100) NOT NULL UNIQUE, " .
 				"folder_path VARCHAR(200) NOT NULL UNIQUE, " .
 				"interface_uri VARCHAR(200) NOT NULL UNIQUE, " .
-				"owner INTEGER NOT NULL, " .
-				"title VARCHAR(200) NOT NULL, " .
-				"privacy VARCHAR(100) NOT NULL, " .
-				"password VARCHAR(100), " .
-				"running INTEGER NOT NULL DEFAULT 0, " .
+				"running INT NOT NULL DEFAULT 0, " .
 				"last_query VARCHAR(100), " .
-				"last_query_when TIMESTAMP, " .
+				"last_query_when INTEGER, " .
 				"current_net VARCHAR(100) " .
 				")";
 			
@@ -87,34 +83,6 @@ class TEMAdb extends C2MySQL {
 				die('An error occurred while initializing the MySQL database.');
 			}
 		}
-
-		if ( !parent::table_exists('sessions_users') ) {
-			// Session_settings table definition
-			$sql = "CREATE TABLE sessions_users (" .
-				"id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY, " .
-				"nickname VARCHAR(100) NOT NULL UNIQUE, " .
-				"email VARCHAR(100) NOT NULL UNIQUE, " .
-				"password VARCHAR(200) NOT NULL, " .
-				"confirm_token VARCHAR(100) NOT NULL UNIQUE, " .
-				"token_when TIMESTAMP, " .
-				"confirmed INTEGER NOT NULL " .
-				")";
-			
-			// Create table
-			parent::query($sql);
-			if( parent::isError() ) {
-				die('An error occurred while initializing the MySQL database.');
-			}
-		}
-	}
-
-	/**
-	 * Perform a one-way hashing of provided string
-	 * @param  String $s
-	 * @return String    Hashed version of $s
-	 */
-	protected function encrypt($s) {
-		return(md5('TEMA' . sha1($s . md5('TEMA')) . sha1('TEMA')));
 	}
 }
 

@@ -18,10 +18,6 @@
                         templateUrl: 'user_side/src/app/mods/interface/tpl.html'
                     })
 
-                    .when('/activation/:id', {
-                        templateUrl: 'user_side/src/app/mods/user_activate/tpl.html'
-                    })
-
                     .when('/help', {
                         templateUrl: 'user_side/src/app/mods/help/tpl.html'
                     })

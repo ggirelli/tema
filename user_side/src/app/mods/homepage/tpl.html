@@ -2,10 +2,46 @@
 <style type="text/css">@import "user_side/src/common/css/homepage.css";</style>
 
 <!-- url-specific template -->
-<div id='homepage' ng-app='tea' ng-controller='homepageController as hCtrl' ng-model='hCtrl'>
+<div id='homepage' class='col-md-8 col-md-offset-2' ng-app='tea' ng-controller='homepageController as hCtrl' ng-model='hCtrl'>
 
-	<div ng-if="!m.logsys.logged.status" ng-include="'user_side/src/app/mods/homepage/mods/guest/tpl.html'"></div>
-	
-	<div ng-if="m.logsys.logged.status" ng-include="'user_side/src/app/mods/homepage/mods/user/tpl.html'"></div>
+	<div class="title col-md-12">
+		<p>TEMA</p>
+		<small>Tumor Evolution Manager and Analyzer</small>
+	</div>
+
+	<div class="session-choice panel panel-default col-md-12">
+
+		<div class="panel-heading">
+			<span ng-show='homepage.isWaiting()'>Make your choice:</span>
+			<span ng-show='homepage.isPreLoading()'>Enter the session ID:</span>
+		</div>
+		<div class="panel-body">
+
+			<div class="col-md-6">
+				<button class="cell btn btn-success" ng-click='homepage.new()' ng-class="{'disabled':homepage.isPreLoading()}">create a new session</button>
+			</div>
+
+			<div class="col-md-6" ng-show='homepage.isWaiting()'>
+				<button class="cell btn btn-warning" ng-click='homepage.loading()'>load an old session</button>
+			</div>
+
+			<div class="col-md-6" ng-show='homepage.isPreLoading() || homepage.isLoading()'>
+
+				<div class="cell cell-input">
+					<input type="text" placeholder='session id' ng-model='m.tmpID' />
+				</div>
+
+				<div class='cell-response'>
+					<button class='btn btn-primary' ng-click='homepage.load(m.tmpID)'>load</button>
+					<button class='btn btn-danger' ng-click='homepage.waiting()'>back</button>
+				</div>
+				
+			</div>
+
+		</div>
+
+	</div>
+
+	<div class='load-error alert alert-danger col-md-10 col-md-offset-1' ng-show='m.tmpErr == 3'>impossible to load session &lt; <b>{{m.tmpID}}</b> &gt;</div>
 
 </div>

@@ -38,10 +38,10 @@ class C2MySQL {
 	public $db_name;
 	
 	/**
-	 * MySQLi instance
-	 * @var mysqli
+	 * Connection id
+	 * @var integer
 	 */
-	private $mysqli;
+	private $db_cnx_id;
 	
 	/**
 	 * Error variable
@@ -64,27 +64,11 @@ class C2MySQL {
 		$this->user = $user;
 		$this->pwd = $pwd;
 		$this->db_name = $db_name;
-
+		
 		// Connect to MySQL server
 		$this->connect2MySQL();
 		// If no errors occurred, connect to database
 		if( !$this->isError() ) { $this->connect2MySQL_db(); }
-	}
-
-	/**
-	 * Identifies errors that occurred during the connection.
-	 * @return boolean	true = an error has occured
-	 */
-	public function isError() {
-		// Evaluates errors based on the signal variable.
-		if( $this->connect_error ) { return true; }
-		
-		// Evaluate MySQL errors
-        $error = $this->mysqli->error;
-        if ( empty($error) )
-            return false;
-        else
-            return true;
 	}
 	
 	// protected FUNCTIONS
@@ -92,14 +76,12 @@ class C2MySQL {
     /**
      * Returns a MySQLresult instance for data fetching
      * @param String $sql 	query to be executed
-     * @param Boolean $verbose whether to print an error message
      * @return MySQLresult instance
      */
-    protected function & query($sql, $verbose=TRUE) {
-        if ( !$mysqliResult = $this->mysqli->query($sql) )
-            if ( $verbose ) 
-            	trigger_error ('Query fallita: ' . $this->mysqli->error . ' SQL: ' . $sql);
-        $result = new MySQLResult($this,$mysqliResult);
+    protected function & query($sql) {
+        if ( !$queryResource = mysql_query($sql,$this->db_cnx_id) )
+            trigger_error ('Query fallita: ' . mysql_error($this->db_cnx_id) . ' SQL: ' . $sql);
+        $result = new MySQLResult($this,$queryResource);
 		return $result;
     }
 	
@@ -130,8 +112,8 @@ class C2MySQL {
 	 * @return null
 	 */
 	protected function close() {
-		if( !$this->mysqli->close() )
-			trigger_error("Impossible to terminat the connection.\n\n" . $this->mysqli->error);
+		if( !mysql_close($this->db_cnx_id) )
+			trigger_error("Impossible to terminat the connection.\n\n" . mysql_error());
 	}
 
 	/**
@@ -149,12 +131,19 @@ class C2MySQL {
 	}
 
 	/**
-	 * Escapes a string based on current connection's charset
-	 * @param  String $s to be escaped
-	 * @return String    escaped
+	 * Identifies errors that occurred during the connection.
+	 * @return boolean	true = an error has occured
 	 */
-	protected function escape_string($s) {
-		return $this->mysqli->escape_string($s);
+	protected function isError() {
+		// Evaluates errors based on the signal variable.
+		if( $this->connect_error ) { return true; }
+		
+		// Evaluate MySQL errors
+        $error = mysql_error($this->db_cnx_id);
+        if ( empty($error) )
+            return false;
+        else
+            return true;
 	}
 
 	// private FUNCTIONS
@@ -164,11 +153,9 @@ class C2MySQL {
 	 * @return null (sets $this->connect_error)
 	 */
 	private function connect2MySQL() {
-		if( !$this->mysqli = @mysqli_connect($this->host, $this->user, $this->pwd) ) {
+		if( !$this->db_cnx_id = @mysql_connect($this->host, $this->user, $this->pwd) ) {
             trigger_error('Impossible to contact the MySQL server.');
             $this->connectError = true;
-		} else {
-			$this->mysqli->set_charset("utf8");
 		}
 	}
 	
@@ -177,7 +164,7 @@ class C2MySQL {
 	 * @return void (sets $this->connect_error)
 	 */
 	private function connect2MySQL_db() {
-		if( !@$this->mysqli->select_db($this->db_name) ) {
+		if( !@mysql_select_db($this->db_name, $this->db_cnx_id) ) {
             trigger_error('Impossible to select the database.');
             $this->connectError = true;
 		}
@@ -205,16 +192,16 @@ class MySQLresult {
      *  Result of the query, to fetch
      * @var resource
      */
-    var $result;
+    var $query;
 
     /**
      * @param C2MySQL instance $mysql
-     * @param resource $result
+     * @param resource $query
      * @access public
      */
-    public function __construct(& $c2mysql,$result) {
+    public function __construct(& $c2mysql,$query) {
         $this->c2mysql = & $c2mysql;
-        $this->result = $result;
+        $this->query = $query;
     }
 
     /**
@@ -223,10 +210,10 @@ class MySQLresult {
      * @return Boolean 	if no rows are left to be fetched, returns false
      */
     public function fetch () {
-        if ( $row = $this->result->fetch_array(MYSQLI_ASSOC) ) {
+        if ( $row = mysql_fetch_array($this->query,MYSQL_ASSOC) ) {
             return $row;
         } else if ( $this->size() > 0 ) {
-            $this->result->data_seek(0);
+            mysql_data_seek($this->query,0);
             return false;
         } else {
             return false;
@@ -237,14 +224,14 @@ class MySQLresult {
      * @return int 	number of selected rows
      */
     public function size () {
-        return $this->result->num_rows;
+        return mysql_num_rows($this->query);
     }
 
     /**
      * @return int 	ID of the last inserted row
      */
     public function insertID () {
-        return $this->c2mysql->mysqli->insert_id;
+        return mysql_insert_id($this->c2mysql->db_cnx_id);
     }
     
     /**

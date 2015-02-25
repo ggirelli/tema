@@ -3,15 +3,6 @@
 	src: url('../fonts/optimus.ttf');
 }
 
-@font-face {
-  font-family: 'Karla';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Karla'), local('Karla-Regular'),
-  	url('../fonts/karla.woff2') format('woff2'),
-  	url('../fonts/karla.woff') format('woff');
-}
-
 html,
 body {
 	height: 100%;
@@ -21,14 +12,10 @@ body {
 	padding: 0;
 
 	background-color: #fefefe;
-	
-	font-family: "Karla", sans-serif;
-	font-size: 20px;
 }
 
 .float-right {
 	float: right;
-	margin-right: 3px;
 }
 
 .hidden-file-input {
@@ -54,136 +41,3 @@ body {
 .text-align-right {
 	text-align: right !important;
 }
-
-.font-size-24px {
-	font-size: 24px !important;
-}
-
-.mbot0 { margin-bottom: 0em !important; }
-.mbot02 { margin-bottom: 0.2em !important; }
-.mbot05 { margin-bottom: 0.5em !important; }
-.mrig0 { margin-right: 0em !important; }
-.mrig02 { margin-right: 0.2em !important; }
-.mrig05 { margin-right: 0.5em !important; }
-.mrig07 { margin-right: 0.7em !important; }
-.mlef0 { margin-left: 0em !important; }
-.mlef02 { margin-left: 0.2em !important; }
-.mlef05 { margin-left: 0.5em !important; }
-.mlef07 { margin-left: 0.7em !important; }
-
-.prig0 { padding-right: 0 !important; }
-.prig02 { padding-right: 0.2em !important; }
-.prig05 { padding-right: 0.5em !important; }
-.plef0 { padding-left: 0 !important; }
-.plef02 { padding-left: 0.2em !important; }
-.plef05 { padding-left: 0.5em !important; }
-.pori0 {
-	padding-left: 0;
-	padding-right: 0;
-}
-
-.h2-5em { height: 2.5em; }
-
-.all-width {
-	width: 100%;
-}
-
-.all-dimensions {
-	height: 100%;
-	width: 100%;
-}
-
-/** buttons **/
-
-.btn {
-	border-radius: 6px;
-	font-size: 24px;
-}
-
-.btn-aqua {
-	background-color: rgb(16, 156, 126);
-	color: white;
-	border: 1px solid rgb(13, 135, 110);
-	border-bottom-width: 4px;
-}
-
-.btn-light-aqua {
-	background-color: rgb(100, 201, 155);
-	color: white;
-	border: 1px solid rgb(87, 181, 138);
-	border-bottom-width: 4px;
-}
-
-.btn-reddish {
-	background-color: rgb(232, 78, 48);
-	color: white;
-	border: 1px solid rgb(212, 71, 44);
-	border-bottom-width: 4px;
-}
-
-.btn-sky {
-	background-color: rgb(115, 195, 240);
-	color: white;
-	border: 1px solid rgb(88, 176, 235);
-	border-bottom-width: 4px;
-}
-
-.btn:hover {
-	color: white;
-	border-bottom-width: 1px;
-}
-
-/** panels **/
-
-.panel-success { border-color: rgb(16, 156, 126); }
-
-.panel-success .panel-heading {
-	background-color: rgb(16, 156, 126);
-	color: white;
-}
-
-.panel-success .panel-body,
-.panel-success .panel-body p,
-.panel-success .panel-body h2 {
-	color: rgb(87, 181, 138);
-}
-
-.panel-sky { border-color: rgb(98, 181, 227); }
-.panel-sky .panel-heading {
-	background-color: rgb(115, 195, 240);
-	color: white;
-}
-.panel-sky .panel-body,
-.panel-sky .panel-body p,
-.panel-sky .panel-body h2 {
-	color: rgb(88, 176, 235);
-}
-
-.panel-light-aqua { border-color: rgb(87, 181, 138); }
-.panel-light-aqua .panel-heading {
-	background-color: rgb(100, 201, 155);
-	color: white;
-}
-.panel-light-aqua,
-.panel-light-aqua p,
-.panel-light-aqua h2 {
-	color: rgb(87, 181, 138);
-}
-
-
-.panel-reddish { border-color: rgb(212, 71, 44); }
-.panel-reddish .panel-heading {
-	background-color: rgb(232, 78, 48);
-	color: white;
-}
-.panel-reddish,
-.panel-reddish p,
-.panel-reddish h2 {
-	color: rgb(232, 78, 48);
-}
-
-
-.panel-light { border-color: #dadada; }
-.panel-light > .panel-heading { color: #989898; }
-
-
