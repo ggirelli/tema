@@ -16,6 +16,12 @@
             scope.canvas = canvas;
             scope.settings = settings;
 
+            /*--------------------------------------*/
+            /* Check session privacy and protection */
+            /*--------------------------------------*/
+
+            
+
             /*-------------------------*/
             /* Initialize network list */
             /*-------------------------*/
