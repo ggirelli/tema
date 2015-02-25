@@ -2,8 +2,18 @@
 body,
 html {
 	background-color: #f0f0f0;
+	font-size: 14px;
+}
 
-	font-size: 14px !important;
+/* FIX BUTTON FROM v0.2.0 */
+
+.btn {
+	font-size: 14px;
+	border-radius: 4px;
+}
+
+.btn.oldSkin {
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
 /* LEFT BAR */
