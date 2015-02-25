@@ -9,13 +9,13 @@
 define('HOST', 'localhost');
 define('USER', 'root');
 define('PWD', '');
-define('DB_NAME', 'TEMA15');
+define('DB_NAME', 'TEA14');
 
 // Address
 define('RPATH', dirname(__FILE__));
 define('SPATH', dirname(__FILE__) . '/session');
 define('SCRIPATH', dirname(__FILE__) . '/Rscripts');
-define('RURI', 'https://localhost/public_html/TEMA');
+define('RURI', 'http://localhost/public_html/TEA');
 
 // Uploader
 $GLOBALS['FILENAME_BAN'] = array('.', '..', 'config', 'sif.dat', 'sif.json');
