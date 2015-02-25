@@ -1,0 +1,30 @@
+# Changelog
+# -----------------------------------------
+
+v. 0.3.0
+
+* Codename: 'TEMA' (Tumor Evolution Manager and Analyzer)
+* New features:
+	- Login system
+	- Privacy in session system
+	- Drag'n'drop uploader
+
+v. 0.2.0
+
+* Codename: 'TEA' (Tumor Evolution Analyzer)
+* New code architecture
+* New interface with Numix-inspired GUI
+* New features:
+	- Graph operations
+	- Visualization filters
+	- Network navigation
+	- Network attributes manager
+	- (Sample Info File) SIF-based analysis
+	- Gene Ontology manager
+
+v. 0.1.0
+
+* Codename: 'SOGI' (Simple Online Graph Interface)
+* First attempt to create a simple interface with
+  a console-like front-to-back end communication
+* Powered by Cytoscape.js

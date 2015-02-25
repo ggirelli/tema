@@ -2,7 +2,7 @@
 /**
  * Lists TEMA sessions
  * @author Gabriele Girelli <gabriele@filopoe.it>
- * @since  0.2.0
+ * @since  0.3.0
  */
 
 // Requirements
