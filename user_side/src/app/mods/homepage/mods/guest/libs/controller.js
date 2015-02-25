@@ -141,7 +141,7 @@
                                         };
                                         rootScope.TEMAlogged = scope.m.logsys.logged;
                                         scope.in.setSigning(false);
-                                    }, 1500)
+                                    }, 3000)
                                 }
                             });
 

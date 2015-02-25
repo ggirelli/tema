@@ -53,14 +53,45 @@
 }
 
 #userpage .panel-left {
-	height: 190px;
+	height: 255px;
 }
 
 #userpage .panel-left .panel-body {
 	margin-top: 5px;
-	padding-top: 0;
+	padding: 0;
 
-	height: 130px;
+	height: 195px;
 
 	overflow: auto;
 }
+
+#userpage .panel-left .list-group {
+	margin: 0;
+}
+
+#userpage .panel-left .list-group-item:first-child {
+	border-top: none;
+}
+
+#userpage .panel-left .list-group-item {
+	border-bottom: none;
+	border-right: none;
+	border-left: none;
+}
+
+#userpage .panel-left .list-group-item a {
+	display: inline-block;
+	width: 100%;
+	color: rgb(100,100,100);
+}
+
+#userpage .panel-left .list-group-item a:hover {
+	color: rgb(212,71,44);
+	text-decoration: none;
+}
+
+#userpage .panel-left .list-group-item a .glyphicon {
+	margin-right: 5px;
+	font-size: 16px;
+}
+
