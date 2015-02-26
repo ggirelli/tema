@@ -68,7 +68,7 @@
 		</div>
 	</div>
 
-	<a ng-show="!uploader.is_basic(m.uploader_type)" href='#/interface/{{m.session_id}}' class="btn btn-danger float-right" ng-click='uploader.abort()' ng-class="{'disabled' : uploader.uploading}">Abort</a>
+	<a ng-show="!uploader.is_basic(m.uploader_type)" href='#/interface/{{m.session_id}}' class="btn btn-danger float-right small-caps" ng-click='uploader.abort()' ng-class="{'disabled' : uploader.uploading}">back</a>
 
 	<p ng-show="uploader.is_basic(m.uploader_type)" >
 		<small><sup>1</sup> you can upload your files manually at the address <span style='font-family: Monospace;'>/server_side/session/{{m.session_id}}/</span></small>
