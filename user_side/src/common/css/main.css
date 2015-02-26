@@ -135,16 +135,16 @@ body {
 
 /** panels **/
 
-.panel-success { border-color: rgb(16, 156, 126); }
+.panel-aqua { border-color: rgb(16, 156, 126); }
 
-.panel-success .panel-heading {
+.panel-aqua .panel-heading {
 	background-color: rgb(16, 156, 126);
 	color: white;
 }
 
-.panel-success .panel-body,
-.panel-success .panel-body p,
-.panel-success .panel-body h2 {
+.panel-aqua .panel-body,
+.panel-aqua .panel-body p,
+.panel-aqua .panel-body h2 {
 	color: rgb(87, 181, 138);
 }
 
