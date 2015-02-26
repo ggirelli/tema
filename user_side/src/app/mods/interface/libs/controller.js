@@ -4,12 +4,14 @@
     define([], function () {
 
         return function (q, scope, model, routeParams, networks,
-            panels, inspector, commander, canvas, settings, sessions) {
+            panels, inspector, commander, canvas, settings,
+            sessions, uploader) {
 
         	scope.m = model;
             scope.m.session_id = routeParams.id;
             self.session_error = true;
             scope.m.session_protected = false;
+            scope.m.uploader_type = "0";
 
             scope.networks = networks;
         	scope.inspector = inspector;
@@ -18,6 +20,7 @@
             scope.canvas = canvas;
             scope.settings = settings;
             scope.sessions = sessions;
+            scope.uploader = uploader;
 
             /*--------------------------------------*/
             /* Check session privacy and protection */
@@ -204,7 +207,16 @@
                         }
                     }
                 }
-            }
+            };
+
+            scope.toggleUploader = function () {
+                scope.m.uploading = !scope.m.uploading;
+                scope.m.uploader_type = "0";
+                scope.uploader.abort();
+                scope.networks.reload_list(scope.m.session_id)
+
+                if ( !scope.m.uploading ) scope.canvas.init();
+            };
 
             /**
              * [resetApp description]

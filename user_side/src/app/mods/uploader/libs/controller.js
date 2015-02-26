@@ -11,6 +11,10 @@
 
         	scope.uploader = uploader;
 
+        	scope.toggleUploader = function () {
+                scope.m.uploading = !scope.m.uploading;
+            };
+
         };
 
     });

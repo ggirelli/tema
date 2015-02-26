@@ -10,10 +10,6 @@
                         templateUrl: 'user_side/src/app/mods/homepage/tpl.html'
                     })
 
-                    .when('/upload/:id', {
-                        templateUrl: 'user_side/src/app/mods/uploader/tpl.html'
-                    })
-
                     .when('/interface/:id', {
                         templateUrl: 'user_side/src/app/mods/interface/tpl.html'
                     })

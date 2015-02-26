@@ -3,7 +3,7 @@
 
 <!-- url-specific template -->
 <div id='interface' ng-app='tea' ng-controller='interfaceController as iCtrl' ng-model='iCtrl'>
-	<div ng-if="!m.session_error">
+	<div ng-if="!m.session_error" ng-show="!m.uploading">
 		<div id='left-bar'>
 			<a class="title" href='' ng-click="resetApp()">TEMA</a>
 			<span class="btn btn-primary btn-circle" ng-click="panels.toggle('graph_list')" ng-class="{'open' : panels.show.graph_list}" title="Network list">
@@ -40,7 +40,7 @@
 			<div class='left-panel graph-list-panel panel panel-primary' ng-show='panels.show.graph_list'>
 				<div class="panel-heading">
 					Network list
-					<a href='#/upload/{{m.session_id}}' class="btn-panel glyphicon glyphicon-cloud-upload float-right" title='Upload'></a>
+					<a href='#/interface/{{m.session_id}}' class="btn-panel glyphicon glyphicon-cloud-upload float-right" title='Upload' ng-click="toggleUploader()"></a>
 					<a href="#/interface/{{m.session_id}}" class="btn-panel glyphicon glyphicon-refresh float-right" title='Refresh' ng-click="networks.reload_list(m.session_id)"></a>
 					<a href="#/interface/{{m.session_id}}" class="btn-panel glyphicon glyphicon-transfer float-right" title="Convert" ng-click="networks.toggle_conversion_panel(m.session_id)"></a>
 					<a href="#/interface/{{m.session_id}}" class="btn-panel glyphicon glyphicon-floppy-disk float-right" title="Save" ng-click="canvas.save(m.session_id, networks.list, settings.info.default_layout)"></a>
@@ -48,7 +48,7 @@
 
 				<div class="panel-body" ng-show="!networks.conversion.is()">
 					<div class="alert" ng-show='networks.list != null' ng-repeat='net in networks.list' ng-class="{'alert-info' : networks.isConverted(net)&&!canvas.isLoaded(net.name), 'alert-danger' : !networks.isConverted(net), 'alert-warning' : canvas.isPreloaded(net.name), 'alert-success' : canvas.isLoaded(net.name)}">
-						<a href="#/interface/{{m.session_id}}" class="load-network-link" ng-class="{'text-danger' : !networks.isConverted(net), 'text-success' : canvas.isLoaded(net.name)}" ng-click="networks.init_file(net)" title="N: {{net.data.v_count}} | E: {{net.data.e_count}}">{{net.name}} <span class="glyphicon glyphicon-flag" ng-show="!networks.isConverted(net)"></span><span class="glyphicon glyphicon-eye-open" ng-show="canvas.isLoaded(net.name)"></span></a>
+						<a href="#/interface/{{m.session_id}}" class="load-network-link" ng-class="{'text-danger' : !networks.isConverted(net), 'text-success' : canvas.isLoaded(net.name)}" ng-click="networks.init_file(net)" title="N: {{net.data.v_count}} | E: {{net.data.e_count}}">{{net.name}} <span class="glyphicon glyphicon-flag mrig02" ng-show="!networks.isConverted(net)"></span><span class="glyphicon glyphicon-eye-open" ng-show="canvas.isLoaded(net.name)"></span></a>
 						<!-- overwrite -->
 						<a href="#/interface/{{m.session_id}}" ng-class="{'text-danger' : !networks.isConverted(net)}" class="net-action float-right" title='Overwrite' ng-click="networks.overwrite(m.session_id, net.id, settings.info.default_layout)"><span class="glyphicon glyphicon-import"></span></a>
 						<!-- remove -->
@@ -1482,6 +1482,7 @@
 			<div id="loaded-network-spy">{{canvas.current_data.name}}</div>
 		</div>
 	</div>
+	<div ng-if="!m.session_error" ng-show="m.uploading" ng-include="'user_side/src/app/mods/uploader/tpl.html'"></div>
 	<div class="password-protection jumbotron" ng-if="m.session_protected">
 		<center>
 			<h1>TEMA</h1>

@@ -79,6 +79,8 @@
             self.session_id = null;
             self.session_error = true;
             self.session_protected = false;
+
+            self.uploading = false;
             
            	self.currentSession = null;
 

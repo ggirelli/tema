@@ -14,7 +14,7 @@
         './mods/interface/libs/inspector.service', './mods/interface/libs/panels.service',
         './mods/interface/libs/commander.service', './mods/interface/libs/canvas.service',
         './mods/interface/libs/settings.service', './mods/interface/libs/sessions.service',
-        './mods/uploader/libs/controller', './mods/uploader/libs/service', 
+        './mods/uploader/libs/service', 
         './mods/uploader/libs/directive', './mods/uploader/libs/submit_form.directive',
         'angular-route', 'angular-animate', 'jquery', 'dropzone'];
 
@@ -30,7 +30,7 @@
             inspectorService, panelsService,
             commanderService, canvasService,
             settingsService, sessionsService,
-            uploaderController, uploaderService,
+            uploaderService,
             autoclickDirective, submitformDirective) {
         
         angular.module('tea', ['ngRoute']).
@@ -97,19 +97,13 @@
             service('panelsService', ['$rootScope', panelsService]).
             service('settingsService', ['$q', '$http', '$rootScope', settingsService]).
             service('sessionsService', ['$q', '$http', '$rootScope', sessionsService]).
+            service('uploaderService', ['$http', '$q', '$timeout', uploaderService]).
             controller('interfaceController', [
                 '$q', '$scope', 'appModel', '$routeParams',
                 'networkService', 'panelsService', 'inspectorService',
                 'commanderService', 'canvasService', 'settingsService',
-                'sessionsService',
+                'sessionsService', 'uploaderService',
                 interfaceController
-            ]).
-
-            service('uploaderService', ['$http', '$q', '$timeout', uploaderService]).
-            controller('uploaderController', [
-                '$scope', 'appModel', '$routeParams',
-                'uploaderService',
-                uploaderController
             ]).
 
             directive('uploaderAutoclick', [
