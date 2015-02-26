@@ -2,14 +2,14 @@
 
 // Requirements
 require_once('functions.lib.php');
-require_once('tea.db.class.php');
+require_once('tema.db.class.php');
 
 /**
-* Class that manages TEA sessions
+* Class that manages TEMA sessions
 * @author Gabriele Girelli <gabriele@filopoe.it>
 * @since 0.2.0
 */
-class TEAsession extends TEAdb {
+class TEMAsession extends TEMAdb {
 	
 	// ATTRIBUTES
 	
@@ -54,6 +54,30 @@ class TEAsession extends TEAdb {
 	 * @var String
 	 */
 	private $current_net;
+
+	/**
+	 * Privacy status
+	 * @var String
+	 */
+	private $privacy;
+
+	/**
+	 * Owner user ID
+	 * @var Integer
+	 */
+	private $owner;
+
+	/**
+	 * Protection status
+	 * @var Boolean
+	 */
+	private $protected;
+
+	/**
+	 * Session password
+	 * @var String
+	 */
+	private $password;
 
 	/**
 	 * Max number of nodes visualized in the canvas
@@ -107,7 +131,10 @@ class TEAsession extends TEAdb {
 	 * @param  String $id session id
 	 * @return null
 	 */
-	public function init($id) {
+	public function init($id,
+		$title = NULL, $owner = NULL,
+		$privacy = NULL, $password = NULL
+	) {
 		if( $this->exists($id) ) {
 
 			// Load old session in current class instance
@@ -116,7 +143,7 @@ class TEAsession extends TEAdb {
 		} else {
 
 			// Create new session and load it in the current class instance
-			$this->_new($id);
+			$this->_new($id, $title, $owner, $privacy, $password);
 
 		}
 	}
@@ -156,6 +183,18 @@ class TEAsession extends TEAdb {
 				return $this->current_net;
 				break;
 			}
+			case 'privacy': {
+				return $this->privacy;
+				break;
+			}
+			case 'owner': {
+				return $this->owner;
+				break;
+			}
+			case 'protected': {
+				return $this->protected;
+				break;
+			}
 			case 'settings': {
 				return $this->settings;
 				break;
@@ -188,7 +227,7 @@ class TEAsession extends TEAdb {
  	}
 
 	/**
-	 * Determines whether a certain TEAsession exists
+	 * Determines whether a certain TEMAsession exists
 	 * @param  String $id
 	 * @return boolean
 	 */
@@ -267,7 +306,6 @@ class TEAsession extends TEAdb {
 		}
 	}
 
-
 	public function apply_settings($settings) {
 		$updated = false;
 		foreach ($this->settings_labels as $label) {
@@ -282,6 +320,10 @@ class TEAsession extends TEAdb {
 		}
 	}
 
+	public function is_password($pwd) {
+		return($this->encrypt($pwd) == $this->password);
+	}
+
 	// private FUNCTIONS
 
 	/**
@@ -289,8 +331,16 @@ class TEAsession extends TEAdb {
 	 * @param  String $id
 	 * @return null
 	 */
-	private function _new($id) {
+	private function _new($id, $title, $owner, $privacy, $password) {
 		if ( !$this->exists($id) ) {
+			$title = $this->escape_string($title);
+			$privacy = $this->escape_string($privacy);
+			if(!is_null($password))	$password = $this->encrypt($password);
+
+			$owner = $this->escape_string($owner);
+			$sql = "SELECT id FROM sessions_users WHERE nickname='$owner'";
+			$r = $this->query($sql);
+			$owner = $r->fetch()['id'];
 
 			// Make session directory
 			mkdir(SPATH . '/' . $id);
@@ -298,10 +348,14 @@ class TEAsession extends TEAdb {
 			mkdir(SPATH . '/' . $id . '/settings');
 
 			// Insert session in the database
-			$sql = "INSERT INTO sessions (seed, folder_path, interface_uri, running) VALUES ( " .
+			$sql = "INSERT INTO sessions (seed, folder_path, interface_uri, owner, title, privacy, password, running) VALUES ( " .
 				"'" . $id . "', " .
 				"'" . SPATH . "/" . $id . "', " .
 				"'" . RURI . "/s/" . $id . "', " .
+				"'$owner', " .
+				"'$title', " .
+				"'$privacy', " .
+				"'$password', " .
 				"0)";
 			$this->query($sql);
 			$this->set_default_settings($id);
@@ -329,6 +383,14 @@ class TEAsession extends TEAdb {
 			$this->last_query = $q['last_query'];
 			$this->last_query_when = $q['last_query_when'];
 			$this->current_net = $q['current_net'];
+			$this->privacy = $q['privacy'];
+			$this->owner = $q['owner'];
+			$this->password = $q['password'];
+			if ( '' === $q['password'] ) {
+				$this->protected = FALSE;
+			} else {
+				$this->protected = TRUE;
+			}
 
 			$this->list_networks();
 			$this->read_settings();
