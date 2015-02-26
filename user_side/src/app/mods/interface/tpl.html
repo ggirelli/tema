@@ -3,1483 +3,1499 @@
 
 <!-- url-specific template -->
 <div id='interface' ng-app='tea' ng-controller='interfaceController as iCtrl' ng-model='iCtrl'>
+	<div ng-if="!m.session_error">
+		<div id='left-bar'>
+			<a class="title" href='' ng-click="resetApp()">TEMA</a>
+			<span class="btn btn-primary btn-circle" ng-click="panels.toggle('graph_list')" ng-class="{'open' : panels.show.graph_list}" title="Network list">
+				<span class="glyphicon glyphicon-th-list"></span>
+			</span>
+			<span class="btn btn-primary btn-circle" ng-click="panels.toggle('attributes')" ng-class="{'open' : panels.show.attributes}" title="Attributes">
+				<span class="glyphicon glyphicon-tags"></span>
+			</span>
+			<span class="btn btn-danger btn-circle" ng-click="panels.toggle('operations')" ng-class="{'open' : panels.show.operations}" title="Operations">
+				<span class="glyphicon glyphicon-pencil"></span>
+			</span>
+			<span class="btn btn-success btn-circle" ng-click="panels.toggle('filter')" ng-class="{'open' : panels.show.filter}" title="Filter">
+				<span class="glyphicon glyphicon-filter"></span>
+			</span>
+			<span class="btn btn-success btn-circle" ng-click="panels.toggle('navigate')" ng-class="{'open' : panels.show.navigate}" title="Navigate">
+				<span class="glyphicon glyphicon-plane"></span>
+			</span>
+			<span class="btn btn-warning btn-circle" ng-click="panels.toggle('layout')" ng-class="{'open' : panels.show.layout}" title="Layout">
+				<span class="glyphicon glyphicon-th"></span>
+			</span>
+			<span class="btn btn-warning btn-circle" ng-click="panels.toggle('style')" ng-class="{'open' : panels.show.style}" title="Style">
+				<span class="glyphicon glyphicon-adjust"></span>
+			</span>
+			<span class="btn btn-default btn-circle" ng-click="panels.toggle('settings')" ng-class="{'open' : panels.show.settings}" title="Settings">
+				<span class="glyphicon glyphicon-cog"></span>
+			</span>
+			<a href="#/help" class="btn btn-info btn-circle" title="Help">
+				<span class="glyphicon glyphicon-heart-empty"></span>
+			</a>
+		</div>
 
-	<div id='left-bar'>
-		<a class="title" href='' ng-click="resetApp()">TEMA</a>
-		<span class="btn btn-primary btn-circle" ng-click="panels.toggle('graph_list')" ng-class="{'open' : panels.show.graph_list}" title="Network list">
-			<span class="glyphicon glyphicon-th-list"></span>
-		</span>
-		<span class="btn btn-primary btn-circle" ng-click="panels.toggle('attributes')" ng-class="{'open' : panels.show.attributes}" title="Attributes">
-			<span class="glyphicon glyphicon-tags"></span>
-		</span>
-		<span class="btn btn-danger btn-circle" ng-click="panels.toggle('operations')" ng-class="{'open' : panels.show.operations}" title="Operations">
-			<span class="glyphicon glyphicon-pencil"></span>
-		</span>
-		<span class="btn btn-success btn-circle" ng-click="panels.toggle('filter')" ng-class="{'open' : panels.show.filter}" title="Filter">
-			<span class="glyphicon glyphicon-filter"></span>
-		</span>
-		<span class="btn btn-success btn-circle" ng-click="panels.toggle('navigate')" ng-class="{'open' : panels.show.navigate}" title="Navigate">
-			<span class="glyphicon glyphicon-plane"></span>
-		</span>
-		<span class="btn btn-warning btn-circle" ng-click="panels.toggle('layout')" ng-class="{'open' : panels.show.layout}" title="Layout">
-			<span class="glyphicon glyphicon-th"></span>
-		</span>
-		<span class="btn btn-warning btn-circle" ng-click="panels.toggle('style')" ng-class="{'open' : panels.show.style}" title="Style">
-			<span class="glyphicon glyphicon-adjust"></span>
-		</span>
-		<span class="btn btn-default btn-circle" ng-click="panels.toggle('settings')" ng-class="{'open' : panels.show.settings}" title="Settings">
-			<span class="glyphicon glyphicon-cog"></span>
-		</span>
-		<a href="#/help" class="btn btn-info btn-circle" title="Help">
-			<span class="glyphicon glyphicon-heart-empty"></span>
-		</a>
-	</div>
+		<div class='left-panel-wrap'>
 
-	<div class='left-panel-wrap'>
+			<div class='left-panel graph-list-panel panel panel-primary' ng-show='panels.show.graph_list'>
+				<div class="panel-heading">
+					Network list
+					<a href='#/upload/{{m.session_id}}' class="btn-panel glyphicon glyphicon-cloud-upload float-right" title='Upload'></a>
+					<a href="#/interface/{{m.session_id}}" class="btn-panel glyphicon glyphicon-refresh float-right" title='Refresh' ng-click="networks.reload_list(m.session_id)"></a>
+					<a href="#/interface/{{m.session_id}}" class="btn-panel glyphicon glyphicon-transfer float-right" title="Convert" ng-click="networks.toggle_conversion_panel(m.session_id)"></a>
+					<a href="#/interface/{{m.session_id}}" class="btn-panel glyphicon glyphicon-floppy-disk float-right" title="Save" ng-click="canvas.save(m.session_id, networks.list, settings.info.default_layout)"></a>
+				</div>
 
-		<div class='left-panel graph-list-panel panel panel-primary' ng-show='panels.show.graph_list'>
-			<div class="panel-heading">
-				Network list
-				<a href='#/upload/{{m.session_id}}' class="btn-panel glyphicon glyphicon-cloud-upload float-right" title='Upload'></a>
-				<a href="#/interface/{{m.session_id}}" class="btn-panel glyphicon glyphicon-refresh float-right" title='Refresh' ng-click="networks.reload_list(m.session_id)"></a>
-				<a href="#/interface/{{m.session_id}}" class="btn-panel glyphicon glyphicon-transfer float-right" title="Convert" ng-click="networks.toggle_conversion_panel(m.session_id)"></a>
-				<a href="#/interface/{{m.session_id}}" class="btn-panel glyphicon glyphicon-floppy-disk float-right" title="Save" ng-click="canvas.save(m.session_id, networks.list, settings.info.default_layout)"></a>
+				<div class="panel-body" ng-show="!networks.conversion.is()">
+					<div class="alert" ng-show='networks.list != null' ng-repeat='net in networks.list' ng-class="{'alert-info' : networks.isConverted(net)&&!canvas.isLoaded(net.name), 'alert-danger' : !networks.isConverted(net), 'alert-warning' : canvas.isPreloaded(net.name), 'alert-success' : canvas.isLoaded(net.name)}">
+						<a href="#/interface/{{m.session_id}}" class="load-network-link" ng-class="{'text-danger' : !networks.isConverted(net), 'text-success' : canvas.isLoaded(net.name)}" ng-click="networks.init_file(net)" title="N: {{net.data.v_count}} | E: {{net.data.e_count}}">{{net.name}} <span class="glyphicon glyphicon-flag" ng-show="!networks.isConverted(net)"></span><span class="glyphicon glyphicon-eye-open" ng-show="canvas.isLoaded(net.name)"></span></a>
+						<!-- overwrite -->
+						<a href="#/interface/{{m.session_id}}" ng-class="{'text-danger' : !networks.isConverted(net)}" class="net-action float-right" title='Overwrite' ng-click="networks.overwrite(m.session_id, net.id, settings.info.default_layout)"><span class="glyphicon glyphicon-import"></span></a>
+						<!-- remove -->
+						<a href="#/interface/{{m.session_id}}" ng-class="{'text-danger' : !networks.isConverted(net)}" class="net-action float-right" title='Remove' ng-click="networks.remove(m.session_id, net.id)"><span class="glyphicon glyphicon-trash"></span></a>
+						<!-- rename -->
+						<a href="#/interface/{{m.session_id}}" ng-class="{'text-danger' : !networks.isConverted(net)}" class="net-action float-right" title='Rename' ng-click="networks.rename(m.session_id, net.id)"><span class="glyphicon glyphicon-pencil"></span></a>
+						<!-- download -->
+						<a href="#/interface/{{m.session_id}}" ng-class="{'text-danger' : !networks.isConverted(net)}" class="net-action float-right" title='Download' ng-click="networks.download(m.session_id, net.id)"><span class="glyphicon glyphicon-cloud-download"></span></a>
+						<!-- inspect -->
+						<a href="#/interface/{{m.session_id}}" ng-class="{'text-danger' : !networks.isConverted(net)}" class="net-action float-right" title='Inspect' ng-click="networks.inspect(net.id)"><span class="glyphicon glyphicon-search"></span></a>
+					</div>
+
+					<p ng-show='networks.list == null'>
+						<i>You have not uploaded any network yet...</i><br />
+						Visit the <a href="#/upload/{{m.session_id}}">uploader</a>!
+					</p>
+				</div>
+
+				<div class="panel-body" ng-show="networks.conversion.is()">
+					<label class="group-selection-option alert alert-warning" for="convert-all"><input type="checkbox" id="convert-all" name="convert-all" ng-model="networks.conversion.group.all" ng-click="networks.conversion.un_select_all()" /> Un/Select all</label><label class="group-selection-option alert alert-success" for="convert-filter"><input type="checkbox" id="convert-filter" name="convert-filter" ng-model="networks.conversion.group.filter" ng-click="networks.conversion.toggle_filter()" /> Custom Filters</label>
+
+					<div class="panel panel-success" ng-show="networks.conversion.group.filter">
+						<div class="panel-success panel-heading">
+							Filter
+							<a href="#/interface/{{m.session_id}}" class="btn-panel float-right" ng-click="networks.conversion.add_filter()" title="Add new"><span class="text-success glyphicon glyphicon-plus"></span></a>
+						</div>
+						<div class="panel-body">
+							<table class="filter-selection">
+								<tr>
+									<td></td>
+									<th>Attribute</th>
+									<th>Condition</th>
+									<th>Value</th>
+								</tr>
+								<tr ng-repeat="filter in networks.conversion.filters">
+									<td class="text-align-left">
+										<select class="form-control" ng-show="!$first" ng-model="networks.conversion.filters[$index].combine" ng-change="networks.conversion.apply_filters()">
+											<option value="">--</option>
+											<option value="AND">AND</option>
+											<option value="OR">OR</option>
+										</select>
+									</td>
+									<td>
+										<select class="form-control" style="max-width: 100px;" ng-model="networks.conversion.filters[$index].attribute" ng-change="networks.conversion.apply_filters(); networks.conversion.filters[$index].value=''">
+											<option value="">--</option>
+											<option value="{{attr}}" ng-repeat="attr in networks.conversion.group.net_attributes">{{networks.conversion.extract_attr_name(attr)}}</option>
+										</select>
+									</td>
+									<td>
+										<select class="form-control" ng-model="networks.conversion.filters[$index].condition" ng-change="networks.conversion.apply_filters()">
+											<option value="" ng-show="!networks.conversion.filters[$index].object">--</option>
+											<option value="e" ng-show="!networks.conversion.filters[$index].object">=</option>
+											<option value="ne" ng-show="!networks.conversion.filters[$index].object">&#8800;</option>
+											<option value="lt" ng-show="!networks.conversion.filters[$index].object">&lt;</option>
+											<option value="le" ng-show="!networks.conversion.filters[$index].object">&le;</option>
+											<option value="gt" ng-show="!networks.conversion.filters[$index].object">&gt;</option>
+											<option value="ge" ng-show="!networks.conversion.filters[$index].object">&ge;</option>
+											<option value="c" ng-selected="networks.conversion.filters[$index].object" ng-show="networks.conversion.filters[$index].object">contains</option>
+										</select>
+									</td>
+									<td>
+										<select class="form-control" style="max-width: 100px;" ng-model="networks.conversion.filters[$index].value" ng-change="networks.conversion.apply_filters()">
+											<option value="" ng-selected="-1 == networks.conversion.get_net_attr_values($index).indexOf(networks.conversion.filters[$index].value)">--</option>
+											<option value="{{v}}" ng-repeat="v in networks.conversion.get_net_attr_values($index)">{{v}}</option>
+										</select>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+
+					<h4>Select the networks to convert:</h4>
+
+					<label for="net-{{net.id}}" class="alert" ng-repeat='net in networks.conversion.group.net_list | filter:networks.isToConvert' ng-show='networks.list != null' ng-class="{'alert-info' : networks.isConverted(net), 'alert-danger' : !networks.isConverted(net)}" style="width: 100%;">
+						<input id="net-{{net.id}}" name="net-{{net.id}}" type="checkbox" ng-model="networks.conversion.group.networks[net.name]" ng-click="networks.conversion.check(net.name)" />
+						{{net.name}}
+					</label>
+
+					<button class="btn btn-select_group btn-success" ng-click="networks.start_converting_group(settings.info.default_layout)">apply</button>
+				</div>
 			</div>
 
-			<div class="panel-body" ng-show="!networks.conversion.is()">
-				<div class="alert" ng-show='networks.list != null' ng-repeat='net in networks.list' ng-class="{'alert-info' : networks.isConverted(net)&&!canvas.isLoaded(net.name), 'alert-danger' : !networks.isConverted(net), 'alert-warning' : canvas.isPreloaded(net.name), 'alert-success' : canvas.isLoaded(net.name)}">
-					<a href="#/interface/{{m.session_id}}" class="load-network-link" ng-class="{'text-danger' : !networks.isConverted(net), 'text-success' : canvas.isLoaded(net.name)}" ng-click="networks.init_file(net)" title="N: {{net.data.v_count}} | E: {{net.data.e_count}}">{{net.name}} <span class="glyphicon glyphicon-flag" ng-show="!networks.isConverted(net)"></span><span class="glyphicon glyphicon-eye-open" ng-show="canvas.isLoaded(net.name)"></span></a>
+			<div class='left-panel attributes-panel panel panel-primary' ng-show='panels.show.attributes'>
+				<div class="panel-heading">
+					<span ng-show="!networks.attributes.is_attr_doing()">
+						Attributes
+						<a href="#/interface/{{m.session_id}}" class="btn-panel text-success float-right" ng-click="networks.attributes.do_attr('add_new')" title="Add new"><span class="glyphicon glyphicon-plus"></span></a>
+						<a href="#/interface/{{m.session_id}}" class="btn-panel text-success float-right" ng-click="networks.attributes.do_attr('combine')" title="Combine"><span class="glyphicon glyphicon-resize-small"></span></a>
+					</span>
+					<span ng-show="networks.attributes.is_attr_doing('add_new')">Add new attribute</span>
+					<span ng-show="networks.attributes.is_attr_doing('combine')">Combine attributes</span>
+					<span ng-show="networks.attributes.is_attr_doing('rename')">Rename attribute</span>
+					<span ng-show="networks.attributes.is_attr_doing('remove')">Remove attribute</span>
+					<span ng-show="networks.attributes.is_attr_doing('replace')">Replace attribute</span>
+				</div>
+				<div class="panel-body">
+					<!-- list -->
+					<div ng-if="!networks.attributes.is_attr_doing()">
+						<h4>Node attributes:</h4>
+						<div class="alert alert-info" ng-repeat="attr in canvas.get_attributes('nodes')">
+							{{attr}}
+							<!-- overwrite -->
+							<a href="#/interface/{{m.session_id}}" class="attr-action float-right" title='Overwrite' ng-if="!canvas.is_attr_reserved('nodes', attr)" ng-click="networks.attributes.do_attr('overwrite'); networks.attributes.list.options.type='nodes'; networks.attributes.list.options.name=attr;"><span class="glyphicon glyphicon-import"></span></a>
+							<!-- remove -->
+							<a href="#/interface/{{m.session_id}}" class="attr-action float-right" title='Remove' ng-if="!canvas.is_attr_reserved('nodes', attr)" ng-click="networks.attributes.attr_remove(canvas.current, m.session_id, attr, 'nodes')"><span class="glyphicon glyphicon-trash"></span></a>
+							<!-- rename -->
+							<a href="#/interface/{{m.session_id}}" class="attr-action float-right" title='Rename' ng-if="!canvas.is_attr_reserved('nodes', attr)" ng-click="networks.attributes.attr_rename(canvas.current, m.session_id, attr, 'nodes')"><span class="glyphicon glyphicon-pencil"></span></a>
+						</div>
+						<hr style="margin-bottom: 2em;" />
+						<h4>Edge attributes:</h4>
+						<div class="alert alert-info" ng-repeat="attr in canvas.get_attributes('edges')">
+							{{attr}}
+							<!-- overwrite -->
+							<a href="#/interface/{{m.session_id}}" class="attr-action float-right" title='Overwrite' ng-if="!canvas.is_attr_reserved('edges', attr)" ng-click="networks.attributes.do_attr('overwrite'); networks.attributes.list.options.type='edges'; networks.attributes.list.options.name=attr;"><span class="glyphicon glyphicon-import"></span></a>
+							<!-- remove -->
+							<a href="#/interface/{{m.session_id}}" class="attr-action float-right" title='Remove' ng-if="!canvas.is_attr_reserved('edges', attr)" ng-click="networks.attributes.attr_remove(canvas.current, m.session_id, attr, 'edges')"><span class="glyphicon glyphicon-trash"></span></a>
+							<!-- rename -->
+							<a href="#/interface/{{m.session_id}}" class="attr-action float-right" title='Rename' ng-if="!canvas.is_attr_reserved('edges', attr)" ng-click="networks.attributes.attr_rename(canvas.current, m.session_id, attr, 'edges')"><span class="glyphicon glyphicon-pencil"></span></a>
+						</div>
+						<hr />
+					</div>
+					<!-- add_new -->
+					<div ng-show="networks.attributes.is_attr_doing('add_new')">
+						
+						<h4>
+							Add <select name="attr_input" id="attr_input" ng-model="networks.attributes.list.options.input">
+								<option value="">--</option>
+								<option value="manual">manually</option>
+								<option value="index">index as</option>
+								<option value="ginfo">gene info as</option>
+							</select> new 
+							<select name="attr_type" id="attr_type" ng-model="networks.attributes.list.options.type">
+								<option value="" ng-show="'manual' == networks.attributes.list.options.input">--</option>
+								<option value="edges" ng-show="'manual' == networks.attributes.list.options.input">edge</option>
+								<option value="nodes" ng-show="-1 != ['manual', 'index', 'ginfo'].indexOf(networks.attributes.list.options.input)" ng-selected="-1 != ['index', 'ginfo'].indexOf(networks.attributes.list.options.input)">node</option>
+							</select>
+							attribute.
+						</h4>
+						<p ng-show="-1 != ['manual', 'index'].indexOf(networks.attributes.list.options.input)">
+							<label for="attr_name">GO attribute name: </label>
+							<input class="form-control" type="text" id="attr_name" name="attr_name" ng-model="networks.attributes.list.options.name" />
+						</p>
+						<p ng-show="'manual' == networks.attributes.list.options.input">
+							<label for="attr_values">Comma Separated Values:</label>
+							<textarea class="form-control" name="attr_values" id="attr_values" cols="40" rows="10" ng-model="networks.attributes.list.options.values"></textarea>
+						</p>
+						<p ng-show="'index' == networks.attributes.list.options.input">
+							<label for="index">Select index:</label>
+							<select name="index" id="index" ng-model="networks.attributes.list.options.index">
+								<option value="">--</option>
+								<option value="degree">degree</option>
+								<option value="indegree">indegree</option>
+								<option value="outdegree">outdegree</option>
+								<option value="betweenness">betweenness</option>
+								<option value="closeness">closeness</option>
+							</select>
+						</p>
+						<p ng-show="'ginfo' == networks.attributes.list.options.input">
+							The following attributes will be added:
+							<ul ng-show="'ginfo' == networks.attributes.list.options.input">
+								<li>go: gene ontologies</li>
+							</ul>
+						</p>
+						<p ng-show="'ginfo' == networks.attributes.list.options.input">
+							<label for="hugo-containing-attr">Select the attribute containing the HUGO names.</label>
+							<select name="hugo-containing-attr" class="form-control" id="hugo-containing-attr" ng-model="networks.attributes.list.options.hugo">
+								<option value="">--</option>
+								<option value="{{attr}}" ng-repeat="attr in canvas.get_attributes('nodes')">{{attr}}</option>
+							</select>
+						</p>
+
+						<p class="alert alert-danger" ng-repeat="msg in networks.attributes.list.options.errMsg">{{msg}}</p>
+
+						<button class="btn abort-btn btn-success" ng-click="networks.attributes.attr_apply(canvas.current, m.session_id, 'add_new')">apply</button> <button class="btn abort-btn btn-danger" ng-click="networks.attributes.do_attr(null)">abort</button>
+					</div>
+					<!-- combine -->
+					<div ng-show="networks.attributes.is_attr_doing('combine')">
+						<h4>
+							Combine 
+							<select name="attr_type" id="attr_type" ng-model="networks.attributes.list.options.type">
+								<option value="">--</option>
+								<option value="edges">edge</option>
+								<option value="nodes">node</option>
+							</select>
+							attributes.
+						</h4>
+						<hr>
+						<p>
+							<label for="attr_name">New attribute name: </label>
+							<input class="form-control" type="text" id="attr_name" name="attr_name" ng-model="networks.attributes.list.options.name" />
+						</p>
+						<hr>
+						<div ng-show="null != networks.attributes.list.options.type">
+							<h4>Select the attributes that you want to combine:</h4>
+							<label class="attr-list alert" ng-class="{'alert-info' : !networks.attributes.list[networks.attributes.list.options.type][attr], 'alert-success' : networks.attributes.list[networks.attributes.list.options.type][attr]}" for="attr-{{attr}}" ng-repeat="attr in canvas.get_attributes(networks.attributes.list.options.type)">
+								<input type="checkbox" id="attr-{{attr}}" name="attr-{{attr}}" ng-model="networks.attributes.list[networks.attributes.list.options.type][attr]"> {{attr}}
+							</label>
+						</div>
+						<hr>
+						<div ng-show="networks.attributes.attr_selected()">
+							<h4>Write a function in R code:</h4>
+							<textarea class="form-control" name="attr_function" id="attr_function" cols="40" rows="5" ng-model="networks.attributes.list.options.function" placeholder="_0_*log(_1_)"></textarea>
+							<h4>In the function use the attributes as follows:</h4>
+							<ul>
+								<li ng-repeat="attr in networks.attributes.attr_get_selected()"><code>{{attr}}</code> as <code>_{{$index}}_</code></li>
+							</ul>
+						</div>
+
+						<p class="alert alert-danger" ng-repeat="msg in networks.attributes.list.options.errMsg">{{msg}}</p>
+
+						<button class="btn abort-btn btn-success" ng-click="networks.attributes.attr_apply(canvas.current, m.session_id, 'combine')">apply</button> <button class="btn abort-btn btn-danger" ng-click="networks.attributes.do_attr(null)">abort</button>
+					</div>
 					<!-- overwrite -->
-					<a href="#/interface/{{m.session_id}}" ng-class="{'text-danger' : !networks.isConverted(net)}" class="net-action float-right" title='Overwrite' ng-click="networks.overwrite(m.session_id, net.id, settings.info.default_layout)"><span class="glyphicon glyphicon-import"></span></a>
-					<!-- remove -->
-					<a href="#/interface/{{m.session_id}}" ng-class="{'text-danger' : !networks.isConverted(net)}" class="net-action float-right" title='Remove' ng-click="networks.remove(m.session_id, net.id)"><span class="glyphicon glyphicon-trash"></span></a>
-					<!-- rename -->
-					<a href="#/interface/{{m.session_id}}" ng-class="{'text-danger' : !networks.isConverted(net)}" class="net-action float-right" title='Rename' ng-click="networks.rename(m.session_id, net.id)"><span class="glyphicon glyphicon-pencil"></span></a>
-					<!-- download -->
-					<a href="#/interface/{{m.session_id}}" ng-class="{'text-danger' : !networks.isConverted(net)}" class="net-action float-right" title='Download' ng-click="networks.download(m.session_id, net.id)"><span class="glyphicon glyphicon-cloud-download"></span></a>
-					<!-- inspect -->
-					<a href="#/interface/{{m.session_id}}" ng-class="{'text-danger' : !networks.isConverted(net)}" class="net-action float-right" title='Inspect' ng-click="networks.inspect(net.id)"><span class="glyphicon glyphicon-search"></span></a>
-				</div>
-
-				<p ng-show='networks.list == null'>
-					<i>You have not uploaded any network yet...</i><br />
-					Visit the <a href="#/upload/{{m.session_id}}">uploader</a>!
-				</p>
-			</div>
-
-			<div class="panel-body" ng-show="networks.conversion.is()">
-				<label class="group-selection-option alert alert-warning" for="convert-all"><input type="checkbox" id="convert-all" name="convert-all" ng-model="networks.conversion.group.all" ng-click="networks.conversion.un_select_all()" /> Un/Select all</label><label class="group-selection-option alert alert-success" for="convert-filter"><input type="checkbox" id="convert-filter" name="convert-filter" ng-model="networks.conversion.group.filter" ng-click="networks.conversion.toggle_filter()" /> Custom Filters</label>
-
-				<div class="panel panel-success" ng-show="networks.conversion.group.filter">
-					<div class="panel-success panel-heading">
-						Filter
-						<a href="#/interface/{{m.session_id}}" class="btn-panel float-right" ng-click="networks.conversion.add_filter()" title="Add new"><span class="text-success glyphicon glyphicon-plus"></span></a>
-					</div>
-					<div class="panel-body">
-						<table class="filter-selection">
-							<tr>
-								<td></td>
-								<th>Attribute</th>
-								<th>Condition</th>
-								<th>Value</th>
-							</tr>
-							<tr ng-repeat="filter in networks.conversion.filters">
-								<td class="text-align-left">
-									<select class="form-control" ng-show="!$first" ng-model="networks.conversion.filters[$index].combine" ng-change="networks.conversion.apply_filters()">
-										<option value="">--</option>
-										<option value="AND">AND</option>
-										<option value="OR">OR</option>
-									</select>
-								</td>
-								<td>
-									<select class="form-control" style="max-width: 100px;" ng-model="networks.conversion.filters[$index].attribute" ng-change="networks.conversion.apply_filters(); networks.conversion.filters[$index].value=''">
-										<option value="">--</option>
-										<option value="{{attr}}" ng-repeat="attr in networks.conversion.group.net_attributes">{{networks.conversion.extract_attr_name(attr)}}</option>
-									</select>
-								</td>
-								<td>
-									<select class="form-control" ng-model="networks.conversion.filters[$index].condition" ng-change="networks.conversion.apply_filters()">
-										<option value="" ng-show="!networks.conversion.filters[$index].object">--</option>
-										<option value="e" ng-show="!networks.conversion.filters[$index].object">=</option>
-										<option value="ne" ng-show="!networks.conversion.filters[$index].object">&#8800;</option>
-										<option value="lt" ng-show="!networks.conversion.filters[$index].object">&lt;</option>
-										<option value="le" ng-show="!networks.conversion.filters[$index].object">&le;</option>
-										<option value="gt" ng-show="!networks.conversion.filters[$index].object">&gt;</option>
-										<option value="ge" ng-show="!networks.conversion.filters[$index].object">&ge;</option>
-										<option value="c" ng-selected="networks.conversion.filters[$index].object" ng-show="networks.conversion.filters[$index].object">contains</option>
-									</select>
-								</td>
-								<td>
-									<select class="form-control" style="max-width: 100px;" ng-model="networks.conversion.filters[$index].value" ng-change="networks.conversion.apply_filters()">
-										<option value="" ng-selected="-1 == networks.conversion.get_net_attr_values($index).indexOf(networks.conversion.filters[$index].value)">--</option>
-										<option value="{{v}}" ng-repeat="v in networks.conversion.get_net_attr_values($index)">{{v}}</option>
-									</select>
-								</td>
-							</tr>
-						</table>
-					</div>
-				</div>
-
-				<h4>Select the networks to convert:</h4>
-
-				<label for="net-{{net.id}}" class="alert" ng-repeat='net in networks.conversion.group.net_list | filter:networks.isToConvert' ng-show='networks.list != null' ng-class="{'alert-info' : networks.isConverted(net), 'alert-danger' : !networks.isConverted(net)}" style="width: 100%;">
-					<input id="net-{{net.id}}" name="net-{{net.id}}" type="checkbox" ng-model="networks.conversion.group.networks[net.name]" ng-click="networks.conversion.check(net.name)" />
-					{{net.name}}
-				</label>
-
-				<button class="btn btn-select_group btn-success" ng-click="networks.start_converting_group(settings.info.default_layout)">apply</button>
-			</div>
-		</div>
-
-		<div class='left-panel attributes-panel panel panel-primary' ng-show='panels.show.attributes'>
-			<div class="panel-heading">
-				<span ng-show="!networks.attributes.is_attr_doing()">
-					Attributes
-					<a href="#/interface/{{m.session_id}}" class="btn-panel text-success float-right" ng-click="networks.attributes.do_attr('add_new')" title="Add new"><span class="glyphicon glyphicon-plus"></span></a>
-					<a href="#/interface/{{m.session_id}}" class="btn-panel text-success float-right" ng-click="networks.attributes.do_attr('combine')" title="Combine"><span class="glyphicon glyphicon-resize-small"></span></a>
-				</span>
-				<span ng-show="networks.attributes.is_attr_doing('add_new')">Add new attribute</span>
-				<span ng-show="networks.attributes.is_attr_doing('combine')">Combine attributes</span>
-				<span ng-show="networks.attributes.is_attr_doing('rename')">Rename attribute</span>
-				<span ng-show="networks.attributes.is_attr_doing('remove')">Remove attribute</span>
-				<span ng-show="networks.attributes.is_attr_doing('replace')">Replace attribute</span>
-			</div>
-			<div class="panel-body">
-				<!-- list -->
-				<div ng-if="!networks.attributes.is_attr_doing()">
-					<h4>Node attributes:</h4>
-					<div class="alert alert-info" ng-repeat="attr in canvas.get_attributes('nodes')">
-						{{attr}}
-						<!-- overwrite -->
-						<a href="#/interface/{{m.session_id}}" class="attr-action float-right" title='Overwrite' ng-if="!canvas.is_attr_reserved('nodes', attr)" ng-click="networks.attributes.do_attr('overwrite'); networks.attributes.list.options.type='nodes'; networks.attributes.list.options.name=attr;"><span class="glyphicon glyphicon-import"></span></a>
-						<!-- remove -->
-						<a href="#/interface/{{m.session_id}}" class="attr-action float-right" title='Remove' ng-if="!canvas.is_attr_reserved('nodes', attr)" ng-click="networks.attributes.attr_remove(canvas.current, m.session_id, attr, 'nodes')"><span class="glyphicon glyphicon-trash"></span></a>
-						<!-- rename -->
-						<a href="#/interface/{{m.session_id}}" class="attr-action float-right" title='Rename' ng-if="!canvas.is_attr_reserved('nodes', attr)" ng-click="networks.attributes.attr_rename(canvas.current, m.session_id, attr, 'nodes')"><span class="glyphicon glyphicon-pencil"></span></a>
-					</div>
-					<hr style="margin-bottom: 2em;" />
-					<h4>Edge attributes:</h4>
-					<div class="alert alert-info" ng-repeat="attr in canvas.get_attributes('edges')">
-						{{attr}}
-						<!-- overwrite -->
-						<a href="#/interface/{{m.session_id}}" class="attr-action float-right" title='Overwrite' ng-if="!canvas.is_attr_reserved('edges', attr)" ng-click="networks.attributes.do_attr('overwrite'); networks.attributes.list.options.type='edges'; networks.attributes.list.options.name=attr;"><span class="glyphicon glyphicon-import"></span></a>
-						<!-- remove -->
-						<a href="#/interface/{{m.session_id}}" class="attr-action float-right" title='Remove' ng-if="!canvas.is_attr_reserved('edges', attr)" ng-click="networks.attributes.attr_remove(canvas.current, m.session_id, attr, 'edges')"><span class="glyphicon glyphicon-trash"></span></a>
-						<!-- rename -->
-						<a href="#/interface/{{m.session_id}}" class="attr-action float-right" title='Rename' ng-if="!canvas.is_attr_reserved('edges', attr)" ng-click="networks.attributes.attr_rename(canvas.current, m.session_id, attr, 'edges')"><span class="glyphicon glyphicon-pencil"></span></a>
-					</div>
-					<hr />
-				</div>
-				<!-- add_new -->
-				<div ng-show="networks.attributes.is_attr_doing('add_new')">
-					
-					<h4>
-						Add <select name="attr_input" id="attr_input" ng-model="networks.attributes.list.options.input">
-							<option value="">--</option>
-							<option value="manual">manually</option>
-							<option value="index">index as</option>
-							<option value="ginfo">gene info as</option>
-						</select> new 
-						<select name="attr_type" id="attr_type" ng-model="networks.attributes.list.options.type">
-							<option value="" ng-show="'manual' == networks.attributes.list.options.input">--</option>
-							<option value="edges" ng-show="'manual' == networks.attributes.list.options.input">edge</option>
-							<option value="nodes" ng-show="-1 != ['manual', 'index', 'ginfo'].indexOf(networks.attributes.list.options.input)" ng-selected="-1 != ['index', 'ginfo'].indexOf(networks.attributes.list.options.input)">node</option>
-						</select>
-						attribute.
-					</h4>
-					<p ng-show="-1 != ['manual', 'index'].indexOf(networks.attributes.list.options.input)">
-						<label for="attr_name">GO attribute name: </label>
-						<input class="form-control" type="text" id="attr_name" name="attr_name" ng-model="networks.attributes.list.options.name" />
-					</p>
-					<p ng-show="'manual' == networks.attributes.list.options.input">
-						<label for="attr_values">Comma Separated Values:</label>
-						<textarea class="form-control" name="attr_values" id="attr_values" cols="40" rows="10" ng-model="networks.attributes.list.options.values"></textarea>
-					</p>
-					<p ng-show="'index' == networks.attributes.list.options.input">
-						<label for="index">Select index:</label>
-						<select name="index" id="index" ng-model="networks.attributes.list.options.index">
-							<option value="">--</option>
-							<option value="degree">degree</option>
-							<option value="indegree">indegree</option>
-							<option value="outdegree">outdegree</option>
-							<option value="betweenness">betweenness</option>
-							<option value="closeness">closeness</option>
-						</select>
-					</p>
-					<p ng-show="'ginfo' == networks.attributes.list.options.input">
-						The following attributes will be added:
-						<ul ng-show="'ginfo' == networks.attributes.list.options.input">
-							<li>go: gene ontologies</li>
-						</ul>
-					</p>
-					<p ng-show="'ginfo' == networks.attributes.list.options.input">
-						<label for="hugo-containing-attr">Select the attribute containing the HUGO names.</label>
-						<select name="hugo-containing-attr" class="form-control" id="hugo-containing-attr" ng-model="networks.attributes.list.options.hugo">
-							<option value="">--</option>
-							<option value="{{attr}}" ng-repeat="attr in canvas.get_attributes('nodes')">{{attr}}</option>
-						</select>
-					</p>
-
-					<p class="alert alert-danger" ng-repeat="msg in networks.attributes.list.options.errMsg">{{msg}}</p>
-
-					<button class="btn abort-btn btn-success" ng-click="networks.attributes.attr_apply(canvas.current, m.session_id, 'add_new')">apply</button> <button class="btn abort-btn btn-danger" ng-click="networks.attributes.do_attr(null)">abort</button>
-				</div>
-				<!-- combine -->
-				<div ng-show="networks.attributes.is_attr_doing('combine')">
-					<h4>
-						Combine 
-						<select name="attr_type" id="attr_type" ng-model="networks.attributes.list.options.type">
-							<option value="">--</option>
-							<option value="edges">edge</option>
-							<option value="nodes">node</option>
-						</select>
-						attributes.
-					</h4>
-					<hr>
-					<p>
-						<label for="attr_name">New attribute name: </label>
-						<input class="form-control" type="text" id="attr_name" name="attr_name" ng-model="networks.attributes.list.options.name" />
-					</p>
-					<hr>
-					<div ng-show="null != networks.attributes.list.options.type">
-						<h4>Select the attributes that you want to combine:</h4>
-						<label class="attr-list alert" ng-class="{'alert-info' : !networks.attributes.list[networks.attributes.list.options.type][attr], 'alert-success' : networks.attributes.list[networks.attributes.list.options.type][attr]}" for="attr-{{attr}}" ng-repeat="attr in canvas.get_attributes(networks.attributes.list.options.type)">
-							<input type="checkbox" id="attr-{{attr}}" name="attr-{{attr}}" ng-model="networks.attributes.list[networks.attributes.list.options.type][attr]"> {{attr}}
-						</label>
-					</div>
-					<hr>
-					<div ng-show="networks.attributes.attr_selected()">
-						<h4>Write a function in R code:</h4>
-						<textarea class="form-control" name="attr_function" id="attr_function" cols="40" rows="5" ng-model="networks.attributes.list.options.function" placeholder="_0_*log(_1_)"></textarea>
-						<h4>In the function use the attributes as follows:</h4>
-						<ul>
-							<li ng-repeat="attr in networks.attributes.attr_get_selected()"><code>{{attr}}</code> as <code>_{{$index}}_</code></li>
-						</ul>
-					</div>
-
-					<p class="alert alert-danger" ng-repeat="msg in networks.attributes.list.options.errMsg">{{msg}}</p>
-
-					<button class="btn abort-btn btn-success" ng-click="networks.attributes.attr_apply(canvas.current, m.session_id, 'combine')">apply</button> <button class="btn abort-btn btn-danger" ng-click="networks.attributes.do_attr(null)">abort</button>
-				</div>
-				<!-- overwrite -->
-				<div ng-show="networks.attributes.is_attr_doing('overwrite')">
-					
-					<h4>
-						Owerwrite <select name="attr_input" id="attr_input" ng-model="networks.attributes.list.options.input">
-							<option value="">--</option>
-							<option value="manual">manually</option>
-							<option value="index" ng-show="'nodes' == networks.attributes.list.options.type">with index</option>
-						</select>.
-					</h4>
-					<p ng-show="'manual' == networks.attributes.list.options.input">
-						<label for="attr_values">Comma Separated Values:</label>
-						<textarea class="form-control" name="attr_values" id="attr_values" cols="40" rows="10" ng-model="networks.attributes.list.options.values"></textarea>
-					</p>
-					<p ng-show="'index' == networks.attributes.list.options.input">
-						<label for="index">Select index:</label>
-						<select name="index" id="index" ng-model="networks.attributes.list.options.index">
-							<option value="">--</option>
-							<option value="degree">degree</option>
-							<option value="indegree">indegree</option>
-							<option value="outdegree">outdegree/option>
-							<option value="betweenness">betweenness</option>
-							<option value="closeness">closeness</option>
-						</select>
-					</p>
-
-					<p class="alert alert-danger" ng-repeat="msg in networks.attributes.list.options.errMsg">{{msg}}</p>
-
-					<button class="btn abort-btn btn-success" ng-click="networks.attributes.attr_apply(canvas.current, m.session_id, 'add_new')">apply</button> <button class="btn abort-btn btn-danger" ng-click="networks.attributes.do_attr(null)">abort</button>
-				</div>
-
-				<p class="footnote">
-					All the changes applied to the attributes are applied only
-					to the current visualization and are not saved on the server.
-					To do so, please use the <u><i>overwrite</i></u> or the <u><i>save</i></u> functions.
-				</p>
-			</div>
-		</div>
-
-		<div class='left-panel operations-panel panel panel-danger' ng-show='panels.show.operations'>
-			<div class="panel-heading">
-				<span ng-show="commander.is_operation()">Operate on networks</span>
-				<span ng-show="commander.is_operation('merge')">Merge networks</span>
-				<span ng-show="commander.is_operation('intersect')">Intersect networks</span>
-				<span ng-show="commander.is_operation('subtract')">Subtract networks</span>
-				<span ng-show="commander.is_operation('contains')">Is Subnetwork?</span>
-				<span ng-show="commander.is_operation('distances')">Calculate distance</span>
-			</div>
-			<!-- operation index -->
-			<div class="panel-body" ng-show="commander.is_operation()">
-				<!-- merge -->
-				<div class="btn operation-btn btn-danger btn-block" ng-show="!commander.operation.status" ng-click="commander.init_operation('merge', networks.list, m.session_id)">
-					Merge networks
-				</div>
-				<!-- intersect -->
-				<div class="btn operation-btn btn-danger btn-block" ng-show="!commander.operation.status" ng-click="commander.init_operation('intersect', networks.list, m.session_id)">
-					Intersect networks
-				</div>
-				<!-- subtract -->
-				<div class="btn operation-btn btn-danger btn-block" ng-show="!commander.operation.status" ng-click="commander.init_operation('subtract', networks.list, m.session_id)">
-					Subtract networks
-				</div>
-				<!-- contains -->
-				<div class="btn operation-btn btn-info btn-block" ng-show="!commander.operation.status" ng-click="commander.init_operation('contains', networks.list, m.session_id)">
-					is Subnetwork
-				</div>
-				<!-- distances -->
-				<div class="btn operation-btn btn-success btn-block" ng-show="!commander.operation.status" ng-click="commander.init_operation('distances', networks.list, m.session_id)">
-					Calculate distance
-				</div>
-			</div>
-			<!-- merge body -->
-			<div class="panel-body" ng-show="commander.is_operation('merge')">
-				<div class="merge-page-1" ng-show="commander.merge.is_page(1)">
-					<label for="merge-new-name">
-						New name:
-						<input class="form-control" type="text" id="merge-new-name" name="merge-new-name" ng-model="commander.merge.group.new_name" />
-					</label>
-					<hr />
-
-					<h4>Select the networks to merge:</h4>
-					<label class="group-selection-option alert alert-warning" for="merge-all"><input type="checkbox" id="merge-all" name="merge-all" ng-model="commander.merge.group.all" ng-click="commander.merge.un_select_all(); commander.merge.get_attrs({nodes:[],edges:[]});" /> Un/Select all</label><label class="group-selection-option alert alert-success" for="merge-filter"><input type="checkbox" id="merge-filter" name="merge-filter" ng-model="commander.merge.group.filter" ng-click="commander.merge.toggle_filter()" /> Custom Filters</label>
-
-					<div class="panel panel-success" ng-show="commander.merge.group.filter">
-						<div class="panel-success panel-heading">
-							Filter
-							<a href="#/interface/{{m.session_id}}" class="btn-panel float-right" ng-click="commander.merge.add_filter()" title="Add new"><span class="text-success glyphicon glyphicon-plus"></span></a>
-						</div>
-						<div class="panel-body">
-							<table class="filter-selection">
-								<tr>
-									<td></td>
-									<th>Attribute</th>
-									<th>Condition</th>
-									<th>Value</th>
-								</tr>
-								<tr ng-repeat="filter in commander.merge.filters">
-									<td class="text-align-left">
-										<select class="form-control" ng-show="!$first" ng-model="commander.merge.filters[$index].combine" ng-change="commander.merge.apply_filters()">
-											<option value="">--</option>
-											<option value="AND">AND</option>
-											<option value="OR">OR</option>
-										</select>
-									</td>
-									<td>
-										<select class="form-control" style="max-width: 100px;" ng-model="commander.merge.filters[$index].attribute" ng-change="commander.merge.apply_filters(); commander.merge.filters[$index].value=''">
-											<option value="">--</option>
-											<option value="{{attr}}" ng-repeat="attr in commander.merge.group.net_attributes">{{commander.merge.extract_attr_name(attr)}}</option>
-										</select>
-									</td>
-									<td>
-										<select class="form-control" ng-model="commander.merge.filters[$index].condition" ng-change="commander.merge.apply_filters()">
-											<option value="" ng-show="!commander.merge.filters[$index].object">--</option>
-											<option value="e" ng-show="!commander.merge.filters[$index].object">=</option>
-											<option value="ne" ng-show="!commander.merge.filters[$index].object">&#8800;</option>
-											<option value="lt" ng-show="!commander.merge.filters[$index].object">&lt;</option>
-											<option value="le" ng-show="!commander.merge.filters[$index].object">&le;</option>
-											<option value="gt" ng-show="!commander.merge.filters[$index].object">&gt;</option>
-											<option value="ge" ng-show="!commander.merge.filters[$index].object">&ge;</option>
-											<option value="c" ng-selected="commander.merge.filters[$index].object" ng-show="commander.merge.filters[$index].object">contains</option>
-										</select>
-									</td>
-									<td>
-										<select class="form-control" style="max-width: 100px;" ng-model="commander.merge.filters[$index].value" ng-change="commander.merge.apply_filters()">
-											<option value="" ng-selected="-1 == commander.merge.get_net_attr_values($index).indexOf(commander.merge.filters[$index].value)">--</option>
-											<option value="{{v}}" ng-repeat="v in commander.merge.get_net_attr_values($index)">{{v}}</option>
-										</select>
-									</td>
-								</tr>
-							</table>
-						</div>
-					</div>
-
-					<label for="net-{{net.id}}" class="alert" ng-repeat='net in commander.merge.group.net_list | filter:networks.isConverted' ng-show='networks.list != null' ng-class="{'alert-info' : networks.isConverted(net), 'alert-danger' : !networks.isConverted(net)}" style="width: 100%;">
-						<input id="net-{{net.id}}" name="net-{{net.id}}" type="checkbox" ng-model="commander.merge.group.networks[net.name]" ng-click="commander.merge.check(net.name); commander.merge.get_attrs({nodes:[],edges:[]});" />
-						{{net.name}}
-					</label>
-
-					<button class="btn end-btn btn-success" ng-click='commander.merge_set_page(2)'>next</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
-				</div>
-
-				<div class="merge-page-2" ng-show="commander.merge.is_page(2)">
-					<h4>Select the attributes to use for identity definitions:</h4>
-					<div>
-						<h5>Nodes</h5>
-						<label class="alert alert-warning attr-select" for="attr-node-{{attr}}" ng-repeat="attr in commander.merge.group.nodes">
-							<input type="checkbox" name="attr-node-{{attr}}" id="attr-node-{{attr}}" ng-model="commander.merge.n_attr_identity[attr]" />
-							{{attr}}
-						</label>
-						<i ng-show="0 == commander.merge.group.nodes.length">No node attributes...</i>
-					</div>
-					<div>
-						<h5>Edges</h5>
-						<label class="alert alert-warning attr-select" for="attr-edge-{{attr}}" ng-repeat="attr in commander.merge.group.edges">
-							<input type="checkbox" name="attr-edge-{{attr}}" id="attr-edge-{{attr}}" ng-model="commander.merge.e_attr_identity[attr]" />
-							{{attr}}
-						</label>
-						<i ng-show="0 == commander.merge.group.edges.length">No edge attributes...</i>
-					</div>
-
-					<br />
-					<button class="btn end-btn btn-success" ng-click='commander.merge_set_page(3)'>next</button><button class="btn end-btn btn-warning" ng-click='commander.merge.set_page(1)'>back</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
-				</div>
-
-				<div class="merge-page-3" ng-show="commander.merge.is_page(3)">
-					<h4>Select the behavior for non-identity attributes:</h4>
-					<div>
-						<div ng-repeat="(attr, behavior) in commander.merge.n_attr_behavior">
-							node-{{attr}}
-							<select class='form-control' name="node-{{attr}}-behavior" id="node-{{attr}}-behavior" ng-model="commander.merge.n_attr_behavior[attr]">
-								<option value="ignore">ignore</option>
-								<option value="sum">sum</option>
-								<option value="prod">prod</option>
-								<option value="min">min</option>
-								<option value="max">max</option>
-								<option value="random">random</option>
-								<option value="mean">mean</option>
-								<option value="median">median</option>
-								<option value="concat">concat</option>
-								<option value="first">first</option>
-								<option value="last">last</option>
+					<div ng-show="networks.attributes.is_attr_doing('overwrite')">
+						
+						<h4>
+							Owerwrite <select name="attr_input" id="attr_input" ng-model="networks.attributes.list.options.input">
+								<option value="">--</option>
+								<option value="manual">manually</option>
+								<option value="index" ng-show="'nodes' == networks.attributes.list.options.type">with index</option>
+							</select>.
+						</h4>
+						<p ng-show="'manual' == networks.attributes.list.options.input">
+							<label for="attr_values">Comma Separated Values:</label>
+							<textarea class="form-control" name="attr_values" id="attr_values" cols="40" rows="10" ng-model="networks.attributes.list.options.values"></textarea>
+						</p>
+						<p ng-show="'index' == networks.attributes.list.options.input">
+							<label for="index">Select index:</label>
+							<select name="index" id="index" ng-model="networks.attributes.list.options.index">
+								<option value="">--</option>
+								<option value="degree">degree</option>
+								<option value="indegree">indegree</option>
+								<option value="outdegree">outdegree/option>
+								<option value="betweenness">betweenness</option>
+								<option value="closeness">closeness</option>
 							</select>
-						</div>
+						</p>
+
+						<p class="alert alert-danger" ng-repeat="msg in networks.attributes.list.options.errMsg">{{msg}}</p>
+
+						<button class="btn abort-btn btn-success" ng-click="networks.attributes.attr_apply(canvas.current, m.session_id, 'add_new')">apply</button> <button class="btn abort-btn btn-danger" ng-click="networks.attributes.do_attr(null)">abort</button>
 					</div>
-					<div>
-						<div ng-repeat="(attr, behavior) in commander.merge.e_attr_behavior">
-							edge-{{attr}}
-							<select class='form-control' name="edge-{{attr}}-behavior" id="edge-{{attr}}-behavior" ng-model="commander.merge.e_attr_behavior[attr]">
-								<option value="ignore">ignore</option>
-								<option value="sum">sum</option>
-								<option value="prod">prod</option>
-								<option value="min">min</option>
-								<option value="max">max</option>
-								<option value="random">random</option>
-								<option value="mean">mean</option>
-								<option value="median">median</option>
-								<option value="concat">concat</option>
-								<option value="first">first</option>
-								<option value="last">last</option>
-							</select>
-						</div>
-					</div>
-					<div ng-show="0 == commander.merge.group.nodes.length"><i>No node attributes...</i></div>
-					<div ng-show="0 == commander.merge.group.edges.length"><i>No edge attributes...</i></div>
 
-					<br />
-					<button class="btn end-btn btn-success" ng-click='commander.merge_set_page(4)'>next</button><button class="btn end-btn btn-warning" ng-click='commander.merge.set_page(2)'>back</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
+					<p class="footnote">
+						All the changes applied to the attributes are applied only
+						to the current visualization and are not saved on the server.
+						To do so, please use the <u><i>overwrite</i></u> or the <u><i>save</i></u> functions.
+					</p>
 				</div>
-
-				<div class="merge-page-4" ng-show="commander.merge.is_page(4)">
-					<label for="add-node-count-attr" class="alert alert-info">
-						<input type="checkbox" id="add-node-count-attr" name="add-node-count-attr" ng-model="commander.merge.add_node_count_attr" />
-						Add node <u>count</u> attribute.
-					</label>
-					<label for="add-edge-count-attr" class="alert alert-info">
-						<input type="checkbox" id="add-edge-count-attr" name="add-edge-count-attr" ng-model="commander.merge.add_edge_count_attr" />
-						Add edge <u>count</u> attribute.
-					</label>
-
-					<br />
-					<button class="btn end-btn btn-success" ng-click='commander.apply_merge(m.session_id, settings.info.default_layout)'>merge</button><button class="btn end-btn btn-warning" ng-click='commander.merge.set_page(3)'>back</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
-				</div>
-
-				<hr style="margin-bottom: 2em;" />
-
-				<div class="alert alert-danger" ng-show="undefined != commander.merge.errMsg">{{commander.merge.errMsg}}</div>
-
-				<p class="footnote" ng-show="commander.merge.is_page(2)">
-					Remember to standardize correctly map the attributes of the networks of interest
-					using the attribute management tools.
-				</p>
 			</div>
-			<!-- intersect body -->
-			<div class="panel-body" ng-show="commander.is_operation('intersect')">
-				<div class="intersect-page-1" ng-show="commander.intersect.is_page(1)">
-					<label for="intersect-new-name">
-						New name:
-						<input class="form-control" type="text" id="intersect-new-name" name="intersect-new-name" ng-model="commander.intersect.group.new_name" />
-					</label>
-					<hr />
 
-					<h4>Select the networks to intersect:</h4>
-					<label class="group-selection-option alert alert-warning" for="intersect-all"><input type="checkbox" id="intersect-all" name="intersect-all" ng-model="commander.intersect.group.all" ng-click="commander.intersect.un_select_all(); commander.intersect.get_attrs({nodes:[],edges:[]});" /> Un/Select all</label><label class="group-selection-option alert alert-success" for="intersect-filter"><input type="checkbox" id="intersect-filter" name="intersect-filter" ng-model="commander.intersect.group.filter" ng-click="commander.intersect.toggle_filter()" /> Custom Filters</label>
-
-					<div class="panel panel-success" ng-show="commander.intersect.group.filter">
-						<div class="panel-success panel-heading">
-							Filter
-							<a href="#/interface/{{m.session_id}}" class="btn-panel float-right" ng-click="commander.intersect.add_filter()" title="Add new"><span class="text-success glyphicon glyphicon-plus"></span></a>
-						</div>
-						<div class="panel-body">
-							<table class="filter-selection">
-								<tr>
-									<td></td>
-									<th>Attribute</th>
-									<th>Condition</th>
-									<th>Value</th>
-								</tr>
-								<tr ng-repeat="filter in commander.intersect.filters">
-									<td class="text-align-left">
-										<select class="form-control" ng-show="!$first" ng-model="commander.intersect.filters[$index].combine" ng-change="commander.intersect.apply_filters()">
-											<option value="">--</option>
-											<option value="AND">AND</option>
-											<option value="OR">OR</option>
-										</select>
-									</td>
-									<td>
-										<select class="form-control" style="max-width: 100px;" ng-model="commander.intersect.filters[$index].attribute" ng-change="commander.intersect.apply_filters(); commander.intersect.filters[$index].value=''">
-											<option value="">--</option>
-											<option value="{{attr}}" ng-repeat="attr in commander.intersect.group.net_attributes">{{commander.intersect.extract_attr_name(attr)}}</option>
-										</select>
-									</td>
-									<td>
-										<select class="form-control" ng-model="commander.intersect.filters[$index].condition" ng-change="commander.intersect.apply_filters()">
-											<option value="" ng-show="!commander.intersect.filters[$index].object">--</option>
-											<option value="e" ng-show="!commander.intersect.filters[$index].object">=</option>
-											<option value="ne" ng-show="!commander.intersect.filters[$index].object">&#8800;</option>
-											<option value="lt" ng-show="!commander.intersect.filters[$index].object">&lt;</option>
-											<option value="le" ng-show="!commander.intersect.filters[$index].object">&le;</option>
-											<option value="gt" ng-show="!commander.intersect.filters[$index].object">&gt;</option>
-											<option value="ge" ng-show="!commander.intersect.filters[$index].object">&ge;</option>
-											<option value="c" ng-selected="commander.intersect.filters[$index].object" ng-show="commander.intersect.filters[$index].object">contains</option>
-										</select>
-									</td>
-									<td>
-										<select class="form-control" style="max-width: 100px;" ng-model="commander.intersect.filters[$index].value" ng-change="commander.intersect.apply_filters()">
-											<option value="" ng-selected="-1 == commander.intersect.get_net_attr_values($index).indexOf(commander.intersect.filters[$index].value)">--</option>
-											<option value="{{v}}" ng-repeat="v in commander.intersect.get_net_attr_values($index)">{{v}}</option>
-										</select>
-									</td>
-								</tr>
-							</table>
-						</div>
-					</div>
-
-					<label for="net-{{net.id}}" class="alert" ng-repeat='net in commander.intersect.group.net_list | filter:networks.isConverted' ng-show='networks.list != null' ng-class="{'alert-info' : networks.isConverted(net), 'alert-danger' : !networks.isConverted(net)}" style="width: 100%;">
-						<input id="net-{{net.id}}" name="net-{{net.id}}" type="checkbox" ng-model="commander.intersect.group.networks[net.name]" ng-click="commander.intersect.check(net.name); commander.intersect.get_attrs({nodes:[],edges:[]});" />
-						{{net.name}}
-					</label>
-
-					<button class="btn end-btn btn-success" ng-click='commander.intersect_set_page(2)'>next</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
+			<div class='left-panel operations-panel panel panel-danger' ng-show='panels.show.operations'>
+				<div class="panel-heading">
+					<span ng-show="commander.is_operation()">Operate on networks</span>
+					<span ng-show="commander.is_operation('merge')">Merge networks</span>
+					<span ng-show="commander.is_operation('intersect')">Intersect networks</span>
+					<span ng-show="commander.is_operation('subtract')">Subtract networks</span>
+					<span ng-show="commander.is_operation('contains')">Is Subnetwork?</span>
+					<span ng-show="commander.is_operation('distances')">Calculate distance</span>
 				</div>
-
-				<div class="intersect-page-2" ng-show="commander.intersect.is_page(2)">
-					<h4>Select the attributes to use for identity definitions:</h4>
-					<div>
-						<h5>Nodes</h5>
-						<label class="alert alert-warning attr-select" for="attr-node-{{attr}}" ng-repeat="attr in commander.intersect.group.nodes">
-							<input type="checkbox" name="attr-node-{{attr}}" id="attr-node-{{attr}}" ng-model="commander.intersect.n_attr_identity[attr]" />
-							{{attr}}
+				<!-- operation index -->
+				<div class="panel-body" ng-show="commander.is_operation()">
+					<!-- merge -->
+					<div class="btn operation-btn btn-danger btn-block" ng-show="!commander.operation.status" ng-click="commander.init_operation('merge', networks.list, m.session_id)">
+						Merge networks
+					</div>
+					<!-- intersect -->
+					<div class="btn operation-btn btn-danger btn-block" ng-show="!commander.operation.status" ng-click="commander.init_operation('intersect', networks.list, m.session_id)">
+						Intersect networks
+					</div>
+					<!-- subtract -->
+					<div class="btn operation-btn btn-danger btn-block" ng-show="!commander.operation.status" ng-click="commander.init_operation('subtract', networks.list, m.session_id)">
+						Subtract networks
+					</div>
+					<!-- contains -->
+					<div class="btn operation-btn btn-info btn-block" ng-show="!commander.operation.status" ng-click="commander.init_operation('contains', networks.list, m.session_id)">
+						is Subnetwork
+					</div>
+					<!-- distances -->
+					<div class="btn operation-btn btn-success btn-block" ng-show="!commander.operation.status" ng-click="commander.init_operation('distances', networks.list, m.session_id)">
+						Calculate distance
+					</div>
+				</div>
+				<!-- merge body -->
+				<div class="panel-body" ng-show="commander.is_operation('merge')">
+					<div class="merge-page-1" ng-show="commander.merge.is_page(1)">
+						<label for="merge-new-name">
+							New name:
+							<input class="form-control" type="text" id="merge-new-name" name="merge-new-name" ng-model="commander.merge.group.new_name" />
 						</label>
-						<i ng-show="0 == commander.intersect.group.nodes.length">No node attributes...</i>
-					</div>
-					<div>
-						<h5>Edges</h5>
-						<label class="alert alert-warning attr-select" for="attr-edge-{{attr}}" ng-repeat="attr in commander.intersect.group.edges">
-							<input type="checkbox" name="attr-edge-{{attr}}" id="attr-edge-{{attr}}" ng-model="commander.intersect.e_attr_identity[attr]" />
-							{{attr}}
+						<hr />
+
+						<h4>Select the networks to merge:</h4>
+						<label class="group-selection-option alert alert-warning" for="merge-all"><input type="checkbox" id="merge-all" name="merge-all" ng-model="commander.merge.group.all" ng-click="commander.merge.un_select_all(); commander.merge.get_attrs({nodes:[],edges:[]});" /> Un/Select all</label><label class="group-selection-option alert alert-success" for="merge-filter"><input type="checkbox" id="merge-filter" name="merge-filter" ng-model="commander.merge.group.filter" ng-click="commander.merge.toggle_filter()" /> Custom Filters</label>
+
+						<div class="panel panel-success" ng-show="commander.merge.group.filter">
+							<div class="panel-success panel-heading">
+								Filter
+								<a href="#/interface/{{m.session_id}}" class="btn-panel float-right" ng-click="commander.merge.add_filter()" title="Add new"><span class="text-success glyphicon glyphicon-plus"></span></a>
+							</div>
+							<div class="panel-body">
+								<table class="filter-selection">
+									<tr>
+										<td></td>
+										<th>Attribute</th>
+										<th>Condition</th>
+										<th>Value</th>
+									</tr>
+									<tr ng-repeat="filter in commander.merge.filters">
+										<td class="text-align-left">
+											<select class="form-control" ng-show="!$first" ng-model="commander.merge.filters[$index].combine" ng-change="commander.merge.apply_filters()">
+												<option value="">--</option>
+												<option value="AND">AND</option>
+												<option value="OR">OR</option>
+											</select>
+										</td>
+										<td>
+											<select class="form-control" style="max-width: 100px;" ng-model="commander.merge.filters[$index].attribute" ng-change="commander.merge.apply_filters(); commander.merge.filters[$index].value=''">
+												<option value="">--</option>
+												<option value="{{attr}}" ng-repeat="attr in commander.merge.group.net_attributes">{{commander.merge.extract_attr_name(attr)}}</option>
+											</select>
+										</td>
+										<td>
+											<select class="form-control" ng-model="commander.merge.filters[$index].condition" ng-change="commander.merge.apply_filters()">
+												<option value="" ng-show="!commander.merge.filters[$index].object">--</option>
+												<option value="e" ng-show="!commander.merge.filters[$index].object">=</option>
+												<option value="ne" ng-show="!commander.merge.filters[$index].object">&#8800;</option>
+												<option value="lt" ng-show="!commander.merge.filters[$index].object">&lt;</option>
+												<option value="le" ng-show="!commander.merge.filters[$index].object">&le;</option>
+												<option value="gt" ng-show="!commander.merge.filters[$index].object">&gt;</option>
+												<option value="ge" ng-show="!commander.merge.filters[$index].object">&ge;</option>
+												<option value="c" ng-selected="commander.merge.filters[$index].object" ng-show="commander.merge.filters[$index].object">contains</option>
+											</select>
+										</td>
+										<td>
+											<select class="form-control" style="max-width: 100px;" ng-model="commander.merge.filters[$index].value" ng-change="commander.merge.apply_filters()">
+												<option value="" ng-selected="-1 == commander.merge.get_net_attr_values($index).indexOf(commander.merge.filters[$index].value)">--</option>
+												<option value="{{v}}" ng-repeat="v in commander.merge.get_net_attr_values($index)">{{v}}</option>
+											</select>
+										</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+
+						<label for="net-{{net.id}}" class="alert" ng-repeat='net in commander.merge.group.net_list | filter:networks.isConverted' ng-show='networks.list != null' ng-class="{'alert-info' : networks.isConverted(net), 'alert-danger' : !networks.isConverted(net)}" style="width: 100%;">
+							<input id="net-{{net.id}}" name="net-{{net.id}}" type="checkbox" ng-model="commander.merge.group.networks[net.name]" ng-click="commander.merge.check(net.name); commander.merge.get_attrs({nodes:[],edges:[]});" />
+							{{net.name}}
 						</label>
-						<i ng-show="0 == commander.intersect.group.edges.length">No edge attributes...</i>
+
+						<button class="btn end-btn btn-success" ng-click='commander.merge_set_page(2)'>next</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
 					</div>
 
-					<br />
-					<button class="btn end-btn btn-success" ng-click='commander.intersect_set_page(3)'>next</button><button class="btn end-btn btn-warning" ng-click='commander.intersect.set_page(1)'>back</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
-				</div>
-
-				<div class="intersect-page-3" ng-show="commander.intersect.is_page(3)">
-					<h4>Select the behavior for non-identity attributes:</h4>
-					<div>
-						<div ng-repeat="(attr, behavior) in commander.intersect.n_attr_behavior">
-							node-{{attr}}
-							<select class='form-control' name="node-{{attr}}-behavior" id="node-{{attr}}-behavior" ng-model="commander.intersect.n_attr_behavior[attr]">
-								<option value="ignore">ignore</option>
-								<option value="sum">sum</option>
-								<option value="prod">prod</option>
-								<option value="min">min</option>
-								<option value="max">max</option>
-								<option value="random">random</option>
-								<option value="mean">mean</option>
-								<option value="median">median</option>
-								<option value="concat">concat</option>
-								<option value="first">first</option>
-								<option value="last">last</option>
-							</select>
+					<div class="merge-page-2" ng-show="commander.merge.is_page(2)">
+						<h4>Select the attributes to use for identity definitions:</h4>
+						<div>
+							<h5>Nodes</h5>
+							<label class="alert alert-warning attr-select" for="attr-node-{{attr}}" ng-repeat="attr in commander.merge.group.nodes">
+								<input type="checkbox" name="attr-node-{{attr}}" id="attr-node-{{attr}}" ng-model="commander.merge.n_attr_identity[attr]" />
+								{{attr}}
+							</label>
+							<i ng-show="0 == commander.merge.group.nodes.length">No node attributes...</i>
 						</div>
-					</div>
-					<div>
-						<div ng-repeat="(attr, behavior) in commander.intersect.e_attr_behavior">
-							edge-{{attr}}
-							<select class='form-control' name="edge-{{attr}}-behavio" id="edge-{{attr}}-behavio" ng-model="commander.intersect.e_attr_behavior[attr]">
-								<option value="ignore">ignore</option>
-								<option value="sum">sum</option>
-								<option value="prod">prod</option>
-								<option value="min">min</option>
-								<option value="max">max</option>
-								<option value="random">random</option>
-								<option value="mean">mean</option>
-								<option value="median">median</option>
-								<option value="concat">concat</option>
-								<option value="first">first</option>
-								<option value="last">last</option>
-							</select>
+						<div>
+							<h5>Edges</h5>
+							<label class="alert alert-warning attr-select" for="attr-edge-{{attr}}" ng-repeat="attr in commander.merge.group.edges">
+								<input type="checkbox" name="attr-edge-{{attr}}" id="attr-edge-{{attr}}" ng-model="commander.merge.e_attr_identity[attr]" />
+								{{attr}}
+							</label>
+							<i ng-show="0 == commander.merge.group.edges.length">No edge attributes...</i>
 						</div>
+
+						<br />
+						<button class="btn end-btn btn-success" ng-click='commander.merge_set_page(3)'>next</button><button class="btn end-btn btn-warning" ng-click='commander.merge.set_page(1)'>back</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
 					</div>
-					<div ng-show="0 == commander.intersect.group.nodes.length">No node attributes...</div>
-					<div ng-show="0 == commander.intersect.group.edges.length">No edge attributes...</div>
 
+					<div class="merge-page-3" ng-show="commander.merge.is_page(3)">
+						<h4>Select the behavior for non-identity attributes:</h4>
+						<div>
+							<div ng-repeat="(attr, behavior) in commander.merge.n_attr_behavior">
+								node-{{attr}}
+								<select class='form-control' name="node-{{attr}}-behavior" id="node-{{attr}}-behavior" ng-model="commander.merge.n_attr_behavior[attr]">
+									<option value="ignore">ignore</option>
+									<option value="sum">sum</option>
+									<option value="prod">prod</option>
+									<option value="min">min</option>
+									<option value="max">max</option>
+									<option value="random">random</option>
+									<option value="mean">mean</option>
+									<option value="median">median</option>
+									<option value="concat">concat</option>
+									<option value="first">first</option>
+									<option value="last">last</option>
+								</select>
+							</div>
+						</div>
+						<div>
+							<div ng-repeat="(attr, behavior) in commander.merge.e_attr_behavior">
+								edge-{{attr}}
+								<select class='form-control' name="edge-{{attr}}-behavior" id="edge-{{attr}}-behavior" ng-model="commander.merge.e_attr_behavior[attr]">
+									<option value="ignore">ignore</option>
+									<option value="sum">sum</option>
+									<option value="prod">prod</option>
+									<option value="min">min</option>
+									<option value="max">max</option>
+									<option value="random">random</option>
+									<option value="mean">mean</option>
+									<option value="median">median</option>
+									<option value="concat">concat</option>
+									<option value="first">first</option>
+									<option value="last">last</option>
+								</select>
+							</div>
+						</div>
+						<div ng-show="0 == commander.merge.group.nodes.length"><i>No node attributes...</i></div>
+						<div ng-show="0 == commander.merge.group.edges.length"><i>No edge attributes...</i></div>
 
-					<br />
-					<button class="btn end-btn btn-success" ng-click='commander.apply_intersect(m.session_id, settings.info.default_layout)'>intersect</button><button class="btn end-btn btn-warning" ng-click='commander.intersect.set_page(2)'>back</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
-				</div>
+						<br />
+						<button class="btn end-btn btn-success" ng-click='commander.merge_set_page(4)'>next</button><button class="btn end-btn btn-warning" ng-click='commander.merge.set_page(2)'>back</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
+					</div>
 
-				<hr style="margin-bottom: 2em;" />
+					<div class="merge-page-4" ng-show="commander.merge.is_page(4)">
+						<label for="add-node-count-attr" class="alert alert-info">
+							<input type="checkbox" id="add-node-count-attr" name="add-node-count-attr" ng-model="commander.merge.add_node_count_attr" />
+							Add node <u>count</u> attribute.
+						</label>
+						<label for="add-edge-count-attr" class="alert alert-info">
+							<input type="checkbox" id="add-edge-count-attr" name="add-edge-count-attr" ng-model="commander.merge.add_edge_count_attr" />
+							Add edge <u>count</u> attribute.
+						</label>
 
-				<div class="alert alert-danger" ng-show="undefined != commander.intersect.errMsg">{{commander.intersect.errMsg}}</div>
-
-				<p class="footnote" ng-show="commander.intersect.is_page(2)">
-					Remember to standardize correctly map the attributes of the networks of interest
-					using the attribute management tools.
-				</p>
-			</div>
-			<!-- subtract body -->
-			<div class="panel-body" ng-show="commander.is_operation('subtract')">
-				<div class="subtract-page-1" ng-show="commander.subtract.is_page(1)">
-					<label for="subtract-new-name">
-						New name:
-						<input class="form-control" type="text" id="subtract-new-name" name="subtract-new-name" ng-model="commander.subtract.group.new_name" />
-					</label>
-					<hr />
-
-					<h4>Select the minuend network:</h4>
-					<select name="" id="" class="form-control" ng-model="commander.subtract.group.minuend" ng-change="commander.subtract.get_attrs(commander.subtract.get_attrs_from_net(networks.get_network_from_name(commander.subtract.group.super), commander.subtract.get_attrs_from_net(networks.get_network_from_name(commander.subtract.group.sub), {nodes:[],edges:[]})));" ng-show='networks.list != null'>
-						<option value="">--</option>
-						<option value="{{net.name}}" ng-repeat="net in commander.subtract.group.net_list | filter:networks.isConverted">{{net.name}}</option>
-					</select>
-					<br />
-
-					<button class="btn end-btn btn-success" ng-click='commander.subtract_set_page(2, m.session_id)'>next</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
-				</div>
-
-                <div class="subtract-page-2" ng-show="commander.subtract.is_page(2)">
-                    <h4>Select the networks to subtract:</h4>
-                    <label class="group-selection-option alert alert-warning" for="subtract-all"><input type="checkbox" id="subtract-all" name="subtract-all" ng-model="commander.subtract.group.all" ng-click="commander.subtract.un_select_all(); commander.subtract.get_attrs(commander.subtract.get_attrs_from_net(networks.get_network_from_name(commander.subtract.group.minuend), {nodes:[],edges:[]}));" /> Un/Select all</label><label class="group-selection-option alert alert-success" for="subtract-filter"><input type="checkbox" id="subtract-filter" name="subtract-filter" ng-model="commander.subtract.group.filter" ng-click="commander.subtract.toggle_filter()" /> Custom Filters</label>
-
-                    <div class="panel panel-success" ng-show="commander.subtract.group.filter">
-                        <div class="panel-success panel-heading">
-                            Filter
-                            <a href="#/interface/{{m.session_id}}" class="btn-panel float-right" ng-click="commander.subtract.add_filter()" title="Add new"><span class="text-success glyphicon glyphicon-plus"></span></a>
-                        </div>
-                        <div class="panel-body">
-                            <table class="filter-selection">
-                                <tr>
-                                    <td></td>
-                                    <th>Attribute</th>
-                                    <th>Condition</th>
-                                    <th>Value</th>
-                                </tr>
-                                <tr ng-repeat="filter in commander.subtract.filters">
-                                    <td class="text-align-left">
-                                        <select class="form-control" ng-show="!$first" ng-model="commander.subtract.filters[$index].combine" ng-change="commander.subtract.apply_filters()">
-                                            <option value="">--</option>
-                                            <option value="AND">AND</option>
-                                            <option value="OR">OR</option>
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <select class="form-control" style="max-width: 100px;" ng-model="commander.subtract.filters[$index].attribute" ng-change="commander.subtract.apply_filters(); commander.subtract.filters[$index].value=''">
-                                            <option value="">--</option>
-                                            <option value="{{attr}}" ng-repeat="attr in commander.subtract.group.net_attributes">{{commander.subtract.extract_attr_name(attr)}}</option>
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <select class="form-control" ng-model="commander.subtract.filters[$index].condition" ng-change="commander.subtract.apply_filters()">
-                                            <option value="" ng-show="!commander.subtract.filters[$index].object">--</option>
-                                            <option value="e" ng-show="!commander.subtract.filters[$index].object">=</option>
-                                            <option value="ne" ng-show="!commander.subtract.filters[$index].object">&#8800;</option>
-                                            <option value="lt" ng-show="!commander.subtract.filters[$index].object">&lt;</option>
-                                            <option value="le" ng-show="!commander.subtract.filters[$index].object">&le;</option>
-                                            <option value="gt" ng-show="!commander.subtract.filters[$index].object">&gt;</option>
-                                            <option value="ge" ng-show="!commander.subtract.filters[$index].object">&ge;</option>
-                                            <option value="c" ng-selected="commander.subtract.filters[$index].object" ng-show="commander.subtract.filters[$index].object">contains</option>
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <select class="form-control" style="max-width: 100px;" ng-model="commander.subtract.filters[$index].value" ng-change="commander.subtract.apply_filters()">
-                                            <option value="" ng-selected="-1 == commander.subtract.get_net_attr_values($index).indexOf(commander.subtract.filters[$index].value)">--</option>
-                                            <option value="{{v}}" ng-repeat="v in commander.subtract.get_net_attr_values($index)">{{v}}</option>
-                                        </select>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-
-                    <label for="net-subtrahend-{{net.id}}" class="alert" ng-repeat='net in commander.subtract.group.net_list | filter:networks.isConverted' ng-show='networks.list != null' ng-class="{'alert-info' : networks.isConverted(net), 'alert-danger' : !networks.isConverted(net)}" style="width: 100%;">
-                        <input id="net-subtrahend-{{net.id}}" name="net-subtrahend-{{net.id}}" type="checkbox" ng-model="commander.subtract.group.networks[net.name]" ng-click="commander.subtract.check(net.name); commander.subtract.get_attrs(commander.subtract.get_attrs_from_net(networks.get_network_from_name(commander.subtract.group.minuend), {nodes:[],edges:[]}));" />
-                        {{net.name}}
-                    </label>
-
-                    <button class="btn end-btn btn-success" ng-click='commander.subtract_set_page(3, m.session_id)'>next</button><button class="btn end-btn btn-warning" ng-click='commander.subtract.set_page(1)'>back</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
-                </div>
-
-                <div class="subtract-page-3" ng-show="commander.subtract.is_page(3)">
-                    <h4>Select the attributes to use for identity definitions:</h4>
-                    <div>
-                        <h5>Nodes</h5>
-                        <label class="alert alert-warning attr-select" for="attr-node-{{attr}}" ng-repeat="attr in commander.subtract.group.nodes">
-                            <input type="checkbox" name="attr-node-{{attr}}" id="attr-node-{{attr}}" ng-model="commander.subtract.n_attr_identity[attr]" />
-                            {{attr}}
-                        </label>
-                    </div>
-                    <i ng-show="0 == commander.subtract.group.nodes.length">No node attributes...</i>
-                    <div>
-                        <h5>Edges</h5>
-                        <label class="alert alert-warning attr-select" for="attr-edge-{{attr}}" ng-repeat="attr in commander.subtract.group.edges">
-                            <input type="checkbox" name="attr-edge-{{attr}}" id="attr-edge-{{attr}}" ng-model="commander.subtract.e_attr_identity[attr]" />
-                            {{attr}}
-                        </label>
-                    </div>
-                    <i ng-show="0 == commander.subtract.group.edges.length">No edge attributes...</i>
-
-                    <br />
-                    <button class="btn end-btn btn-success" ng-click='commander.subtract_set_page(4, m.session_id, settings.info.default_layout)'>subtract</button><button class="btn end-btn btn-warning" ng-click='commander.subtract.set_page(2)'>back</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
-                </div>
-
-				<hr style="margin-bottom: 2em;" />
-
-				<div class="alert alert-danger" ng-show="undefined != commander.subtract.errMsg">{{commander.subtract.errMsg}}</div>
-
-				<p class="footnote" ng-show="commander.subtract.is_page(3)">
-					Remember to standardize correctly map the attributes of the networks of interest
-					using the attribute management tools.
-				</p>
-			</div>
-			<!-- contains body -->
-			<div class="panel-body" ng-show="commander.is_operation('contains')">
-				<div class="contains-page-1" ng-show="commander.contains.is_page(1)">
-					<h4>Select the super-network:</h4>
-					<select name="" id="" class="form-control" ng-model="commander.contains.group.super" ng-change="commander.contains.get_attrs(commander.contains.get_attrs_from_net(networks.get_network_from_name(commander.contains.group.super), commander.contains.get_attrs_from_net(networks.get_network_from_name(commander.contains.group.sub), {nodes:[],edges:[]})));">
-						<option value="">--</option>
-						<option value="{{net.name}}" ng-repeat="net in commander.contains.group.net_list | filter:networks.isConverted">{{net.name}}</option>
-					</select>
+						<br />
+						<button class="btn end-btn btn-success" ng-click='commander.apply_merge(m.session_id, settings.info.default_layout)'>merge</button><button class="btn end-btn btn-warning" ng-click='commander.merge.set_page(3)'>back</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
+					</div>
 
 					<hr style="margin-bottom: 2em;" />
 
-					<h4>Select the sub-network:</h4>
-					<select name="" id="" class="form-control" ng-model="commander.contains.group.sub" ng-change="commander.contains.get_attrs(commander.contains.get_attrs_from_net(networks.get_network_from_name(commander.contains.group.super), commander.contains.get_attrs_from_net(networks.get_network_from_name(commander.contains.group.sub), {nodes:[],edges:[]})));">
-						<option value="">--</option>
-						<option value="{{net.name}}" ng-repeat="net in commander.contains.group.net_list | filter:networks.isConverted">{{net.name}}</option>
-					</select>
-					
+					<div class="alert alert-danger" ng-show="undefined != commander.merge.errMsg">{{commander.merge.errMsg}}</div>
+
+					<p class="footnote" ng-show="commander.merge.is_page(2)">
+						Remember to standardize correctly map the attributes of the networks of interest
+						using the attribute management tools.
+					</p>
+				</div>
+				<!-- intersect body -->
+				<div class="panel-body" ng-show="commander.is_operation('intersect')">
+					<div class="intersect-page-1" ng-show="commander.intersect.is_page(1)">
+						<label for="intersect-new-name">
+							New name:
+							<input class="form-control" type="text" id="intersect-new-name" name="intersect-new-name" ng-model="commander.intersect.group.new_name" />
+						</label>
+						<hr />
+
+						<h4>Select the networks to intersect:</h4>
+						<label class="group-selection-option alert alert-warning" for="intersect-all"><input type="checkbox" id="intersect-all" name="intersect-all" ng-model="commander.intersect.group.all" ng-click="commander.intersect.un_select_all(); commander.intersect.get_attrs({nodes:[],edges:[]});" /> Un/Select all</label><label class="group-selection-option alert alert-success" for="intersect-filter"><input type="checkbox" id="intersect-filter" name="intersect-filter" ng-model="commander.intersect.group.filter" ng-click="commander.intersect.toggle_filter()" /> Custom Filters</label>
+
+						<div class="panel panel-success" ng-show="commander.intersect.group.filter">
+							<div class="panel-success panel-heading">
+								Filter
+								<a href="#/interface/{{m.session_id}}" class="btn-panel float-right" ng-click="commander.intersect.add_filter()" title="Add new"><span class="text-success glyphicon glyphicon-plus"></span></a>
+							</div>
+							<div class="panel-body">
+								<table class="filter-selection">
+									<tr>
+										<td></td>
+										<th>Attribute</th>
+										<th>Condition</th>
+										<th>Value</th>
+									</tr>
+									<tr ng-repeat="filter in commander.intersect.filters">
+										<td class="text-align-left">
+											<select class="form-control" ng-show="!$first" ng-model="commander.intersect.filters[$index].combine" ng-change="commander.intersect.apply_filters()">
+												<option value="">--</option>
+												<option value="AND">AND</option>
+												<option value="OR">OR</option>
+											</select>
+										</td>
+										<td>
+											<select class="form-control" style="max-width: 100px;" ng-model="commander.intersect.filters[$index].attribute" ng-change="commander.intersect.apply_filters(); commander.intersect.filters[$index].value=''">
+												<option value="">--</option>
+												<option value="{{attr}}" ng-repeat="attr in commander.intersect.group.net_attributes">{{commander.intersect.extract_attr_name(attr)}}</option>
+											</select>
+										</td>
+										<td>
+											<select class="form-control" ng-model="commander.intersect.filters[$index].condition" ng-change="commander.intersect.apply_filters()">
+												<option value="" ng-show="!commander.intersect.filters[$index].object">--</option>
+												<option value="e" ng-show="!commander.intersect.filters[$index].object">=</option>
+												<option value="ne" ng-show="!commander.intersect.filters[$index].object">&#8800;</option>
+												<option value="lt" ng-show="!commander.intersect.filters[$index].object">&lt;</option>
+												<option value="le" ng-show="!commander.intersect.filters[$index].object">&le;</option>
+												<option value="gt" ng-show="!commander.intersect.filters[$index].object">&gt;</option>
+												<option value="ge" ng-show="!commander.intersect.filters[$index].object">&ge;</option>
+												<option value="c" ng-selected="commander.intersect.filters[$index].object" ng-show="commander.intersect.filters[$index].object">contains</option>
+											</select>
+										</td>
+										<td>
+											<select class="form-control" style="max-width: 100px;" ng-model="commander.intersect.filters[$index].value" ng-change="commander.intersect.apply_filters()">
+												<option value="" ng-selected="-1 == commander.intersect.get_net_attr_values($index).indexOf(commander.intersect.filters[$index].value)">--</option>
+												<option value="{{v}}" ng-repeat="v in commander.intersect.get_net_attr_values($index)">{{v}}</option>
+											</select>
+										</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+
+						<label for="net-{{net.id}}" class="alert" ng-repeat='net in commander.intersect.group.net_list | filter:networks.isConverted' ng-show='networks.list != null' ng-class="{'alert-info' : networks.isConverted(net), 'alert-danger' : !networks.isConverted(net)}" style="width: 100%;">
+							<input id="net-{{net.id}}" name="net-{{net.id}}" type="checkbox" ng-model="commander.intersect.group.networks[net.name]" ng-click="commander.intersect.check(net.name); commander.intersect.get_attrs({nodes:[],edges:[]});" />
+							{{net.name}}
+						</label>
+
+						<button class="btn end-btn btn-success" ng-click='commander.intersect_set_page(2)'>next</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
+					</div>
+
+					<div class="intersect-page-2" ng-show="commander.intersect.is_page(2)">
+						<h4>Select the attributes to use for identity definitions:</h4>
+						<div>
+							<h5>Nodes</h5>
+							<label class="alert alert-warning attr-select" for="attr-node-{{attr}}" ng-repeat="attr in commander.intersect.group.nodes">
+								<input type="checkbox" name="attr-node-{{attr}}" id="attr-node-{{attr}}" ng-model="commander.intersect.n_attr_identity[attr]" />
+								{{attr}}
+							</label>
+							<i ng-show="0 == commander.intersect.group.nodes.length">No node attributes...</i>
+						</div>
+						<div>
+							<h5>Edges</h5>
+							<label class="alert alert-warning attr-select" for="attr-edge-{{attr}}" ng-repeat="attr in commander.intersect.group.edges">
+								<input type="checkbox" name="attr-edge-{{attr}}" id="attr-edge-{{attr}}" ng-model="commander.intersect.e_attr_identity[attr]" />
+								{{attr}}
+							</label>
+							<i ng-show="0 == commander.intersect.group.edges.length">No edge attributes...</i>
+						</div>
+
+						<br />
+						<button class="btn end-btn btn-success" ng-click='commander.intersect_set_page(3)'>next</button><button class="btn end-btn btn-warning" ng-click='commander.intersect.set_page(1)'>back</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
+					</div>
+
+					<div class="intersect-page-3" ng-show="commander.intersect.is_page(3)">
+						<h4>Select the behavior for non-identity attributes:</h4>
+						<div>
+							<div ng-repeat="(attr, behavior) in commander.intersect.n_attr_behavior">
+								node-{{attr}}
+								<select class='form-control' name="node-{{attr}}-behavior" id="node-{{attr}}-behavior" ng-model="commander.intersect.n_attr_behavior[attr]">
+									<option value="ignore">ignore</option>
+									<option value="sum">sum</option>
+									<option value="prod">prod</option>
+									<option value="min">min</option>
+									<option value="max">max</option>
+									<option value="random">random</option>
+									<option value="mean">mean</option>
+									<option value="median">median</option>
+									<option value="concat">concat</option>
+									<option value="first">first</option>
+									<option value="last">last</option>
+								</select>
+							</div>
+						</div>
+						<div>
+							<div ng-repeat="(attr, behavior) in commander.intersect.e_attr_behavior">
+								edge-{{attr}}
+								<select class='form-control' name="edge-{{attr}}-behavio" id="edge-{{attr}}-behavio" ng-model="commander.intersect.e_attr_behavior[attr]">
+									<option value="ignore">ignore</option>
+									<option value="sum">sum</option>
+									<option value="prod">prod</option>
+									<option value="min">min</option>
+									<option value="max">max</option>
+									<option value="random">random</option>
+									<option value="mean">mean</option>
+									<option value="median">median</option>
+									<option value="concat">concat</option>
+									<option value="first">first</option>
+									<option value="last">last</option>
+								</select>
+							</div>
+						</div>
+						<div ng-show="0 == commander.intersect.group.nodes.length">No node attributes...</div>
+						<div ng-show="0 == commander.intersect.group.edges.length">No edge attributes...</div>
+
+
+						<br />
+						<button class="btn end-btn btn-success" ng-click='commander.apply_intersect(m.session_id, settings.info.default_layout)'>intersect</button><button class="btn end-btn btn-warning" ng-click='commander.intersect.set_page(2)'>back</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
+					</div>
+
 					<hr style="margin-bottom: 2em;" />
 
-                    <h4>Select the attributes to use for identity definitions:</h4>
-                    <div>
-                        <h5>Nodes</h5>
-                        <label class="alert alert-warning attr-select" for="attr-node-{{attr}}" ng-repeat="attr in commander.contains.group.nodes">
-                            <input type="checkbox" name="attr-node-{{attr}}" id="attr-node-{{attr}}" ng-model="commander.contains.n_attr_identity[attr]" />
-                            {{attr}}
-                        </label>
-                    </div>
-                    <i ng-show="0 == commander.contains.group.nodes.length">No node attributes...</i>
-                    <div>
-                        <h5>Edges</h5>
-                        <label class="alert alert-warning attr-select" for="attr-edge-{{attr}}" ng-repeat="attr in commander.contains.group.edges">
-                            <input type="checkbox" name="attr-edge-{{attr}}" id="attr-edge-{{attr}}" ng-model="commander.contains.e_attr_identity[attr]" />
-                            {{attr}}
-                        </label>
-                    </div>
-                    <i ng-show="0 == commander.contains.group.edges.length">No edge attributes...</i>
+					<div class="alert alert-danger" ng-show="undefined != commander.intersect.errMsg">{{commander.intersect.errMsg}}</div>
 
-                    <br />
-                    <button class="btn end-btn btn-success" ng-click='commander.contains_set_page(2, m.session_id)'>contains</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
-                </div>
-
-				<hr style="margin-bottom: 2em;" />
-
-				<div class="alert alert-danger" ng-show="undefined != commander.contains.errMsg">{{commander.contains.errMsg}}</div>
-
-				<p class="footnote" ng-show="commander.contains.is_page(3)">
-					Remember to standardize correctly map the attributes of the networks of interest
-					using the attribute management tools.
-				</p>
-			</div>
-			<!-- distance -->
-			<div class="panel-body" ng-show="commander.is_operation('distances')">
-				<div class="distances-page-1" ng-show="commander.distances.is_page(1)">
-					<h4>Select the networks to calculate their pair-wise distance:</h4>
-					<label class="group-selection-option alert alert-warning" for="distances-all"><input type="checkbox" id="distances-all" name="distances-all" ng-model="commander.distances.group.all" ng-click="commander.distances.un_select_all(); commander.distances.get_attrs({nodes:[],edges:[]});" /> Un/Select all</label><label class="group-selection-option alert alert-success" for="distances-filter"><input type="checkbox" id="distances-filter" name="distances-filter" ng-model="commander.distances.group.filter" ng-click="commander.distances.toggle_filter()" /> Custom Filters</label>
-
-					<div class="panel panel-success" ng-show="commander.distances.group.filter">
-						<div class="panel-success panel-heading">
-							Filter
-							<a href="#/interface/{{m.session_id}}" class="btn-panel float-right" ng-click="commander.distances.add_filter()" title="Add new"><span class="text-success glyphicon glyphicon-plus"></span></a>
-						</div>
-						<div class="panel-body">
-							<table class="filter-selection">
-								<tr>
-									<td></td>
-									<th>Attribute</th>
-									<th>Condition</th>
-									<th>Value</th>
-								</tr>
-								<tr ng-repeat="filter in commander.distances.filters">
-									<td class="text-align-left">
-										<select class="form-control" ng-show="!$first" ng-model="commander.distances.filters[$index].combine" ng-change="commander.distances.apply_filters()">
-											<option value="">--</option>
-											<option value="AND">AND</option>
-											<option value="OR">OR</option>
-										</select>
-									</td>
-									<td>
-										<select class="form-control" style="max-width: 100px;" ng-model="commander.distances.filters[$index].attribute" ng-change="commander.distances.apply_filters(); commander.distances.filters[$index].value=''">
-											<option value="">--</option>
-											<option value="{{attr}}" ng-repeat="attr in commander.distances.group.net_attributes">{{commander.distances.extract_attr_name(attr)}}</option>
-										</select>
-									</td>
-									<td>
-										<select class="form-control" ng-model="commander.distances.filters[$index].condition" ng-change="commander.distances.apply_filters()">
-											<option value="" ng-show="!commander.distances.filters[$index].object">--</option>
-											<option value="e" ng-show="!commander.distances.filters[$index].object">=</option>
-											<option value="ne" ng-show="!commander.distances.filters[$index].object">&#8800;</option>
-											<option value="lt" ng-show="!commander.distances.filters[$index].object">&lt;</option>
-											<option value="le" ng-show="!commander.distances.filters[$index].object">&le;</option>
-											<option value="gt" ng-show="!commander.distances.filters[$index].object">&gt;</option>
-											<option value="ge" ng-show="!commander.distances.filters[$index].object">&ge;</option>
-											<option value="c" ng-selected="commander.distances.filters[$index].object" ng-show="commander.distances.filters[$index].object">contains</option>
-										</select>
-									</td>
-									<td>
-										<select class="form-control" style="max-width: 100px;" ng-model="commander.distances.filters[$index].value" ng-change="commander.distances.apply_filters()">
-											<option value="" ng-selected="-1 == commander.distances.get_net_attr_values($index).indexOf(commander.distances.filters[$index].value)">--</option>
-											<option value="{{v}}" ng-repeat="v in commander.distances.get_net_attr_values($index)">{{v}}</option>
-										</select>
-									</td>
-								</tr>
-							</table>
-						</div>
-					</div>
-
-					<label for="net-{{net.id}}" class="alert" ng-repeat='net in commander.distances.group.net_list | filter:networks.isConverted' ng-show='networks.list != null' ng-class="{'alert-info' : networks.isConverted(net), 'alert-danger' : !networks.isConverted(net)}" style="width: 100%;">
-						<input id="net-{{net.id}}" name="net-{{net.id}}" type="checkbox" ng-model="commander.distances.group.networks[net.name]" ng-click="commander.distances.check(net.name); commander.distances.get_attrs({nodes:[],edges:[]});" />
-						{{net.name}}
-					</label>
-
-					<button class="btn end-btn btn-success" ng-click='commander.distances_set_page(2)'>next</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
-				</div>
-
-				<div class="distances-page-2" ng-show="commander.distances.is_page(2)">
-					<h4>Select the attributes to use for identity definitions:</h4>
-					<div>
-						<h5>Nodes</h5>
-						<label class="alert alert-warning attr-select" for="attr-node-{{attr}}" ng-repeat="attr in commander.distances.group.nodes">
-							<input type="checkbox" name="attr-node-{{attr}}" id="attr-node-{{attr}}" ng-model="commander.distances.n_attr_identity[attr]" />
-							{{attr}}
-						</label>
-					</div>
-					<div>
-						<h5>Edges</h5>
-						<label class="alert alert-warning attr-select" for="attr-edge-{{attr}}" ng-repeat="attr in commander.distances.group.edges">
-							<input type="checkbox" name="attr-edge-{{attr}}" id="attr-edge-{{attr}}" ng-model="commander.distances.e_attr_identity[attr]" />
-							{{attr}}
-						</label>
-					</div>
-
-					<br />
-					<button class="btn end-btn btn-success" ng-click='commander.distances_set_page(3)'>next</button><button class="btn end-btn btn-warning" ng-click='commander.distances.set_page(1)'>back</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
-				</div>
-
-				<div class="distances-page-3" ng-show="commander.distances.is_page(3)">
-					<h4>Select the distances:</h4>
-
-					<label for="dist-hamming" class="alert alert-info" style="width: 100%;">
-						<input id="dist-hamming" name="dist-hamming" type="checkbox" ng-model="commander.distances.measures['h']" />
-						Hamming
-					</label>
-					<label for="dist-hamming-im" class="alert alert-info" style="width: 100%;">
-						<input id="dist-hamming-im" name="dist-hamming-im" type="checkbox" ng-model="commander.distances.measures['him']" />
-						HIM
-					</label>
-					<label for="dist-IM" class="alert alert-info" style="width: 100%;">
-						<input id="dist-IM" name="dist-IM" type="checkbox" ng-model="commander.distances.measures['im']" />
-						Ipsen-Mikhailov
-					</label>
-					<label for="dist-jaccard" class="alert alert-info" style="width: 100%;">
-						<input id="dist-jaccard" name="dist-jaccard" type="checkbox" ng-model="commander.distances.measures['j']" />
-						Jaccard
-					</label>
-					<label for="dist-jaccard-im" class="alert alert-info" style="width: 100%;">
-						<input id="dist-jaccard-im" name="dist-jaccard-im" type="checkbox" ng-model="commander.distances.measures['jim']" />
-						JIM
-					</label>
-					<label for="dist-jaccard-subset" class="alert alert-info" style="width: 100%;">
-						<input id="dist-jaccard-subset" name="dist-jaccard-subset" type="checkbox" ng-model="commander.distances.measures['js']" />
-						Jaccard subset
-					</label>
-					<label for="dist-jaccard-subset-im" class="alert alert-info" style="width: 100%;">
-						<input id="dist-jaccard-subset-im" name="dist-jaccard-subset-im" type="checkbox" ng-model="commander.distances.measures['jsim']" />
-						JsIM
-					</label>
-					
-					<br />
-					<button class="btn end-btn btn-success" ng-click='commander.distances_set_page(4)'>next</button><button class="btn end-btn btn-warning" ng-click='commander.distances.set_page(2)'>back</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
-				</div>
-
-				<div class="distances-page-4" ng-show="commander.distances.is_page(4)">
-					<label for="auto-plot" class="alert alert-info" style="width: 100%;">
-						<input type="checkbox" id="auto-plot" name="auto-plot" ng-model="commander.distances.out_plot" />
-						Output plots and heatmaps.
-					</label>
-					<label for="auto-table" class="alert alert-info" style="width: 100%;">
-						<input type="checkbox" id="auto-table" name="auto-table" ng-model="commander.distances.out_table" />
-						Output distances table.
-					</label>
-
-					<br />
-					<button class="btn end-btn btn-success" ng-click='commander.apply_distances(m.session_id)'>distances</button><button class="btn end-btn btn-warning" ng-click='commander.distances.set_page(3)'>back</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
-				</div>
-
-				<hr style="margin-bottom: 2em;" />
-
-				<div class="alert alert-danger" ng-show="undefined != commander.distances.errMsg">{{commander.distances.errMsg}}</div>
-			</div>
-		</div>
-
-		<div class='left-panel filter-panel panel panel-success' ng-show='panels.show.filter'>
-			<div class="panel-heading">Select node/edges</div>
-			<div class="panel-body">
-				
-				<table class="panel panel-default" style="width: 100%; text-align: center;">
-					<tr>
-						<th class="panel-heading" style="text-align: center;">
-							<button class="btn btn-info btn-block" ng-click="canvas.filters.init(canvas.current, 'w');" ng-disabled="canvas.filters.is_token('w')">
-								Whole
-							</button>
-						</th>
-						<th class="panel-heading" style="text-align: center;">
-							<button class="btn btn-info btn-block" ng-click="canvas.filters.init(canvas.filtered, 'f');" ng-disabled="canvas.filters.is_token('f')">
-								Filtered
-							</button>
-						</th>
-						<th class="panel-heading" style="text-align: center;">
-							<button class="btn btn-info btn-block" ng-click="canvas.filters.init(canvas.visualization, 'v');" ng-disabled="canvas.filters.is_token('v')">
-								Visualized
-							</button>
-						</th>
-					</tr>
-					<tr>
-						<td class="panel-body">
-							{{canvas.current.nodes.length}} Nodes<br />
-							{{canvas.current.edges.length}} Edges
- 						</td>
-						<td class="panel-body">
-							<div ng-if="canvas.filtered == undefined">
-								0 Nodes<br />
-								0 Edges
-							</div>
-							<div ng-if="canvas.filtered != undefined">
-								{{canvas.filtered.nodes.length}} Nodes<br />
-								{{canvas.filtered.edges.length}} Edges
-							</div>
- 						</td>
-						<td class="panel-body">
-							<div ng-if="canvas.visualization == undefined">
-								0 Nodes<br />
-								0 Edges
-							</div>
-							<div ng-if="canvas.visualization != undefined">
-								{{canvas.visualization.nodes.length}} Nodes<br />
-								{{canvas.visualization.edges.length}} Edges
-							</div>
- 						</td>
-					</tr>
-				</table>
-
-				<!-- node filters -->
-				<div class="panel panel-success" ng-if="canvas.filters.isLoaded()">
-					<div class="panel-heading">
-						Node Filters
-						<a href="#/interface/{{m.session_id}}" class="btn-panel btn-filter float-right" ng-click="canvas.filters.remove('nodes')" title="Remove last"><span class="text-success glyphicon glyphicon-minus"></span></a>
-						<a href="#/interface/{{m.session_id}}" class="btn-panel btn-filter float-right" ng-click="canvas.filters.add('nodes')" title="Add new"><span class="text-success glyphicon glyphicon-plus"></span></a>
-					</div>
-					<div class="panel-body">
-						<table class="filter-selection">
-							<tr ng-if="0 == canvas.filters.list.nodes.length">
-								<td colspan="4">
-									Click the <span class="glyphicon glyphicon-plus"></span> icon to add a filter...
-								</td>
-							</tr>
-							<tr ng-if="0 != canvas.filters.list.nodes.length">
-								<td></td>
-								<th>Attribute</th>
-								<th>Condition</th>
-								<th>Value</th>
-							</tr>
-							<tr ng-repeat="filter in canvas.filters.list.nodes">
-								<td class="text-align-left">
-									<select class="form-control" ng-show="!$first" ng-model="canvas.filters.list.nodes[$index].combine" ng-change="canvas.filters.apply()">
-										<option value="">--</option>
-										<option value="AND">AND</option>
-										<option value="OR">OR</option>
-									</select>
-								</td>
-								<td>
-									<select class="form-control" style="max-width: 100px;" ng-model="canvas.filters.list.nodes[$index].attribute" ng-change="canvas.filters.apply(); canvas.filters.list.nodes[$index].value=''">
-										<option value="">--</option>
-										<option value="{{attr}}" ng-repeat="attr in canvas.filters.attributes.nodes.labels">{{attr}}</option>
-									</select>
-								</td>
-								<td>
-									<select class="form-control" ng-model="canvas.filters.list.nodes[$index].condition" ng-change="canvas.filters.apply()">
-										<option value="" ng-show="!canvas.filters[$index].object">--</option>
-										<option value="e" ng-show="!canvas.filters[$index].object">=</option>
-										<option value="ne" ng-show="!canvas.filters[$index].object">&#8800;</option>
-										<option value="lt" ng-show="!canvas.filters[$index].object">&lt;</option>
-										<option value="le" ng-show="!canvas.filters[$index].object">&le;</option>
-										<option value="gt" ng-show="!canvas.filters[$index].object">&gt;</option>
-										<option value="ge" ng-show="!canvas.filters[$index].object">&ge;</option>
-										<option value="c" ng-selected="canvas.filters[$index].object" ng-show="canvas.filters[$index].object">contains</option>
-									</select>
-								</td>
-								<td>
-									<select class="form-control" style="max-width: 100px;" ng-model="canvas.filters.list.nodes[$index].value" ng-change="canvas.filters.apply()">
-										<option value="" ng-selected="-1 == canvas.filters.attributes.nodes.values[canvas.filters.list.nodes[$index].attribute].indexOf(canvas.filters[$index].value)">--</option>
-										<option value="{{v}}" ng-repeat="v in canvas.filters.attributes.nodes.values[canvas.filters.list.nodes[$index].attribute]">{{v}}</option>
-									</select>
-								</td>
-							</tr>
-						</table>
-					</div>
-				</div>
-				<!-- edge filters -->
-				<div class="panel panel-success" ng-if="canvas.filters.isLoaded()">
-					<div class="panel-heading">
-						Edge Filters
-						<a href="#/interface/{{m.session_id}}" class="btn-panel btn-filters float-right" ng-click="canvas.filters.remove('edges')" title="Remove last"><span class="text-success glyphicon glyphicon-minus"></span></a>
-						<a href="#/interface/{{m.session_id}}" class="btn-panel btn-filters float-right" ng-click="canvas.filters.add('edges')" title="Add new"><span class="text-success glyphicon glyphicon-plus"></span></a>
-					</div>
-					<div class="panel-body">
-						<table class="filter-selection">
-							<tr ng-if="0 == canvas.filters.list.edges.length">
-								<td colspan="4">
-									Click the <span class="glyphicon glyphicon-plus"></span> icon to add a filter...
-								</td>
-							</tr>
-							<tr ng-if="0 != canvas.filters.list.edges.length">
-								<td></td>
-								<th>Attribute</th>
-								<th>Condition</th>
-								<th>Value</th>
-							</tr>
-							<tr ng-repeat="filter in canvas.filters.list.edges">
-								<td class="text-align-left">
-									<select class="form-control" ng-show="!$first" ng-model="canvas.filters.list.edges[$index].combine" ng-change="canvas.filters.apply()">
-										<option value="">--</option>
-										<option value="AND">AND</option>
-										<option value="OR">OR</option>
-									</select>
-								</td>
-								<td>
-									<select class="form-control" style="max-width: 100px;" ng-model="canvas.filters.list.edges[$index].attribute" ng-change="canvas.filters.apply(); canvas.filters.list.edges[$index].value=''">
-										<option value="">--</option>
-										<option value="{{attr}}" ng-repeat="attr in canvas.filters.attributes.edges.labels">{{attr}}</option>
-									</select>
-								</td>
-								<td>
-									<select class="form-control" ng-model="canvas.filters.list.edges[$index].condition" ng-change="canvas.filters.apply()">
-										<option value="" ng-show="!canvas.filters[$index].object">--</option>
-										<option value="e" ng-show="!canvas.filters[$index].object">=</option>
-										<option value="ne" ng-show="!canvas.filters[$index].object">&#8800;</option>
-										<option value="lt" ng-show="!canvas.filters[$index].object">&lt;</option>
-										<option value="le" ng-show="!canvas.filters[$index].object">&le;</option>
-										<option value="gt" ng-show="!canvas.filters[$index].object">&gt;</option>
-										<option value="ge" ng-show="!canvas.filters[$index].object">&ge;</option>
-										<option value="c" ng-selected="canvas.filters[$index].object" ng-show="canvas.filters[$index].object">contains</option>
-									</select>
-								</td>
-								<td>
-									<select class="form-control" style="max-width: 100px;" ng-model="canvas.filters.list.edges[$index].value" ng-change="canvas.filters.apply()">
-										<option value="" ng-selected="-1 == canvas.filters.attributes.edges.values[canvas.filters.list.edges[$index].attribute].indexOf(canvas.filters[$index].value)">--</option>
-										<option value="{{v}}" ng-repeat="v in canvas.filters.attributes.edges.values[canvas.filters.list.edges[$index].attribute]">{{v}}</option>
-									</select>
-								</td>
-							</tr>
-						</table>
-					</div>
-				</div>
-				
-				<div class="panel panel-danger" ng-if="canvas.filters.has()">
-					<div class="panel-heading">
-						Selected
-					</div>
-					<div class="panel-body">
-						{{canvas.filters.selection.nodes.length}} Nodes<br />
-						{{canvas.filters.selection.edges.length}} Edges
-					</div>
-				</div>
-
-				<div class="col-md-6" ng-if="canvas.filters.has()">
-					<button class="btn btn-block btn-danger small-caps" ng-click="canvas.unmask()" ng-disabled="canvas.filters.is_token('v')">unmask</button>
-				</div>
-				<div class="col-md-6" ng-if="canvas.filters.has()">
-					<button class="btn btn-block btn-warning small-caps" ng-click="canvas.mask()" ng-disabled="canvas.filters.is_token('f')">mask</button>
-				</div>
-				<div class="col-md-6" ng-if="canvas.filters.has()" style="margin-top: 4px;">
-					<button class="btn btn-block btn-primary small-caps" ng-click="alert('@todo')" ng-disabled="!canvas.filters.is_token('v')">select</button>
-				</div>
-				<div class="col-md-6" ng-if="canvas.filters.has()" style="margin-top: 4px;">
-					<button class="btn btn-block btn-success small-caps" ng-click="networks.init_file(canvas.current_data)" ng-disabled="canvas.visualized">load</button>
-				</div>
-
-			</div>
-		</div>
-
-		<div class='left-panel navigate-panel panel panel-success' ng-show='panels.show.navigate'>
-			<div class="panel-heading">Navigate network</div>
-			<div class="panel-body">
-
-				<table class="panel panel-default" style="width: 100%; text-align: center;">
-					<tr>
-						<th class="panel-heading" style="text-align: center;">
-							<button class="btn btn-info btn-block" ng-click="canvas.navi.init(canvas.current, 'w');" ng-disabled="canvas.navi.filters.is_token('w')">
-								Whole
-							</button>
-						</th>
-						<th class="panel-heading" style="text-align: center;">
-							<button class="btn btn-danger btn-block" disabled>
-								Filtered
-							</button>
-						</th>
-						<th class="panel-heading" style="text-align: center;">
-							<button class="btn btn-info btn-block" ng-click="canvas.navi.init(canvas.visualization, 'v');" ng-disabled="canvas.navi.filters.is_token('v')">
-								Visualized
-							</button>
-						</th>
-					</tr>
-					<tr>
-						<td class="panel-body">
-							{{canvas.current.nodes.length}} Nodes<br />
-							{{canvas.current.edges.length}} Edges
- 						</td>
-						<td class="panel-body">
-							<div ng-if="canvas.filtered == undefined">
-								0 Nodes<br />
-								0 Edges
-							</div>
-							<div ng-if="canvas.filtered != undefined">
-								{{canvas.filtered.nodes.length}} Nodes<br />
-								{{canvas.filtered.edges.length}} Edges
-							</div>
- 						</td>
-						<td class="panel-body">
-							<div ng-if="canvas.visualization == undefined">
-								0 Nodes<br />
-								0 Edges
-							</div>
-							<div ng-if="canvas.visualization != undefined">
-								{{canvas.visualization.nodes.length}} Nodes<br />
-								{{canvas.visualization.edges.length}} Edges
-							</div>
- 						</td>
-					</tr>
-				</table>
-
-				<div ng-if="canvas.navi.filters.isLoaded()">
-					<p>
-						Select a node to visualize its <select name="" id="" ng-model="canvas.navi.mode">
-							<option value="">--</option>
-							<option value="all">(all)</option>
-							<option value="in">in</option>
-							<option value="out">out</option>
-						</select> neighborhood<br />
-						up to {{settings.info.node_thr}} nodes.
+					<p class="footnote" ng-show="commander.intersect.is_page(2)">
+						Remember to standardize correctly map the attributes of the networks of interest
+						using the attribute management tools.
 					</p>
+				</div>
+				<!-- subtract body -->
+				<div class="panel-body" ng-show="commander.is_operation('subtract')">
+					<div class="subtract-page-1" ng-show="commander.subtract.is_page(1)">
+						<label for="subtract-new-name">
+							New name:
+							<input class="form-control" type="text" id="subtract-new-name" name="subtract-new-name" ng-model="commander.subtract.group.new_name" />
+						</label>
+						<hr />
 
-					<p>
-						<select name="" id="" class="form-control" ng-model="canvas.navi.start_node">
+						<h4>Select the minuend network:</h4>
+						<select name="" id="" class="form-control" ng-model="commander.subtract.group.minuend" ng-change="commander.subtract.get_attrs(commander.subtract.get_attrs_from_net(networks.get_network_from_name(commander.subtract.group.super), commander.subtract.get_attrs_from_net(networks.get_network_from_name(commander.subtract.group.sub), {nodes:[],edges:[]})));" ng-show='networks.list != null'>
 							<option value="">--</option>
-							<option value="{{node_id}}" ng-repeat="node_id in canvas.navi.filter_node_ids(canvas.navi.get_node_ids(), canvas.navi.filters.selection.nodes)">{{node_id}}</option>
+							<option value="{{net.name}}" ng-repeat="net in commander.subtract.group.net_list | filter:networks.isConverted">{{net.name}}</option>
 						</select>
-					</p>
+						<br />
 
-					<p>
-						You can also filter the node list.
+						<button class="btn end-btn btn-success" ng-click='commander.subtract_set_page(2, m.session_id)'>next</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
+					</div>
+
+	                <div class="subtract-page-2" ng-show="commander.subtract.is_page(2)">
+	                    <h4>Select the networks to subtract:</h4>
+	                    <label class="group-selection-option alert alert-warning" for="subtract-all"><input type="checkbox" id="subtract-all" name="subtract-all" ng-model="commander.subtract.group.all" ng-click="commander.subtract.un_select_all(); commander.subtract.get_attrs(commander.subtract.get_attrs_from_net(networks.get_network_from_name(commander.subtract.group.minuend), {nodes:[],edges:[]}));" /> Un/Select all</label><label class="group-selection-option alert alert-success" for="subtract-filter"><input type="checkbox" id="subtract-filter" name="subtract-filter" ng-model="commander.subtract.group.filter" ng-click="commander.subtract.toggle_filter()" /> Custom Filters</label>
+
+	                    <div class="panel panel-success" ng-show="commander.subtract.group.filter">
+	                        <div class="panel-success panel-heading">
+	                            Filter
+	                            <a href="#/interface/{{m.session_id}}" class="btn-panel float-right" ng-click="commander.subtract.add_filter()" title="Add new"><span class="text-success glyphicon glyphicon-plus"></span></a>
+	                        </div>
+	                        <div class="panel-body">
+	                            <table class="filter-selection">
+	                                <tr>
+	                                    <td></td>
+	                                    <th>Attribute</th>
+	                                    <th>Condition</th>
+	                                    <th>Value</th>
+	                                </tr>
+	                                <tr ng-repeat="filter in commander.subtract.filters">
+	                                    <td class="text-align-left">
+	                                        <select class="form-control" ng-show="!$first" ng-model="commander.subtract.filters[$index].combine" ng-change="commander.subtract.apply_filters()">
+	                                            <option value="">--</option>
+	                                            <option value="AND">AND</option>
+	                                            <option value="OR">OR</option>
+	                                        </select>
+	                                    </td>
+	                                    <td>
+	                                        <select class="form-control" style="max-width: 100px;" ng-model="commander.subtract.filters[$index].attribute" ng-change="commander.subtract.apply_filters(); commander.subtract.filters[$index].value=''">
+	                                            <option value="">--</option>
+	                                            <option value="{{attr}}" ng-repeat="attr in commander.subtract.group.net_attributes">{{commander.subtract.extract_attr_name(attr)}}</option>
+	                                        </select>
+	                                    </td>
+	                                    <td>
+	                                        <select class="form-control" ng-model="commander.subtract.filters[$index].condition" ng-change="commander.subtract.apply_filters()">
+	                                            <option value="" ng-show="!commander.subtract.filters[$index].object">--</option>
+	                                            <option value="e" ng-show="!commander.subtract.filters[$index].object">=</option>
+	                                            <option value="ne" ng-show="!commander.subtract.filters[$index].object">&#8800;</option>
+	                                            <option value="lt" ng-show="!commander.subtract.filters[$index].object">&lt;</option>
+	                                            <option value="le" ng-show="!commander.subtract.filters[$index].object">&le;</option>
+	                                            <option value="gt" ng-show="!commander.subtract.filters[$index].object">&gt;</option>
+	                                            <option value="ge" ng-show="!commander.subtract.filters[$index].object">&ge;</option>
+	                                            <option value="c" ng-selected="commander.subtract.filters[$index].object" ng-show="commander.subtract.filters[$index].object">contains</option>
+	                                        </select>
+	                                    </td>
+	                                    <td>
+	                                        <select class="form-control" style="max-width: 100px;" ng-model="commander.subtract.filters[$index].value" ng-change="commander.subtract.apply_filters()">
+	                                            <option value="" ng-selected="-1 == commander.subtract.get_net_attr_values($index).indexOf(commander.subtract.filters[$index].value)">--</option>
+	                                            <option value="{{v}}" ng-repeat="v in commander.subtract.get_net_attr_values($index)">{{v}}</option>
+	                                        </select>
+	                                    </td>
+	                                </tr>
+	                            </table>
+	                        </div>
+	                    </div>
+
+	                    <label for="net-subtrahend-{{net.id}}" class="alert" ng-repeat='net in commander.subtract.group.net_list | filter:networks.isConverted' ng-show='networks.list != null' ng-class="{'alert-info' : networks.isConverted(net), 'alert-danger' : !networks.isConverted(net)}" style="width: 100%;">
+	                        <input id="net-subtrahend-{{net.id}}" name="net-subtrahend-{{net.id}}" type="checkbox" ng-model="commander.subtract.group.networks[net.name]" ng-click="commander.subtract.check(net.name); commander.subtract.get_attrs(commander.subtract.get_attrs_from_net(networks.get_network_from_name(commander.subtract.group.minuend), {nodes:[],edges:[]}));" />
+	                        {{net.name}}
+	                    </label>
+
+	                    <button class="btn end-btn btn-success" ng-click='commander.subtract_set_page(3, m.session_id)'>next</button><button class="btn end-btn btn-warning" ng-click='commander.subtract.set_page(1)'>back</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
+	                </div>
+
+	                <div class="subtract-page-3" ng-show="commander.subtract.is_page(3)">
+	                    <h4>Select the attributes to use for identity definitions:</h4>
+	                    <div>
+	                        <h5>Nodes</h5>
+	                        <label class="alert alert-warning attr-select" for="attr-node-{{attr}}" ng-repeat="attr in commander.subtract.group.nodes">
+	                            <input type="checkbox" name="attr-node-{{attr}}" id="attr-node-{{attr}}" ng-model="commander.subtract.n_attr_identity[attr]" />
+	                            {{attr}}
+	                        </label>
+	                    </div>
+	                    <i ng-show="0 == commander.subtract.group.nodes.length">No node attributes...</i>
+	                    <div>
+	                        <h5>Edges</h5>
+	                        <label class="alert alert-warning attr-select" for="attr-edge-{{attr}}" ng-repeat="attr in commander.subtract.group.edges">
+	                            <input type="checkbox" name="attr-edge-{{attr}}" id="attr-edge-{{attr}}" ng-model="commander.subtract.e_attr_identity[attr]" />
+	                            {{attr}}
+	                        </label>
+	                    </div>
+	                    <i ng-show="0 == commander.subtract.group.edges.length">No edge attributes...</i>
+
+	                    <br />
+	                    <button class="btn end-btn btn-success" ng-click='commander.subtract_set_page(4, m.session_id, settings.info.default_layout)'>subtract</button><button class="btn end-btn btn-warning" ng-click='commander.subtract.set_page(2)'>back</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
+	                </div>
+
+					<hr style="margin-bottom: 2em;" />
+
+					<div class="alert alert-danger" ng-show="undefined != commander.subtract.errMsg">{{commander.subtract.errMsg}}</div>
+
+					<p class="footnote" ng-show="commander.subtract.is_page(3)">
+						Remember to standardize correctly map the attributes of the networks of interest
+						using the attribute management tools.
 					</p>
+				</div>
+				<!-- contains body -->
+				<div class="panel-body" ng-show="commander.is_operation('contains')">
+					<div class="contains-page-1" ng-show="commander.contains.is_page(1)">
+						<h4>Select the super-network:</h4>
+						<select name="" id="" class="form-control" ng-model="commander.contains.group.super" ng-change="commander.contains.get_attrs(commander.contains.get_attrs_from_net(networks.get_network_from_name(commander.contains.group.super), commander.contains.get_attrs_from_net(networks.get_network_from_name(commander.contains.group.sub), {nodes:[],edges:[]})));">
+							<option value="">--</option>
+							<option value="{{net.name}}" ng-repeat="net in commander.contains.group.net_list | filter:networks.isConverted">{{net.name}}</option>
+						</select>
+
+						<hr style="margin-bottom: 2em;" />
+
+						<h4>Select the sub-network:</h4>
+						<select name="" id="" class="form-control" ng-model="commander.contains.group.sub" ng-change="commander.contains.get_attrs(commander.contains.get_attrs_from_net(networks.get_network_from_name(commander.contains.group.super), commander.contains.get_attrs_from_net(networks.get_network_from_name(commander.contains.group.sub), {nodes:[],edges:[]})));">
+							<option value="">--</option>
+							<option value="{{net.name}}" ng-repeat="net in commander.contains.group.net_list | filter:networks.isConverted">{{net.name}}</option>
+						</select>
+						
+						<hr style="margin-bottom: 2em;" />
+
+	                    <h4>Select the attributes to use for identity definitions:</h4>
+	                    <div>
+	                        <h5>Nodes</h5>
+	                        <label class="alert alert-warning attr-select" for="attr-node-{{attr}}" ng-repeat="attr in commander.contains.group.nodes">
+	                            <input type="checkbox" name="attr-node-{{attr}}" id="attr-node-{{attr}}" ng-model="commander.contains.n_attr_identity[attr]" />
+	                            {{attr}}
+	                        </label>
+	                    </div>
+	                    <i ng-show="0 == commander.contains.group.nodes.length">No node attributes...</i>
+	                    <div>
+	                        <h5>Edges</h5>
+	                        <label class="alert alert-warning attr-select" for="attr-edge-{{attr}}" ng-repeat="attr in commander.contains.group.edges">
+	                            <input type="checkbox" name="attr-edge-{{attr}}" id="attr-edge-{{attr}}" ng-model="commander.contains.e_attr_identity[attr]" />
+	                            {{attr}}
+	                        </label>
+	                    </div>
+	                    <i ng-show="0 == commander.contains.group.edges.length">No edge attributes...</i>
+
+	                    <br />
+	                    <button class="btn end-btn btn-success" ng-click='commander.contains_set_page(2, m.session_id)'>contains</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
+	                </div>
+
+					<hr style="margin-bottom: 2em;" />
+
+					<div class="alert alert-danger" ng-show="undefined != commander.contains.errMsg">{{commander.contains.errMsg}}</div>
+
+					<p class="footnote" ng-show="commander.contains.is_page(3)">
+						Remember to standardize correctly map the attributes of the networks of interest
+						using the attribute management tools.
+					</p>
+				</div>
+				<!-- distance -->
+				<div class="panel-body" ng-show="commander.is_operation('distances')">
+					<div class="distances-page-1" ng-show="commander.distances.is_page(1)">
+						<h4>Select the networks to calculate their pair-wise distance:</h4>
+						<label class="group-selection-option alert alert-warning" for="distances-all"><input type="checkbox" id="distances-all" name="distances-all" ng-model="commander.distances.group.all" ng-click="commander.distances.un_select_all(); commander.distances.get_attrs({nodes:[],edges:[]});" /> Un/Select all</label><label class="group-selection-option alert alert-success" for="distances-filter"><input type="checkbox" id="distances-filter" name="distances-filter" ng-model="commander.distances.group.filter" ng-click="commander.distances.toggle_filter()" /> Custom Filters</label>
+
+						<div class="panel panel-success" ng-show="commander.distances.group.filter">
+							<div class="panel-success panel-heading">
+								Filter
+								<a href="#/interface/{{m.session_id}}" class="btn-panel float-right" ng-click="commander.distances.add_filter()" title="Add new"><span class="text-success glyphicon glyphicon-plus"></span></a>
+							</div>
+							<div class="panel-body">
+								<table class="filter-selection">
+									<tr>
+										<td></td>
+										<th>Attribute</th>
+										<th>Condition</th>
+										<th>Value</th>
+									</tr>
+									<tr ng-repeat="filter in commander.distances.filters">
+										<td class="text-align-left">
+											<select class="form-control" ng-show="!$first" ng-model="commander.distances.filters[$index].combine" ng-change="commander.distances.apply_filters()">
+												<option value="">--</option>
+												<option value="AND">AND</option>
+												<option value="OR">OR</option>
+											</select>
+										</td>
+										<td>
+											<select class="form-control" style="max-width: 100px;" ng-model="commander.distances.filters[$index].attribute" ng-change="commander.distances.apply_filters(); commander.distances.filters[$index].value=''">
+												<option value="">--</option>
+												<option value="{{attr}}" ng-repeat="attr in commander.distances.group.net_attributes">{{commander.distances.extract_attr_name(attr)}}</option>
+											</select>
+										</td>
+										<td>
+											<select class="form-control" ng-model="commander.distances.filters[$index].condition" ng-change="commander.distances.apply_filters()">
+												<option value="" ng-show="!commander.distances.filters[$index].object">--</option>
+												<option value="e" ng-show="!commander.distances.filters[$index].object">=</option>
+												<option value="ne" ng-show="!commander.distances.filters[$index].object">&#8800;</option>
+												<option value="lt" ng-show="!commander.distances.filters[$index].object">&lt;</option>
+												<option value="le" ng-show="!commander.distances.filters[$index].object">&le;</option>
+												<option value="gt" ng-show="!commander.distances.filters[$index].object">&gt;</option>
+												<option value="ge" ng-show="!commander.distances.filters[$index].object">&ge;</option>
+												<option value="c" ng-selected="commander.distances.filters[$index].object" ng-show="commander.distances.filters[$index].object">contains</option>
+											</select>
+										</td>
+										<td>
+											<select class="form-control" style="max-width: 100px;" ng-model="commander.distances.filters[$index].value" ng-change="commander.distances.apply_filters()">
+												<option value="" ng-selected="-1 == commander.distances.get_net_attr_values($index).indexOf(commander.distances.filters[$index].value)">--</option>
+												<option value="{{v}}" ng-repeat="v in commander.distances.get_net_attr_values($index)">{{v}}</option>
+											</select>
+										</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+
+						<label for="net-{{net.id}}" class="alert" ng-repeat='net in commander.distances.group.net_list | filter:networks.isConverted' ng-show='networks.list != null' ng-class="{'alert-info' : networks.isConverted(net), 'alert-danger' : !networks.isConverted(net)}" style="width: 100%;">
+							<input id="net-{{net.id}}" name="net-{{net.id}}" type="checkbox" ng-model="commander.distances.group.networks[net.name]" ng-click="commander.distances.check(net.name); commander.distances.get_attrs({nodes:[],edges:[]});" />
+							{{net.name}}
+						</label>
+
+						<button class="btn end-btn btn-success" ng-click='commander.distances_set_page(2)'>next</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
+					</div>
+
+					<div class="distances-page-2" ng-show="commander.distances.is_page(2)">
+						<h4>Select the attributes to use for identity definitions:</h4>
+						<div>
+							<h5>Nodes</h5>
+							<label class="alert alert-warning attr-select" for="attr-node-{{attr}}" ng-repeat="attr in commander.distances.group.nodes">
+								<input type="checkbox" name="attr-node-{{attr}}" id="attr-node-{{attr}}" ng-model="commander.distances.n_attr_identity[attr]" />
+								{{attr}}
+							</label>
+						</div>
+						<div>
+							<h5>Edges</h5>
+							<label class="alert alert-warning attr-select" for="attr-edge-{{attr}}" ng-repeat="attr in commander.distances.group.edges">
+								<input type="checkbox" name="attr-edge-{{attr}}" id="attr-edge-{{attr}}" ng-model="commander.distances.e_attr_identity[attr]" />
+								{{attr}}
+							</label>
+						</div>
+
+						<br />
+						<button class="btn end-btn btn-success" ng-click='commander.distances_set_page(3)'>next</button><button class="btn end-btn btn-warning" ng-click='commander.distances.set_page(1)'>back</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
+					</div>
+
+					<div class="distances-page-3" ng-show="commander.distances.is_page(3)">
+						<h4>Select the distances:</h4>
+
+						<label for="dist-hamming" class="alert alert-info" style="width: 100%;">
+							<input id="dist-hamming" name="dist-hamming" type="checkbox" ng-model="commander.distances.measures['h']" />
+							Hamming
+						</label>
+						<label for="dist-hamming-im" class="alert alert-info" style="width: 100%;">
+							<input id="dist-hamming-im" name="dist-hamming-im" type="checkbox" ng-model="commander.distances.measures['him']" />
+							HIM
+						</label>
+						<label for="dist-IM" class="alert alert-info" style="width: 100%;">
+							<input id="dist-IM" name="dist-IM" type="checkbox" ng-model="commander.distances.measures['im']" />
+							Ipsen-Mikhailov
+						</label>
+						<label for="dist-jaccard" class="alert alert-info" style="width: 100%;">
+							<input id="dist-jaccard" name="dist-jaccard" type="checkbox" ng-model="commander.distances.measures['j']" />
+							Jaccard
+						</label>
+						<label for="dist-jaccard-im" class="alert alert-info" style="width: 100%;">
+							<input id="dist-jaccard-im" name="dist-jaccard-im" type="checkbox" ng-model="commander.distances.measures['jim']" />
+							JIM
+						</label>
+						<label for="dist-jaccard-subset" class="alert alert-info" style="width: 100%;">
+							<input id="dist-jaccard-subset" name="dist-jaccard-subset" type="checkbox" ng-model="commander.distances.measures['js']" />
+							Jaccard subset
+						</label>
+						<label for="dist-jaccard-subset-im" class="alert alert-info" style="width: 100%;">
+							<input id="dist-jaccard-subset-im" name="dist-jaccard-subset-im" type="checkbox" ng-model="commander.distances.measures['jsim']" />
+							JsIM
+						</label>
+						
+						<br />
+						<button class="btn end-btn btn-success" ng-click='commander.distances_set_page(4)'>next</button><button class="btn end-btn btn-warning" ng-click='commander.distances.set_page(2)'>back</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
+					</div>
+
+					<div class="distances-page-4" ng-show="commander.distances.is_page(4)">
+						<label for="auto-plot" class="alert alert-info" style="width: 100%;">
+							<input type="checkbox" id="auto-plot" name="auto-plot" ng-model="commander.distances.out_plot" />
+							Output plots and heatmaps.
+						</label>
+						<label for="auto-table" class="alert alert-info" style="width: 100%;">
+							<input type="checkbox" id="auto-table" name="auto-table" ng-model="commander.distances.out_table" />
+							Output distances table.
+						</label>
+
+						<br />
+						<button class="btn end-btn btn-success" ng-click='commander.apply_distances(m.session_id)'>distances</button><button class="btn end-btn btn-warning" ng-click='commander.distances.set_page(3)'>back</button><button class="btn end-btn btn-danger" ng-click='commander.abort_operation()'>abort</button>
+					</div>
+
+					<hr style="margin-bottom: 2em;" />
+
+					<div class="alert alert-danger" ng-show="undefined != commander.distances.errMsg">{{commander.distances.errMsg}}</div>
+				</div>
+			</div>
+
+			<div class='left-panel filter-panel panel panel-success' ng-show='panels.show.filter'>
+				<div class="panel-heading">Select node/edges</div>
+				<div class="panel-body">
+					
+					<table class="panel panel-default" style="width: 100%; text-align: center;">
+						<tr>
+							<th class="panel-heading" style="text-align: center;">
+								<button class="btn btn-info btn-block" ng-click="canvas.filters.init(canvas.current, 'w');" ng-disabled="canvas.filters.is_token('w')">
+									Whole
+								</button>
+							</th>
+							<th class="panel-heading" style="text-align: center;">
+								<button class="btn btn-info btn-block" ng-click="canvas.filters.init(canvas.filtered, 'f');" ng-disabled="canvas.filters.is_token('f')">
+									Filtered
+								</button>
+							</th>
+							<th class="panel-heading" style="text-align: center;">
+								<button class="btn btn-info btn-block" ng-click="canvas.filters.init(canvas.visualization, 'v');" ng-disabled="canvas.filters.is_token('v')">
+									Visualized
+								</button>
+							</th>
+						</tr>
+						<tr>
+							<td class="panel-body">
+								{{canvas.current.nodes.length}} Nodes<br />
+								{{canvas.current.edges.length}} Edges
+	 						</td>
+							<td class="panel-body">
+								<div ng-if="canvas.filtered == undefined">
+									0 Nodes<br />
+									0 Edges
+								</div>
+								<div ng-if="canvas.filtered != undefined">
+									{{canvas.filtered.nodes.length}} Nodes<br />
+									{{canvas.filtered.edges.length}} Edges
+								</div>
+	 						</td>
+							<td class="panel-body">
+								<div ng-if="canvas.visualization == undefined">
+									0 Nodes<br />
+									0 Edges
+								</div>
+								<div ng-if="canvas.visualization != undefined">
+									{{canvas.visualization.nodes.length}} Nodes<br />
+									{{canvas.visualization.edges.length}} Edges
+								</div>
+	 						</td>
+						</tr>
+					</table>
 
 					<!-- node filters -->
-					<div class="panel panel-success" ng-if="canvas.navi.filters.isLoaded()">
+					<div class="panel panel-success" ng-if="canvas.filters.isLoaded()">
 						<div class="panel-heading">
 							Node Filters
-							<a href="#/interface/{{m.session_id}}" class="btn-panel btn-filter float-right" ng-click="canvas.navi.filters.remove('nodes')" title="Remove last"><span class="text-success glyphicon glyphicon-minus"></span></a>
-							<a href="#/interface/{{m.session_id}}" class="btn-panel btn-filter float-right" ng-click="canvas.navi.filters.add('nodes')" title="Add new"><span class="text-success glyphicon glyphicon-plus"></span></a>
+							<a href="#/interface/{{m.session_id}}" class="btn-panel btn-filter float-right" ng-click="canvas.filters.remove('nodes')" title="Remove last"><span class="text-success glyphicon glyphicon-minus"></span></a>
+							<a href="#/interface/{{m.session_id}}" class="btn-panel btn-filter float-right" ng-click="canvas.filters.add('nodes')" title="Add new"><span class="text-success glyphicon glyphicon-plus"></span></a>
 						</div>
 						<div class="panel-body">
 							<table class="filter-selection">
-								<tr ng-if="0 == canvas.navi.filters.list.nodes.length">
+								<tr ng-if="0 == canvas.filters.list.nodes.length">
 									<td colspan="4">
 										Click the <span class="glyphicon glyphicon-plus"></span> icon to add a filter...
 									</td>
 								</tr>
-								<tr ng-if="0 != canvas.navi.filters.list.nodes.length">
+								<tr ng-if="0 != canvas.filters.list.nodes.length">
 									<td></td>
 									<th>Attribute</th>
 									<th>Condition</th>
 									<th>Value</th>
 								</tr>
-								<tr ng-repeat="filter in canvas.navi.filters.list.nodes">
+								<tr ng-repeat="filter in canvas.filters.list.nodes">
 									<td class="text-align-left">
-										<select class="form-control" ng-show="!$first" ng-model="canvas.navi.filters.list.nodes[$index].combine" ng-change="canvas.navi.filters.apply()">
+										<select class="form-control" ng-show="!$first" ng-model="canvas.filters.list.nodes[$index].combine" ng-change="canvas.filters.apply()">
 											<option value="">--</option>
 											<option value="AND">AND</option>
 											<option value="OR">OR</option>
 										</select>
 									</td>
 									<td>
-										<select class="form-control" style="max-width: 100px;" ng-model="canvas.navi.filters.list.nodes[$index].attribute" ng-change="canvas.navi.filters.apply(); canvas.navi.filters.list.nodes[$index].value=''">
+										<select class="form-control" style="max-width: 100px;" ng-model="canvas.filters.list.nodes[$index].attribute" ng-change="canvas.filters.apply(); canvas.filters.list.nodes[$index].value=''">
 											<option value="">--</option>
-											<option value="{{attr}}" ng-repeat="attr in canvas.navi.filters.attributes.nodes.labels">{{attr}}</option>
+											<option value="{{attr}}" ng-repeat="attr in canvas.filters.attributes.nodes.labels">{{attr}}</option>
 										</select>
 									</td>
 									<td>
-										<select class="form-control" ng-model="canvas.navi.filters.list.nodes[$index].condition" ng-change="canvas.navi.filters.apply()">
-											<option value="" ng-show="!canvas.navi.filters[$index].object">--</option>
-											<option value="e" ng-show="!canvas.navi.filters[$index].object">=</option>
-											<option value="ne" ng-show="!canvas.navi.filters[$index].object">&#8800;</option>
-											<option value="lt" ng-show="!canvas.navi.filters[$index].object">&lt;</option>
-											<option value="le" ng-show="!canvas.navi.filters[$index].object">&le;</option>
-											<option value="gt" ng-show="!canvas.navi.filters[$index].object">&gt;</option>
-											<option value="ge" ng-show="!canvas.navi.filters[$index].object">&ge;</option>
-											<option value="c" ng-selected="canvas.navi.filters[$index].object" ng-show="canvas.navi.filters[$index].object">contains</option>
+										<select class="form-control" ng-model="canvas.filters.list.nodes[$index].condition" ng-change="canvas.filters.apply()">
+											<option value="" ng-show="!canvas.filters[$index].object">--</option>
+											<option value="e" ng-show="!canvas.filters[$index].object">=</option>
+											<option value="ne" ng-show="!canvas.filters[$index].object">&#8800;</option>
+											<option value="lt" ng-show="!canvas.filters[$index].object">&lt;</option>
+											<option value="le" ng-show="!canvas.filters[$index].object">&le;</option>
+											<option value="gt" ng-show="!canvas.filters[$index].object">&gt;</option>
+											<option value="ge" ng-show="!canvas.filters[$index].object">&ge;</option>
+											<option value="c" ng-selected="canvas.filters[$index].object" ng-show="canvas.filters[$index].object">contains</option>
 										</select>
 									</td>
 									<td>
-										<select class="form-control" style="max-width: 100px;" ng-model="canvas.navi.filters.list.nodes[$index].value" ng-change="canvas.navi.filters.apply()">
-											<option value="" ng-selected="-1 == canvas.navi.filters.attributes.nodes.values[canvas.navi.filters.list.nodes[$index].attribute].indexOf(canvas.navi.filters[$index].value)">--</option>
-											<option value="{{v}}" ng-repeat="v in canvas.navi.filters.attributes.nodes.values[canvas.navi.filters.list.nodes[$index].attribute]">{{v}}</option>
+										<select class="form-control" style="max-width: 100px;" ng-model="canvas.filters.list.nodes[$index].value" ng-change="canvas.filters.apply()">
+											<option value="" ng-selected="-1 == canvas.filters.attributes.nodes.values[canvas.filters.list.nodes[$index].attribute].indexOf(canvas.filters[$index].value)">--</option>
+											<option value="{{v}}" ng-repeat="v in canvas.filters.attributes.nodes.values[canvas.filters.list.nodes[$index].attribute]">{{v}}</option>
 										</select>
 									</td>
 								</tr>
 							</table>
 						</div>
 					</div>
+					<!-- edge filters -->
+					<div class="panel panel-success" ng-if="canvas.filters.isLoaded()">
+						<div class="panel-heading">
+							Edge Filters
+							<a href="#/interface/{{m.session_id}}" class="btn-panel btn-filters float-right" ng-click="canvas.filters.remove('edges')" title="Remove last"><span class="text-success glyphicon glyphicon-minus"></span></a>
+							<a href="#/interface/{{m.session_id}}" class="btn-panel btn-filters float-right" ng-click="canvas.filters.add('edges')" title="Add new"><span class="text-success glyphicon glyphicon-plus"></span></a>
+						</div>
+						<div class="panel-body">
+							<table class="filter-selection">
+								<tr ng-if="0 == canvas.filters.list.edges.length">
+									<td colspan="4">
+										Click the <span class="glyphicon glyphicon-plus"></span> icon to add a filter...
+									</td>
+								</tr>
+								<tr ng-if="0 != canvas.filters.list.edges.length">
+									<td></td>
+									<th>Attribute</th>
+									<th>Condition</th>
+									<th>Value</th>
+								</tr>
+								<tr ng-repeat="filter in canvas.filters.list.edges">
+									<td class="text-align-left">
+										<select class="form-control" ng-show="!$first" ng-model="canvas.filters.list.edges[$index].combine" ng-change="canvas.filters.apply()">
+											<option value="">--</option>
+											<option value="AND">AND</option>
+											<option value="OR">OR</option>
+										</select>
+									</td>
+									<td>
+										<select class="form-control" style="max-width: 100px;" ng-model="canvas.filters.list.edges[$index].attribute" ng-change="canvas.filters.apply(); canvas.filters.list.edges[$index].value=''">
+											<option value="">--</option>
+											<option value="{{attr}}" ng-repeat="attr in canvas.filters.attributes.edges.labels">{{attr}}</option>
+										</select>
+									</td>
+									<td>
+										<select class="form-control" ng-model="canvas.filters.list.edges[$index].condition" ng-change="canvas.filters.apply()">
+											<option value="" ng-show="!canvas.filters[$index].object">--</option>
+											<option value="e" ng-show="!canvas.filters[$index].object">=</option>
+											<option value="ne" ng-show="!canvas.filters[$index].object">&#8800;</option>
+											<option value="lt" ng-show="!canvas.filters[$index].object">&lt;</option>
+											<option value="le" ng-show="!canvas.filters[$index].object">&le;</option>
+											<option value="gt" ng-show="!canvas.filters[$index].object">&gt;</option>
+											<option value="ge" ng-show="!canvas.filters[$index].object">&ge;</option>
+											<option value="c" ng-selected="canvas.filters[$index].object" ng-show="canvas.filters[$index].object">contains</option>
+										</select>
+									</td>
+									<td>
+										<select class="form-control" style="max-width: 100px;" ng-model="canvas.filters.list.edges[$index].value" ng-change="canvas.filters.apply()">
+											<option value="" ng-selected="-1 == canvas.filters.attributes.edges.values[canvas.filters.list.edges[$index].attribute].indexOf(canvas.filters[$index].value)">--</option>
+											<option value="{{v}}" ng-repeat="v in canvas.filters.attributes.edges.values[canvas.filters.list.edges[$index].attribute]">{{v}}</option>
+										</select>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+					
+					<div class="panel panel-danger" ng-if="canvas.filters.has()">
+						<div class="panel-heading">
+							Selected
+						</div>
+						<div class="panel-body">
+							{{canvas.filters.selection.nodes.length}} Nodes<br />
+							{{canvas.filters.selection.edges.length}} Edges
+						</div>
+					</div>
+
+					<div class="col-md-6" ng-if="canvas.filters.has()">
+						<button class="btn btn-block btn-danger small-caps" ng-click="canvas.unmask()" ng-disabled="canvas.filters.is_token('v')">unmask</button>
+					</div>
+					<div class="col-md-6" ng-if="canvas.filters.has()">
+						<button class="btn btn-block btn-warning small-caps" ng-click="canvas.mask()" ng-disabled="canvas.filters.is_token('f')">mask</button>
+					</div>
+					<div class="col-md-6" ng-if="canvas.filters.has()" style="margin-top: 4px;">
+						<button class="btn btn-block btn-primary small-caps" ng-click="alert('@todo')" ng-disabled="!canvas.filters.is_token('v')">select</button>
+					</div>
+					<div class="col-md-6" ng-if="canvas.filters.has()" style="margin-top: 4px;">
+						<button class="btn btn-block btn-success small-caps" ng-click="networks.init_file(canvas.current_data)" ng-disabled="canvas.visualized">load</button>
+					</div>
+
+				</div>
+			</div>
+
+			<div class='left-panel navigate-panel panel panel-success' ng-show='panels.show.navigate'>
+				<div class="panel-heading">Navigate network</div>
+				<div class="panel-body">
+
+					<table class="panel panel-default" style="width: 100%; text-align: center;">
+						<tr>
+							<th class="panel-heading" style="text-align: center;">
+								<button class="btn btn-info btn-block" ng-click="canvas.navi.init(canvas.current, 'w');" ng-disabled="canvas.navi.filters.is_token('w')">
+									Whole
+								</button>
+							</th>
+							<th class="panel-heading" style="text-align: center;">
+								<button class="btn btn-danger btn-block" disabled>
+									Filtered
+								</button>
+							</th>
+							<th class="panel-heading" style="text-align: center;">
+								<button class="btn btn-info btn-block" ng-click="canvas.navi.init(canvas.visualization, 'v');" ng-disabled="canvas.navi.filters.is_token('v')">
+									Visualized
+								</button>
+							</th>
+						</tr>
+						<tr>
+							<td class="panel-body">
+								{{canvas.current.nodes.length}} Nodes<br />
+								{{canvas.current.edges.length}} Edges
+	 						</td>
+							<td class="panel-body">
+								<div ng-if="canvas.filtered == undefined">
+									0 Nodes<br />
+									0 Edges
+								</div>
+								<div ng-if="canvas.filtered != undefined">
+									{{canvas.filtered.nodes.length}} Nodes<br />
+									{{canvas.filtered.edges.length}} Edges
+								</div>
+	 						</td>
+							<td class="panel-body">
+								<div ng-if="canvas.visualization == undefined">
+									0 Nodes<br />
+									0 Edges
+								</div>
+								<div ng-if="canvas.visualization != undefined">
+									{{canvas.visualization.nodes.length}} Nodes<br />
+									{{canvas.visualization.edges.length}} Edges
+								</div>
+	 						</td>
+						</tr>
+					</table>
+
+					<div ng-if="canvas.navi.filters.isLoaded()">
+						<p>
+							Select a node to visualize its <select name="" id="" ng-model="canvas.navi.mode">
+								<option value="">--</option>
+								<option value="all">(all)</option>
+								<option value="in">in</option>
+								<option value="out">out</option>
+							</select> neighborhood<br />
+							up to {{settings.info.node_thr}} nodes.
+						</p>
+
+						<p>
+							<select name="" id="" class="form-control" ng-model="canvas.navi.start_node">
+								<option value="">--</option>
+								<option value="{{node_id}}" ng-repeat="node_id in canvas.navi.filter_node_ids(canvas.navi.get_node_ids(), canvas.navi.filters.selection.nodes)">{{node_id}}</option>
+							</select>
+						</p>
+
+						<p>
+							You can also filter the node list.
+						</p>
+
+						<!-- node filters -->
+						<div class="panel panel-success" ng-if="canvas.navi.filters.isLoaded()">
+							<div class="panel-heading">
+								Node Filters
+								<a href="#/interface/{{m.session_id}}" class="btn-panel btn-filter float-right" ng-click="canvas.navi.filters.remove('nodes')" title="Remove last"><span class="text-success glyphicon glyphicon-minus"></span></a>
+								<a href="#/interface/{{m.session_id}}" class="btn-panel btn-filter float-right" ng-click="canvas.navi.filters.add('nodes')" title="Add new"><span class="text-success glyphicon glyphicon-plus"></span></a>
+							</div>
+							<div class="panel-body">
+								<table class="filter-selection">
+									<tr ng-if="0 == canvas.navi.filters.list.nodes.length">
+										<td colspan="4">
+											Click the <span class="glyphicon glyphicon-plus"></span> icon to add a filter...
+										</td>
+									</tr>
+									<tr ng-if="0 != canvas.navi.filters.list.nodes.length">
+										<td></td>
+										<th>Attribute</th>
+										<th>Condition</th>
+										<th>Value</th>
+									</tr>
+									<tr ng-repeat="filter in canvas.navi.filters.list.nodes">
+										<td class="text-align-left">
+											<select class="form-control" ng-show="!$first" ng-model="canvas.navi.filters.list.nodes[$index].combine" ng-change="canvas.navi.filters.apply()">
+												<option value="">--</option>
+												<option value="AND">AND</option>
+												<option value="OR">OR</option>
+											</select>
+										</td>
+										<td>
+											<select class="form-control" style="max-width: 100px;" ng-model="canvas.navi.filters.list.nodes[$index].attribute" ng-change="canvas.navi.filters.apply(); canvas.navi.filters.list.nodes[$index].value=''">
+												<option value="">--</option>
+												<option value="{{attr}}" ng-repeat="attr in canvas.navi.filters.attributes.nodes.labels">{{attr}}</option>
+											</select>
+										</td>
+										<td>
+											<select class="form-control" ng-model="canvas.navi.filters.list.nodes[$index].condition" ng-change="canvas.navi.filters.apply()">
+												<option value="" ng-show="!canvas.navi.filters[$index].object">--</option>
+												<option value="e" ng-show="!canvas.navi.filters[$index].object">=</option>
+												<option value="ne" ng-show="!canvas.navi.filters[$index].object">&#8800;</option>
+												<option value="lt" ng-show="!canvas.navi.filters[$index].object">&lt;</option>
+												<option value="le" ng-show="!canvas.navi.filters[$index].object">&le;</option>
+												<option value="gt" ng-show="!canvas.navi.filters[$index].object">&gt;</option>
+												<option value="ge" ng-show="!canvas.navi.filters[$index].object">&ge;</option>
+												<option value="c" ng-selected="canvas.navi.filters[$index].object" ng-show="canvas.navi.filters[$index].object">contains</option>
+											</select>
+										</td>
+										<td>
+											<select class="form-control" style="max-width: 100px;" ng-model="canvas.navi.filters.list.nodes[$index].value" ng-change="canvas.navi.filters.apply()">
+												<option value="" ng-selected="-1 == canvas.navi.filters.attributes.nodes.values[canvas.navi.filters.list.nodes[$index].attribute].indexOf(canvas.navi.filters[$index].value)">--</option>
+												<option value="{{v}}" ng-repeat="v in canvas.navi.filters.attributes.nodes.values[canvas.navi.filters.list.nodes[$index].attribute]">{{v}}</option>
+											</select>
+										</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+
+						<hr />
+
+						<button class="btn btn-success float-right small-caps" ng-if="canvas.navi.filters.isLoaded()" ng-click="canvas.navigate(m.session_id, canvas.navi.start_node)">apply</button>
+					</div>
+				</div>
+			</div>
+
+			<div class='left-panel layout-panel panel panel-warning' ng-show='panels.show.layout'>
+				<div class="panel-heading">Layout</div>
+				<div class="panel-body">
+					
+					<button type="button" class="btn btn-warning oldSkin btn-md" ng-click="canvas.layout({name:'circle'})" >
+						<span class="glyphicon glyphicon-repeat"></span>
+					</button>
+					<button type="button" class="btn btn-warning oldSkin btn-md" ng-click="canvas.layout({name:'grid'})">
+						<span class="glyphicon glyphicon-th"></span>
+					</button>
+					<button type="button" class="btn btn-warning oldSkin btn-md" ng-click="canvas.layout({name:'breadthfirst'})">
+						<span class="glyphicon glyphicon-tree-deciduous"></span>
+					</button>
+					<button type="button" class="btn btn-warning oldSkin btn-md" ng-click="canvas.layout({name:'random'})">
+						<span class="glyphicon glyphicon-asterisk"></span>
+					</button>
+					<button type="button" class="btn btn-danger oldSkin btn-md" ng-click="canvas.center()">
+						<span class="glyphicon glyphicon-screenshot"></span>
+					</button>
+
+				</div>
+			</div>
+
+			<div class='left-panel style-panel panel panel-warning' ng-show='panels.show.style'>
+				<div class="panel-heading">Style</div>
+				<div class="panel-body">
+					...
+				</div>
+			</div>
+
+			<div class='left-panel settings-panel panel panel-default' ng-show='panels.show.settings'>
+				<div class="panel-heading">Settings</div>
+				<div class="panel-body">
+
+					<h4>Sample Info File</h4>
+
+					<!-- SIF -->
+					<div ng-show="!settings.is_sif_ready()">
+						<button class="btn btn-default" ng-click="settings.upload_sif(m.session_id)">Upload SIF</button>
+						<input type="file" id="sif-input" class='hidden-file-input' />
+					</div>
+
+					<div ng-show="settings.is_sif_ready()">
+						SIF sample column:
+						<select name="sif-sample-column" id="sif-sample-column" class="form-control" ng-model="settings.info.sif_sample_col">
+							<option value="">Select a column</option>
+							<option value="{{k}}" ng-repeat="k in settings.info.sif_keys" ng-selected="settings.is_sif_sample_col(k)">{{k}}</option>
+						</select>
+						<button class="btn btn-default change-sif-btn" ng-click="settings.upload_sif(m.session_id)">Change SIF</button>
+						<input type="file" id="sif-input" class='hidden-file-input' />
+					</div>
 
 					<hr />
 
-					<button class="btn btn-success float-right small-caps" ng-if="canvas.navi.filters.isLoaded()" ng-click="canvas.navigate(m.session_id, canvas.navi.start_node)">apply</button>
+					<h4>Visualization</h4>
+
+					<!-- default layout -->
+					<p>
+						<label for="default_layout">Default layout:</label>
+						<select name="default_layout" id="default_layout" class="form-control" ng-model="settings.info.default_layout">
+							<option value="grid">grid</option>
+							<option value="circle">circle</option>
+						</select>
+					</p>
+
+					<!-- node_threshold -->
+					<div>
+						<label for="node_thr">Node threshold: </label>
+						<input id="node_thr" name="node_thr" type="number" ng-model="settings.info.node_thr" />
+					</div>
+
+					<hr />
+
+					<h4>Gene Ontologies</h4>
+
+					<!-- GO files -->
+
+					<table class="go-table">
+						<tr>
+							<th><label for="goa-input">GO annotations: </label></th>
+							<th><label for="gob-input">GO basic: </label></th>
+						</tr>
+						<tr>
+							<td>
+								<div ng-if="!settings.is_go_ready('a')">
+									<div class="alert alert-warning" style="margin-bottom: 2px;">default</div>
+									<button class="btn btn-primary btn-block" ng-click="settings.upload_goa(m.session_id)">Upload GOA</button>
+								</div>
+								<div ng-if="settings.is_go_ready('a')">
+									<div class="alert alert-success" style="margin-bottom: 2px;">GOA loaded.</div>
+									<button class="btn btn-warning btn-block" ng-click="settings.upload_goa(m.session_id)">Change GOA</button>
+								</div>
+								<input type="file" id="goa-input" name="goa-input" class='hidden-file-input' />
+							</td>
+							<td>
+								<div ng-if="!settings.is_go_ready('b')">
+									<div class="alert alert-warning" style="margin-bottom: 2px;">default</div>
+									<button class="btn btn-primary btn-block" ng-click="settings.upload_gob(m.session_id)">Upload GOB</button>
+								</div>
+								<div ng-if="settings.is_go_ready('b')">
+									<div class="alert alert-success" style="margin-bottom: 2px;">GOB loaded.</div>
+									<button class="btn btn-warning btn-block" ng-click="settings.upload_gob(m.session_id)">Change GOB</button>
+								</div>
+								<input type="file" id="gob-input" name="gob-input" class='hidden-file-input' />
+							</td>
+						</tr>
+						<tr ng-if="settings.is_go_ready()">
+							<td colspan="2">
+								<button class="btn btn-block btn-primary" ng-click="settings.apply_go_mapper(m.session_id)">map GOs</button>
+							</td>
+						</tr>
+					</table>
+
+					<br />
+
+					<div ng-click="settings.is_go_mapped(m.session_id)">
+						<label for="go_status">Status: </label>
+						<span class="text-success" ng-show="settings.info.go_status">ready</span>
+						<span class="text-danger" ng-show="!settings.info.go_status">waiting</span>
+					</div>
+
+					<hr />
+
+					<!-- save_button -->
+					<button class="btn btn-apply btn-sm btn-success" ng-click="settings._apply(m.session_id)">apply</button>
 				</div>
 			</div>
+
 		</div>
 
-		<div class='left-panel layout-panel panel panel-warning' ng-show='panels.show.layout'>
-			<div class="panel-heading">Layout</div>
-			<div class="panel-body">
+		<div id='bottom-bar'>
+			<div class="col-md-12 wrap">
+
+				<div id="console" class='col-md-5' ng-click='panels.closeAll()' style="visibility: hidden;">
+					<input type='text' class='terminal' /><button class='btn btn-info'><span class="glyphicon glyphicon-forward"></span></button>
+				</div>
 				
-				<button type="button" class="btn btn-warning btn-md" ng-click="canvas.layout({name:'circle'})" >
-					<span class="glyphicon glyphicon-repeat"></span>
-				</button>
-				<button type="button" class="btn btn-warning btn-md" ng-click="canvas.layout({name:'grid'})">
-					<span class="glyphicon glyphicon-th"></span>
-				</button>
-				<button type="button" class="btn btn-warning btn-md" ng-click="canvas.layout({name:'breadthfirst'})">
-					<span class="glyphicon glyphicon-tree-deciduous"></span>
-				</button>
-				<button type="button" class="btn btn-warning btn-md" ng-click="canvas.layout({name:'random'})">
-					<span class="glyphicon glyphicon-asterisk"></span>
-				</button>
-				<button type="button" class="btn btn-danger btn-md" ng-click="canvas.center()">
-					<span class="glyphicon glyphicon-screenshot"></span>
-				</button>
+				<div id="inspector" class="col-md-4 col-md-offset-2 panel panel-info" ng-show='inspector.show'>
+					<div class="panel-heading">
+						Inspector
+						<a href="#/interface/{{m.session_id}}" class="close-btn" ng-click="inspector.close()"><span class="glyphicon glyphicon-remove"></span></a>
+					</div>
+					<div class="panel-body">
+						
+						<div ng-show="inspector.is_inspecting('network')">
+							<p><b>Name: </b>{{inspector.inspecting.network.name}}</p>
 
-			</div>
-		</div>
+							<p><b>Nodes: </b>{{inspector.inspecting.network.data.v_count}}</p>
+							<p><b>Node attributes:</b></p>
+							<ul>
+								<li ng-show="!inspector.inspecting.network.data.v_attributes_array">{{inspector.inspecting.network.data.v_attributes}}</li>
+								<li ng-repeat="attr in inspector.inspecting.network.data.v_attributes" ng-show="inspector.inspecting.network.data.v_attributes_array">{{attr}}</li>
+							</ul>
 
-		<div class='left-panel style-panel panel panel-warning' ng-show='panels.show.style'>
-			<div class="panel-heading">Style</div>
-			<div class="panel-body">
-				...
-			</div>
-		</div>
+							<p><b>Edges: </b>{{inspector.inspecting.network.data.e_count}}</p>
+							<p><b>Edge attributes:</b></p>
+							<ul>
+								<li ng-show="!inspector.inspecting.network.data.e_attributes_array">{{inspector.inspecting.network.data.e_attributes}}</li>
+								<li ng-repeat="attr in inspector.inspecting.network.data.e_attributes" ng-show="inspector.inspecting.network.data.e_attributes_array">{{attr}}</li>
+							</ul>
 
-		<div class='left-panel settings-panel panel panel-default' ng-show='panels.show.settings'>
-			<div class="panel-heading">Settings</div>
-			<div class="panel-body">
+							<p><b>Single-sample: </b>{{inspector.inspecting.network.single}}</p>
 
-				<h4>Sample Info File</h4>
-
-				<!-- SIF -->
-				<div ng-show="!settings.is_sif_ready()">
-					<button class="btn btn-default" ng-click="settings.upload_sif(m.session_id)">Upload SIF</button>
-					<input type="file" id="sif-input" class='hidden-file-input' />
-				</div>
-
-				<div ng-show="settings.is_sif_ready()">
-					SIF sample column:
-					<select name="sif-sample-column" id="sif-sample-column" class="form-control" ng-model="settings.info.sif_sample_col">
-						<option value="">Select a column</option>
-						<option value="{{k}}" ng-repeat="k in settings.info.sif_keys" ng-selected="settings.is_sif_sample_col(k)">{{k}}</option>
-					</select>
-					<button class="btn btn-default change-sif-btn" ng-click="settings.upload_sif(m.session_id)">Change SIF</button>
-					<input type="file" id="sif-input" class='hidden-file-input' />
-				</div>
-
-				<hr />
-
-				<h4>Visualization</h4>
-
-				<!-- default layout -->
-				<p>
-					<label for="default_layout">Default layout:</label>
-					<select name="default_layout" id="default_layout" class="form-control" ng-model="settings.info.default_layout">
-						<option value="grid">grid</option>
-						<option value="circle">circle</option>
-					</select>
-				</p>
-
-				<!-- node_threshold -->
-				<div>
-					<label for="node_thr">Node threshold: </label>
-					<input id="node_thr" name="node_thr" type="number" ng-model="settings.info.node_thr" />
-				</div>
-
-				<hr />
-
-				<h4>Gene Ontologies</h4>
-
-				<!-- GO files -->
-
-				<table class="go-table">
-					<tr>
-						<th><label for="goa-input">GO annotations: </label></th>
-						<th><label for="gob-input">GO basic: </label></th>
-					</tr>
-					<tr>
-						<td>
-							<div ng-if="!settings.is_go_ready('a')">
-								<div class="alert alert-warning" style="margin-bottom: 2px;">default</div>
-								<button class="btn btn-primary btn-block" ng-click="settings.upload_goa(m.session_id)">Upload GOA</button>
+							<br />
+							<div ng-show="inspector.inspecting.network.single">
+								<h4>SIF data</h4>
+								<p ng-repeat="(key, value) in inspector.inspecting.network.sif_data">
+									<b>{{key}}: </b>{{value}}
+								</p>
 							</div>
-							<div ng-if="settings.is_go_ready('a')">
-								<div class="alert alert-success" style="margin-bottom: 2px;">GOA loaded.</div>
-								<button class="btn btn-warning btn-block" ng-click="settings.upload_goa(m.session_id)">Change GOA</button>
-							</div>
-							<input type="file" id="goa-input" name="goa-input" class='hidden-file-input' />
-						</td>
-						<td>
-							<div ng-if="!settings.is_go_ready('b')">
-								<div class="alert alert-warning" style="margin-bottom: 2px;">default</div>
-								<button class="btn btn-primary btn-block" ng-click="settings.upload_gob(m.session_id)">Upload GOB</button>
-							</div>
-							<div ng-if="settings.is_go_ready('b')">
-								<div class="alert alert-success" style="margin-bottom: 2px;">GOB loaded.</div>
-								<button class="btn btn-warning btn-block" ng-click="settings.upload_gob(m.session_id)">Change GOB</button>
-							</div>
-							<input type="file" id="gob-input" name="gob-input" class='hidden-file-input' />
-						</td>
-					</tr>
-					<tr ng-if="settings.is_go_ready()">
-						<td colspan="2">
-							<button class="btn btn-block btn-primary" ng-click="settings.apply_go_mapper(m.session_id)">map GOs</button>
-						</td>
-					</tr>
-				</table>
-
-				<br />
-
-				<div ng-click="settings.is_go_mapped(m.session_id)">
-					<label for="go_status">Status: </label>
-					<span class="text-success" ng-show="settings.info.go_status">ready</span>
-					<span class="text-danger" ng-show="!settings.info.go_status">waiting</span>
-				</div>
-
-				<hr />
-
-				<!-- save_button -->
-				<button class="btn btn-apply btn-sm btn-success" ng-click="settings._apply(m.session_id)">apply</button>
-			</div>
-		</div>
-
-	</div>
-
-	<div id='bottom-bar'>
-		<div class="col-md-12 wrap">
-
-			<div id="console" class='col-md-5' ng-click='panels.closeAll()' style="visibility: hidden;">
-				<input type='text' class='terminal' /><button class='btn btn-info'><span class="glyphicon glyphicon-forward"></span></button>
-			</div>
-			
-			<div id="inspector" class="col-md-4 col-md-offset-2 panel panel-info" ng-show='inspector.show'>
-				<div class="panel-heading">
-					Inspector
-					<a href="#/interface/{{m.session_id}}" class="close-btn" ng-click="inspector.close()"><span class="glyphicon glyphicon-remove"></span></a>
-				</div>
-				<div class="panel-body">
-					
-					<div ng-show="inspector.is_inspecting('network')">
-						<p><b>Name: </b>{{inspector.inspecting.network.name}}</p>
-
-						<p><b>Nodes: </b>{{inspector.inspecting.network.data.v_count}}</p>
-						<p><b>Node attributes:</b></p>
-						<ul>
-							<li ng-show="!inspector.inspecting.network.data.v_attributes_array">{{inspector.inspecting.network.data.v_attributes}}</li>
-							<li ng-repeat="attr in inspector.inspecting.network.data.v_attributes" ng-show="inspector.inspecting.network.data.v_attributes_array">{{attr}}</li>
-						</ul>
-
-						<p><b>Edges: </b>{{inspector.inspecting.network.data.e_count}}</p>
-						<p><b>Edge attributes:</b></p>
-						<ul>
-							<li ng-show="!inspector.inspecting.network.data.e_attributes_array">{{inspector.inspecting.network.data.e_attributes}}</li>
-							<li ng-repeat="attr in inspector.inspecting.network.data.e_attributes" ng-show="inspector.inspecting.network.data.e_attributes_array">{{attr}}</li>
-						</ul>
-
-						<p><b>Single-sample: </b>{{inspector.inspecting.network.single}}</p>
-
-						<br />
-						<div ng-show="inspector.inspecting.network.single">
-							<h4>SIF data</h4>
-							<p ng-repeat="(key, value) in inspector.inspecting.network.sif_data">
-								<b>{{key}}: </b>{{value}}
-							</p>
+							<br />
 						</div>
-						<br />
-					</div>
 
-					<div ng-show="inspector.is_inspecting('node')">
-						<p><div ng-repeat="(k,v) in inspector.inspecting.node">
-							<div ng-if="networks.attributes.isObject(v)">
-								<b>{{k}}</b>:
-								<ul ng-if="!networks.attributes.isArray(v)">
-									<li ng-repeat="(a, b) in v"><b>{{a}}</b>: {{b}}</li>
-								</ul>
-								<ul ng-if="networks.attributes.isArray(v)">
-									<li ng-repeat="a in v">{{a}}</li>
-								</ul>
-							</div>
-							<span ng-if="!networks.attributes.isObject(v)"><b>{{k}}</b>: {{v}}</span>
-						</div></p>
-					</div>
+						<div ng-show="inspector.is_inspecting('node')">
+							<p><div ng-repeat="(k,v) in inspector.inspecting.node">
+								<div ng-if="networks.attributes.isObject(v)">
+									<b>{{k}}</b>:
+									<ul ng-if="!networks.attributes.isArray(v)">
+										<li ng-repeat="(a, b) in v"><b>{{a}}</b>: {{b}}</li>
+									</ul>
+									<ul ng-if="networks.attributes.isArray(v)">
+										<li ng-repeat="a in v">{{a}}</li>
+									</ul>
+								</div>
+								<span ng-if="!networks.attributes.isObject(v)"><b>{{k}}</b>: {{v}}</span>
+							</div></p>
+						</div>
 
-					<div ng-show="inspector.is_inspecting('edge')">
-						<p><div ng-repeat="(k,v) in inspector.inspecting.edge">
-							<div ng-if="networks.attributes.isObject(v)">
-								<b>{{k}}</b>:
-								<ul ng-if="!networks.attributes.isArray(v)">
-									<li ng-repeat="(a, b) in v"><b>{{a}}</b>: {{b}}</li>
-								</ul>
-								<ul ng-if="networks.attributes.isArray(v)">
-									<li ng-repeat="a in v">{{a}}</li>
-								</ul>
-							</div>
-							<span ng-if="!networks.attributes.isObject(v)"><b>{{k}}</b>: {{v}}</span>
-						</div></p>
-					</div>
+						<div ng-show="inspector.is_inspecting('edge')">
+							<p><div ng-repeat="(k,v) in inspector.inspecting.edge">
+								<div ng-if="networks.attributes.isObject(v)">
+									<b>{{k}}</b>:
+									<ul ng-if="!networks.attributes.isArray(v)">
+										<li ng-repeat="(a, b) in v"><b>{{a}}</b>: {{b}}</li>
+									</ul>
+									<ul ng-if="networks.attributes.isArray(v)">
+										<li ng-repeat="a in v">{{a}}</li>
+									</ul>
+								</div>
+								<span ng-if="!networks.attributes.isObject(v)"><b>{{k}}</b>: {{v}}</span>
+							</div></p>
+						</div>
 
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
 
-	<div id="canvas" ng-click='panels.closeAll();'>
-		<div id="loaded-network-spy">{{canvas.current_data.name}}</div>
+		<div id="canvas" ng-click='panels.closeAll();'>
+			<div id="loaded-network-spy">{{canvas.current_data.name}}</div>
+		</div>
 	</div>
-
+	<div class="password-protection jumbotron" ng-if="m.session_protected">
+		<center>
+			<h1>TEMA</h1>
+			<h2>You are trying to access a protected session.</h2>
+			<h2>Please provide the</h2>
+			<input type="password" class="form-control" placeholder="password" ng-model="sessions.front_password" />
+			<h2>and then</h2>
+			<button class="btn btn-light-aqua btn-lg small-caps font-size-24px" ng-click="frontEnter()">submit</button>
+		</center>
+	</div>
+	<div class="cannot-access jumbotron" ng-if="m.session_error && !m.session_protected">
+		<h1>TEMA</h1>
+		<h2>
+			<b>Error:</b> you can not access the selected session.
+		</h2>
+	</div>
 </div>

@@ -2,14 +2,14 @@
 /**
  * Upload a network by drag&drop.
  * @author Gabriele Girelli <gabriele@filopoe.it>
- * @since  0.2.0
+ * @since  0.3.0
  */
 
 // Requirements
-require_once(dirname(dirname(__FILE__)) . '/include/tea.session.class.php');
+require_once(dirname(dirname(__FILE__)) . '/include/tema.session.class.php');
 
 // Connect to database
-$s = new TEAsession(HOST, USER, PWD, DB_NAME);
+$s = new TEMAsession(HOST, USER, PWD, DB_NAME);
 
 // Convert $_POST to $data
 $data->id = $_POST['id'];
