@@ -173,8 +173,9 @@
                     if(scope.m.logsys.load.hatch != null || scope.m.logsys.load.token == null) {
                         return(false)
                     } else {
-                        console.log(1);
                         document.location.hash = '#/interface/' + scope.m.logsys.load.token;
+                        scope.m.logsys.load.token = '';
+                        scope.load.setDoing(false);
                     }
     			}
 

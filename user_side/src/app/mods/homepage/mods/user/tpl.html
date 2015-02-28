@@ -7,7 +7,7 @@
 	</div>
 
 	<!-- user-panel -->
-	<div class="session-choice panel panel-light col-md-12" ng-if="!out.isSigning()&&!create.isDoing()">
+	<div class="session-choice panel panel-light col-md-12" ng-if="!out.isSigning()&&!create.isDoing()&&!load.isDoing()">
 		<div class="panel-heading">
 			You are logged in as <u>{{m.logsys.logged.usr}}</u>
 			<a href="" class="float-right mrigh02" ng-click="panels.reload()" title="Reload lists"><span class="glyphicon glyphicon-refresh"></span></a>
@@ -18,7 +18,7 @@
 				<div class="col-md-12 pori0"><button class="all-width mbot02 h2-5em btn btn-aqua small-caps" ng-click="out.sign()">logout</button></div>
 				<div class="col-md-12 pori0"><button class="all-width mbot02 h2-5em btn btn-light-aqua small-caps" ng-click='' onclick="javascript:alert('TODO')">edit profile</button></div>
 				<div class="col-md-12 pori0"><button class="all-width mbot02 h2-5em btn btn-reddish small-caps" ng-click='create.setDoing(true)'>createa <u>new</u> session</button></div>
-				<div class="col-md-12 pori0"><button class="all-width mbot0 h2-5em btn btn-sky small-caps" ng-click='' onclick="javascript:alert('TODO')">enter a <u>public</u> session</button></div>
+				<div class="col-md-12 pori0"><button class="all-width mbot0 h2-5em btn btn-sky small-caps" ng-click='load.setDoing(true)'>enter a <u>public</u> session</button></div>
 			</div>
 
 			<div class="col-md-6 col-md-pull-6 plef0 prig05 mbot05">
@@ -100,6 +100,26 @@
 
 			<a ng-click="create.setDoing(false)" class="btn btn-reddish float-right small-caps h2-5em">back</a>
 			<a ng-click="create.do()" class="btn btn-aqua float-right small-caps h2-5em">create</a>
+		</div>
+	</div>
+
+	<!-- load-public-session -->
+	<div class="selected-form panel panel-default col-md-12" ng-if="load.isDoing()">
+		<div class="panel-heading">Load a public session!</div>
+		<div class="panel-body">
+
+			<form action="" role="form">
+				<div class="mbot05 col-md-12 input-group">
+					<span class="input-group-addon"><span class="glyphicon glyphicon-barcode"></span></span>
+					<input class="form-control" type="text" placeholder="Insert the public session token (e.g.: 1423645674753cae649e)" name="token" id="token" ng-model="m.logsys.load.token" />
+				</div>
+
+				<div><input class="mbot05 form-control hidden-file-input" type="email" id="hatch" name="hatch" ng-model="m.logsys.load.hatch"></div>
+
+				<a href="#" ng-click="load.setDoing(false)" class="float-right mrig07 btn btn-reddish small-caps">back</a>
+				<a ng-click="load.do()" class="float-right mrig07 btn btn-aqua small-caps">load</a>
+			</form>		
+
 		</div>
 	</div>
 

@@ -213,6 +213,33 @@
 
             scope.panels.loadAll();
 
+            /**
+             * Functions to load a public session
+             * @type {Object}
+             */
+            scope.load = {
+
+                setDoing: function (val) {
+                    scope.m.logsys.load.doing = val;
+                },
+
+                isDoing: function () {
+                    return(scope.m.logsys.load.doing);
+                },
+
+                do: function () {
+                    // Check for bot in the honeypot
+                    if(scope.m.logsys.load.hatch != null || scope.m.logsys.load.token == null) {
+                        return(false)
+                    } else {
+                        document.location.hash = '#/interface/' + scope.m.logsys.load.token;
+                        scope.m.logsys.load.token = '';
+                        scope.load.setDoing(false);
+                    }
+                }
+
+            };
+
         };
 
     });
