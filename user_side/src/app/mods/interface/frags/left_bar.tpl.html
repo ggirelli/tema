@@ -1,0 +1,60 @@
+<a class="title" href='' ng-click="resetApp()">TEMA</a>
+
+<span class="btn btn-aqua btn-circle"
+	ng-click="panels.toggle('graph_list')"
+	ng-class="{'open' : panels.show.graph_list}"
+	title="Network list">
+	<span class="glyphicon glyphicon-th-list"></span>
+</span>
+<span class="btn btn-aqua btn-circle"
+	ng-click="panels.toggle('attributes')"
+	ng-class="{'open' : panels.show.attributes}"
+	title="Attributes">
+	<span class="glyphicon glyphicon-tags"></span>
+</span>
+
+<span class="btn btn-reddish btn-circle"
+	ng-click="panels.toggle('operations')"
+	ng-class="{'open' : panels.show.operations}"
+	title="Operations">
+	<span class="glyphicon glyphicon-pencil"></span>
+</span>
+
+<span class="btn btn-sky btn-circle"
+	ng-click="panels.toggle('filter')"
+	ng-class="{'open' : panels.show.filter}"
+	title="Filter">
+	<span class="glyphicon glyphicon-filter"></span>
+</span>
+<span class="btn btn-sky btn-circle"
+	ng-click="panels.toggle('navigate')"
+	ng-class="{'open' : panels.show.navigate}"
+	title="Navigate">
+	<span class="glyphicon glyphicon-plane"></span>
+</span>
+
+<span class="btn btn-gold btn-circle"
+	ng-click="panels.toggle('layout')"
+	ng-class="{'open' : panels.show.layout}"
+	title="Layout">
+	<span class="glyphicon glyphicon-th"></span>
+</span>
+<span class="btn btn-gold btn-circle"
+	ng-click="panels.toggle('style')"
+	ng-class="{'open' : panels.show.style}"
+	title="Style">
+	<span class="glyphicon glyphicon-adjust"></span>
+</span>
+
+<span class="btn btn-gray btn-circle"
+	ng-click="panels.toggle('settings')"
+	ng-class="{'open' : panels.show.settings}"
+	title="Settings">
+	<span class="glyphicon glyphicon-cog"></span>
+</span>
+
+<a href="#/help"
+	class="btn btn-light-aqua btn-circle"
+	title="Help">
+	<span class="glyphicon glyphicon-heart-empty"></span>
+</a>

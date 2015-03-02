@@ -1,0 +1,133 @@
+<div class="panel-heading">Navigate network</div>
+<div class="panel-body">
+
+	<table class="panel panel-default" style="width: 100%; text-align: center;">
+		<tr>
+			<th class="panel-heading" style="text-align: center;">
+				<button class="btn btn-info btn-block" ng-click="canvas.navi.init(canvas.current, 'w');" ng-disabled="canvas.navi.filters.is_token('w')">
+					Whole
+				</button>
+			</th>
+			<th class="panel-heading" style="text-align: center;">
+				<button class="btn btn-danger btn-block" disabled>
+					Filtered
+				</button>
+			</th>
+			<th class="panel-heading" style="text-align: center;">
+				<button class="btn btn-info btn-block" ng-click="canvas.navi.init(canvas.visualization, 'v');" ng-disabled="canvas.navi.filters.is_token('v')">
+					Visualized
+				</button>
+			</th>
+		</tr>
+		<tr>
+			<td class="panel-body">
+				{{canvas.current.nodes.length}} Nodes<br />
+				{{canvas.current.edges.length}} Edges
+				</td>
+			<td class="panel-body">
+				<div ng-if="canvas.filtered == undefined">
+					0 Nodes<br />
+					0 Edges
+				</div>
+				<div ng-if="canvas.filtered != undefined">
+					{{canvas.filtered.nodes.length}} Nodes<br />
+					{{canvas.filtered.edges.length}} Edges
+				</div>
+				</td>
+			<td class="panel-body">
+				<div ng-if="canvas.visualization == undefined">
+					0 Nodes<br />
+					0 Edges
+				</div>
+				<div ng-if="canvas.visualization != undefined">
+					{{canvas.visualization.nodes.length}} Nodes<br />
+					{{canvas.visualization.edges.length}} Edges
+				</div>
+				</td>
+		</tr>
+	</table>
+
+	<div ng-if="canvas.navi.filters.isLoaded()">
+		<p>
+			Select a node to visualize its <select name="" id="" ng-model="canvas.navi.mode">
+				<option value="">--</option>
+				<option value="all">(all)</option>
+				<option value="in">in</option>
+				<option value="out">out</option>
+			</select> neighborhood<br />
+			up to {{settings.info.node_thr}} nodes.
+		</p>
+
+		<p>
+			<select name="" id="" class="form-control" ng-model="canvas.navi.start_node">
+				<option value="">--</option>
+				<option value="{{node_id}}" ng-repeat="node_id in canvas.navi.filter_node_ids(canvas.navi.get_node_ids(), canvas.navi.filters.selection.nodes)">{{node_id}}</option>
+			</select>
+		</p>
+
+		<p>
+			You can also filter the node list.
+		</p>
+
+		<!-- node filters -->
+		<div class="panel panel-success" ng-if="canvas.navi.filters.isLoaded()">
+			<div class="panel-heading">
+				Node Filters
+				<a href="#/interface/{{m.session_id}}" class="btn-panel btn-filter float-right" ng-click="canvas.navi.filters.remove('nodes')" title="Remove last"><span class="text-success glyphicon glyphicon-minus"></span></a>
+				<a href="#/interface/{{m.session_id}}" class="btn-panel btn-filter float-right" ng-click="canvas.navi.filters.add('nodes')" title="Add new"><span class="text-success glyphicon glyphicon-plus"></span></a>
+			</div>
+			<div class="panel-body">
+				<table class="filter-selection">
+					<tr ng-if="0 == canvas.navi.filters.list.nodes.length">
+						<td colspan="4">
+							Click the <span class="glyphicon glyphicon-plus"></span> icon to add a filter...
+						</td>
+					</tr>
+					<tr ng-if="0 != canvas.navi.filters.list.nodes.length">
+						<td></td>
+						<th>Attribute</th>
+						<th>Condition</th>
+						<th>Value</th>
+					</tr>
+					<tr ng-repeat="filter in canvas.navi.filters.list.nodes">
+						<td class="text-align-left">
+							<select class="form-control" ng-show="!$first" ng-model="canvas.navi.filters.list.nodes[$index].combine" ng-change="canvas.navi.filters.apply()">
+								<option value="">--</option>
+								<option value="AND">AND</option>
+								<option value="OR">OR</option>
+							</select>
+						</td>
+						<td>
+							<select class="form-control" style="max-width: 100px;" ng-model="canvas.navi.filters.list.nodes[$index].attribute" ng-change="canvas.navi.filters.apply(); canvas.navi.filters.list.nodes[$index].value=''">
+								<option value="">--</option>
+								<option value="{{attr}}" ng-repeat="attr in canvas.navi.filters.attributes.nodes.labels">{{attr}}</option>
+							</select>
+						</td>
+						<td>
+							<select class="form-control" ng-model="canvas.navi.filters.list.nodes[$index].condition" ng-change="canvas.navi.filters.apply()">
+								<option value="" ng-show="!canvas.navi.filters[$index].object">--</option>
+								<option value="e" ng-show="!canvas.navi.filters[$index].object">=</option>
+								<option value="ne" ng-show="!canvas.navi.filters[$index].object">&#8800;</option>
+								<option value="lt" ng-show="!canvas.navi.filters[$index].object">&lt;</option>
+								<option value="le" ng-show="!canvas.navi.filters[$index].object">&le;</option>
+								<option value="gt" ng-show="!canvas.navi.filters[$index].object">&gt;</option>
+								<option value="ge" ng-show="!canvas.navi.filters[$index].object">&ge;</option>
+								<option value="c" ng-selected="canvas.navi.filters[$index].object" ng-show="canvas.navi.filters[$index].object">contains</option>
+							</select>
+						</td>
+						<td>
+							<select class="form-control" style="max-width: 100px;" ng-model="canvas.navi.filters.list.nodes[$index].value" ng-change="canvas.navi.filters.apply()">
+								<option value="" ng-selected="-1 == canvas.navi.filters.attributes.nodes.values[canvas.navi.filters.list.nodes[$index].attribute].indexOf(canvas.navi.filters[$index].value)">--</option>
+								<option value="{{v}}" ng-repeat="v in canvas.navi.filters.attributes.nodes.values[canvas.navi.filters.list.nodes[$index].attribute]">{{v}}</option>
+							</select>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+
+		<hr />
+
+		<button class="btn btn-success float-right small-caps" ng-if="canvas.navi.filters.isLoaded()" ng-click="canvas.navigate(m.session_id, canvas.navi.start_node)">apply</button>
+	</div>
+</div>

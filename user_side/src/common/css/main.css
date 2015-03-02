@@ -1,3 +1,4 @@
+
 @font-face {
 	font-family: optimus;
 	src: url('../fonts/optimus.ttf');
@@ -131,6 +132,20 @@ body {
 	border-bottom-width: 4px;
 }
 
+.btn-gold {
+	background-color: rgb(255,184,95);
+	color: white;
+	border: 1px solid rgb(255,158,82);
+	border-bottom-width: 4px;
+}
+
+.btn-gray {
+	background-color: #cacaca;
+	color: white;
+	border: 1px solid #bababa;
+	border-bottom-width: 4px;
+}
+
 .btn:hover {
 	color: white;
 	border-bottom-width: 1px;
@@ -139,17 +154,17 @@ body {
 /** panels **/
 
 .panel-aqua { border-color: rgb(16, 156, 126); }
-
 .panel-aqua .panel-heading {
 	background-color: rgb(16, 156, 126);
 	color: white;
 }
-
 .panel-aqua .panel-body,
 .panel-aqua .panel-body p,
 .panel-aqua .panel-body h2 {
 	color: rgb(87, 181, 138);
 }
+.panel-aqua .panel-heading a { color: white; }
+.panel-aqua .panel-heading a:hover { color: rgb(127,255,197); }
 
 .panel-sky { border-color: rgb(98, 181, 227); }
 .panel-sky .panel-heading {
@@ -185,6 +200,27 @@ body {
 	color: rgb(232, 78, 48);
 }
 
+.panel-gold { border-color: rgb(255,158,82); }
+.panel-gold .panel-heading {
+	background-color: rgb(255,184,95);
+	color: white;
+}
+.panel-gold,
+.panel-gold p,
+.panel-gold h2 {
+	color: rgb(255,184,95);
+}
+
+.panel-gray { border-color: #bababa; }
+.panel-gray .panel-heading {
+	background-color: #cacaca;
+	color: white;
+}
+.panel-gray,
+.panel-gray p,
+.panel-gray h2 {
+	color: #323232;
+}
 
 .panel-light { border-color: #dadada; }
 .panel-light > .panel-heading { color: #989898; }

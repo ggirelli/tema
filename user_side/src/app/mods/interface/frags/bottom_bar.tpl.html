@@ -1,0 +1,75 @@
+<div class="col-md-12 wrap">
+
+	<div id="console" class='col-md-5' ng-click='panels.closeAll()' style="visibility: hidden;">
+		<input type='text' class='terminal' /><button class='btn btn-info'><span class="glyphicon glyphicon-forward"></span></button>
+	</div>
+	
+	<div id="inspector" class="col-md-4 col-md-offset-2 panel panel-info" ng-show='inspector.show'>
+		<div class="panel-heading">
+			Inspector
+			<a href="#/interface/{{m.session_id}}" class="close-btn" ng-click="inspector.close()"><span class="glyphicon glyphicon-remove"></span></a>
+		</div>
+		<div class="panel-body">
+			
+			<div ng-show="inspector.is_inspecting('network')">
+				<p><b>Name: </b>{{inspector.inspecting.network.name}}</p>
+
+				<p><b>Nodes: </b>{{inspector.inspecting.network.data.v_count}}</p>
+				<p><b>Node attributes:</b></p>
+				<ul>
+					<li ng-show="!inspector.inspecting.network.data.v_attributes_array">{{inspector.inspecting.network.data.v_attributes}}</li>
+					<li ng-repeat="attr in inspector.inspecting.network.data.v_attributes" ng-show="inspector.inspecting.network.data.v_attributes_array">{{attr}}</li>
+				</ul>
+
+				<p><b>Edges: </b>{{inspector.inspecting.network.data.e_count}}</p>
+				<p><b>Edge attributes:</b></p>
+				<ul>
+					<li ng-show="!inspector.inspecting.network.data.e_attributes_array">{{inspector.inspecting.network.data.e_attributes}}</li>
+					<li ng-repeat="attr in inspector.inspecting.network.data.e_attributes" ng-show="inspector.inspecting.network.data.e_attributes_array">{{attr}}</li>
+				</ul>
+
+				<p><b>Single-sample: </b>{{inspector.inspecting.network.single}}</p>
+
+				<br />
+				<div ng-show="inspector.inspecting.network.single">
+					<h4>SIF data</h4>
+					<p ng-repeat="(key, value) in inspector.inspecting.network.sif_data">
+						<b>{{key}}: </b>{{value}}
+					</p>
+				</div>
+				<br />
+			</div>
+
+			<div ng-show="inspector.is_inspecting('node')">
+				<p><div ng-repeat="(k,v) in inspector.inspecting.node">
+					<div ng-if="networks.attributes.isObject(v)">
+						<b>{{k}}</b>:
+						<ul ng-if="!networks.attributes.isArray(v)">
+							<li ng-repeat="(a, b) in v"><b>{{a}}</b>: {{b}}</li>
+						</ul>
+						<ul ng-if="networks.attributes.isArray(v)">
+							<li ng-repeat="a in v">{{a}}</li>
+						</ul>
+					</div>
+					<span ng-if="!networks.attributes.isObject(v)"><b>{{k}}</b>: {{v}}</span>
+				</div></p>
+			</div>
+
+			<div ng-show="inspector.is_inspecting('edge')">
+				<p><div ng-repeat="(k,v) in inspector.inspecting.edge">
+					<div ng-if="networks.attributes.isObject(v)">
+						<b>{{k}}</b>:
+						<ul ng-if="!networks.attributes.isArray(v)">
+							<li ng-repeat="(a, b) in v"><b>{{a}}</b>: {{b}}</li>
+						</ul>
+						<ul ng-if="networks.attributes.isArray(v)">
+							<li ng-repeat="a in v">{{a}}</li>
+						</ul>
+					</div>
+					<span ng-if="!networks.attributes.isObject(v)"><b>{{k}}</b>: {{v}}</span>
+				</div></p>
+			</div>
+
+		</div>
+	</div>
+</div>

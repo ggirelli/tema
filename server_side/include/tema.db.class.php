@@ -127,6 +127,21 @@ class TEMAdb extends C2MySQL {
 				die('An error occurred while initializing the MySQL database');
 			}
 		}
+
+		if ( !parent::table_exists('sessions_shared') ) {
+			// Sessions_shared table definition
+			$sql = "CREATE TABLE sessions_shared (" .
+				"id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY, " .
+				"user_id INTEGER NOT NULL, " .
+				"seed VARCHAR(100) NOT NULL" .
+				")";
+
+			// Create table
+			parent::query($sql);
+			if( parent::isError() ) {
+				die('An error occurred while initializing the MySQL database');
+			}
+		}
 	}
 
 	/**

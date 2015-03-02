@@ -1,0 +1,186 @@
+<div class="panel-heading">Select node/edges</div>
+<div class="panel-body">
+	
+	<table class="panel panel-default" style="width: 100%; text-align: center;">
+		<tr>
+			<th class="panel-heading" style="text-align: center;">
+				<button class="btn btn-info btn-block" ng-click="canvas.filters.init(canvas.current, 'w');" ng-disabled="canvas.filters.is_token('w')">
+					Whole
+				</button>
+			</th>
+			<th class="panel-heading" style="text-align: center;">
+				<button class="btn btn-info btn-block" ng-click="canvas.filters.init(canvas.filtered, 'f');" ng-disabled="canvas.filters.is_token('f')">
+					Filtered
+				</button>
+			</th>
+			<th class="panel-heading" style="text-align: center;">
+				<button class="btn btn-info btn-block" ng-click="canvas.filters.init(canvas.visualization, 'v');" ng-disabled="canvas.filters.is_token('v')">
+					Visualized
+				</button>
+			</th>
+		</tr>
+		<tr>
+			<td class="panel-body">
+				{{canvas.current.nodes.length}} Nodes<br />
+				{{canvas.current.edges.length}} Edges
+				</td>
+			<td class="panel-body">
+				<div ng-if="canvas.filtered == undefined">
+					0 Nodes<br />
+					0 Edges
+				</div>
+				<div ng-if="canvas.filtered != undefined">
+					{{canvas.filtered.nodes.length}} Nodes<br />
+					{{canvas.filtered.edges.length}} Edges
+				</div>
+				</td>
+			<td class="panel-body">
+				<div ng-if="canvas.visualization == undefined">
+					0 Nodes<br />
+					0 Edges
+				</div>
+				<div ng-if="canvas.visualization != undefined">
+					{{canvas.visualization.nodes.length}} Nodes<br />
+					{{canvas.visualization.edges.length}} Edges
+				</div>
+				</td>
+		</tr>
+	</table>
+
+	<!-- node filters -->
+	<div class="panel panel-success" ng-if="canvas.filters.isLoaded()">
+		<div class="panel-heading">
+			Node Filters
+			<a href="#/interface/{{m.session_id}}" class="btn-panel btn-filter float-right" ng-click="canvas.filters.remove('nodes')" title="Remove last"><span class="text-success glyphicon glyphicon-minus"></span></a>
+			<a href="#/interface/{{m.session_id}}" class="btn-panel btn-filter float-right" ng-click="canvas.filters.add('nodes')" title="Add new"><span class="text-success glyphicon glyphicon-plus"></span></a>
+		</div>
+		<div class="panel-body">
+			<table class="filter-selection">
+				<tr ng-if="0 == canvas.filters.list.nodes.length">
+					<td colspan="4">
+						Click the <span class="glyphicon glyphicon-plus"></span> icon to add a filter...
+					</td>
+				</tr>
+				<tr ng-if="0 != canvas.filters.list.nodes.length">
+					<td></td>
+					<th>Attribute</th>
+					<th>Condition</th>
+					<th>Value</th>
+				</tr>
+				<tr ng-repeat="filter in canvas.filters.list.nodes">
+					<td class="text-align-left">
+						<select class="form-control" ng-show="!$first" ng-model="canvas.filters.list.nodes[$index].combine" ng-change="canvas.filters.apply()">
+							<option value="">--</option>
+							<option value="AND">AND</option>
+							<option value="OR">OR</option>
+						</select>
+					</td>
+					<td>
+						<select class="form-control" style="max-width: 100px;" ng-model="canvas.filters.list.nodes[$index].attribute" ng-change="canvas.filters.apply(); canvas.filters.list.nodes[$index].value=''">
+							<option value="">--</option>
+							<option value="{{attr}}" ng-repeat="attr in canvas.filters.attributes.nodes.labels">{{attr}}</option>
+						</select>
+					</td>
+					<td>
+						<select class="form-control" ng-model="canvas.filters.list.nodes[$index].condition" ng-change="canvas.filters.apply()">
+							<option value="" ng-show="!canvas.filters[$index].object">--</option>
+							<option value="e" ng-show="!canvas.filters[$index].object">=</option>
+							<option value="ne" ng-show="!canvas.filters[$index].object">&#8800;</option>
+							<option value="lt" ng-show="!canvas.filters[$index].object">&lt;</option>
+							<option value="le" ng-show="!canvas.filters[$index].object">&le;</option>
+							<option value="gt" ng-show="!canvas.filters[$index].object">&gt;</option>
+							<option value="ge" ng-show="!canvas.filters[$index].object">&ge;</option>
+							<option value="c" ng-selected="canvas.filters[$index].object" ng-show="canvas.filters[$index].object">contains</option>
+						</select>
+					</td>
+					<td>
+						<select class="form-control" style="max-width: 100px;" ng-model="canvas.filters.list.nodes[$index].value" ng-change="canvas.filters.apply()">
+							<option value="" ng-selected="-1 == canvas.filters.attributes.nodes.values[canvas.filters.list.nodes[$index].attribute].indexOf(canvas.filters[$index].value)">--</option>
+							<option value="{{v}}" ng-repeat="v in canvas.filters.attributes.nodes.values[canvas.filters.list.nodes[$index].attribute]">{{v}}</option>
+						</select>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<!-- edge filters -->
+	<div class="panel panel-success" ng-if="canvas.filters.isLoaded()">
+		<div class="panel-heading">
+			Edge Filters
+			<a href="#/interface/{{m.session_id}}" class="btn-panel btn-filters float-right" ng-click="canvas.filters.remove('edges')" title="Remove last"><span class="text-success glyphicon glyphicon-minus"></span></a>
+			<a href="#/interface/{{m.session_id}}" class="btn-panel btn-filters float-right" ng-click="canvas.filters.add('edges')" title="Add new"><span class="text-success glyphicon glyphicon-plus"></span></a>
+		</div>
+		<div class="panel-body">
+			<table class="filter-selection">
+				<tr ng-if="0 == canvas.filters.list.edges.length">
+					<td colspan="4">
+						Click the <span class="glyphicon glyphicon-plus"></span> icon to add a filter...
+					</td>
+				</tr>
+				<tr ng-if="0 != canvas.filters.list.edges.length">
+					<td></td>
+					<th>Attribute</th>
+					<th>Condition</th>
+					<th>Value</th>
+				</tr>
+				<tr ng-repeat="filter in canvas.filters.list.edges">
+					<td class="text-align-left">
+						<select class="form-control" ng-show="!$first" ng-model="canvas.filters.list.edges[$index].combine" ng-change="canvas.filters.apply()">
+							<option value="">--</option>
+							<option value="AND">AND</option>
+							<option value="OR">OR</option>
+						</select>
+					</td>
+					<td>
+						<select class="form-control" style="max-width: 100px;" ng-model="canvas.filters.list.edges[$index].attribute" ng-change="canvas.filters.apply(); canvas.filters.list.edges[$index].value=''">
+							<option value="">--</option>
+							<option value="{{attr}}" ng-repeat="attr in canvas.filters.attributes.edges.labels">{{attr}}</option>
+						</select>
+					</td>
+					<td>
+						<select class="form-control" ng-model="canvas.filters.list.edges[$index].condition" ng-change="canvas.filters.apply()">
+							<option value="" ng-show="!canvas.filters[$index].object">--</option>
+							<option value="e" ng-show="!canvas.filters[$index].object">=</option>
+							<option value="ne" ng-show="!canvas.filters[$index].object">&#8800;</option>
+							<option value="lt" ng-show="!canvas.filters[$index].object">&lt;</option>
+							<option value="le" ng-show="!canvas.filters[$index].object">&le;</option>
+							<option value="gt" ng-show="!canvas.filters[$index].object">&gt;</option>
+							<option value="ge" ng-show="!canvas.filters[$index].object">&ge;</option>
+							<option value="c" ng-selected="canvas.filters[$index].object" ng-show="canvas.filters[$index].object">contains</option>
+						</select>
+					</td>
+					<td>
+						<select class="form-control" style="max-width: 100px;" ng-model="canvas.filters.list.edges[$index].value" ng-change="canvas.filters.apply()">
+							<option value="" ng-selected="-1 == canvas.filters.attributes.edges.values[canvas.filters.list.edges[$index].attribute].indexOf(canvas.filters[$index].value)">--</option>
+							<option value="{{v}}" ng-repeat="v in canvas.filters.attributes.edges.values[canvas.filters.list.edges[$index].attribute]">{{v}}</option>
+						</select>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	
+	<div class="panel panel-danger" ng-if="canvas.filters.has()">
+		<div class="panel-heading">
+			Selected
+		</div>
+		<div class="panel-body">
+			{{canvas.filters.selection.nodes.length}} Nodes<br />
+			{{canvas.filters.selection.edges.length}} Edges
+		</div>
+	</div>
+
+	<div class="col-md-6" ng-if="canvas.filters.has()">
+		<button class="btn btn-block btn-danger small-caps" ng-click="canvas.unmask()" ng-disabled="canvas.filters.is_token('v')">unmask</button>
+	</div>
+	<div class="col-md-6" ng-if="canvas.filters.has()">
+		<button class="btn btn-block btn-warning small-caps" ng-click="canvas.mask()" ng-disabled="canvas.filters.is_token('f')">mask</button>
+	</div>
+	<div class="col-md-6" ng-if="canvas.filters.has()" style="margin-top: 4px;">
+		<button class="btn btn-block btn-primary small-caps" ng-click="alert('@todo')" ng-disabled="!canvas.filters.is_token('v')">select</button>
+	</div>
+	<div class="col-md-6" ng-if="canvas.filters.has()" style="margin-top: 4px;">
+		<button class="btn btn-block btn-success small-caps" ng-click="networks.init_file(canvas.current_data)" ng-disabled="canvas.visualized">load</button>
+	</div>
+
+</div>
