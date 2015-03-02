@@ -232,6 +232,7 @@ class TEMAsession extends TEMAdb {
 	 * @return boolean
 	 */
 	public function exists($id) {
+		$id = $this->escape_string($id);
 		$r = $this->query("SELECT id FROM sessions WHERE seed = '" . $id . "'");
 		if( 1 == $r->size() ) {
 			return true;
@@ -333,6 +334,7 @@ class TEMAsession extends TEMAdb {
 	 */
 	private function _new($id, $title, $owner, $privacy, $password) {
 		if ( !$this->exists($id) ) {
+			$id = $this->escape_string($id);
 			$title = $this->escape_string($title);
 			$privacy = $this->escape_string($privacy);
 			if(!is_null($password))	$password = $this->encrypt($password);
@@ -472,7 +474,8 @@ class TEMAsession extends TEMAdb {
 	 * Reads the settings from the database
 	 */
 	private function read_settings() {
-		$sql = "SELECT * FROM sessions_settings WHERE seed = '" . $this->id . "'";
+		$id = $this->escape_string($this->id);
+		$sql = "SELECT * FROM sessions_settings WHERE seed = '" . $id . "'";
 		$q = $this->query($sql);
 
 		$this->settings = array();
@@ -493,6 +496,7 @@ class TEMAsession extends TEMAdb {
 	 * @param String $id session_id
 	 */
 	private function set_default_settings($id) {
+		$id = $this->escape_string($id);
 		// node_thr
 		$sql = "INSERT INTO sessions_settings (seed, setting_key, setting_value) " .
 				"VALUES ( '" . $id . "', 'node_thr', '1000' )";
@@ -507,17 +511,20 @@ class TEMAsession extends TEMAdb {
 	private function write_settings() {
 		foreach ( $this->settings_labels as $label ) {
 			if ( isset($this->settings[$label]) ) {
-				$sql = "SELECT * FROM sessions_settings WHERE seed = '" . $this->id . "' AND setting_key = '" . $label . "'";
+				$id = $this->escape_string($this->id);
+				$label = $this->escape_string($label);
+				$value = $this->escape_string($this->settings[$label]);
+				$sql = "SELECT * FROM sessions_settings WHERE seed = '" . $id . "' AND setting_key = '" . $label . "'";
 				$q = $this->query($sql);
 
 				if ( $q->size() != 0 ) {
 					$sql = "UPDATE sessions_settings SET " .
-					"setting_value = '" . $this->settings[$label] . "' " .
-					"WHERE seed = '" . $this->id . "' AND setting_key = '" . $label . "'";
+					"setting_value = '" . $value . "' " .
+					"WHERE seed = '" . $id . "' AND setting_key = '" . $label . "'";
 					$q = $this->query($sql);
 				} else {
 					$sql = "INSERT INTO sessions_settings (seed, setting_key, setting_value) " .
-					"VALUES ( '" . $this->id . "', '" . $label . "', '" . $this->settings[$label] . "' )";
+					"VALUES ( '" . $this->id . "', '" . $label . "', '" . $value . "' )";
 					$q = $this->query($sql);
 				}
 			}
