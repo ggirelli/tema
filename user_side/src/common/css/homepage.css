@@ -52,11 +52,11 @@
 	color: #989898;
 }
 
-#userpage .panel-left {
+#userpage .panel-list {
 	height: 255px;
 }
 
-#userpage .panel-left .panel-body {
+#userpage .panel-list .panel-body {
 	margin-top: 5px;
 	padding: 0;
 
@@ -65,32 +65,30 @@
 	overflow: auto;
 }
 
-#userpage .panel-left .list-group {
+#userpage .panel-list .list-group {
 	margin: 0;
 }
 
-#userpage .panel-left .list-group-item:first-child {
+#userpage .panel-list .list-group-item:first-child {
 	border-top: none;
 }
 
-#userpage .panel-left .list-group-item {
+#userpage .panel-list .list-group-item {
 	border-bottom: none;
 	border-right: none;
 	border-left: none;
 }
 
-#userpage .panel-left .list-group-item a {
+#userpage .panel-list .list-group-item a {
 	display: inline-block;
 	width: 100%;
 	color: rgb(100,100,100);
 }
+#userpage .panel-list .list-group-item a:hover { text-decoration: none; }
+#userpage .panel-list.panel-reddish .list-group-item a:hover { color: rgb(212,71,44); }
+#userpage .panel-list.panel-sky .list-group-item a:hover { color: rgb(88, 176, 235); }
 
-#userpage .panel-left .list-group-item a:hover {
-	color: rgb(212,71,44);
-	text-decoration: none;
-}
-
-#userpage .panel-left .list-group-item a .glyphicon {
+#userpage .panel-list .list-group-item a .glyphicon {
 	margin-right: 5px;
 	font-size: 16px;
 }

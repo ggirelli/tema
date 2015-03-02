@@ -35,7 +35,12 @@ class TEMAdb extends C2MySQL {
 	 * @return Boolean
 	 */
 	private function check_database() {
-		if( !parent::table_exists('sessions') or !parent::table_exists('sessions_settings') or !parent::table_exists('sessions_users') ) {
+		if( 
+			!parent::table_exists('sessions') or
+			!parent::table_exists('sessions_settings') or
+			!parent::table_exists('sessions_users') or
+			!parent::table_exists('sessions_history')
+		) {
 			return false;
 		}
 		
@@ -73,7 +78,7 @@ class TEMAdb extends C2MySQL {
 		}
 
 		if ( !parent::table_exists('sessions_settings') ) {
-			// Session_settings table definition
+			// Sessions_settings table definition
 			$sql = "CREATE TABLE sessions_settings (" .
 				"id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY, " .
 				"seed VARCHAR(100) NOT NULL, " .
@@ -89,7 +94,7 @@ class TEMAdb extends C2MySQL {
 		}
 
 		if ( !parent::table_exists('sessions_users') ) {
-			// Session_settings table definition
+			// Sessions_users table definition
 			$sql = "CREATE TABLE sessions_users (" .
 				"id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY, " .
 				"nickname VARCHAR(100) NOT NULL UNIQUE, " .
@@ -104,6 +109,22 @@ class TEMAdb extends C2MySQL {
 			parent::query($sql);
 			if( parent::isError() ) {
 				die('An error occurred while initializing the MySQL database.');
+			}
+		}
+
+		if ( !parent::table_exists('sessions_history') ) {
+			// Sessions_history table definition
+			$sql = "CREATE TABLE sessions_history (" .
+				"id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY, " .
+				"user INTEGER NOT NULL, " .
+				"seed VARCHAR(100) NOT NULL, " .
+				"date TIMESTAMP DEFAULT NOW()" .
+				")";
+
+			// Create table
+			parent::query($sql);
+			if( parent::isError() ) {
+				die('An error occurred while initializing the MySQL database');
 			}
 		}
 	}

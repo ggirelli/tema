@@ -221,10 +221,7 @@ class TEMAuser extends TEMAdb {
 	 * @return Array A list of sessions owned by the user
 	 */
 	public function list_owned_sessions() {
-		// Retrieve user ID
-		$sql = "SELECT id FROM sessions_users WHERE nickname='$this->username'";
-		$r = $this->query($sql);
-		$user_id = $r->fetch()['id'];
+		$user_id = $this->get_id($this->username);
 
 		// Retrieve owned sessions
 		$sql = "SELECT seed, title, privacy, password FROM sessions WHERE owner='$user_id'";
@@ -242,6 +239,50 @@ class TEMAuser extends TEMAdb {
 		}
 
 		return($l);
+	}
+
+	public function list_history_sessions() {
+		$user_id = $this->get_id($this->username);
+
+		// Retrieve history
+		$sql = "SELECT s.seed, s.title, s.privacy, s.password, h.date FROM `sessions_history` AS h " .
+			"LEFT JOIN `sessions` AS s ON h.seed=s.seed WHERE h.user=$user_id";
+		$r = $this->query($sql);
+
+		// Hide password and prepare multi-array
+		$l = array();
+		while($row = $r->fetch()) {
+			if ( '' === $row['password'] ) {
+				$row['password'] = 0;
+			} else {
+				$row['password'] = 1;
+			}
+			$l[] = $row;
+		}
+
+		return(array_reverse($l));
+	}
+
+	/**
+	 * Updates the user's session history
+	 * @param  String $seed session seed
+	 * @return Boolean 	whether the operations succeded
+	 */
+	public function update_history($seed) {
+		$user_id = $this->get_id($this->username);
+		$seed = $this->escape_string($seed);
+
+		// Update session history
+		$sql = "INSERT INTO sessions_history " .
+			"(user, seed)" .
+			"VALUES ('$user_id', '$seed')";
+		$r = $this->query($sql);
+
+		if ( $this->isError() ) {
+			return FALSE;
+		} else {
+			return TRUE;
+		}
 	}
 
 	// private FUNCTIONS
@@ -486,6 +527,17 @@ class TEMAuser extends TEMAdb {
 			// Non-existent confirmation token
 			$this->msg[] = 9;
 		}
+	}
+
+	/**
+	 * @param  String $usr username
+	 * @return int		the id of the user in the DB
+	 */
+	private function get_id($usr) {
+		// Retrieve user ID
+		$sql = "SELECT id FROM sessions_users WHERE nickname='$usr'";
+		$r = $this->query($sql);
+		return $r->fetch()['id'];
 	}
 }
 

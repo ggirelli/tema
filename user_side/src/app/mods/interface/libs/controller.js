@@ -55,6 +55,21 @@
                 scope.m.session_error = false;
                 scope.m.session_protected = false;
 
+                /*------------------------*/
+                /* Update session history */
+                /*------------------------*/
+
+                if ( scope.m.logsys.logged.status ) {
+
+                    scope.sessions.update_history(
+                        scope.m.session_id,
+                        scope.m.logsys.logged.usr
+                    );
+
+                } else {
+                    console.log(2);
+                }
+
                 /*-------------------------*/
                 /* Initialize network list */
                 /*-------------------------*/

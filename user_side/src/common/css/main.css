@@ -26,6 +26,9 @@ body {
 	font-size: 20px;
 }
 
+.col0 { color: #000000; }
+.col65 { color: #656565; }
+
 .float-right {
 	float: right;
 	margin-right: 3px;

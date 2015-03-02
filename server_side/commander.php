@@ -46,6 +46,7 @@ if( isset($data->action) ) {
 
 			case 'create_session':
 			case 'list_sessions': case 'enter_session':
+			case 'update_history':
 			case 'session_load':
 
 			case 'register_user': case 'confirm_user':

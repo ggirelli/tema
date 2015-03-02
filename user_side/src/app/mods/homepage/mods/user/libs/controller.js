@@ -190,9 +190,8 @@
 
                     })
                         .success(function (data) {
-                            console.log(data);
                             if ( 0 == data.err ) {
-                                scope.m.userpage.shared_list = data.list;
+                                scope.m.userpage.history_list = data.list;
                             } else {
                                 console.log('ERROR: Could not retrieve session history.');
                             }

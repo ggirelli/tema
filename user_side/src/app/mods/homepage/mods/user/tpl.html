@@ -22,10 +22,13 @@
 			</div>
 
 			<div class="col-md-6 col-md-pull-6 plef0 prig05 mbot05">
-				<div class="session-choice panel panel-reddish panel-left mbot0">
+				<div class="session-choice panel panel-reddish panel-list mbot0">
 					<div class="panel-heading">Your sessions</div>
 					<div class="panel-body">
 						<ol class="list-group">
+							<li ng-if="m.userpage.owned_list.length === 0">
+								<i class="plef05 col65">Create a <u>new</u> session to see it listed here.</i>
+							</li>
 							<li class="list-group-item" ng-repeat="s in m.userpage.owned_list">
 								<a href="#/interface/{{s.seed}}">
 									<span class="glyphicon glyphicon-eye-open" title="Public" ng-if="s.privacy == 'public'"></span>
@@ -40,7 +43,7 @@
 			</div>
 
 			<div class="col-md-6 session-choice prig05">
-				<div class="session-choice panel panel-light-aqua">
+				<div class="session-choice panel panel-light-aqua panel-list">
 					<div class="panel-heading">Shared sessions</div>
 					<div class="panel-body">
 						here a list of shared sessions
@@ -49,10 +52,23 @@
 			</div>
 
 			<div class="col-md-6 session-choice plef05">
-				<div class="session-choice panel panel-sky">
+				<div class="session-choice panel panel-sky panel-list">
 					<div class="panel-heading">Your history</div>
 					<div class="panel-body">
-						here a list of last visited sessions
+						<ol class="list-group">
+							<li ng-if="m.userpage.history_list.length === 0">
+								<i class="plef05 col65">Create a <u>new</u> session to see it listed here.</i>
+							</li>
+							<li class="list-group-item" ng-repeat="s in m.userpage.history_list">
+								<p>{{s.date}}</p>
+								<a href="#/interface/{{s.seed}}">
+									<span class="glyphicon glyphicon-eye-open" title="Public" ng-if="s.privacy == 'public'"></span>
+									<span class="glyphicon glyphicon-eye-close" title="Private" ng-if="s.privacy == 'private'"></span>
+									<span class="glyphicon glyphicon-lock" title="Protected" ng-if="s.password == 1"></span>
+									<span title="{{s.seed}}">{{s.title}}</span>
+								</a>
+							</li>
+						</ol>
 					</div>
 				</div>
 			</div>

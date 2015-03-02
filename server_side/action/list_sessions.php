@@ -14,21 +14,47 @@ $user = new TEMAuser(
 	$data->usr, NULL, NULL, NULL
 );
 
-if ( 'owned' == $data->type ) {
-	$list = $user->list_owned_sessions();
+switch($data->type) {
+	case 'owned': {
+		$list = $user->list_owned_sessions();
 
-	$json = '{"list":[';
-	for ($i = 0; $i < count($list); $i++) {
-		$session = $list[$i];
-		$json .= '{"seed":"' . $session['seed'] .'", ' .
-			'"title":"' . $session['title'] .'", ' .
-			'"privacy":"' . $session['privacy'] .'", ' .
-			'"password":"' . $session['password'] .'"}';
-		if ( $i != count($list)-1 ) $json .= ",";
+		$json = '{"list":[';
+		for ($i = 0; $i < count($list); $i++) {
+			$session = $list[$i];
+			$json .= '{"seed":"' . $session['seed'] .'", ' .
+				'"title":"' . $session['title'] .'", ' .
+				'"privacy":"' . $session['privacy'] .'", ' .
+				'"password":"' . $session['password'] .'"}';
+			if ( $i != count($list)-1 ) $json .= ",";
+		}
+		$json .= '], "err":0}';
+
+		die($json);
+
+		break;
 	}
-	$json .= '], "err":0}';
+	case 'shared': {
+		break;
+	}
+	case 'history': {
+		$list = $user->list_history_sessions();
 
-	die($json);
+		$json = '{"list":[';
+		for ($i = 0; $i < count($list); $i++) {
+			$session = $list[$i];
+			$json .= '{"seed":"' . $session['seed'] .'", ' .
+				'"title":"' . $session['title'] .'", ' .
+				'"privacy":"' . $session['privacy'] .'", ' .
+				'"password":"' . $session['password'] .'", ' .
+				'"date":"' . $session['date'] . '"}';
+			if ( $i != count($list)-1 ) $json .= ",";
+		}
+		$json .= '], "err":0}';
+
+		die($json);
+
+		break;
+	}
 }
 
 die('{"err":3, "list":[]}');

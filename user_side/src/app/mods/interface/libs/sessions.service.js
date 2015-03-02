@@ -36,7 +36,30 @@
                 return(qwait.promise);
             };
 
-        };
+            self.update_history = function (session_id, usr) {
+                var qwait = q.defer(); 
+
+                http({
+
+                    method: 'POST',
+                    data: {
+                        action: 'update_history',
+                        usr: usr,
+                        seed: session_id
+                    },
+                    url: 's/'
+
+                })
+                    .success(function (data) {
+                        if ( 0 != data.err ) {
+                            console.log("ERROR: could not update user session history.");
+                        }
+                        qwait.resolve(data);
+                    });
+
+                return qwait.promise;
+            };
+        }
 
     });
 

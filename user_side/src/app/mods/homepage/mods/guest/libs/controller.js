@@ -131,6 +131,7 @@
 
                         })
                             .success(function (data) {
+                                console.log(data);
                                 scope.m.logsys.in.err.code = data.err;
                                 if ( 0 === data.err ) {
                                     scope.m.logsys.in.usr = data.usr;
