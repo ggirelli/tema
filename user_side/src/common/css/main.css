@@ -86,7 +86,11 @@ body {
 	padding-right: 0;
 }
 
-.h2-5em { height: 2.5em; }
+.h2-5em { height: 2.5em !important; }
+.h3em { height: 3em !important; }
+
+.fs1em { font-size: 1em !important; }
+.fs1-5em { font-size: 1.5em !important; }
 
 .all-width {
 	width: 100%;
@@ -213,7 +217,7 @@ body {
 
 .panel-gray { border-color: #bababa; }
 .panel-gray .panel-heading {
-	background-color: #cacaca;
+	background-color: #999999;
 	color: white;
 }
 .panel-gray,
@@ -225,4 +229,81 @@ body {
 .panel-light { border-color: #dadada; }
 .panel-light > .panel-heading { color: #989898; }
 
+/** ACCORDION **/
 
+.accordion-tema {
+	display: block;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+}
+
+.accordion-tema .accordion-head {
+	display: block;
+	margin: 0;
+	padding: 15px;
+	width: 100%;
+	
+	border-top: 1px solid white;
+	
+	color: white;
+	font-size: 1.2em;
+	font-weight: normal;
+}
+
+.accordion-tema .accordion-head:hover {
+	text-decoration: none;
+}
+
+.accordion-tema .accordion-body {
+	display: block;
+	margin: 0;
+	padding: 1em 0.5em;
+	width: 100%;
+}
+
+.accordion-tema-aqua .accordion-head { background-color: rgb(11, 107, 87); }
+.accordion-tema-aqua .accordion-head:hover { background-color: rgb(16, 156, 126); }
+.accordion-tema-aqua .accordion-body { border-bottom: 1px solid rgb(16, 156, 126); }
+
+.accordion-tema-light-aqua .accordion-head { background-color: rgb(88, 176, 136); }
+.accordion-tema-light-aqua .accordion-head:hover { background-color: rgb(100, 201, 155); }
+.accordion-tema-light-aqua .body { border-bottom: 1px solid rgb(100, 201, 155); }
+
+.accordion-tema-sky .accordion-head { background-color: rgb(108, 182, 224); }
+.accordion-tema-sky .accordion-head:hover { background-color: rgb(115, 195, 240); }
+.accordion-tema-sky .accordion-body { border-bottom: 1px solid rgb(115, 195, 240); }
+
+.accordion-tema-reddish .accordion-head { background-color: rgb(194, 65, 40); }
+.accordion-tema-reddish .accordion-head:hover { background-color: rgb(232, 78, 48); }
+.accordion-tema-reddish .accordion-body { border-bottom: 1px solid rgb(232, 78, 48); }
+
+.accordion-tema-gold .accordion-head { background-color: rgb(217, 156, 81); }
+.accordion-tema-gold .accordion-head:hover { background-color: rgb(255,184,95); }
+.accordion-tema-gold .accordion-body { border-bottom: 1px solid rgb(255,184,95); }
+
+.accordion-tema-gray .accordion-head { background-color: #bababa; }
+.accordion-tema-gray .accordion-head:hover { background-color: #cacaca; }
+.accordion-tema-gray .accordion-body { border-bottom: 1px solid #cacaca; }
+
+.accordion-body {
+	display: block !important;
+	height: 200px;
+
+	opacity: 1;
+
+	overflow: hidden;
+
+	-webkit-transition:all linear 0.5s;
+    -moz-transition:all linear 0.5s;
+    -o-transition:all linear 0.5s;
+    transition:all linear 0.5s;
+}
+.accordion-body.ng-hide {
+	height: 0;
+
+	padding-top: 0;
+	padding-bottom: 0;
+
+	opacity: 0;
+}

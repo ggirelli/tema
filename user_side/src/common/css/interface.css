@@ -113,11 +113,10 @@ html {
 
 	z-index: 2;
 
-	-moz-transition:all linear 0.5s;
-	-o-transition:all linear 0.5s;
-	transition:all linear 0.5s;
-	-webkit-transition:all linear 0.5s;
-	transition:all linear 0.5s;
+    -webkit-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+    -moz-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+    -o-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+    transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
 }
 
 #interface .left-panel.ng-hide {
@@ -128,8 +127,9 @@ html {
 #interface .left-panel .panel-heading {
 	border-radius: 0;
 
+	font-family: karla;
+	font-size: 1.5em;
 	font-weight: bold;
-	font-family: tahoma;
 }
 
 #interface .left-panel .panel-heading a {
@@ -153,6 +153,13 @@ html {
 #interface .left-panel.attributes-panel .attr-action,
 #interface .left-panel.graph-list-panel .net-action {
 	margin-left: 8px;
+}
+
+#interface .left-panel.attributes-panel .panel-heading > .btn-panel,
+#interface .left-panel.graph-list-panel .panel-heading > .btn-panel,
+#interface .left-panel.attributes-panel .panel-heading > .attr-action,
+#interface .left-panel.graph-list-panel .panel-heading > .net-action {
+	font-size: 0.8em;
 }
 
 #interface .left-panel.graph-list-panel .load-network-link {
@@ -284,6 +291,11 @@ html {
 
 /* settings */
 
+#interface .left-panel.settings-panel .panel-body {
+	padding: 0;
+	margin: 0;
+}
+
 #interface .left-panel.settings-panel hr {
 	margin-bottom: 3em;
 	margin-top: 1em;
@@ -407,11 +419,10 @@ html {
 
 	z-index: 1;
 
-	-moz-transition:all linear 0.5s;
-	-o-transition:all linear 0.5s;
-	transition:all linear 0.5s;
-	-webkit-transition:all linear 0.5s;
-	transition:all linear 0.5s;
+    -webkit-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+    -moz-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+    -o-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+    transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
 }
 
 #interface #inspector.ng-hide {
@@ -466,3 +477,5 @@ html {
 	font-size: 24px;
 	text-align: center;
 }
+
+

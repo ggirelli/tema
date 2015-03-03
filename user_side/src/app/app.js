@@ -33,7 +33,7 @@
             uploaderService,
             autoclickDirective, submitformDirective) {
         
-        angular.module('tea', ['ngRoute']).
+        angular.module('tea', ['ngRoute', 'ngAnimate']).
         	config(['$routeProvider', routeConfig]).
 
             service('formCheckService', [formCheckService]).
