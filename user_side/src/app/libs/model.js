@@ -67,6 +67,9 @@
                         pwd: false,
                         code: 0
                     }
+                },
+                inside: {
+                    owner: false
                 }
             };
 

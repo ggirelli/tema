@@ -59,6 +59,32 @@
 
                 return qwait.promise;
             };
+
+            self.isOwner = function (usr, session_id) {
+                var qwait = q.defer();
+
+                http({
+
+                    method: 'POST',
+                    data: {
+                        action: 'list_sessions',
+                        type: 'owned',
+                        list: true,
+                        usr: usr
+                    },
+                    url: 's/'
+
+                })
+                    .success(function (data) {
+                        if ( -1 != data.list.indexOf(session_id) ) {
+                            qwait.resolve(true);
+                        } else {
+                            qwait.resolve(false);
+                        }
+                    });
+
+                return qwait.promise;
+            };
         }
 
     });

@@ -141,6 +141,7 @@
                         data: {
                             action: 'list_sessions',
                             type: 'owned',
+                            list: false,
                             usr: scope.m.logsys.logged.usr
                         },
                         url: 's/'
@@ -162,6 +163,7 @@
                         data: {
                             action: 'list_sessions',
                             type: 'shared',
+                            list: false,
                             usr: scope.m.logsys.logged.usr
                         },
                         url: 's/'
@@ -184,6 +186,7 @@
                         data: {
                             action: 'list_sessions',
                             type: 'history',
+                            list: false,
                             usr: scope.m.logsys.logged.usr
                         },
                         url: 's/'

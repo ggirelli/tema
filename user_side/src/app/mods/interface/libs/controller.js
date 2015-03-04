@@ -66,8 +66,17 @@
                         scope.m.logsys.logged.usr
                     );
 
+                    // Check if owner
+                    scope.sessions.isOwner(scope.m.logsys.logged.usr, scope.m.session_id).then(function (isOwner) {
+                        if ( isOwner ) {
+                            scope.m.session_sys.inside.owner = true;
+                        } else {
+                            scope.m.session_sys.inside.owner = false;
+                        }
+                    });
+
                 } else {
-                    console.log(2);
+                    console.log('Your are entering TEMA as a *guest*.');
                 }
 
                 /*-------------------------*/

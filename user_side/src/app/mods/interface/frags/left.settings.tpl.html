@@ -103,7 +103,13 @@
 	<div class="accordion-tema accordion-tema-gray">
 		<a class="accordion-head" href="" ng-click="panels.toggleAccordion('settings', 4)">Sharing</a>
 		<div class="accordion-body" ng-show="panels.isAccordion('settings', 4)">
-			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Et vel saepe tempore ipsum dicta nostrum odio reprehenderit cum, obcaecati quidem beatae, nihil eligendi, accusamus ratione molestias optio tempora magni perferendis!
+
+			<div ng-if="m.session_sys.inside.owner">
+				<!-- sharing form -->
+				
+			</div>
+			<div ng-if="!m.session_sys.inside.owner">Only the session <b>owner</b> can change the sharing options.</div>
+
 		</div>
 	</div>
 

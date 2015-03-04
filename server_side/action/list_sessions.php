@@ -18,18 +18,34 @@ switch($data->type) {
 	case 'owned': {
 		$list = $user->list_owned_sessions();
 
-		$json = '{"list":[';
-		for ($i = 0; $i < count($list); $i++) {
-			$session = $list[$i];
-			$json .= '{"seed":"' . $session['seed'] .'", ' .
-				'"title":"' . $session['title'] .'", ' .
-				'"privacy":"' . $session['privacy'] .'", ' .
-				'"password":"' . $session['password'] .'"}';
-			if ( $i != count($list)-1 ) $json .= ",";
-		}
-		$json .= '], "err":0}';
+		if ( !$data->list ) {
 
-		die($json);
+			$json = '{"list":[';
+			for ($i = 0; $i < count($list); $i++) {
+				$session = $list[$i];
+				$json .= '{"seed":"' . $session['seed'] .'", ' .
+					'"title":"' . $session['title'] .'", ' .
+					'"privacy":"' . $session['privacy'] .'", ' .
+					'"password":"' . $session['password'] .'"}';
+				if ( $i != count($list)-1 ) $json .= ",";
+			}
+			$json .= '], "err":0}';
+
+			die($json);
+
+		} else {
+
+			$json = '{"list":[';
+			for ($i = 0; $i < count($list); $i++) {
+				$session = $list[$i];
+				$json .= '"' . $session['seed'] .'"';
+				if ( $i != count($list)-1 ) $json .= ",";
+			}
+			$json .= '], "err":0}';
+
+			die($json);
+
+		}
 
 		break;
 	}
