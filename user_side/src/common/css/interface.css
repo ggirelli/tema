@@ -119,6 +119,11 @@ html {
     transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
 }
 
+#interface .left-panel .panel-body,
+#interface .left-panel .panel-body p {
+	color: #454545 !important;
+}
+
 #interface .left-panel.ng-hide {
 	left: -340px;
 	opacity: 1;
@@ -271,7 +276,7 @@ html {
 /* layout */
 
 #interface .left-panel.layout-panel {
-	width: 72px;
+	width: 114px;
 
 	-moz-transition:all linear 0.5s;
 	-o-transition:all linear 0.5s;
@@ -281,7 +286,7 @@ html {
 }
 
 #interface .left-panel.layout-panel.ng-hide {
-	left: -12px;
+	left: -54px;
 	opacity: 1;
 }
 

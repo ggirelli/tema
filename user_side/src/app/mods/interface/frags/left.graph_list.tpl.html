@@ -7,8 +7,8 @@
 </div>
 
 <div class="panel-body" ng-show="!networks.conversion.is()">
-	<div class="alert" ng-show='networks.list != null' ng-repeat='net in networks.list' ng-class="{'alert-info' : networks.isConverted(net)&&!canvas.isLoaded(net.name), 'alert-danger' : !networks.isConverted(net), 'alert-warning' : canvas.isPreloaded(net.name), 'alert-success' : canvas.isLoaded(net.name)}">
-		<a href="#/interface/{{m.session_id}}" class="load-network-link" ng-class="{'text-danger' : !networks.isConverted(net), 'text-success' : canvas.isLoaded(net.name)}" ng-click="networks.init_file(net)" title="N: {{net.data.v_count}} | E: {{net.data.e_count}}">{{net.name}} <span class="glyphicon glyphicon-flag mrig02" ng-show="!networks.isConverted(net)"></span><span class="glyphicon glyphicon-eye-open" ng-show="canvas.isLoaded(net.name)"></span></a>
+	<div class="alert" ng-show='networks.list != null' ng-repeat='net in networks.list' ng-class="{'alert-light-aqua' : networks.isConverted(net)&&!canvas.isLoaded(net.name), 'alert-reddish' : !networks.isConverted(net), 'alert-gold' : canvas.isPreloaded(net.name), 'alert-aqua' : canvas.isLoaded(net.name)}">
+		<a href="#/interface/{{m.session_id}}" class="load-network-link" ng-class="{'text-danger' : !networks.isConverted(net), 'text-success' : canvas.isLoaded(net.name)}" ng-click="networks.init_file(net)" title="N: {{net.data.v_count}} | E: {{net.data.e_count}}"><span class="glyphicon glyphicon-flag mrig05" ng-show="!networks.isConverted(net)"></span><span class="glyphicon glyphicon-eye-open mrig05" ng-show="canvas.isLoaded(net.name)"></span>{{net.name}}</a>
 		<!-- overwrite -->
 		<a href="#/interface/{{m.session_id}}" ng-class="{'text-danger' : !networks.isConverted(net)}" class="net-action float-right" title='Overwrite' ng-click="networks.overwrite(m.session_id, net.id, settings.info.default_layout)"><span class="glyphicon glyphicon-import"></span></a>
 		<!-- remove -->
@@ -28,7 +28,7 @@
 </div>
 
 <div class="panel-body" ng-show="networks.conversion.is()">
-	<label class="group-selection-option alert alert-warning" for="convert-all"><input type="checkbox" id="convert-all" name="convert-all" ng-model="networks.conversion.group.all" ng-click="networks.conversion.un_select_all()" /> Un/Select all</label><label class="group-selection-option alert alert-success" for="convert-filter"><input type="checkbox" id="convert-filter" name="convert-filter" ng-model="networks.conversion.group.filter" ng-click="networks.conversion.toggle_filter()" /> Custom Filters</label>
+	<label class="group-selection-option alert alert-gold" for="convert-all"><input type="checkbox" id="convert-all" name="convert-all" ng-model="networks.conversion.group.all" ng-click="networks.conversion.un_select_all()" /> Un/Select all</label><label class="group-selection-option alert alert-aqua" for="convert-filter"><input type="checkbox" id="convert-filter" name="convert-filter" ng-model="networks.conversion.group.filter" ng-click="networks.conversion.toggle_filter()" /> Custom Filters</label>
 
 	<div class="panel panel-success" ng-show="networks.conversion.group.filter">
 		<div class="panel-success panel-heading">
@@ -82,7 +82,7 @@
 
 	<h4>Select the networks to convert:</h4>
 
-	<label for="net-{{net.id}}" class="alert" ng-repeat='net in networks.conversion.group.net_list | filter:networks.isToConvert' ng-show='networks.list != null' ng-class="{'alert-info' : networks.isConverted(net), 'alert-danger' : !networks.isConverted(net)}" style="width: 100%;">
+	<label for="net-{{net.id}}" class="alert" ng-repeat='net in networks.conversion.group.net_list | filter:networks.isToConvert' ng-show='networks.list != null' ng-class="{'alert-sky' : networks.isConverted(net), 'alert-reddish' : !networks.isConverted(net)}" style="width: 100%;">
 		<input id="net-{{net.id}}" name="net-{{net.id}}" type="checkbox" ng-model="networks.conversion.group.networks[net.name]" ng-click="networks.conversion.check(net.name)" />
 		{{net.name}}
 	</label>

@@ -36,10 +36,10 @@
 				</div>
 
 				<div class="uploader-btn-wrap col-md-4">
-					<button class="btn btn-primary btn-block" ng-click='uploader.addFile()' ng-class="{'disabled' : uploader.uploading}">Select file</button>
-					<button class="btn btn-warning btn-block" ng-click='uploader.check_list(2000)' ng-class="{'disabled' : uploader.uploading}">Check file(s)</button>
-					<button class="btn btn-success btn-block" submit-form='#hidden-form' ng-class="{'disabled' : uploader.uploading}">Upload file(s)</button>
-					<a href='#/interface/{{m.session_id}}' class="btn btn-danger btn-block" ng-click='toggleUploader()' ng-class="{'disabled' : uploader.uploading}">Abort</a>
+					<button class="btn btn-sky btn-block h2-5em" ng-click='uploader.addFile()' ng-class="{'disabled' : uploader.uploading}">Select file</button>
+					<button class="btn btn-gold btn-block h2-5em" ng-click='uploader.check_list(2000)' ng-class="{'disabled' : uploader.uploading}">Check file(s)</button>
+					<button class="btn btn-aqua btn-block h2-5em" submit-form='#hidden-form' ng-class="{'disabled' : uploader.uploading}">Upload file(s)</button>
+					<a href='#/interface/{{m.session_id}}' class="btn btn-reddish btn-block h2-5em" ng-click='toggleUploader()' ng-class="{'disabled' : uploader.uploading}">Abort</a>
 				</div>
 
 				<div class="uploader-list-wrap col-md-8">
@@ -55,8 +55,8 @@
 						<small>{{file.msg}}</small>
 					</div>
 
-					<button class="btn btn-success btn-end-upload" ng-show="uploader.uploading && uploader.progress == 100" ng-click="toggleUploader()">continue</button>
-					<button class="btn btn-warning btn-end-upload" ng-show="uploader.uploading && uploader.progress == 100" ng-click="uploader.abort()">again</button>
+					<button class="btn btn-aqua h2-5em btn-end-upload" ng-show="uploader.uploading && uploader.progress == 100" ng-click="toggleUploader()">continue</button>
+					<button class="btn btn-gold h2-5em btn-end-upload" ng-show="uploader.uploading && uploader.progress == 100" ng-click="uploader.abort()">again</button>
 				</div>
 
 				<form id='hidden-form' ng-submit="uploader.upload()">
@@ -68,7 +68,7 @@
 		</div>
 	</div>
 
-	<a ng-show="!uploader.is_basic(m.uploader_type)" href='#/interface/{{m.session_id}}' class="btn btn-danger float-right small-caps" ng-click='toggleUploader()' ng-class="{'disabled' : uploader.uploading}">back</a>
+	<a ng-show="!uploader.is_basic(m.uploader_type)" href='#/interface/{{m.session_id}}' class="btn btn-reddish h2-5em float-right small-caps" ng-click='toggleUploader()' ng-class="{'disabled' : uploader.uploading}">back</a>
 
 	<p ng-show="uploader.is_basic(m.uploader_type)" >
 		<small><sup>1</sup> you can upload your files manually at the address <span style='font-family: Monospace;'>/server_side/session/{{m.session_id}}/</span></small>

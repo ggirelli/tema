@@ -14,7 +14,7 @@
 <!-- list -->
 <div ng-if="!networks.attributes.is_attr_doing()">
 	<h4>Node attributes:</h4>
-	<div class="alert alert-info" ng-repeat="attr in canvas.get_attributes('nodes')">
+	<div class="alert alert-sky" ng-repeat="attr in canvas.get_attributes('nodes')">
 		{{attr}}
 		<!-- overwrite -->
 		<a href="#/interface/{{m.session_id}}" class="attr-action float-right" title='Overwrite' ng-if="!canvas.is_attr_reserved('nodes', attr)" ng-click="networks.attributes.do_attr('overwrite'); networks.attributes.list.options.type='nodes'; networks.attributes.list.options.name=attr;"><span class="glyphicon glyphicon-import"></span></a>
@@ -25,7 +25,7 @@
 	</div>
 	<hr style="margin-bottom: 2em;" />
 	<h4>Edge attributes:</h4>
-	<div class="alert alert-info" ng-repeat="attr in canvas.get_attributes('edges')">
+	<div class="alert alert-sky" ng-repeat="attr in canvas.get_attributes('edges')">
 		{{attr}}
 		<!-- overwrite -->
 		<a href="#/interface/{{m.session_id}}" class="attr-action float-right" title='Overwrite' ng-if="!canvas.is_attr_reserved('edges', attr)" ng-click="networks.attributes.do_attr('overwrite'); networks.attributes.list.options.type='edges'; networks.attributes.list.options.name=attr;"><span class="glyphicon glyphicon-import"></span></a>
@@ -86,9 +86,9 @@
 		</select>
 	</p>
 
-	<p class="alert alert-danger" ng-repeat="msg in networks.attributes.list.options.errMsg">{{msg}}</p>
+	<p class="alert alert-reddish" ng-repeat="msg in networks.attributes.list.options.errMsg">{{msg}}</p>
 
-	<button class="btn abort-btn btn-success" ng-click="networks.attributes.attr_apply(canvas.current, m.session_id, 'add_new')">apply</button> <button class="btn abort-btn btn-danger" ng-click="networks.attributes.do_attr(null)">abort</button>
+	<button class="btn abort-btn h2-5em btn-aqua" ng-click="networks.attributes.attr_apply(canvas.current, m.session_id, 'add_new')">apply</button> <button class="btn abort-btn h2-5em btn-reddish" ng-click="networks.attributes.do_attr(null)">abort</button>
 </div>
 <!-- combine -->
 <div ng-show="networks.attributes.is_attr_doing('combine')">
@@ -109,7 +109,7 @@
 	<hr>
 	<div ng-show="null != networks.attributes.list.options.type">
 		<h4>Select the attributes that you want to combine:</h4>
-		<label class="attr-list alert" ng-class="{'alert-info' : !networks.attributes.list[networks.attributes.list.options.type][attr], 'alert-success' : networks.attributes.list[networks.attributes.list.options.type][attr]}" for="attr-{{attr}}" ng-repeat="attr in canvas.get_attributes(networks.attributes.list.options.type)">
+		<label class="attr-list alert" ng-class="{'alert-sky' : !networks.attributes.list[networks.attributes.list.options.type][attr], 'alert-aqua' : networks.attributes.list[networks.attributes.list.options.type][attr]}" for="attr-{{attr}}" ng-repeat="attr in canvas.get_attributes(networks.attributes.list.options.type)">
 			<input type="checkbox" id="attr-{{attr}}" name="attr-{{attr}}" ng-model="networks.attributes.list[networks.attributes.list.options.type][attr]"> {{attr}}
 		</label>
 	</div>
@@ -123,9 +123,9 @@
 		</ul>
 	</div>
 
-	<p class="alert alert-danger" ng-repeat="msg in networks.attributes.list.options.errMsg">{{msg}}</p>
+	<p class="alert alert-reddish" ng-repeat="msg in networks.attributes.list.options.errMsg">{{msg}}</p>
 
-	<button class="btn abort-btn btn-success" ng-click="networks.attributes.attr_apply(canvas.current, m.session_id, 'combine')">apply</button> <button class="btn abort-btn btn-danger" ng-click="networks.attributes.do_attr(null)">abort</button>
+	<button class="btn abort-btn btn-aqua h2-5em" ng-click="networks.attributes.attr_apply(canvas.current, m.session_id, 'combine')">apply</button> <button class="btn abort-btn btn-reddish h2-5em" ng-click="networks.attributes.do_attr(null)">abort</button>
 </div>
 <!-- overwrite -->
 <div ng-show="networks.attributes.is_attr_doing('overwrite')">
@@ -153,9 +153,9 @@
 		</select>
 	</p>
 
-	<p class="alert alert-danger" ng-repeat="msg in networks.attributes.list.options.errMsg">{{msg}}</p>
+	<p class="alert alert-reddish" ng-repeat="msg in networks.attributes.list.options.errMsg">{{msg}}</p>
 
-	<button class="btn abort-btn btn-success" ng-click="networks.attributes.attr_apply(canvas.current, m.session_id, 'add_new')">apply</button> <button class="btn abort-btn btn-danger" ng-click="networks.attributes.do_attr(null)">abort</button>
+	<button class="btn abort-btn btn-aqua h2-5em" ng-click="networks.attributes.attr_apply(canvas.current, m.session_id, 'add_new')">apply</button> <button class="btn abort-btn btn-reddish h2-5em" ng-click="networks.attributes.do_attr(null)">abort</button>
 </div>
 
 <p class="footnote">

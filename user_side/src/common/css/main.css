@@ -307,3 +307,59 @@ body {
 
 	opacity: 0;
 }
+
+/** ALERTS **/
+
+.alert-aqua a,
+.alert-light-aqua a,
+.alert-reddish a,
+.alert-gold a,
+.alert-gray a {
+	color: white;
+}
+
+.alert-aqua a:hover,
+.alert-light-aqua a:hover,
+.alert-reddish a:hover,
+.alert-gold a:hover,
+.alert-gray a:hover {
+	color: #323232;
+}
+
+.alert-aqua {
+	background-color: rgb(59, 173, 139);
+	color: white;
+	border: 1px solid rgb(13, 135, 110);
+}
+
+.alert-light-aqua {
+	background-color: rgb(132, 209, 173);
+	color: white;
+	border: 1px solid rgb(87, 181, 138);
+}
+
+.alert-sky {
+	background-color: rgb(138, 202, 207);
+	color: #454545;
+	border: 1px solid rgb(158, 206, 255);
+}
+.alert-sky a { color: #454545; }
+.alert-sky a:hover { color: #232323; }
+
+.alert-gold {
+	background-color: rgb(255, 198, 127);
+	color: white;
+	border: 1px solid rgb(255,158,82);
+}
+
+.alert-reddish {
+	background-color: rgb(255, 123, 97);
+	color: white;
+	border: 1px solid rgb(212, 71, 44);
+}
+
+.alert-gray {
+	background-color: #cacaca;
+	color: white;
+	border: 1px solid #bababa;
+}
