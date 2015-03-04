@@ -39,7 +39,8 @@ class TEMAdb extends C2MySQL {
 			!parent::table_exists('sessions') or
 			!parent::table_exists('sessions_settings') or
 			!parent::table_exists('sessions_users') or
-			!parent::table_exists('sessions_history')
+			!parent::table_exists('sessions_history') or
+			!parent::table_exists('sessions_shared')
 		) {
 			return false;
 		}

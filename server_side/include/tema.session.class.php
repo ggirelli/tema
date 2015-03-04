@@ -321,8 +321,83 @@ class TEMAsession extends TEMAdb {
 		}
 	}
 
+	/**
+	 * @param  String  $pwd password candidate
+	 * @return boolean      Whether the password candidate is the password to the current session
+	 */
 	public function is_password($pwd) {
 		return($this->encrypt($pwd) == $this->password);
+	}
+
+	/**
+	 * @return Array List of usernames of user with which the current session is shared
+	 */
+	public function shared_with() {
+		$sql = "SELECT su.nickname FROM sessions_shared AS sh " .
+			"LEFT JOIN sessions_users AS su " .
+			"ON sh.user_id=su.id " .
+			"WHERE sh.seed='" . $this->id . "'";
+		$r = $this->query($sql);
+
+		$l = array();
+		while ( $row = $r->fetch() ) {
+			$l[] = $row['nickname'];
+		}
+		return($l);
+	}
+
+	/**
+	 * Shares the current session with a given user
+	 * @param  String $usr username
+	 * @return Boolean
+	 */
+	public function share_with($usr) {
+		$usr = $this->escape_string($usr);
+		
+		// If not already shared with
+		if ( !in_array(strtoupper($usr), $this->shared_with()) ) {
+			$sql = "SELECT id FROM sessions_users WHERE nickname='$usr'";
+			$r = $this->query($sql);
+			if ( 0 == $r->size() ) return NULL;
+
+			$id = $r->fetch()['id'];
+			if ( $id == $this->owner ) return NULL;
+
+			$sql = "INSERT INTO sessions_shared (user_id, seed) VALUES ($id, '" . $this->id . "')";
+			$r = $this->query($sql);
+
+			if ( $this->isError() ) {
+				return FALSE;
+			} else {
+				return TRUE;
+			}
+		}
+	}
+
+	/**
+	 * Revokes current session sharing with a given user
+	 * @param  String $usr username
+	 * @return Boolean
+	 */
+	public function rm_share_with($usr) {
+		$usr = $this->escape_string($usr);
+		
+		// If already shared with
+		if ( in_array(strtoupper($usr), $this->shared_with()) ) {
+			$sql = "SELECT id FROM sessions_users WHERE nickname='$usr'";
+			$r = $this->query($sql);
+			if ( 0 == $r->size() ) return NULL;
+
+			$id = $r->fetch()['id'];
+			$sql = "DELETE FROM sessions_shared WHERE user_id=$id AND seed='" . $this->id . "'";
+			$r = $this->query($sql);
+
+			if ( $this->isError() ) {
+				return FALSE;
+			} else {
+				return TRUE;
+			}
+		}
 	}
 
 	// private FUNCTIONS

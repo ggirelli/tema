@@ -18,7 +18,8 @@
                 node_thr: 1000,
                 goa: false,
                 gob: false,
-                go_status: false
+                go_status: false,
+                shared_with: []
             };
 
             /**
@@ -317,6 +318,7 @@
                         self.info.sif_sample_col = data['sif_sample_col'];
                         self.info.node_thr = parseInt(data['node_thr']);
                         self.info.default_layout = data['default_layout'];
+                        self.info.shared_with = data['shared_with'];
 
                         qwait.resolve(data);
                     });
@@ -359,6 +361,36 @@
                 if ( self.is_sif_ready() ) {
                     rootScope.$broadcast('apply_sif', self.info);
                 }
+            };
+
+            /**
+             * Manages session sharing
+             * @param  {String} session_id
+             * @param  {String} usr        nickname
+             * @param  {String} action     either 'rm' or 'add'
+             * @return {Promise}            data contains server answer
+             */
+            self.manage_share_with = function (session_id, usr, action) {
+                var qwait = q.defer();
+
+                http({
+
+                    method: 'POST',
+                    data: {
+                        action: 'manage_sharing',
+                        session_id: session_id,
+                        usr: usr,
+                        type: action
+                    },
+                    url: 's/'
+
+                })
+                    .success( function (data) {
+                        self.info.shared_with = data.list;
+                        qwait.resolve(data);
+                    })
+
+                return qwait.promise;
             };
 
         };

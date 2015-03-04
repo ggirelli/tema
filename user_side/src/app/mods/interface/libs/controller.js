@@ -84,7 +84,7 @@
                 /*-------------------------*/
 
                 scope.networks.get_list(scope.m.session_id).then(function (data) {
-                    console.log(data);
+                    //console.log(data);
                     if (0 != data['err'] ) {
                         document.location.hash = '#/';
                     } else {
@@ -141,6 +141,9 @@
                             }
                         });
                         scope.settings.is_go_mapped(scope.m.session_id);
+
+                        // Check shared session
+                        
                     }
                 });
 

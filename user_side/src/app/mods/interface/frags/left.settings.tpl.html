@@ -106,7 +106,17 @@
 
 			<div ng-if="m.session_sys.inside.owner">
 				<!-- sharing form -->
-				
+				<div class="input-group mbot05">
+					<input class="form-control" type="text" placeholder="Insert a username to share this session" ng-model="m.tmpUsr_sharedWith" />
+					<div class="btn btn-aqua input-group-addon" ng-click="settings.manage_share_with(m.session_id, m.tmpUsr_sharedWith, 'add')">
+						<span class="glyphicon glyphicon-plus"></span>
+					</div>
+				</div>
+				<div ng-if="settings.info.shared_with.length != 0">
+					<div class="alert alert-light-aqua mbot02" ng-repeat="usr in settings.info.shared_with">
+						{{usr}} <a href="" ng-click="settings.manage_share_with(m.session_id, usr, 'rm')" class="float-right mrigh05"><span class="glyphicon glyphicon-trash"></span></a>
+					</div>
+				</div>
 			</div>
 			<div ng-if="!m.session_sys.inside.owner">Only the session <b>owner</b> can change the sharing options.</div>
 
