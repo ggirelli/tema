@@ -50,6 +50,39 @@ switch($data->type) {
 		break;
 	}
 	case 'shared': {
+		$list = $user->list_shared_sessions();
+
+		if ( !$data->list ) {
+
+			$json = '{"list":[';
+			for ($i = 0; $i < count($list); $i++) {
+				$session = $list[$i];
+				$json .= '{"seed":"' . $session['seed'] .'", ' .
+					'"title":"' . $session['title'] .'", ' .
+					'"privacy":"' . $session['privacy'] .'", ' .
+					'"password":"' . $session['password'] . '", ' .
+					'"owner":"' . $session['nickname'] . '"' .
+					'}';
+				if ( $i != count($list)-1 ) $json .= ",";
+			}
+			$json .= '], "err":0}';
+
+			die($json);
+
+		} else {
+
+			$json = '{"list":[';
+			for ($i = 0; $i < count($list); $i++) {
+				$session = $list[$i];
+				$json .= '"' . $session['seed'] .'"';
+				if ( $i != count($list)-1 ) $json .= ",";
+			}
+			$json .= '], "err":0}';
+
+			die($json);
+
+		}
+
 		break;
 	}
 	case 'history': {

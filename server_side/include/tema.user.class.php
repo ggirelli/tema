@@ -241,6 +241,36 @@ class TEMAuser extends TEMAdb {
 		return($l);
 	}
 
+	/**
+	 * @return Array A list of sessions shared with the user
+	 */
+	public function list_shared_sessions() {
+		$user_id = $this->get_id($this->username);
+
+		// Retrieve shared sessions
+		$sql = "SELECT sh.seed, se.title, se.privacy, se.password, su.nickname FROM sessions_shared AS sh " .
+			"LEFT JOIN sessions AS se ON sh.seed=se.seed " .
+			"LEFT JOIN sessions_users AS su ON se.owner=su.id " .
+			"WHERE sh.user_id=$user_id";
+		$r = $this->query($sql);
+
+		// Hide password and prepare multi-array
+		$l = array();
+		while($row = $r->fetch()) {
+			if ( '' === $row['password'] ) {
+				$row['password'] = 0;
+			} else {
+				$row['password'] = 1;
+			}
+			$l[] = $row;
+		}
+
+		return($l);
+	}
+
+	/**
+	 * @return Array A list of sessions visited by the user
+	 */
 	public function list_history_sessions() {
 		$user_id = $this->get_id($this->username);
 
