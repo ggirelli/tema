@@ -26,8 +26,15 @@ switch($s->get('privacy')) {
 		}
 
 		if ( !in_array($data->seed, $owned) ) {
-			// Does not have the access privilege
-			die('{"err":4}');
+
+			$list = $u->list_shared_sessions();
+			$shared = array();
+			for ($i = 0; $i < count($list); $i++) { $shared[] = $list[$i]['seed']; }
+			
+			if ( !in_array($data->seed, $shared) ) {
+				// Does not have the access privilege
+				die('{"err":4}');
+			}
 		}
 		break;
 	}
