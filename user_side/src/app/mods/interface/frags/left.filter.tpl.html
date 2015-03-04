@@ -4,17 +4,17 @@
 	<table class="panel panel-default" style="width: 100%; text-align: center;">
 		<tr>
 			<th class="panel-heading" style="text-align: center;">
-				<button class="btn btn-info btn-block" ng-click="canvas.filters.init(canvas.current, 'w');" ng-disabled="canvas.filters.is_token('w')">
+				<button class="btn btn-sky h2-5em btn-block" ng-click="canvas.filters.init(canvas.current, 'w');" ng-disabled="canvas.filters.is_token('w')">
 					Whole
 				</button>
 			</th>
 			<th class="panel-heading" style="text-align: center;">
-				<button class="btn btn-info btn-block" ng-click="canvas.filters.init(canvas.filtered, 'f');" ng-disabled="canvas.filters.is_token('f')">
+				<button class="btn btn-sky h2-5em btn-block" ng-click="canvas.filters.init(canvas.filtered, 'f');" ng-disabled="canvas.filters.is_token('f')">
 					Filtered
 				</button>
 			</th>
 			<th class="panel-heading" style="text-align: center;">
-				<button class="btn btn-info btn-block" ng-click="canvas.filters.init(canvas.visualization, 'v');" ng-disabled="canvas.filters.is_token('v')">
+				<button class="btn btn-sky h2-5em btn-block" ng-click="canvas.filters.init(canvas.visualization, 'v');" ng-disabled="canvas.filters.is_token('v')">
 					Visualized
 				</button>
 			</th>
@@ -107,8 +107,8 @@
 	<div class="panel panel-success" ng-if="canvas.filters.isLoaded()">
 		<div class="panel-heading">
 			Edge Filters
-			<a href="#/interface/{{m.session_id}}" class="btn-panel btn-filters float-right" ng-click="canvas.filters.remove('edges')" title="Remove last"><span class="text-success glyphicon glyphicon-minus"></span></a>
-			<a href="#/interface/{{m.session_id}}" class="btn-panel btn-filters float-right" ng-click="canvas.filters.add('edges')" title="Add new"><span class="text-success glyphicon glyphicon-plus"></span></a>
+			<a href="#/interface/{{m.session_id}}" class="btn-panel btn-filter float-right" ng-click="canvas.filters.remove('edges')" title="Remove last"><span class="text-success glyphicon glyphicon-minus"></span></a>
+			<a href="#/interface/{{m.session_id}}" class="btn-panel btn-filter float-right" ng-click="canvas.filters.add('edges')" title="Add new"><span class="text-success glyphicon glyphicon-plus"></span></a>
 		</div>
 		<div class="panel-body">
 			<table class="filter-selection">
@@ -171,16 +171,16 @@
 	</div>
 
 	<div class="col-md-6" ng-if="canvas.filters.has()">
-		<button class="btn btn-block btn-danger small-caps" ng-click="canvas.unmask()" ng-disabled="canvas.filters.is_token('v')">unmask</button>
+		<button class="btn btn-block btn-reddish h2-5em small-caps mbot02" ng-click="canvas.unmask()" ng-disabled="canvas.filters.is_token('v')">unmask</button>
 	</div>
 	<div class="col-md-6" ng-if="canvas.filters.has()">
-		<button class="btn btn-block btn-warning small-caps" ng-click="canvas.mask()" ng-disabled="canvas.filters.is_token('f')">mask</button>
+		<button class="btn btn-block btn-gold h2-5em small-caps mbot02" ng-click="canvas.mask()" ng-disabled="canvas.filters.is_token('f')">mask</button>
 	</div>
-	<div class="col-md-6" ng-if="canvas.filters.has()" style="margin-top: 4px;">
-		<button class="btn btn-block btn-primary small-caps" ng-click="alert('@todo')" ng-disabled="!canvas.filters.is_token('v')">select</button>
+	<div class="col-md-6" ng-if="canvas.filters.has()">
+		<button class="btn btn-block btn-sky h2-5em small-caps mbot02" ng-click="alert('@todo')" ng-disabled="!canvas.filters.is_token('v')">select</button>
 	</div>
-	<div class="col-md-6" ng-if="canvas.filters.has()" style="margin-top: 4px;">
-		<button class="btn btn-block btn-success small-caps" ng-click="networks.init_file(canvas.current_data)" ng-disabled="canvas.visualized">load</button>
+	<div class="col-md-6" ng-if="canvas.filters.has()">
+		<button class="btn btn-block btn-aqua h2-5em small-caps mbot02" ng-click="networks.init_file(canvas.current_data)" ng-disabled="canvas.visualized">load</button>
 	</div>
 
 </div>

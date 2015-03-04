@@ -180,6 +180,10 @@ body {
 .panel-sky .panel-body h2 {
 	color: rgb(88, 176, 235);
 }
+.panel-sky .panel-heading a,
+.panel-sky .panel-heading a span { color: white; }
+.panel-sky .panel-heading a:hover,
+.panel-sky .panel-heading a:hover span { color: #323232; }
 
 .panel-light-aqua { border-color: rgb(87, 181, 138); }
 .panel-light-aqua .panel-heading {
@@ -191,7 +195,6 @@ body {
 .panel-light-aqua h2 {
 	color: rgb(87, 181, 138);
 }
-
 
 .panel-reddish { border-color: rgb(212, 71, 44); }
 .panel-reddish .panel-heading {
@@ -314,16 +317,18 @@ body {
 .alert-light-aqua a,
 .alert-reddish a,
 .alert-gold a,
+.alert-sky a,
 .alert-gray a {
-	color: white;
+	color: #333333;
 }
 
 .alert-aqua a:hover,
 .alert-light-aqua a:hover,
 .alert-reddish a:hover,
 .alert-gold a:hover,
+.alert-sky a:hover,
 .alert-gray a:hover {
-	color: #323232;
+	color: #000;
 }
 
 .alert-aqua {
@@ -340,11 +345,9 @@ body {
 
 .alert-sky {
 	background-color: rgb(138, 202, 207);
-	color: #454545;
+	color: #343434;
 	border: 1px solid rgb(158, 206, 255);
 }
-.alert-sky a { color: #454545; }
-.alert-sky a:hover { color: #232323; }
 
 .alert-gold {
 	background-color: rgb(255, 198, 127);

@@ -4,17 +4,17 @@
 	<table class="panel panel-default" style="width: 100%; text-align: center;">
 		<tr>
 			<th class="panel-heading" style="text-align: center;">
-				<button class="btn btn-info btn-block" ng-click="canvas.navi.init(canvas.current, 'w');" ng-disabled="canvas.navi.filters.is_token('w')">
+				<button class="btn btn-sky h2-5em btn-block" ng-click="canvas.navi.init(canvas.current, 'w');" ng-disabled="canvas.navi.filters.is_token('w')">
 					Whole
 				</button>
 			</th>
 			<th class="panel-heading" style="text-align: center;">
-				<button class="btn btn-danger btn-block" disabled>
+				<button class="btn btn-reddish h2-5em btn-block" disabled>
 					Filtered
 				</button>
 			</th>
 			<th class="panel-heading" style="text-align: center;">
-				<button class="btn btn-info btn-block" ng-click="canvas.navi.init(canvas.visualization, 'v');" ng-disabled="canvas.navi.filters.is_token('v')">
+				<button class="btn btn-sky h2-5em btn-block" ng-click="canvas.navi.init(canvas.visualization, 'v');" ng-disabled="canvas.navi.filters.is_token('v')">
 					Visualized
 				</button>
 			</th>
@@ -128,6 +128,6 @@
 
 		<hr />
 
-		<button class="btn btn-success float-right small-caps" ng-if="canvas.navi.filters.isLoaded()" ng-click="canvas.navigate(m.session_id, canvas.navi.start_node)">apply</button>
+		<button class="btn btn-aqua h2-5em float-right small-caps" ng-if="canvas.navi.filters.isLoaded()" ng-click="canvas.navigate(m.session_id, canvas.navi.start_node)">apply</button>
 	</div>
 </div>
