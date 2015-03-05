@@ -11,6 +11,7 @@
 <span ng-show="networks.attributes.is_attr_doing('replace')">Replace attribute</span>
 </div>
 <div class="panel-body">
+
 <!-- list -->
 <div ng-if="!networks.attributes.is_attr_doing()">
 	<h4>Node attributes:</h4>
@@ -36,6 +37,7 @@
 	</div>
 	<hr />
 </div>
+
 <!-- add_new -->
 <div ng-show="networks.attributes.is_attr_doing('add_new')">
 	
@@ -90,6 +92,7 @@
 
 	<button class="btn abort-btn h2-5em btn-aqua" ng-click="networks.attributes.attr_apply(canvas.current, m.session_id, 'add_new')">apply</button> <button class="btn abort-btn h2-5em btn-reddish" ng-click="networks.attributes.do_attr(null)">abort</button>
 </div>
+
 <!-- combine -->
 <div ng-show="networks.attributes.is_attr_doing('combine')">
 	<h4>
@@ -127,6 +130,7 @@
 
 	<button class="btn abort-btn btn-aqua h2-5em" ng-click="networks.attributes.attr_apply(canvas.current, m.session_id, 'combine')">apply</button> <button class="btn abort-btn btn-reddish h2-5em" ng-click="networks.attributes.do_attr(null)">abort</button>
 </div>
+
 <!-- overwrite -->
 <div ng-show="networks.attributes.is_attr_doing('overwrite')">
 	

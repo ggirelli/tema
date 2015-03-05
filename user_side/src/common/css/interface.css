@@ -167,6 +167,14 @@ html {
 	font-size: 0.8em;
 }
 
+#interface .left-panel.graph-list-panel .panel-heading .btn-panel span {
+	color: white;
+}
+
+#interface .left-panel.graph-list-panel .panel-heading .btn-panel span:hover {
+	color: #7FFFC5;
+}
+
 #interface .left-panel.graph-list-panel .load-network-link {
 	display: inline-block;
 	
