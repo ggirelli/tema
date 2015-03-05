@@ -15,7 +15,8 @@
                 all: false,
                 doing: false,
                 networks: {},
-                page: 1
+                page: 1,
+                filter: false
             };
 
             /**
@@ -48,7 +49,7 @@
              */
             self.un_select_all = function () {
                 var ks = Object.keys(self.group.networks);
-                self.group.all = !self.group.all;
+                //self.group.all = !self.group.all;
                 for (var i = ks.length - 1; i >= 0; i--) {
                     self.group.networks[ks[i]] = self.group.all;
                 }
@@ -59,7 +60,7 @@
              * @param  {String} name network name
              */
             self.check = function (name) {
-                self.group.networks[name] = !self.group.networks[name];
+                //self.group.networks[name] = !self.group.networks[name];
 
                 var all_checked = true;
                 var ks = Object.keys(self.group.networks);
@@ -171,11 +172,11 @@
             self.toggle_filter = function () {
                 self.group.net_list = self.list;
 
-                if ( undefined == self.group.filter ) {
-                    self.group.filter = true;
-                } else {
-                    self.group.filter = !self.group.filter;
-                }
+                //if ( undefined == self.group.filter ) {
+                //    self.group.filter = true;
+                //} else {
+                //    self.group.filter = !self.group.filter;
+                //}
 
                 if ( self.group.filter ) {
                     self.group.net_attr_values = self.get_net_attrs_values(self.list);

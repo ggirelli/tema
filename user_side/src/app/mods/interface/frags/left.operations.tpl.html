@@ -40,16 +40,16 @@
 		<hr />
 
 		<h4>Select the networks to merge:</h4>
-		<label class="group-selection-option alert alert-gold" for="merge-all"
-			ng-click="commander.merge.un_select_all(); commander.merge.get_attrs({nodes:[],edges:[]});">
+		<label class="group-selection-option alert alert-gold" for="merge-all">
 			<input type="checkbox" id="merge-all" name="merge-all"
 				ng-model="commander.merge.group.all"
+				ng-change="commander.merge.un_select_all(); commander.merge.get_attrs({nodes:[],edges:[]});"
 			/>&nbsp;Un/Select all
 		</label>
-		<label class="group-selection-option alert alert-aqua" for="merge-filter"
-			ng-click="commander.merge.toggle_filter()">
+		<label class="group-selection-option alert alert-aqua" for="merge-filter">
 			<input type="checkbox" id="merge-filter" name="merge-filter"
 				ng-model="commander.merge.group.filter"
+				ng-change="commander.merge.toggle_filter()"
 			/>&nbsp;Custom Filters
 		</label>
 
@@ -107,10 +107,10 @@
 			ng-repeat='net in commander.merge.group.net_list | filter:networks.isConverted'
 			ng-show='networks.list != null'
 			ng-class="{'alert-sky' : networks.isConverted(net), 'alert-reddish' : !networks.isConverted(net)}"
-			ng-click="commander.merge.check(net.name); commander.merge.get_attrs({nodes:[],edges:[]});"
 			style="width: 100%;">
 			<input id="net-{{net.id}}" name="net-{{net.id}}" type="checkbox"
 				ng-model="commander.merge.group.networks[net.name]"
+				ng-change="commander.merge.check(net.name); commander.merge.get_attrs({nodes:[],edges:[]});"
 			/>&nbsp;{{net.name}}
 		</label>
 
@@ -219,16 +219,16 @@
 		<hr />
 
 		<h4>Select the networks to intersect:</h4>
-		<label class="group-selection-option alert alert-gold" for="intersect-all"
-			ng-click="commander.intersect.un_select_all(); commander.intersect.get_attrs({nodes:[],edges:[]});">
+		<label class="group-selection-option alert alert-gold" for="intersect-all">
 			<input type="checkbox" id="intersect-all" name="intersect-all"
 				ng-model="commander.intersect.group.all"
+				ng-change="commander.intersect.un_select_all(); commander.intersect.get_attrs({nodes:[],edges:[]});"
 			/>&nbsp;Un/Select all
 		</label>
-		<label class="group-selection-option alert alert-aqua" for="intersect-filter"
-			ng-click="commander.intersect.toggle_filter()">
+		<label class="group-selection-option alert alert-aqua" for="intersect-filter">
 			<input type="checkbox" id="intersect-filter" name="intersect-filter"
 				ng-model="commander.intersect.group.filter"
+				ng-change="commander.intersect.toggle_filter()"
 			/>&nbsp;Custom Filters
 		</label>
 
@@ -285,10 +285,10 @@
 		<label for="net-{{net.id}}" class="alert"
 			ng-repeat='net in commander.intersect.group.net_list | filter:networks.isConverted'
 			ng-show='networks.list != null' ng-class="{'alert-sky' : networks.isConverted(net), 'alert-reddish' : !networks.isConverted(net)}"
-			ng-click="commander.intersect.check(net.name); commander.intersect.get_attrs({nodes:[],edges:[]});"
 			style="width: 100%;">
 			<input id="net-{{net.id}}" name="net-{{net.id}}" type="checkbox"
 				ng-model="commander.intersect.group.networks[net.name]"
+				ng-change="commander.intersect.check(net.name); commander.intersect.get_attrs({nodes:[],edges:[]});"
 			/>&nbsp;{{net.name}}
 		</label>
 
@@ -462,10 +462,10 @@
         	ng-repeat='net in commander.subtract.group.net_list | filter:networks.isConverted'
         	ng-show='networks.list != null'
         	ng-class="{'alert-sky' : networks.isConverted(net), 'alert-reddish' : !networks.isConverted(net)}"
-        	ng-click="commander.subtract.check(net.name); commander.subtract.get_attrs(commander.subtract.get_attrs_from_net(networks.get_network_from_name(commander.subtract.group.minuend), {nodes:[],edges:[]}));"
         	style="width: 100%;">
             <input id="net-subtrahend-{{net.id}}" name="net-subtrahend-{{net.id}}" type="checkbox"
             	ng-model="commander.subtract.group.networks[net.name]"
+            	ng-change="commander.subtract.check(net.name); commander.subtract.get_attrs(commander.subtract.get_attrs_from_net(networks.get_network_from_name(commander.subtract.group.minuend), {nodes:[],edges:[]}));"
             />&nbsp;{{net.name}}
         </label>
 
@@ -562,16 +562,16 @@
 <div class="panel-body" ng-show="commander.is_operation('distances')">
 	<div class="distances-page-1" ng-show="commander.distances.is_page(1)">
 		<h4>Select the networks to calculate their pair-wise distance:</h4>
-		<label class="group-selection-option alert alert-gold" for="distances-all"
-			ng-click="commander.distances.un_select_all(); commander.distances.get_attrs({nodes:[],edges:[]});">
+		<label class="group-selection-option alert alert-gold" for="distances-all">
 			<input type="checkbox" id="distances-all" name="distances-all" 
 				ng-model="commander.distances.group.all"
+				ng-change="commander.distances.un_select_all(); commander.distances.get_attrs({nodes:[],edges:[]});"
 			/>&nbsp;Un/Select all
 		</label>
-		<label class="group-selection-option alert alert-aqua" for="distances-filter"
-			ng-click="commander.distances.toggle_filter()">
+		<label class="group-selection-option alert alert-aqua" for="distances-filter">
 			<input type="checkbox" id="distances-filter" name="distances-filter"
 				ng-model="commander.distances.group.filter"
+				ng-change="commander.distances.toggle_filter()"
 			/>&nbsp;Custom Filters
 		</label>
 
@@ -629,10 +629,10 @@
 			ng-repeat='net in commander.distances.group.net_list | filter:networks.isConverted'
 			ng-show='networks.list != null'
 			ng-class="{'alert-sky' : networks.isConverted(net), 'alert-reddish' : !networks.isConverted(net)}"
-			ng-click="commander.distances.check(net.name); commander.distances.get_attrs({nodes:[],edges:[]});"
 			style="width: 100%;">
 			<input id="net-{{net.id}}" name="net-{{net.id}}" type="checkbox"
 				ng-model="commander.distances.group.networks[net.name]"
+				ng-change="commander.distances.check(net.name); commander.distances.get_attrs({nodes:[],edges:[]});"
 			/>&nbsp;{{net.name}}
 		</label>
 

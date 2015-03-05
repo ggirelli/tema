@@ -30,16 +30,16 @@
 </div>
 
 <div class="panel-body" ng-show="networks.conversion.is()">
-	<label class="group-selection-option alert alert-gold" for="convert-all"
-		ng-click="networks.conversion.un_select_all()">
+	<label class="group-selection-option alert alert-gold" for="convert-all">
 		<input type="checkbox" id="convert-all" name="convert-all"
 			ng-model="networks.conversion.group.all"
+			ng-change="networks.conversion.un_select_all()"
 		/>&nbsp;Un/Select all
 	</label>
-	<label class="group-selection-option alert alert-aqua" for="convert-filter"
-		ng-click="networks.conversion.toggle_filter()">
+	<label class="group-selection-option alert alert-aqua" for="convert-filter">
 		<input type="checkbox" id="convert-filter" name="convert-filter"
 			ng-model="networks.conversion.group.filter"
+			ng-change="networks.conversion.toggle_filter()"
 		/>&nbsp;Custom Filters
 	</label>
 
@@ -99,11 +99,11 @@
 		ng-repeat='net in networks.conversion.group.net_list | filter:networks.isToConvert'
 		ng-show='networks.list != null'
 		ng-class="{'alert-sky' : networks.isConverted(net), 'alert-reddish' : !networks.isConverted(net)}"
-		ng-click="networks.conversion.check(net.name)"
 		style="width: 100%;"
 	>
 		<input id="net-{{net.id}}" name="net-{{net.id}}" type="checkbox"
 			ng-model="networks.conversion.group.networks[net.name]"
+			ng-change="networks.conversion.check(net.name)"
 		/> {{net.name}}
 	</label>
 
