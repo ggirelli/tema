@@ -109,7 +109,7 @@
     			},
 
     			isSigning: function () {
-    				return(scope.m.logsys.in.doing);
+    				return(true === scope.m.logsys.in.doing);
     			},
 
                 sign: function () {
@@ -165,7 +165,7 @@
     			},
 
     			isDoing: function () {
-    				return(scope.m.logsys.load.doing);
+    				return(true === scope.m.logsys.load.doing);
     			},
 
     			do: function () {
