@@ -170,7 +170,11 @@ html {
 #interface .left-panel.graph-list-panel .load-network-link {
 	display: inline-block;
 	
-	width: 210px;
+	width: 175px;
+}
+
+#interface .left-panel.graph-list-panel .alert span {
+	color: #323232;
 }
 
 #interface .left-panel.graph-list-panel .btn-select_group {

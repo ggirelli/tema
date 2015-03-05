@@ -303,6 +303,7 @@
             // GROUP CONVERSION
 
             self.conversion = convertGroup;
+            
             self.toggle_conversion_panel = function (session_id) {
                 self.conversion.list = [];
                 for (var i = self.list.length - 1; i >= 0; i--) {
