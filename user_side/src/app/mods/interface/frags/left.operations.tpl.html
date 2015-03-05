@@ -29,6 +29,7 @@
 		Calculate distance
 	</div>
 </div>
+
 <!-- merge body -->
 <div class="panel-body" ng-show="commander.is_operation('merge')">
 	<div class="merge-page-1" ng-show="commander.merge.is_page(1)">
@@ -39,7 +40,18 @@
 		<hr />
 
 		<h4>Select the networks to merge:</h4>
-		<label class="group-selection-option alert alert-gold" for="merge-all"><input type="checkbox" id="merge-all" name="merge-all" ng-model="commander.merge.group.all" ng-click="commander.merge.un_select_all(); commander.merge.get_attrs({nodes:[],edges:[]});" /> Un/Select all</label><label class="group-selection-option alert alert-aqua" for="merge-filter"><input type="checkbox" id="merge-filter" name="merge-filter" ng-model="commander.merge.group.filter" ng-click="commander.merge.toggle_filter()" /> Custom Filters</label>
+		<label class="group-selection-option alert alert-gold" for="merge-all"
+			ng-click="commander.merge.un_select_all(); commander.merge.get_attrs({nodes:[],edges:[]});">
+			<input type="checkbox" id="merge-all" name="merge-all"
+				ng-model="commander.merge.group.all"
+			/>&nbsp;Un/Select all
+		</label>
+		<label class="group-selection-option alert alert-aqua" for="merge-filter"
+			ng-click="commander.merge.toggle_filter()">
+			<input type="checkbox" id="merge-filter" name="merge-filter"
+				ng-model="commander.merge.group.filter"
+			/>&nbsp;Custom Filters
+		</label>
 
 		<div class="panel panel-success" ng-show="commander.merge.group.filter">
 			<div class="panel-success panel-heading">
@@ -91,9 +103,15 @@
 			</div>
 		</div>
 
-		<label for="net-{{net.id}}" class="alert" ng-repeat='net in commander.merge.group.net_list | filter:networks.isConverted' ng-show='networks.list != null' ng-class="{'alert-sky' : networks.isConverted(net), 'alert-reddish' : !networks.isConverted(net)}" style="width: 100%;">
-			<input id="net-{{net.id}}" name="net-{{net.id}}" type="checkbox" ng-model="commander.merge.group.networks[net.name]" ng-click="commander.merge.check(net.name); commander.merge.get_attrs({nodes:[],edges:[]});" />
-			{{net.name}}
+		<label for="net-{{net.id}}" class="alert"
+			ng-repeat='net in commander.merge.group.net_list | filter:networks.isConverted'
+			ng-show='networks.list != null'
+			ng-class="{'alert-sky' : networks.isConverted(net), 'alert-reddish' : !networks.isConverted(net)}"
+			ng-click="commander.merge.check(net.name); commander.merge.get_attrs({nodes:[],edges:[]});"
+			style="width: 100%;">
+			<input id="net-{{net.id}}" name="net-{{net.id}}" type="checkbox"
+				ng-model="commander.merge.group.networks[net.name]"
+			/>&nbsp;{{net.name}}
 		</label>
 
 		<button class="btn h2-5em end-btn btn-aqua" ng-click='commander.merge_set_page(2)'>next</button><button class="btn h2-5em end-btn btn-reddish" ng-click='commander.abort_operation()'>abort</button>
@@ -190,6 +208,7 @@
 		using the attribute management tools.
 	</p>
 </div>
+
 <!-- intersect body -->
 <div class="panel-body" ng-show="commander.is_operation('intersect')">
 	<div class="intersect-page-1" ng-show="commander.intersect.is_page(1)">
@@ -200,7 +219,18 @@
 		<hr />
 
 		<h4>Select the networks to intersect:</h4>
-		<label class="group-selection-option alert alert-gold" for="intersect-all"><input type="checkbox" id="intersect-all" name="intersect-all" ng-model="commander.intersect.group.all" ng-click="commander.intersect.un_select_all(); commander.intersect.get_attrs({nodes:[],edges:[]});" /> Un/Select all</label><label class="group-selection-option alert alert-aqua" for="intersect-filter"><input type="checkbox" id="intersect-filter" name="intersect-filter" ng-model="commander.intersect.group.filter" ng-click="commander.intersect.toggle_filter()" /> Custom Filters</label>
+		<label class="group-selection-option alert alert-gold" for="intersect-all"
+			ng-click="commander.intersect.un_select_all(); commander.intersect.get_attrs({nodes:[],edges:[]});">
+			<input type="checkbox" id="intersect-all" name="intersect-all"
+				ng-model="commander.intersect.group.all"
+			/>&nbsp;Un/Select all
+		</label>
+		<label class="group-selection-option alert alert-aqua" for="intersect-filter"
+			ng-click="commander.intersect.toggle_filter()">
+			<input type="checkbox" id="intersect-filter" name="intersect-filter"
+				ng-model="commander.intersect.group.filter"
+			/>&nbsp;Custom Filters
+		</label>
 
 		<div class="panel panel-success" ng-show="commander.intersect.group.filter">
 			<div class="panel-success panel-heading">
@@ -252,9 +282,14 @@
 			</div>
 		</div>
 
-		<label for="net-{{net.id}}" class="alert" ng-repeat='net in commander.intersect.group.net_list | filter:networks.isConverted' ng-show='networks.list != null' ng-class="{'alert-sky' : networks.isConverted(net), 'alert-reddish' : !networks.isConverted(net)}" style="width: 100%;">
-			<input id="net-{{net.id}}" name="net-{{net.id}}" type="checkbox" ng-model="commander.intersect.group.networks[net.name]" ng-click="commander.intersect.check(net.name); commander.intersect.get_attrs({nodes:[],edges:[]});" />
-			{{net.name}}
+		<label for="net-{{net.id}}" class="alert"
+			ng-repeat='net in commander.intersect.group.net_list | filter:networks.isConverted'
+			ng-show='networks.list != null' ng-class="{'alert-sky' : networks.isConverted(net), 'alert-reddish' : !networks.isConverted(net)}"
+			ng-click="commander.intersect.check(net.name); commander.intersect.get_attrs({nodes:[],edges:[]});"
+			style="width: 100%;">
+			<input id="net-{{net.id}}" name="net-{{net.id}}" type="checkbox"
+				ng-model="commander.intersect.group.networks[net.name]"
+			/>&nbsp;{{net.name}}
 		</label>
 
 		<button class="btn h2-5em end-btn btn-aqua" ng-click='commander.intersect_set_page(2)'>next</button><button class="btn h2-5em end-btn btn-reddish" ng-click='commander.abort_operation()'>abort</button>
@@ -338,6 +373,7 @@
 		using the attribute management tools.
 	</p>
 </div>
+
 <!-- subtract body -->
 <div class="panel-body" ng-show="commander.is_operation('subtract')">
 	<div class="subtract-page-1" ng-show="commander.subtract.is_page(1)">
@@ -359,7 +395,18 @@
 
     <div class="subtract-page-2" ng-show="commander.subtract.is_page(2)">
         <h4>Select the networks to subtract:</h4>
-        <label class="group-selection-option alert alert-gold" for="subtract-all"><input type="checkbox" id="subtract-all" name="subtract-all" ng-model="commander.subtract.group.all" ng-click="commander.subtract.un_select_all(); commander.subtract.get_attrs(commander.subtract.get_attrs_from_net(networks.get_network_from_name(commander.subtract.group.minuend), {nodes:[],edges:[]}));" /> Un/Select all</label><label class="group-selection-option alert alert-aqua" for="subtract-filter"><input type="checkbox" id="subtract-filter" name="subtract-filter" ng-model="commander.subtract.group.filter" ng-click="commander.subtract.toggle_filter()" /> Custom Filters</label>
+        <label class="group-selection-option alert alert-gold" for="subtract-all"
+        	ng-click="commander.subtract.un_select_all(); commander.subtract.get_attrs(commander.subtract.get_attrs_from_net(networks.get_network_from_name(commander.subtract.group.minuend), {nodes:[],edges:[]}));">
+        	<input type="checkbox" id="subtract-all" name="subtract-all"
+        		ng-model="commander.subtract.group.all"
+        	/>&nbsp;Un/Select all
+        </label>
+        <label class="group-selection-option alert alert-aqua" for="subtract-filter"
+        	ng-click="commander.subtract.toggle_filter()">
+        	<input type="checkbox" id="subtract-filter" name="subtract-filter"
+        		ng-model="commander.subtract.group.filter"
+        	/>&nbsp;Custom Filters
+        </label>
 
         <div class="panel panel-success" ng-show="commander.subtract.group.filter">
             <div class="panel-success panel-heading">
@@ -411,9 +458,15 @@
             </div>
         </div>
 
-        <label for="net-subtrahend-{{net.id}}" class="alert" ng-repeat='net in commander.subtract.group.net_list | filter:networks.isConverted' ng-show='networks.list != null' ng-class="{'alert-sky' : networks.isConverted(net), 'alert-reddish' : !networks.isConverted(net)}" style="width: 100%;">
-            <input id="net-subtrahend-{{net.id}}" name="net-subtrahend-{{net.id}}" type="checkbox" ng-model="commander.subtract.group.networks[net.name]" ng-click="commander.subtract.check(net.name); commander.subtract.get_attrs(commander.subtract.get_attrs_from_net(networks.get_network_from_name(commander.subtract.group.minuend), {nodes:[],edges:[]}));" />
-            {{net.name}}
+        <label for="net-subtrahend-{{net.id}}" class="alert"
+        	ng-repeat='net in commander.subtract.group.net_list | filter:networks.isConverted'
+        	ng-show='networks.list != null'
+        	ng-class="{'alert-sky' : networks.isConverted(net), 'alert-reddish' : !networks.isConverted(net)}"
+        	ng-click="commander.subtract.check(net.name); commander.subtract.get_attrs(commander.subtract.get_attrs_from_net(networks.get_network_from_name(commander.subtract.group.minuend), {nodes:[],edges:[]}));"
+        	style="width: 100%;">
+            <input id="net-subtrahend-{{net.id}}" name="net-subtrahend-{{net.id}}" type="checkbox"
+            	ng-model="commander.subtract.group.networks[net.name]"
+            />&nbsp;{{net.name}}
         </label>
 
         <button class="btn h2-5em end-btn btn-aqua" ng-click='commander.subtract_set_page(3, m.session_id)'>next</button><button class="btn h2-5em end-btn btn-warning" ng-click='commander.subtract.set_page(1)'>back</button><button class="btn h2-5em end-btn btn-reddish" ng-click='commander.abort_operation()'>abort</button>
@@ -451,6 +504,7 @@
 		using the attribute management tools.
 	</p>
 </div>
+
 <!-- contains body -->
 <div class="panel-body" ng-show="commander.is_operation('contains')">
 	<div class="contains-page-1" ng-show="commander.contains.is_page(1)">
@@ -473,17 +527,19 @@
         <h4>Select the attributes to use for identity definitions:</h4>
         <div>
             <h5>Nodes</h5>
-            <label class="alert alert-gold attr-select" for="attr-node-{{attr}}" ng-repeat="attr in commander.contains.group.nodes">
-                <input type="checkbox" name="attr-node-{{attr}}" id="attr-node-{{attr}}" ng-model="commander.contains.n_attr_identity[attr]" />
-                {{attr}}
+            <label class="alert alert-gold attr-select" for="attr-node-{{attr}}"
+            	ng-repeat="attr in commander.contains.group.nodes">
+                <input type="checkbox" name="attr-node-{{attr}}" id="attr-node-{{attr}}"
+                	ng-model="commander.contains.n_attr_identity[attr]" />&nbsp;{{attr}}
             </label>
         </div>
         <i ng-show="0 == commander.contains.group.nodes.length">No node attributes...</i>
         <div>
             <h5>Edges</h5>
-            <label class="alert alert-gold attr-select" for="attr-edge-{{attr}}" ng-repeat="attr in commander.contains.group.edges">
-                <input type="checkbox" name="attr-edge-{{attr}}" id="attr-edge-{{attr}}" ng-model="commander.contains.e_attr_identity[attr]" />
-                {{attr}}
+            <label class="alert alert-gold attr-select" for="attr-edge-{{attr}}"
+            	ng-repeat="attr in commander.contains.group.edges">
+                <input type="checkbox" name="attr-edge-{{attr}}" id="attr-edge-{{attr}}"
+                	ng-model="commander.contains.e_attr_identity[attr]" />&nbsp;{{attr}}
             </label>
         </div>
         <i ng-show="0 == commander.contains.group.edges.length">No edge attributes...</i>
@@ -501,11 +557,23 @@
 		using the attribute management tools.
 	</p>
 </div>
+
 <!-- distance -->
 <div class="panel-body" ng-show="commander.is_operation('distances')">
 	<div class="distances-page-1" ng-show="commander.distances.is_page(1)">
 		<h4>Select the networks to calculate their pair-wise distance:</h4>
-		<label class="group-selection-option alert alert-gold" for="distances-all"><input type="checkbox" id="distances-all" name="distances-all" ng-model="commander.distances.group.all" ng-click="commander.distances.un_select_all(); commander.distances.get_attrs({nodes:[],edges:[]});" /> Un/Select all</label><label class="group-selection-option alert alert-aqua" for="distances-filter"><input type="checkbox" id="distances-filter" name="distances-filter" ng-model="commander.distances.group.filter" ng-click="commander.distances.toggle_filter()" /> Custom Filters</label>
+		<label class="group-selection-option alert alert-gold" for="distances-all"
+			ng-click="commander.distances.un_select_all(); commander.distances.get_attrs({nodes:[],edges:[]});">
+			<input type="checkbox" id="distances-all" name="distances-all" 
+				ng-model="commander.distances.group.all"
+			/>&nbsp;Un/Select all
+		</label>
+		<label class="group-selection-option alert alert-aqua" for="distances-filter"
+			ng-click="commander.distances.toggle_filter()">
+			<input type="checkbox" id="distances-filter" name="distances-filter"
+				ng-model="commander.distances.group.filter"
+			/>&nbsp;Custom Filters
+		</label>
 
 		<div class="panel panel-success" ng-show="commander.distances.group.filter">
 			<div class="panel-success panel-heading">
@@ -557,9 +625,15 @@
 			</div>
 		</div>
 
-		<label for="net-{{net.id}}" class="alert" ng-repeat='net in commander.distances.group.net_list | filter:networks.isConverted' ng-show='networks.list != null' ng-class="{'alert-sky' : networks.isConverted(net), 'alert-reddish' : !networks.isConverted(net)}" style="width: 100%;">
-			<input id="net-{{net.id}}" name="net-{{net.id}}" type="checkbox" ng-model="commander.distances.group.networks[net.name]" ng-click="commander.distances.check(net.name); commander.distances.get_attrs({nodes:[],edges:[]});" />
-			{{net.name}}
+		<label for="net-{{net.id}}" class="alert"
+			ng-repeat='net in commander.distances.group.net_list | filter:networks.isConverted'
+			ng-show='networks.list != null'
+			ng-class="{'alert-sky' : networks.isConverted(net), 'alert-reddish' : !networks.isConverted(net)}"
+			ng-click="commander.distances.check(net.name); commander.distances.get_attrs({nodes:[],edges:[]});"
+			style="width: 100%;">
+			<input id="net-{{net.id}}" name="net-{{net.id}}" type="checkbox"
+				ng-model="commander.distances.group.networks[net.name]"
+			/>&nbsp;{{net.name}}
 		</label>
 
 		<button class="btn h2-5em end-btn btn-aqua" ng-click='commander.distances_set_page(2)'>next</button><button class="btn h2-5em end-btn btn-reddish" ng-click='commander.abort_operation()'>abort</button>
