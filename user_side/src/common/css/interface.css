@@ -149,6 +149,14 @@ html {
 	color: rgba(40, 91, 135, 1);
 }
 
+#interface .left-panel .panel-heading .btn-panel span {
+	color: white;
+}
+
+#interface .left-panel .panel-heading .btn-panel span:hover {
+	color: #cacaca;
+}
+
 /* PANEL-SPECIFIC */
 
 /* graph list */
@@ -165,10 +173,6 @@ html {
 #interface .left-panel.attributes-panel .panel-heading > .attr-action,
 #interface .left-panel.graph-list-panel .panel-heading > .net-action {
 	font-size: 0.8em;
-}
-
-#interface .left-panel.graph-list-panel .panel-heading .btn-panel span {
-	color: white;
 }
 
 #interface .left-panel.graph-list-panel .panel-heading .btn-panel span:hover {
