@@ -179,7 +179,7 @@
 
                 if ( self.group.filter ) {
                     self.group.net_attr_values = self.get_net_attrs_values(self.list);
-                    console.log(self.group.net_attr_values);
+                    //console.log(self.group.net_attr_values);
                     self.group.net_attributes = Object.keys(self.group.net_attr_values);
                     self.filters = [{
                         combine: null,

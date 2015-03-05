@@ -39,7 +39,7 @@
              */
             self.reload_list = function (session_id) {
                 self.get_list(session_id).then(function (data) {
-                    console.log(data);
+                    //console.log(data);
                     if (0 != data['err'] ) {
                         document.location.hash = '#/';
                     } else {
