@@ -41,7 +41,14 @@
                 // Initialize canvas
                 window.cy = cytoscape({
                     container: document.getElementById('canvas'),
-                    maxZoom: 5,
+                    zoom: 1,
+                    pan: { x: 0, y: 0 },
+                    minZoom: 1e-50,
+                    maxZoom: 1e50,
+                    zoomingEnabled: true,
+                    userPanningEnabled: true,
+                    boxSelectionEnabled: true,
+                    motionBlur: false,
                     layout: {
                         name: 'preset'
                     },
