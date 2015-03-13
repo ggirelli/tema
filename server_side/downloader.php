@@ -1,4 +1,8 @@
 <?php
+/**
+ * Downloads session files.
+ * @since 0.3.0
+ */
 
 require_once('settings.php');
 require_once('include/tema.session.class.php');
