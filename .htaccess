@@ -1,5 +1,5 @@
 RewriteEngine On
 RewriteRule ^s/$  server_side/commander.php
-RewriteRule ^s/(.*)/(.*)$ server_side/session/$1/$2
+RewriteRule ^s/(.*)/(.*)$ server_side/downloader.php?s=$1&f=$2
 RewriteRule ^o/(.*)/(.*)$ server_side/session/$1/output_directory/$2
 RewriteRule ^vt/(.*)$ server_side/static/vt/$1
