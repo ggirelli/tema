@@ -27,7 +27,14 @@ if ( isset($_GET['f']) and isset($_GET['s']) ) {
 			header('Pragma: public');
 			header('Content-Length: ' . $size);
 
+			echo file_get_contents($file);
+			die();
+
+		} else {
+			echo 1;
 		}
+	} else {
+		echo 2;
 	}
 }
 
