@@ -78,7 +78,12 @@ class C2SQL {
 		if( $this->connect_error ) { return true; }
 		
 		// Evaluate PostgreSQL errors
-        $error = pg_last_error($this->psql);
+        
+		if( false === $this->psql ) {
+			$error = pg_last_error();
+		} else {
+        	$error = pg_last_error($this->psql);
+        }
         if ( empty($error) )
             return false;
         else
@@ -140,7 +145,7 @@ class C2SQL {
 	 * @return null (sets $this->connect_error)
 	 */
 	private function connect2PostgreSQL() {
-		if( !$this->psql = @pg_connect('host=' . $this->host . ' user=' . $this->user . ' password=' . $this->pwd .  ' dbname=', $this->db_name) ) {
+		if( !$this->psql = pg_connect('host=' . $this->host . ' user=' . $this->user . ' password=' . $this->pwd .  ' dbname=', $this->db_name) ) {
             trigger_error('Impossible to contact the PostgreSQL server.');
             $this->connectError = true;
 		} else {
