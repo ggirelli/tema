@@ -117,7 +117,7 @@ class TEMAdb extends C2SQL {
 			// Sessions_history table definition
 			$sql = "CREATE TABLE sessions_history (" .
 				"id SERIAL, " .
-				"'user' INTEGER NOT NULL, " .
+				"user_id INTEGER NOT NULL, " .
 				"seed VARCHAR(100) NOT NULL, " .
 				"date TIMESTAMP DEFAULT NOW()" .
 				", PRIMARY KEY(id))";

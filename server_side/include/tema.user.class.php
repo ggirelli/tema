@@ -276,7 +276,7 @@ class TEMAuser extends TEMAdb {
 
 		// Retrieve history
 		$sql = "SELECT s.seed, s.title, s.privacy, s.password, h.date FROM `sessions_history` AS h " .
-			"LEFT JOIN `sessions` AS s ON h.seed=s.seed WHERE h.user=$user_id";
+			"LEFT JOIN `sessions` AS s ON h.seed=s.seed WHERE h.user_id=$user_id";
 		$r = $this->query($sql);
 
 		// Hide password and prepare multi-array
@@ -304,7 +304,7 @@ class TEMAuser extends TEMAdb {
 
 		// Update session history
 		$sql = "INSERT INTO sessions_history " .
-			"(user, seed)" .
+			"(user_id, seed)" .
 			"VALUES ('$user_id', '$seed')";
 		$r = $this->query($sql);
 
