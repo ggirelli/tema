@@ -140,12 +140,10 @@ class C2SQL {
 	 * @return null (sets $this->connect_error)
 	 */
 	private function connect2PostgreSQL() {
-		echo 'connecting';
 		if( !$this->psql = @pg_connect('host=' . $this->host . ' user=' . $this->user . ' password=' . $this->pwd .  ' dbname=', $this->db_name) ) {
             trigger_error('Impossible to contact the PostgreSQL server.');
             $this->connectError = true;
 		} else {
-			echo 'done';
 			$this->connectError = false;
 		}
 	}

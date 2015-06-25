@@ -57,7 +57,7 @@ class TEMAdb extends C2SQL {
 		if ( !parent::table_exists('sessions') ) { 
 			// Session table definition
 			$sql = "CREATE TABLE sessions (" .
-				"id SERIAL NOT NULL PRIMARY KEY, " .
+				"id SERIAL, " .
 				"seed VARCHAR(100) NOT NULL UNIQUE, " .
 				"folder_path VARCHAR(200) NOT NULL UNIQUE, " .
 				"interface_uri VARCHAR(200) NOT NULL UNIQUE, " .
@@ -69,7 +69,7 @@ class TEMAdb extends C2SQL {
 				"last_query VARCHAR(100), " .
 				"last_query_when TIMESTAMP, " .
 				"current_net VARCHAR(100) " .
-				")";
+				", PRIMARY KEY(id))";
 			
 			// Create table
 			parent::query($sql);
@@ -81,11 +81,11 @@ class TEMAdb extends C2SQL {
 		if ( !parent::table_exists('sessions_settings') ) {
 			// Sessions_settings table definition
 			$sql = "CREATE TABLE sessions_settings (" .
-				"id SERIAL NOT NULL PRIMARY KEY, " .
+				"id SERIAL, " .
 				"seed VARCHAR(100) NOT NULL, " .
 				"setting_key VARCHAR(200) NOT NULL, " .
 				"setting_value TEXT NOT NULL " .
-				")";
+				", PRIMARY KEY(id))";
 			
 			// Create table
 			parent::query($sql);
@@ -97,14 +97,14 @@ class TEMAdb extends C2SQL {
 		if ( !parent::table_exists('sessions_users') ) {
 			// Sessions_users table definition
 			$sql = "CREATE TABLE sessions_users (" .
-				"id SERIAL NOT NULL PRIMARY KEY, " .
+				"id SERIAL, " .
 				"nickname VARCHAR(100) NOT NULL UNIQUE, " .
 				"email VARCHAR(100) NOT NULL UNIQUE, " .
 				"password VARCHAR(200) NOT NULL, " .
 				"confirm_token VARCHAR(100) NOT NULL UNIQUE, " .
 				"token_when TIMESTAMP, " .
 				"confirmed INTEGER NOT NULL " .
-				")";
+				", PRIMARY KEY(id))";
 			
 			// Create table
 			parent::query($sql);
@@ -116,11 +116,11 @@ class TEMAdb extends C2SQL {
 		if ( !parent::table_exists('sessions_history') ) {
 			// Sessions_history table definition
 			$sql = "CREATE TABLE sessions_history (" .
-				"id SERIAL NOT NULL PRIMARY KEY, " .
+				"id SERIAL, " .
 				"user INTEGER NOT NULL, " .
 				"seed VARCHAR(100) NOT NULL, " .
 				"date TIMESTAMP DEFAULT NOW()" .
-				")";
+				", PRIMARY KEY(id))";
 
 			// Create table
 			parent::query($sql);
@@ -132,10 +132,10 @@ class TEMAdb extends C2SQL {
 		if ( !parent::table_exists('sessions_shared') ) {
 			// Sessions_shared table definition
 			$sql = "CREATE TABLE sessions_shared (" .
-				"id SERIAL NOT NULL PRIMARY KEY, " .
+				"id SERIAL, " .
 				"user_id INTEGER NOT NULL, " .
 				"seed VARCHAR(100) NOT NULL" .
-				")";
+				", PRIMARY KEY(id))";
 
 			// Create table
 			parent::query($sql);
