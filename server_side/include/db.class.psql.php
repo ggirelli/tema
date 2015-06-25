@@ -116,7 +116,7 @@ class C2SQL {
 	 * @return Boolean
 	 */
 	protected function table_exists($table) {
-		$r = $this->query("\\dt '" . $table . "'");
+		$r = $this->query("SELECT 1 FROM information_schema.tables WHERE table_schema='public' AND table_name='" . $table . "'");
 		if( $r->size() == 1 ) {
 			return true;
 		} else {
