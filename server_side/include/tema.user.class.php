@@ -4,6 +4,7 @@
 require_once('functions.lib.php');
 require_once('tema.db.class.php');
 require_once(dirname(__FILE__) . '/PHPMailer/class.phpmailer.php');
+require_once(dirname(__FILE__) . '/PHPMailer/class.smtp.php');
 
 /**
 * Class that manages TEMA users
