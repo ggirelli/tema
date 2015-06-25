@@ -1,5 +1,5 @@
 /*!
- * This file is part of Cytoscape.js snapshot-44169df594-1426787920105.
+ * This file is part of Cytoscape.js 2.3.10.
  * 
  * Cytoscape.js is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by the Free
@@ -29,7 +29,7 @@ var cytoscape;
     return cytoscape.init.apply(cytoscape, arguments);
   };
 
-  $$.version = 'snapshot-44169df594-1426787920105';
+  $$.version = '2.3.10';
   
   // allow functional access to cytoscape.js
   // e.g. var cyto = $.cytoscape({ selector: "#foo", ... });
@@ -13322,7 +13322,7 @@ var cytoscape;
     }
   };
 
-  $$.heapfn.remove = function (eles) {
+  $$.heapfn.delete = function (eles) {
     var elements = this.getArgumentAsCollection(eles);
     
     for (var i = 0; i < elements.length; i += 1) {
@@ -14105,7 +14105,7 @@ var cytoscape;
         return false;
       };
 
-      if (rs.edgeType === 'self' || rs.edgeType === 'compound') {
+      if (rs.edgeType === 'self') {
         if(
             (
               (inEdgeBB = $$.math.inBezierVicinity(x, y, rs.startX, rs.startY, rs.cp2ax, rs.cp2ay, rs.selfEdgeMidX, rs.selfEdgeMidY, widthSq))
@@ -14494,7 +14494,7 @@ var cytoscape;
 
       bpts.push( mid );
 
-      if( rs.edgeType === 'self' || rs.edgeType === 'compound' ){
+      if( rs.edgeType === 'self' ){
         rs.midX = rs.selfEdgeMidX;
         rs.midY = rs.selfEdgeMidY;
       } else {
@@ -14786,8 +14786,6 @@ var cytoscape;
   CanvasRenderer.prototype.findEdgeControlPoints = function(edges) {
     if( !edges || edges.length === 0 ){ return; }
 
-    var cy = this.data.cy;
-    var hasCompounds = cy.hasCompoundNodes();
     var hashTable = {};
     var pairIds = [];
     var haystackEdges = [];
@@ -15021,59 +15019,12 @@ var cytoscape;
           rs.cp2ax = srcPos.x;
           rs.cp2ay = srcPos.y - (1 + Math.pow(srcH, 1.12) / 100) * loopDist * (j / 3 + 1);
           
-          rs.cp2cx = srcPos.x - (1 + Math.pow(srcW, 1.12) / 100) * loopDist * (j / 3 + 1);
+          rs.cp2cx = src._private.position.x - (1 + Math.pow(srcW, 1.12) / 100) * loopDist * (j / 3 + 1);
           rs.cp2cy = srcPos.y;
           
           rs.selfEdgeMidX = (rs.cp2ax + rs.cp2cx) / 2.0;
           rs.selfEdgeMidY = (rs.cp2ay + rs.cp2cy) / 2.0;
-        
-        // Compound edge
-        } else if(
-          hasCompounds &&
-          ( src.isParent() || src.isChild() || tgt.isParent() || tgt.isChild() ) &&
-          ( src.parents().anySame(tgt) || tgt.parents().anySame(src) )
-        ){
-
-          rs.edgeType = 'compound';
-
-          // because the line approximation doesn't apply for compound beziers
-          // (loop/self edges are already elided b/c of cheap src==tgt check)
-          rs.badBezier = false;
-
-          var j = i;
-          var loopDist = stepSize;
-
-          if( edgeIsUnbundled ){
-            j = 0;
-            loopDist = stepDist;
-          }
-
           
-          var loopW = 50;
-
-          var loopaPos = {
-            x: srcPos.x - srcW/2,
-            y: srcPos.y - srcH/2
-          };
-
-          var loopbPos = {
-            x: tgtPos.x - tgtW/2,
-            y: tgtPos.y - tgtH/2
-          };
-
-          var minCompoundStretch = 1;
-
-          rs.cp2ax = loopaPos.x;
-          rs.compoundStretchA = Math.max( minCompoundStretch, Math.log(srcW * 0.01) ); // avoids cases with impossible beziers
-          rs.cp2ay = loopaPos.y - (1 + Math.pow(loopW, 1.12) / 100) * loopDist * (j / 3 + 1) * rs.compoundStretchA;
-          
-          rs.compoundStretchB = Math.max( minCompoundStretch, Math.log(tgtW * 0.01) ); // avoids cases with impossible beziers
-          rs.cp2cx = loopbPos.x - (1 + Math.pow(loopW, 1.12) / 100) * loopDist * (j / 3 + 1) * rs.compoundStretchB;
-          rs.cp2cy = loopbPos.y;
-          
-          rs.selfEdgeMidX = (rs.cp2ax + rs.cp2cx) / 2.0;
-          rs.selfEdgeMidY = (rs.cp2ay + rs.cp2cy) / 2.0;
-
         // Straight edge
         } else if (pairEdges.length % 2 === 1
           && i === Math.floor(pairEdges.length / 2)
@@ -15272,7 +15223,7 @@ var cytoscape;
 
     var rs = edge._private.rscratch;
     
-    if (rs.edgeType == 'self' || rs.edgeType == 'compound') {
+    if (edge._private.rscratch.edgeType == 'self') {
       
       var cp = [rs.cp2cx, rs.cp2cy];
       
@@ -15577,7 +15528,7 @@ var cytoscape;
         lineStyle,
         edgeWidth
       );
-    } else if (rs.edgeType === 'self' || rs.edgeType === 'compound') {
+    } else if (rs.edgeType === 'self') {
       
       var details = edge._private.rscratch;
       var points = [details.startX, details.startY, details.cp2ax,
@@ -15585,6 +15536,7 @@ var cytoscape;
         details.selfEdgeMidX, details.selfEdgeMidY,
         details.cp2cx, details.cp2cy, details.endX, details.endY];
 
+      var details = edge._private.rscratch;
       this.drawStyledEdge(edge, context, points, lineStyle, edgeWidth);
       
     } else if (rs.edgeType === 'straight') {
@@ -17282,8 +17234,6 @@ var cytoscape;
         return;
       }
 
-      if( opts.inDragLayer == null && opts.addToList == null ){ return; } // nothing to do
-
       var listHasId = getDragListIds( opts );
 
       var innerNodes = node.descendants();
@@ -17337,16 +17287,13 @@ var cytoscape;
 
       // also add nodes and edges related to the topmost ancestor
       updateAncestorsInDragLayer( node, {
-        inDragLayer: opts.inDragLayer
+        inDragLayer: true
       } );
     };
 
     // helper function to determine which ancestor nodes and edges should go
     // to the drag layer (or should be removed from drag layer).
     var updateAncestorsInDragLayer = function(node, opts) {
-
-      if( opts.inDragLayer == null && opts.addToList == null ){ return; } // nothing to do
-
       // find top-level parent
       var parent = node;
 
@@ -17622,9 +17569,7 @@ var cytoscape;
                 y: pos[1]
               };
 
-              r.hoverData.dragging = true;
-
-              //checkForTaphold();
+              checkForTaphold();
 
               r.data.canvasNeedsRedraw[CanvasRenderer.SELECT_BOX] = true;
       
@@ -17636,9 +17581,7 @@ var cytoscape;
               y: pos[1]
             };
 
-            r.hoverData.dragging = true;
-
-            //checkForTaphold();
+            checkForTaphold();
 
             r.data.canvasNeedsRedraw[CanvasRenderer.SELECT_BOX] = true;
     
@@ -17646,8 +17589,6 @@ var cytoscape;
           }
           
         }
-      
-        checkForTaphold();
       
       } 
       
@@ -17855,7 +17796,7 @@ var cytoscape;
 
       } else {
         // deactivate bg on box selection
-        if (cy.boxSelectionEnabled() && !r.hoverData.dragging && Math.pow(select[2] - select[0], 2) + Math.pow(select[3] - select[1], 2) > 7 && select[4]){
+        if (cy.boxSelectionEnabled() && Math.pow(select[2] - select[0], 2) + Math.pow(select[3] - select[1], 2) > 7 && select[4]){
           clearTimeout( r.bgActiveTimeout );
           r.data.bgActivePosistion = undefined;
           r.hoverData.selecting = true;
@@ -23175,8 +23116,6 @@ var cytoscape;
       var drawnNodes = 1;
       var fdRenderer = new Springy.Renderer(sim,
         function clear() {
-          if( self.stopped ){ return; } // because springy is a buggy layout
-          
           if( movedNodes.length > 0 && options.animate ){
             simUpdatingPos = true;
 
@@ -23197,8 +23136,6 @@ var cytoscape;
         },
 
         function drawNode(node, p) {
-          if( self.stopped ){ return; } // because springy is a buggy layout
-
           var v = toScreen(p);
           var element = node.data.element;
           
@@ -23253,8 +23190,6 @@ var cytoscape;
       var grabbableNodes = nodes.filter(":grabbable");
       
       function start(){
-        self.stopped = false;
-
         // disable grabbing if so set
         if( options.ungrabifyWhileSimulating ){
           grabbableNodes.ungrabify();
@@ -23264,8 +23199,6 @@ var cytoscape;
       }
       
       self.stopSystem = function(){
-        self.stopped = true;
-
         graph.filterNodes(function(){
           return false; // remove all nodes
         });

@@ -1,47 +1,47 @@
 <?php
 /**
- * Contains the classes required to contact a MySQL server
+ * Contains the classes required to contact a PostgreSQL server
  *
  * @author Gabriele Girelli <gabriele@filopoe.it>
  */
 
 /**
- * MySQL ddatabase management
+ * PostgreSQL ddatabase management
  * @since 0.2.0
  */
-class C2MySQL {
+class C2SQL {
 
 	// ATTRIBUTES
 
 	/**
-	 * MySQL host name
+	 * PostgreSQL host name
 	 * @var string
 	 */
 	public $host;
 	
 	/**
-	 * MySQL host user
+	 * PostgreSQL host user
 	 * @var string
 	 */
 	public $user;
 	
 	/**
-	 * MySQL host password
+	 * PostgreSQL host password
 	 * @var string
 	 */
 	private $pwd;
 	
 	/**
-	 * MySQL database name
+	 * PostgreSQL database name
 	 * @var string
 	 */
 	public $db_name;
 	
 	/**
-	 * MySQLi instance
-	 * @var mysqli
+	 * PostgreSQLi instance
+	 * @var psql
 	 */
-	private $mysqli;
+	private $psql;
 	
 	/**
 	 * Error variable
@@ -53,10 +53,10 @@ class C2MySQL {
 
 	/**
 	 * Connects to given database and server
-     * @param string host (MySQL host name)
-     * @param string dbUser (MySQL host user)
-     * @param string dbPass (MySQL host password)
-     * @param string dbName (MySQL database name)
+     * @param string host (PostgreSQL host name)
+     * @param string dbUser (PostgreSQL host user)
+     * @param string dbPass (PostgreSQL host password)
+     * @param string dbName (PostgreSQL database name)
 	 * @return null
 	 */
 	public function __construct($host, $user, $pwd, $db_name) {
@@ -65,10 +65,8 @@ class C2MySQL {
 		$this->pwd = $pwd;
 		$this->db_name = $db_name;
 
-		// Connect to MySQL server
-		$this->connect2MySQL();
-		// If no errors occurred, connect to database
-		if( !$this->isError() ) { $this->connect2MySQL_db(); }
+		// Connect to PostgreSQL server
+		$this->connect2PostgreSQL();
 	}
 
 	/**
@@ -79,8 +77,8 @@ class C2MySQL {
 		// Evaluates errors based on the signal variable.
 		if( $this->connect_error ) { return true; }
 		
-		// Evaluate MySQL errors
-        $error = $this->mysqli->error;
+		// Evaluate PostgreSQL errors
+        $error = $this->psql->error;
         if ( empty($error) )
             return false;
         else
@@ -90,48 +88,26 @@ class C2MySQL {
 	// protected FUNCTIONS
 
     /**
-     * Returns a MySQLresult instance for data fetching
+     * Returns a PostgreSQLresult instance for data fetching
      * @param String $sql 	query to be executed
      * @param Boolean $verbose whether to print an error message
-     * @return MySQLresult instance
+     * @return PostgreSQLresult instance
      */
     protected function & query($sql, $verbose=TRUE) {
-        if ( !$mysqliResult = $this->mysqli->query($sql) )
+        if ( !$psqlResult = pg_query($this->psql, $sql) )
             if ( $verbose ) 
-            	trigger_error ('Query fallita: ' . $this->mysqli->error . ' SQL: ' . $sql);
-        $result = new MySQLResult($this,$mysqliResult);
+            	trigger_error ('Query fallita: ' . pg_result_error($psqlResult) . ' SQL: ' . $sql);
+        $result = new PostgreSQLResult($this, $psqlResult);
 		return $result;
     }
-	
-	/**
-	 * Locks a table
-	 * @param String $table 	table name
-	 * @param db instance 	$db
-	 * @return null
-	 */
-	protected function lock($table, $db) {
-		// Construct the query
-		$sql = "LOCK TABLES " . $table . " WRITE";
-		$db->query($sql);
-	}
-	
-	/**
-	 * Unlocks all tables
-	 * @param db instance 	$db
-	 * @return null
-	 */
-	protected function unlock($db) {
-		$sql = "UNLOCK TABLES ";
-		$db->query($sql);
-	}
 	
 	/**
 	 * Close the connection
 	 * @return null
 	 */
 	protected function close() {
-		if( !$this->mysqli->close() )
-			trigger_error("Impossible to terminat the connection.\n\n" . $this->mysqli->error);
+		if( !pg_close($this->psql) )
+			trigger_error("Impossible to terminate the connection.\n\n" . pg_last_error($this->psql));
 	}
 
 	/**
@@ -140,7 +116,7 @@ class C2MySQL {
 	 * @return Boolean
 	 */
 	protected function table_exists($table) {
-		$r = $this->query("SHOW TABLES LIKE '" . $table . "'");
+		$r = $this->query("\dt '" . $table . "'");
 		if( $r->size() == 1 ) {
 			return true;
 		} else {
@@ -154,32 +130,22 @@ class C2MySQL {
 	 * @return String    escaped
 	 */
 	protected function escape_string($s) {
-		return $this->mysqli->escape_string($s);
+		return pg_escape__literal($this->psql, $s);
 	}
 
 	// private FUNCTIONS
 	
 	/**
-	 * Connects to the server
+	 * Connects to the database
 	 * @return null (sets $this->connect_error)
 	 */
-	private function connect2MySQL() {
-		if( !$this->mysqli = @mysqli_connect($this->host, $this->user, $this->pwd) ) {
-            trigger_error('Impossible to contact the MySQL server.');
+	private function connect2PostgreSQL() {
+		if( !$this->psql = @pg_connect('host=' . $this->host . ' user=' . $this->user . ' password=' . $this->pwd .  ' dbname=', $this->db_name) ) {
+            trigger_error('Impossible to contact the PostgreSQL server.');
             $this->connectError = true;
 		} else {
-			$this->mysqli->set_charset("utf8");
-		}
-	}
-	
-	/**
-	 * Connects to the database
-	 * @return void (sets $this->connect_error)
-	 */
-	private function connect2MySQL_db() {
-		if( !@$this->mysqli->select_db($this->db_name) ) {
-            trigger_error('Impossible to select the database.');
-            $this->connectError = true;
+			$this->connectError = false;
+			$this->psql->set_charset("utf8");
 		}
 	}
 
@@ -188,18 +154,18 @@ class C2MySQL {
 
 
 /**
- * This class manages fetching data from MySQL databases
- * Called by C2MySQL->query($sql)
+ * This class manages fetching data from PostgreSQL databases
+ * Called by C2SQL->query($sql)
  * @access public
- * @see C2MySQL
+ * @see C2SQL
  * @since 0.2.0
  */
-class MySQLresult {
+class PostgreSQLresult {
     /**
-     * C2MySQL instance
-     * @var MySQL instance
+     * C2SQL instance
+     * @var PostgreSQL instance
      */
-    var $c2mysql;
+    var $c2psql;
 
     /**
      *  Result of the query, to fetch
@@ -208,12 +174,12 @@ class MySQLresult {
     var $result;
 
     /**
-     * @param C2MySQL instance $mysql
+     * @param C2SQL instance $mysql
      * @param resource $result
      * @access public
      */
-    public function __construct(& $c2mysql,$result) {
-        $this->c2mysql = & $c2mysql;
+    public function __construct(& $c2psql,$result) {
+        $this->c2psql = & $c2psql;
         $this->result = $result;
     }
 
@@ -223,10 +189,10 @@ class MySQLresult {
      * @return Boolean 	if no rows are left to be fetched, returns false
      */
     public function fetch () {
-        if ( $row = $this->result->fetch_array(MYSQLI_ASSOC) ) {
+        if ( $row = $pg_fetch_assoc($this->result) ) {
             return $row;
         } else if ( $this->size() > 0 ) {
-            $this->result->data_seek(0);
+            pg_result_seek($this->result, 0);
             return false;
         } else {
             return false;
@@ -237,22 +203,22 @@ class MySQLresult {
      * @return int 	number of selected rows
      */
     public function size () {
-        return $this->result->num_rows;
+        return pg_num_rows($this->result);
     }
 
     /**
      * @return int 	ID of the last inserted row
      */
     public function insertID () {
-        return $this->c2mysql->mysqli->insert_id;
+        return pg_last_oid($this->result);
     }
     
     /**
-     * Looks for MySQL errors
+     * Looks for PostgreSQL errors
      * @return Boolean
      */
     public function isError () {
-        return $this->c2mysql->isError();
+        return $this->c2psql->isError();
     }
 }
 

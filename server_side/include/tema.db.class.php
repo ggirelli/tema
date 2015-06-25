@@ -8,7 +8,7 @@ require_once('db.class.php');
 * @author Gabriele Girelli <gabriele@filopoe.it>
 * @since 0.2.0
 */
-class TEMAdb extends C2MySQL {
+class TEMAdb extends C2SQL {
 	
 	// public FUNCTIONS
 
@@ -24,7 +24,7 @@ class TEMAdb extends C2MySQL {
 			}
 
 		} else {
-			die('Impossible to contact the MySQL server.');
+			die('Impossible to contact the pSQL server.');
 		}
 	}
 
