@@ -10,8 +10,8 @@ define('HOST', 'localhost');
 define('USER', 'root');
 define('PWD', '');
 define('DB_NAME', 'TEMA15');
-define('SQL_TYPE', 'mysql')
-#define('SQL_TYPE', 'psql')
+define('SQL_TYPE', 'mysql');
+#define('SQL_TYPE', 'psql');
 
 // Address
 define('RPATH', dirname(__FILE__));
