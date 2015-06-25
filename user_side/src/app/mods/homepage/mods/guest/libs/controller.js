@@ -75,6 +75,7 @@
 
                             })
                                 .success(function (data) {
+                                    console.log(data);
                                     scope.up.setRunning(false);
                                     scope.m.logsys.up.err.code = data.err;
                                 });
