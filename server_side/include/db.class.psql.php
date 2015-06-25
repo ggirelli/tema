@@ -147,7 +147,6 @@ class C2SQL {
 		} else {
 			echo 'done';
 			$this->connectError = false;
-			$this->psql->set_charset("utf8");
 		}
 	}
 
