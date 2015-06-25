@@ -57,7 +57,7 @@ class TEMAdb extends C2SQL {
 		if ( !parent::table_exists('sessions') ) { 
 			// Session table definition
 			$sql = "CREATE TABLE sessions (" .
-				"id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY, " .
+				"id SERIAL NOT NULL PRIMARY KEY, " .
 				"seed VARCHAR(100) NOT NULL UNIQUE, " .
 				"folder_path VARCHAR(200) NOT NULL UNIQUE, " .
 				"interface_uri VARCHAR(200) NOT NULL UNIQUE, " .
@@ -81,7 +81,7 @@ class TEMAdb extends C2SQL {
 		if ( !parent::table_exists('sessions_settings') ) {
 			// Sessions_settings table definition
 			$sql = "CREATE TABLE sessions_settings (" .
-				"id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY, " .
+				"id SERIAL NOT NULL PRIMARY KEY, " .
 				"seed VARCHAR(100) NOT NULL, " .
 				"setting_key VARCHAR(200) NOT NULL, " .
 				"setting_value TEXT NOT NULL " .
@@ -97,7 +97,7 @@ class TEMAdb extends C2SQL {
 		if ( !parent::table_exists('sessions_users') ) {
 			// Sessions_users table definition
 			$sql = "CREATE TABLE sessions_users (" .
-				"id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY, " .
+				"id SERIAL NOT NULL PRIMARY KEY, " .
 				"nickname VARCHAR(100) NOT NULL UNIQUE, " .
 				"email VARCHAR(100) NOT NULL UNIQUE, " .
 				"password VARCHAR(200) NOT NULL, " .
@@ -116,7 +116,7 @@ class TEMAdb extends C2SQL {
 		if ( !parent::table_exists('sessions_history') ) {
 			// Sessions_history table definition
 			$sql = "CREATE TABLE sessions_history (" .
-				"id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY, " .
+				"id SERIAL NOT NULL PRIMARY KEY, " .
 				"user INTEGER NOT NULL, " .
 				"seed VARCHAR(100) NOT NULL, " .
 				"date TIMESTAMP DEFAULT NOW()" .
@@ -132,7 +132,7 @@ class TEMAdb extends C2SQL {
 		if ( !parent::table_exists('sessions_shared') ) {
 			// Sessions_shared table definition
 			$sql = "CREATE TABLE sessions_shared (" .
-				"id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY, " .
+				"id SERIAL NOT NULL PRIMARY KEY, " .
 				"user_id INTEGER NOT NULL, " .
 				"seed VARCHAR(100) NOT NULL" .
 				")";
