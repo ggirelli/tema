@@ -78,7 +78,7 @@ class C2SQL {
 		if( $this->connect_error ) { return true; }
 		
 		// Evaluate PostgreSQL errors
-        $error = $this->psql->error;
+        $error = pg_last_error($this->psql);
         if ( empty($error) )
             return false;
         else
