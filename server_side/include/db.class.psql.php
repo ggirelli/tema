@@ -193,7 +193,7 @@ class PostgreSQLresult {
      * @return Boolean 	if no rows are left to be fetched, returns false
      */
     public function fetch () {
-        if ( $row = $pg_fetch_assoc($this->result) ) {
+        if ( $row = pg_fetch_assoc($this->result) ) {
             return $row;
         } else if ( $this->size() > 0 ) {
             pg_result_seek($this->result, 0);
