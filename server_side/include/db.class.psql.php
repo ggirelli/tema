@@ -116,7 +116,7 @@ class C2SQL {
 	 * @return Boolean
 	 */
 	protected function table_exists($table) {
-		$r = $this->query("\dt '" . $table . "'");
+		$r = $this->query("\\dt '" . $table . "'");
 		if( $r->size() == 1 ) {
 			return true;
 		} else {
