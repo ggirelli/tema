@@ -130,7 +130,7 @@ class C2SQL {
 	 * @return String    escaped
 	 */
 	protected function escape_string($s) {
-		return pg_escape_literal($this->psql, $s);
+		return pg_escape_string($this->psql, $s);
 	}
 
 	// private FUNCTIONS
