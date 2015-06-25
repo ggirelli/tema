@@ -19,6 +19,10 @@ define('SPATH', dirname(__FILE__) . '/session');
 define('SCRIPATH', dirname(__FILE__) . '/Rscripts');
 define('RURI', 'https://localhost/public_html/TEMA');
 
+// Sendmail
+define('SMTP_HOST', NULL);
+#define('SMTP_HOST', 'mail.example.it');
+
 // Uploader
 $GLOBALS['FILENAME_BAN'] = array('.', '..', 'config', 'sif.dat', 'sif.json');
 $GLOBALS['ALLOWED_EXT'] = array('graphml');

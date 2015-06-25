@@ -493,6 +493,14 @@ class TEMAuser extends TEMAdb {
 		if( !$this->isError() ) {
 			// Send email for confirmation
 			$mail = new PHPMailer;
+
+			if( !is_null(SMTP_HOST) ) {
+				$mail->isSMTP();
+				$mail->Host = SMTP_HOST;
+				$mail->Port = 25;
+				$mail->SMTPAuth = false;
+			}
+
 			$mail->setFrom('info.tema@cibio.unitn.it', 'TEMA Bot');
 			$mail->addAddress($this->email, $this->username);
 			$mail->Subject = 'Welcome to TEMA!';
